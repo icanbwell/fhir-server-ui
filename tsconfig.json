@@ -19,7 +19,7 @@
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.html"],
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.html", "src/src/index.tsx"],
   "exclude": [
     "node_modules",
     "build",

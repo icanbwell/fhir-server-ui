@@ -3,13 +3,11 @@ import BaseApi from './baseApi';
 interface GetPatientEverythingAsyncParams {
     patientId: string;
     question: string;
-    baseUrl: string;
 }
 
 interface GetResourceParams {
     id: string;
     resourceType: string;
-    baseUrl: string;
 }
 
 interface GetBundleAsyncParams {
@@ -50,7 +48,7 @@ class FhirApi extends BaseApi {
         queryString,
         queryParameters,
         operation,
-    }: GetBundleAsyncParams): Promise<{ status: number; json: object }> {
+    }: GetBundleAsyncParams): Promise<{ status: number; json: any }> {
         const url = this.getUrl({
             resourceType,
             id,
@@ -59,6 +57,13 @@ class FhirApi extends BaseApi {
             operation,
         });
         return await this.getData({urlString: url.toString()});
+    }
+
+    addMissingRequiredParams({ queryParams, id }: { queryParams: URLSearchParams; id?: string }) {
+        if (!id && !queryParams.has('_count')) {
+            queryParams.append('_count', '10');
+        }
+        return queryParams;
     }
 
     getUrl({
@@ -93,9 +98,7 @@ class FhirApi extends BaseApi {
                 url.searchParams.append(name, value);
             });
         }
-        if (!id && !url.searchParams.has('_count')) {
-            url.searchParams.append('_count', '10');
-        }
+        this.addMissingRequiredParams({ queryParams: url.searchParams, id });
         return url;
     }
 }

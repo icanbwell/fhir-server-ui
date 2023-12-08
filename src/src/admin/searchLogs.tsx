@@ -7,11 +7,11 @@ import PreJson from '../components/PreJson';
 const SearchLogsPage: React.FC = () => {
     const { fhirUrl } = useContext(EnvironmentContext);
     const [id, setId] = useState<string>('');
-    const [results, setResults] = useState<string | Object | null>(null);
+    const [results, setResults] = useState<String | Object | null>(null);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        const data = await new AdminApi({ fhirUrl }).searchLogs(id);
+        const data: any = await new AdminApi({ fhirUrl }).searchLogs(id);
         setResults(data.json);
     };
 

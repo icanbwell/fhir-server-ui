@@ -9,15 +9,15 @@ interface GetDataParams {
 }
 
 class BaseApi {
-    private readonly fhirUrl: string;
+    private readonly fhirUrl: string|undefined;
 
-    constructor({ fhirUrl }: { fhirUrl: string }) {
+    constructor({ fhirUrl }: { fhirUrl: string|undefined }) {
         this.fhirUrl = fhirUrl;
         axios.interceptors.request.use(this.requestInterceptor);
     }
 
     private getBaseUrl(): string {
-        return this.fhirUrl;
+        return this.fhirUrl || '';
     }
 
     async getData({ urlString, params }: GetDataParams): Promise<any> {
@@ -29,13 +29,12 @@ class BaseApi {
             url.search = new URLSearchParams(params).toString();
         }
 
-        const response = await axios.get(url.toString());
-
-        if (response.status !== 200) {
-            throw new Error('Network response was not ok');
+        try {
+            const response = await axios.get(url.toString());
+            return { status: response.status, json: response.data };
+        } catch (err: any) {
+            return {status: err.response?.status, json: err.response?.data};
         }
-
-        return { status: response.status, json: response.data };
     }
 
     requestInterceptor(req: InternalAxiosRequestConfig<Request<any>>): InternalAxiosRequestConfig<Request<any>> {

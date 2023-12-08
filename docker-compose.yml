@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
       args:
         NODE_ENV: development
-#    env_file:
-#      - .env
     #        mem_limit: 1g  # Set a memory limit of 1GB
     environment:
       SERVER_PORT: 3000

@@ -103,7 +103,11 @@ app.use('/static', express.static(path.join(__dirname, './../build/static')));
 
 app.get('/api/env', (req, res) => {
   // Send only the environment variables you want to expose
-  res.json({ FHIR_SERVER_URL: process.env.FHIR_SERVER_URL });
+  res.json({
+    FHIR_SERVER_URL: process.env.FHIR_SERVER_URL,
+    AUTH_CUSTOM_GROUP: process.env.AUTH_CUSTOM_GROUP,
+    AUTH_CUSTOM_SCOPE: process.env.AUTH_CUSTOM_SCOPE,
+  });
 });
 
 // handles when the user is redirected by the OpenIDConnect/OAuth provider

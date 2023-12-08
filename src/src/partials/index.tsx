@@ -16,20 +16,21 @@ import HumanName from './HumanName';
 import Identifier from './Identifier';
 import Instant from './Instant';
 import Integer from './Integer';
+import InvoiceLineItem from './InvoiceLineItem';
+import InvoicePriceComponent from './InvoicePriceComponent';
 import Markdown from './Markdown';
 import Meta from './Meta';
+import Money from './Money';
 import NameValue from './NameValue';
 import Narrative from './Narrative';
 import ObservationReferenceRange from './ObservationReferenceRange';
-import Participant from './Participant';
+import OperationOutcomeIssue from './OperationOutcomeIssue';
 import PatientContact from './PatientContact';
-import Performer from './Performer';
 import Period from './Period';
-import Position from './Position';
 import Quantity from './Quantity';
 import Ratio from './Ratio';
 import Reference from './Reference';
-import RevereseReference from './ReverseReference';
+import ReverseReference from './ReverseReference';
 import Time from './Time';
 import Timing from './Timing';
 import Uri from './Uri';
@@ -53,20 +54,21 @@ export default {
   Identifier,
   Instant,
   Integer,
+  InvoiceLineItem,
+  InvoicePriceComponent,
   Markdown,
   Meta,
+  Money,
   NameValue,
   Narrative,
   ObservationReferenceRange,
-  Participant,
+  OperationOutcomeIssue,
   PatientContact,
-  Performer,
   Period,
-  Position,
   Quantity,
   Ratio,
   Reference,
-  RevereseReference,
+  ReverseReference,
   Time,
   Timing,
   Uri,

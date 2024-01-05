@@ -1,0 +1,38 @@
+name: Create Artifact
+run-name: ${{ github.workflow }}
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        type: choice
+        description: Env at which build will be deployed.
+        required: true
+        default: dev
+        options:
+          - dev
+          - staging
+          - client-sandbox
+          - perf
+          - prod
+
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  Upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Master
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: yarn cache clean && yarn config delete proxy && yarn config delete https-proxy && yarn config delete registry && yarn install --no-optional --production=true --network-timeout 1000000
+
+      - name: Build app
+        run: yarn env:dev && yarn build:prod
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-ue1
+          path: build/

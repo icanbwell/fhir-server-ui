@@ -1,42 +1,3 @@
-.PHONY:build
-build:
-	docker buildx build --platform=linux/amd64 -t imranq2/node-fhir-server-ui:local .
-
-.PHONY:build_all
-build_all:
-	docker buildx build --platform=linux/amd64,linux/arm64 -t imranq2/node-fhir-server-ui:local .
-
-.PHONY:publish
-publish:
-	docker push imranq2/node-fhir-server-ui:latest
-
-.PHONY:up
-up:
-	yarn build_react && \
-	docker compose -f docker-compose.yml -p fhir-dev-ui build --parallel && \
-	docker compose -p fhir-dev-ui -f docker-compose.yml up --detach && \
-	echo FHIR Server UI admin: http://localhost:5051/admin && \
-	echo FHIR Server UI: http://localhost:5051
-
-.PHONY:up-offline
-up-offline:
-	docker compose -p fhir-dev-ui -f docker-compose.yml up --detach && \
-	echo FHIR server: http://localhost:5051
-
-.PHONY:down
-down:
-	docker compose -p fhir-dev-ui -f docker-compose.yml down && \
-	docker system prune -f
-
-.PHONY:clean
-clean: down
-	docker image rm imranq2/node-fhir-server-ui -f
-	docker image rm node-fhir-server-ui_fhir -f
-	docker volume rm fhir-dev-ui_mongo_data -f
-ifneq ($(shell docker volume ls | grep "fhir-dev-ui"| awk '{print $$2}'),)
-	docker volume ls | grep "fhir-dev-ui" | awk '{print $$2}' | xargs docker volume rm
-endif
-
 .PHONY:init
 init:
 	brew update  # update brew
@@ -47,7 +8,6 @@ init:
 	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | zsh
 	nvm install
 	make update
-
 
 .PHONY:update
 update:down
@@ -79,10 +39,6 @@ fix-lint:
 	npm run fix_lint && \
 	npm run lint
 
-.PHONY:shell
-shell: ## Brings up the bash shell in dev docker
-	docker compose -p fhir-dev-ui -f docker-compose.yml run --rm --name fhir-ui fhir-ui /bin/sh
-
 .PHONY:clean-pre-commit
 clean-pre-commit: ## removes pre-commit hook
 	rm -f .git/hooks/pre-commit
@@ -98,11 +54,11 @@ run-pre-commit: setup-pre-commit
 .PHONY:generate_components
 generate_components:
 	. ${NVM_DIR}/nvm.sh && nvm use && \
-	docker run --rm -it --name pythongenerator --mount type=bind,source="${PWD}"/src,target=/src python:3.8-slim-buster sh -c "pip install lxml jinja2 && python3 src/src/generator/generate_components.py" \
-	eslint --fix "src/src/pages/resources/**/*.tsx"
+	docker run --rm -it --name pythongenerator --mount type=bind,source="${PWD}"/src,target=/src python:3.8-slim-buster sh -c "pip install lxml jinja2 && python3 src/generator/generate_components.py" \
+	eslint --fix "src/pages/resources/**/*.tsx"
 
 .PHONY:generate_types
 generate_types:
 	. ${NVM_DIR}/nvm.sh && nvm use && \
-	docker run --rm -it --name pythongenerator --mount type=bind,source="${PWD}"/src,target=/src python:3.8-slim-buster sh -c "pip install lxml jinja2 && python3 src/src/generator/generate_types.py" \
-	eslint --fix "src/src/types/**/*.ts"
+	docker run --rm -it --name pythongenerator --mount type=bind,source="${PWD}"/src,target=/src python:3.8-slim-buster sh -c "pip install lxml jinja2 && python3 src/generator/generate_types.py" \
+	eslint --fix "src/types/**/*.ts"

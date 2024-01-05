@@ -1,33 +1,33 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "commonjs",
-    "strict": true,
-    "lib": ["es6", "dom"],
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "sourceMap": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "allowJs": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.html", "src/src/**/*.tsx"],
-  "exclude": [
-    "node_modules",
-    "build",
-    "src/scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "src/src/setupTests.ts"
-  ],
-  "types": ["typePatches"]
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "commonjs",
+        "strict": true,
+        "lib": ["es6", "dom"],
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "sourceMap": true,
+        "jsx": "react-jsx",
+        "moduleResolution": "node",
+        "allowJs": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.html", "src/**/*.tsx"],
+    "exclude": [
+        "node_modules",
+        "build",
+        "scripts",
+        "acceptance-tests",
+        "webpack",
+        "jest",
+        "src/setupTests.ts"
+    ],
+    "types": ["typePatches"]
 }

@@ -2,18 +2,19 @@
     "name": "fhir-server-ui",
     "version": "1.0.0",
     "description": "UI to display FHIR resources in a web browser",
-    "main": "src/index.ts",
+    "main": "src/index.tsx",
     "scripts": {
-        "build": "tsc",
-        "build_react": "node src/scripts/build.js",
-        "start_react": "node src/scripts/start.js",
-        "build-clean": "yarn clean && tsc",
-        "clean": "rm -rf ./dist",
-        "start": "node dist/index.js",
-        "dev": "nodemon",
+        "build": "node scripts/build.js",
+        "build:prod": "DISABLE_ESLINT_PLUGIN='true' node scripts/build.js",
+        "start": "node scripts/start.js",
+        "env": "node config.js",
+        "env:dev": "NODE_ENV=dev node config.js",
+        "env:staging": "NODE_ENV=staging node config.js",
+        "env:client-sandbox": "NODE_ENV=client-sandbox node config.js",
+        "env:perf": "NODE_ENV=perf node config.js",
+        "env:prod": "NODE_ENV=prod node config.js",
         "lint": "NODE_ENV=test npm run test:lint",
-        "test:lint": "NODE_OPTIONS=--max-old-space-size=8096 eslint \"src/src/**/*.tsx\" \"src/src/**/*.ts\"",
-        "watch": "node node_modules/.bin/npm-watch"
+        "test:lint": "NODE_OPTIONS=--max-old-space-size=8096 eslint \"src/**/*.tsx\" \"src/**/*.ts\""
     },
     "keywords": [],
     "author": "",
@@ -35,19 +36,11 @@
         "@mui/x-date-pickers": "^6.13.0",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
         "@svgr/webpack": "^5.5.0",
-        "@types/async": "^3.2.20",
-        "@types/cookie-parser": "^1.4.4",
-        "@types/express": "^4.17.17",
-        "@types/express-useragent": "^1.0.2",
-        "@types/fhir": "^0.0.37",
         "@types/jest": "^29.5.4",
         "@types/jwt-decode": "^3.1.0",
-        "@types/node": "^20.6.0",
         "@types/react": "^18.2.21",
         "@types/react-dom": "^18.2.7",
         "@types/react-vertical-timeline-component": "^3.3.6",
-        "@types/supertest": "^2.0.12",
-        "async": "^3.2.4",
         "axios": "^1.6.0",
         "babel-jest": "^27.4.2",
         "babel-loader": "^8.2.3",
@@ -59,7 +52,6 @@
         "camelcase": "^6.2.1",
         "case-sensitive-paths-webpack-plugin": "^2.4.0",
         "chart.js": "^4.4.0",
-        "cookie-parser": "^1.4.6",
         "crypto": "^1.0.1",
         "css-loader": "^6.5.1",
         "css-minimizer-webpack-plugin": "^3.2.0",
@@ -70,24 +62,16 @@
         "eslint-config-react-app": "^7.0.1",
         "eslint-plugin-typescript": "^0.14.0",
         "eslint-webpack-plugin": "^3.1.1",
-        "express": "^4.18.2",
-        "express-http-context": "^1.2.4",
-        "express-useragent": "^1.0.15",
         "file-loader": "^6.2.0",
         "fs-extra": "^10.0.0",
-        "helmet": "^7.0.0",
         "html-webpack-plugin": "^5.5.0",
-        "http-proxy-middleware": "^2.0.6",
-        "identity-obj-proxy": "^3.0.0",
         "jwt-decode": "^4.0.0",
         "mini-css-extract-plugin": "^2.4.5",
-        "openid-client": "^5.5.0",
         "postcss": "^8.4.4",
         "postcss-flexbugs-fixes": "^5.0.2",
         "postcss-loader": "^6.2.1",
         "postcss-normalize": "^10.0.1",
         "postcss-preset-env": "^7.0.1",
-        "prompts": "^2.4.2",
         "react": "^18.2.0",
         "react-app-polyfill": "^3.0.0",
         "react-chartjs-2": "^5.2.0",
@@ -117,26 +101,17 @@
         "@testing-library/jest-dom": "^6.1.3",
         "@testing-library/react": "^14.0.0",
         "@testing-library/user-event": "^14.4.3",
-        "@types/jsonwebtoken": "^9.0.5",
         "@typescript-eslint/eslint-plugin": "^6.9.0",
-        "cra-build-watch": "^3.4.0",
-        "dotenv-cli": "^7.3.0",
-        "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-security": "^1.7.1",
         "jest": "^29.7.0",
         "jest-matcher-utils": "^29.7.0",
         "jest-resolve": "^27.4.2",
         "jest-watch-typeahead": "^1.0.0",
-        "jose": "^4.14.6",
-        "jsonwebtoken": "^9.0.2",
         "nock": "^13.3.3",
         "nodemon": "^3.0.1",
         "npm-check-updates": "^16.14.2",
-        "npm-watch": "^0.11.0",
         "pre-commit": "^1.2.2",
         "prettier": "^3.0.3",
-        "supertest": "^6.3.3",
-        "ts-node": "^10.9.1",
         "webpack": "^5.88.2"
     },
     "pre-commit": [
@@ -150,21 +125,21 @@
         "testEnvironment": "node",
         "testPathIgnorePatterns": [
             "<rootDir>/node_modules/",
-            "<rootDir>/src/src"
+            "<rootDir>/src/"
         ],
         "setupFiles": [
             "<rootDir>/jest/setEnvVars.js",
             "react-app-polyfill/jsdom"
         ],
         "roots": [
-            "<rootDir>/src/src"
+            "<rootDir>/src/"
         ],
         "collectCoverageFrom": [
             "src/**/*.{js,jsx,ts,tsx}",
             "!src/**/*.d.ts"
         ],
         "setupFilesAfterEnv": [
-            "<rootDir>/src/src/setupTests.js"
+            "<rootDir>/src/setupTests.js"
         ],
         "testMatch": [
             "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
@@ -220,14 +195,5 @@
             "last 1 safari version"
         ]
     },
-    "tsconfig.json": "./tsconfig.json",
-    "watch": {
-        "build_react": {
-            "patterns": [
-                "./src/src"
-            ],
-            "extensions": "js,jsx,ts,tsx",
-            "delay": 5000
-        }
-    }
+    "tsconfig.json": "./tsconfig.json"
 }

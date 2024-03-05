@@ -12,7 +12,6 @@ import {
 import HomePage from './pages/HomePage';
 import ErrorPage from './pages/ErrorPage';
 import Auth from './pages/Auth';
-import AdminRoutes from './routes/adminRoutes';
 import FhirRoutes from './routes/fhirRoutes';
 import EnvContext from './context/EnvironmentContext';
 import UserContext from './context/UserContext';
@@ -47,21 +46,6 @@ function App(): React.ReactElement {
                         )
                     }
                     children={FhirRoutes}
-                />
-                <Route
-                    element={
-                        userDetails?.isAdmin ? (
-                            <Outlet />
-                        ) : !userDetails ? (
-                            <Navigate
-                                to="/authcallback"
-                                state={{ resourceUrl: window.location.href }}
-                            />
-                        ) : (
-                            <>Access Denied</>
-                        )
-                    }
-                    children={AdminRoutes}
                 />
                 <Route path="/*" element={<>Invalid Route</>} />
             </Routes>

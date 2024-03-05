@@ -9,7 +9,11 @@
 {% endfor %}
 */
 
+{% if fhir_entity.cleaned_name == 'Person' %}
+import React, { useContext } from 'react';
+{% else %}
 import React from 'react';
+{% endif %}
 import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import {{ '{ T' + fhir_entity.cleaned_name + ' }' }} from '../../types/resources/ {{- fhir_entity.cleaned_name -}}';
@@ -17,6 +21,7 @@ import {{ '{ T' + fhir_entity.cleaned_name + ' }' }} from '../../types/resources
 // Import all the partial resource
 import Partials from '../../partials';
 {% if fhir_entity.cleaned_name == 'Person' %}
+import EnvironmentContext from '../../context/EnvironmentContext';
 import UserContext from '../../context/UserContext';
 {% endif %}
 import { SecurityTagSystem } from '../../utils/securityTagSystem';
@@ -25,6 +30,7 @@ import { generateUuidV5, isUuid } from '../../utils/uid.util';
 const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_entity.cleaned_name + ' ' -}}}): React.ReactElement => {
 {% if fhir_entity.cleaned_name == 'Person' %}
     const { userDetails } = React.useContext(UserContext);
+    const { fhirAdminUrl } = useContext(EnvironmentContext);
 {% endif %}
     const sourceAssigningAuthority = resource?.meta?.security?.find(
         s => s.system === SecurityTagSystem.sourceAssigningAuthority
@@ -101,15 +107,15 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                     <Typography variant="h4" sx={{- '{{ mt: 1 }}' -}}>Admin Functions</Typography>
                     <div>
                         <Typography variant="h5">Connected Person-Patient Graph</Typography>
-                        <Link to='/admin/personPatientLink' state={{- '{{ bwellPersonId: uuid }}' -}}>
-                            /admin/showPersonToPersonLink?bwellPersonId={uuid}
-                        </Link>
+                        <a href={`${fhirAdminUrl}/personPatientLink?bwellPersonId=${uuid}`}>
+                            {fhirAdminUrl}/personPatientLink?bwellPersonId={uuid}
+                        </a>
                     </div>
                     <div>
                         <Typography variant="h5" sx={{- '{{ mt: 1 }}' -}}>Delete all data</Typography>
-                        <Link to='/admin/patientData' state={{- '{{ personId: uuid }}' -}}>
-                            /admin/deletePersonDataGraph?id={uuid}
-                        </Link>
+                        <a href={`${fhirAdminUrl}/patientData?personId=${uuid}`}>
+                            {fhirAdminUrl}/patientData?personId={uuid}
+                        </a>
                     </div>
                 </>
             )}

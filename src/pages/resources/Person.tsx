@@ -9,19 +9,21 @@ Person
     If the element is present, it must have either a @value, an @id, or extensions
 */
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { TPerson } from '../../types/resources/Person';
 
 // Import all the partial resource
 import Partials from '../../partials';
+import EnvironmentContext from '../../context/EnvironmentContext';
 import UserContext from '../../context/UserContext';
 import { SecurityTagSystem } from '../../utils/securityTagSystem';
 import { generateUuidV5, isUuid } from '../../utils/uid.util';
 
 const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
     const { userDetails } = React.useContext(UserContext);
+    const { fhirAdminUrl } = useContext(EnvironmentContext);
     const sourceAssigningAuthority = resource?.meta?.security?.find(
         s => s.system === SecurityTagSystem.sourceAssigningAuthority
     )?.code;
@@ -326,15 +328,15 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                     <Typography variant="h4" sx={{ mt: 1 }}>Admin Functions</Typography>
                     <div>
                         <Typography variant="h5">Connected Person-Patient Graph</Typography>
-                        <Link to='/admin/personPatientLink' state={{ bwellPersonId: uuid }}>
-                            /admin/showPersonToPersonLink?bwellPersonId={uuid}
-                        </Link>
+                        <a href={`${fhirAdminUrl}/personPatientLink?bwellPersonId=${uuid}`}>
+                            {fhirAdminUrl}/personPatientLink?bwellPersonId={uuid}
+                        </a>
                     </div>
                     <div>
                         <Typography variant="h5" sx={{ mt: 1 }}>Delete all data</Typography>
-                        <Link to='/admin/patientData' state={{ personId: uuid }}>
-                            /admin/deletePersonDataGraph?id={uuid}
-                        </Link>
+                        <a href={`${fhirAdminUrl}/patientData?personId=${uuid}`}>
+                            {fhirAdminUrl}/patientData?personId={uuid}
+                        </a>
                     </div>
                 </>
             )}

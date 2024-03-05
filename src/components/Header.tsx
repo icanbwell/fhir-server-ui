@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Button, Popover } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import BwellIcon from '../dist/images/bwell.png';
 import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -11,8 +11,6 @@ import { removeLocalData } from '../utils/localData.utils';
 const Header = () => {
     const env = useContext(EnvContext);
     const { userDetails } = useContext(UserContext);
-    const location = useLocation();
-    const url = location.pathname;
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handlePopoverOpen = (event: any) => {
@@ -39,7 +37,7 @@ const Header = () => {
                     </IconButton>
 
                     <Typography variant="h5" style={{ flexGrow: 1, fontWeight: 500 }}>
-                        FHIR Server {url.includes('admin') && '- Admin'}
+                        FHIR Server
                     </Typography>
                     <IconButton
                         color="inherit"

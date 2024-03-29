@@ -2,16 +2,6 @@
 .git
 .gitignore
 .github
-.idea
-.mypy_cache
-.pytest_cache
 tmp
 .vscode
 node_modules
-grafana
-prometheus
-npm-debug.log
-Dockerfile
-src/admin/scripts/.env*
-.npmrc
-build

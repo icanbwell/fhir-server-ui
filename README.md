@@ -2,18 +2,33 @@
 
 UI to display FHIR resources in a web browser
 
-## Running UI in local environment
+## Running FHIR Server UI in local environment
 
-To run the UI in local environment, follow these steps before running the container
+To run the FHIR Server UI in a local environment:
+1. Run `make up` to start the server.
 
-1. `npm run build_react`
+## Stopping the Server
 
-Then start the container: `make up`
+To stop the server:
+1. Run `make down`.
 
-# To enable hot reload
+## Linting
 
-To enable hot reload for react code, run the command `npm run watch`
+To check linting of the code:
+1. Run `make lint`.
 
-Current delay is set to 5sec i.e. after every 5 seconds code changes will be monitered and build will be created if there are changes.
+## Upgrading & Updating Packages
 
-You can change the delay according to your needs for development purposes from package.json
+To upgrade npm packages:
+1. Run `make upgrade_packages`.
+
+To update npm packages:
+1. Run `make update`.
+
+## Generating Types & Components
+
+To generate components:
+1. Run `make generate_components`.
+
+To generate types:
+1. Run `make generate_types`.

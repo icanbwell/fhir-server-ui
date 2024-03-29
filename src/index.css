@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Format for answer divs */
+.answer {
+  color: rgb(30, 70, 32);
+  background-color: #edf7ed !important;
+}
+
+.home-row {
+    cursor: pointer;
+}
+
+.home-table tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.home-table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.resource-header {
+    font-size: '1.5em';
+}
+
+.description-icon {
+    text-decoration: none;
+    color: inherit;
+}

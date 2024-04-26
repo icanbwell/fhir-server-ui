@@ -1,9 +1,8 @@
 import React from 'react';
+import ReactJson from 'react-json-view';
 
 const PreJson = ({ data }: { data: Object|String|null }): React.ReactElement => {
-    const styles = { overflow: 'scroll', display: 'block' };
-
-    return <div>{!!data && <pre style={styles}>{JSON.stringify(data, null, 2)}</pre>}</div>;
+    return <>{!!data && <ReactJson src={data} displayDataTypes={false} />}</>;
 };
 
 export default PreJson;

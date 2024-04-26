@@ -201,7 +201,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         aria-controls={'searchCollapse'}
                         id={'searchAccordion'}
                     >
-                        <Typography variant="h5">Search</Typography>
+                        <Typography variant="h5" sx={{ ml: 1 }}>Search</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <SearchContainer resourceType={resourceType} onSearch={handleSearch}></SearchContainer>

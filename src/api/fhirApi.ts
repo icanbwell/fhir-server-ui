@@ -1,11 +1,6 @@
 import { getStartAndEndDate } from '../utils/auditEventDateFilter';
 import BaseApi from './baseApi';
 
-interface GetPatientEverythingAsyncParams {
-    patientId: string;
-    question: string;
-}
-
 interface GetResourceParams {
     id: string;
     resourceType: string;
@@ -28,16 +23,6 @@ interface GetUrlParams {
 }
 
 class FhirApi extends BaseApi {
-    async getPatientEverythingAsync({
-        patientId,
-        question,
-    }: GetPatientEverythingAsyncParams) {
-        const urlEncodedQuestion = encodeURIComponent(question);
-        const urlString = `/4_0_0/Patient/${patientId}/$everything?_question=${urlEncodedQuestion}`;
-
-        return await this.getData({urlString});
-    }
-
     async getResource({ id, resourceType }: GetResourceParams) {
         const urlString = `/4_0_0/${resourceType}/${id}/`;
         return await this.getData({urlString});

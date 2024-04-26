@@ -8,6 +8,7 @@ new FhirApi({ fhirUrl: process.env.REACT_APP_FHIR_SERVER_URL, setUserDetails: un
 
 const EnvContext = createContext<{
     fhirUrl: string;
+    fhirAdminUrl: string;
     AUTH_CUSTOM_GROUP: string;
     AUTH_CUSTOM_SCOPE: string;
     AUTH_CODE_FLOW_CLIENT_ID: string;
@@ -16,6 +17,7 @@ const EnvContext = createContext<{
     getFhirServerVersion:() => string;
 }>({
     fhirUrl: process.env.REACT_APP_FHIR_SERVER_URL || '',
+    fhirAdminUrl: process.env.REACT_APP_FHIR_ADMIN_URL || '',
     AUTH_CUSTOM_GROUP: process.env.REACT_APP_AUTH_CUSTOM_GROUP || '',
     AUTH_CUSTOM_SCOPE: process.env.REACT_APP_AUTH_CUSTOM_SCOPE || '',
     AUTH_CODE_FLOW_CLIENT_ID: process.env.REACT_APP_AUTH_CODE_FLOW_CLIENT_ID || '',

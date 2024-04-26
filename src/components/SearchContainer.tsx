@@ -1,60 +1,119 @@
-import React, { useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import SearchForm from './SearchForm';
-import SearchBox from './SearchBox';
+import { useState } from 'react';
+import { TextField, Button, Box, Grid } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import SearchFormQuery from '../utils/searchFormQuery';
+import { getAdvSearchFormData, getFormData } from '../utils/searchForm.utils';
+import { getStartAndEndDate } from '../utils/auditEventDateFilter';
+import { TFieldInfo } from '../types/baseTypes';
 
-function TabPanel(props: any) {
-  const { children, value, index, ...other } = props;
+export default function SearchContainer({
+    onSearch,
+    resourceType,
+}: {
+    onSearch: any;
+    resourceType: string;
+}) {
+    const advSearchFormData = getAdvSearchFormData(resourceType);
+    const formData = getFormData(resourceType);
+    let defaultValues: any;
+    const { startDate, endDate } = getStartAndEndDate();
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box>
-          <Typography>{children}</Typography>
+    // create defaultValues for searchParams
+    defaultValues = resourceType === 'AuditEvent' ?
+        ({ start: startDate, end: endDate, resourceType }) :
+        ({ start: null, end: null, resourceType });
+    formData.forEach((data) => {
+        defaultValues[`${data.name}`] = '';
+    });
+    advSearchFormData.forEach((data) => {
+        defaultValues[`${data.name}`] = '';
+    });
+    const [searchParams, setSearchParams] = useState(defaultValues);
+
+    const resetFields = () => {
+        setSearchParams(defaultValues);
+    };
+
+    const handleSearch = (e: any) => {
+        e.preventDefault();
+
+        onSearch(new SearchFormQuery(searchParams));
+    };
+
+    const handleChange = (e: any) => {
+        e.preventDefault();
+
+        setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
+    };
+
+    return (
+        <Box
+            component="form"
+            sx={{
+                '& .MuiTextField-root': { ml: 1, width: { xs: '90%', sm: '25ch' } },
+                '& .MuiButton-root': { ml: 1, width: { xs: '90%', sm: '10ch' } },
+            }}
+            noValidate
+            autoComplete="on"
+            onSubmit={handleSearch}
+        >
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <DatePicker
+                        label="Last Updated After"
+                        value={searchParams.start}
+                        slotProps={{
+                            field: {
+                                clearable: true,
+                            },
+                        }}
+                        onChange={(newValue) => setSearchParams({ ...searchParams, start: newValue })}
+                    />
+                    <DatePicker
+                        label="Last Updated Before"
+                        value={searchParams.end}
+                        slotProps={{
+                            field: {
+                                clearable: true,
+                            },
+                        }}
+                        onChange={(newValue) => setSearchParams({ ...searchParams, end: newValue })}
+                    />
+                    {formData.map((data: TFieldInfo) => (
+                        <TextField
+                            name={data.name}
+                            label={data.label}
+                            type="text"
+                            value={searchParams[`${data.name}`]}
+                            onChange={handleChange}
+                            fullWidth
+                        />
+                    ))}
+                    {advSearchFormData.map((data: TFieldInfo) => (
+                        <TextField
+                            name={data.name}
+                            label={data.label}
+                            type="text"
+                            value={searchParams[`${data.name}`]}
+                            onChange={handleChange}
+                            fullWidth
+                        />
+                    ))}
+                </Grid>
+                <Grid item xs={12}>
+                    <Button variant="outlined" color="secondary" onClick={resetFields}>
+                        Reset
+                    </Button>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSearch}
+                    >
+                        Search
+                    </Button>
+                </Grid>
+            </Grid>
         </Box>
-      )}
-    </div>
-  );
+    );
 }
-
-const SearchContainer = ({ onSearch, resourceType }: { onSearch: any, resourceType: string }) => {
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event: any, newValue: any) => {
-    setValue(newValue);
-  };
-
-  const handleSearch = (searchFormQuery: any) => {
-    onSearch(searchFormQuery);
-  };
-
-  return (
-    <>
-      <Tabs value={value} onChange={handleChange}>
-        <Tab label="Advanced Search" />
-        <Tab label="ChatGPT" />
-        {/*<Tab label="Tab Three"/>*/}
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <SearchForm resourceType={resourceType} onSearch={handleSearch}></SearchForm>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <SearchBox onSearch={handleSearch}></SearchBox>
-      </TabPanel>
-      {/*<TabPanel value={value} index={2}>*/}
-      {/*    Content of Tab Three*/}
-      {/*</TabPanel>*/}
-    </>
-  );
-};
-
-export default SearchContainer;

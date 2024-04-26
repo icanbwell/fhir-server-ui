@@ -17,7 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 if (process.env.REACT_APP_SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.REACT_APP_SENTRY_DSN,
-    environment: process.env.REACT_APP_ENVIRONMENT
+    environment: process.env.REACT_APP_ENVIRONMENT,
+    autoSessionTracking: false
   });
 }
 

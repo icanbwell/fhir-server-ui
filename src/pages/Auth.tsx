@@ -15,7 +15,6 @@ const Auth = () => {
     const queryParams = new URLSearchParams(location.search);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const authService: IAuthService = AuthServiceFactory.getAuthService();
     const isFetchingToken = useRef(false);
 
     const redirectToLogin = async () => {
@@ -29,6 +28,7 @@ const Auth = () => {
             setError('No identity provider found in local storage');
             return;
         }
+        const authService: IAuthService = AuthServiceFactory.getAuthService();
 
         setIsProcessing(true);
 
@@ -54,6 +54,19 @@ const Auth = () => {
         isFetchingToken.current = true;
         setIsProcessing(true);
 
+        const state = queryParams.get('state');
+        const resourceUrl = state ? Buffer.from(state, 'base64').toString('ascii') : '/';
+        const authAppRedirectPath = process.env.REACT_APP_AUTH_REDIRECT_PATH;
+        if (authAppRedirectPath && resourceUrl === process.env.REACT_APP_AUTH_REDIRECT_STATE) {
+            window.location.href = authAppRedirectPath + location.search;
+
+            // Redirect to home page after callback
+            setTimeout(() => {
+                navigate('/');
+            }, 5000);
+            return;
+        }
+
         console.info('Fetching token');
 
         const identityProvider = getLocalData('identityProvider');
@@ -64,10 +77,9 @@ const Auth = () => {
             isFetchingToken.current = false;
             return;
         }
+        const authService: IAuthService = AuthServiceFactory.getAuthService();
 
         try {
-            const state = queryParams.get('state');
-            const resourceUrl = state ? Buffer.from(state, 'base64').toString('ascii') : '/';
             const tokens = await authService.fetchTokenAsync(identityProvider, code, resourceUrl);
 
             setLocalData('jwt', tokens.access_token);
@@ -115,7 +127,7 @@ const Auth = () => {
         } else {
             fetchTokenAsync(code).catch(console.error);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <>{error ? <div style={{ color: 'red' }}>{error}</div> : <>Authenticating...</>}</>;

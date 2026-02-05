@@ -13,6 +13,7 @@ import {
     Divider,
     Tooltip,
 } from '@mui/material';
+import DOMPurify from 'dompurify';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
@@ -51,7 +52,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
     const [rawResponse, setRawResponse] = useState<Object | null>(null);
     const [compositionHtml, setCompositionHtml] = useState<string>('');
     const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
-    const [sectionData, setSectionData] = useState<Array<{id: string, title: string, headings: HTMLElement[], tables: HTMLTableElement[], content: string}>>([]);
+    const [sectionData, setSectionData] = useState<Array<{ id: string, title: string, headings: HTMLElement[], tables: HTMLTableElement[], content: string }>>([]);
     const [collapsedResourceTypes, setCollapsedResourceTypes] = useState<Set<string>>(new Set());
     const [bundleResourcesCollapsed, setBundleResourcesCollapsed] = useState<boolean>(true);
     const { isDarkMode } = useTheme();
@@ -125,7 +126,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
     }, [bundle]);
 
     // Helper function to extract tables from HTML content
-    const extractTablesFromHtml = (htmlContent: string): {tables: HTMLTableElement[], headings: HTMLElement[]} => {
+    const extractTablesFromHtml = (htmlContent: string): { tables: HTMLTableElement[], headings: HTMLElement[] } => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlContent, 'text/html');
 
@@ -163,7 +164,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                         baseHtml += composition.text.div;
 
                         const sections = composition.section || [];
-                        const sectionsData: Array<{id: string, title: string, tables: HTMLTableElement[], headings: HTMLElement[], content: string}> = [];
+                        const sectionsData: Array<{ id: string, title: string, tables: HTMLTableElement[], headings: HTMLElement[], content: string }> = [];
                         const allSectionIds = new Set<string>();
 
                         sections.forEach((section: any, index: number) => {
@@ -307,7 +308,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                         }}
                     >
                         {/* Render base composition content */}
-                        <div dangerouslySetInnerHTML={{ __html: compositionHtml }} />
+                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(compositionHtml) }} />
 
                         {/* Render sections conditionally */}
                         {sectionData.map((section) => (
@@ -339,7 +340,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                                             // set content received
                                             <div
                                                 className="ips-section-content"
-                                                dangerouslySetInnerHTML={{ __html: section.content }}
+                                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(section.content) }}
                                             />
                                         }
                                     </div>

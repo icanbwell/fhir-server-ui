@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Accordion, Alert, AlertTitle, Box, Button, LinearProgress, Tooltip } from '@mui/material';
+import DOMPurify from 'dompurify';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -86,7 +87,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                 {resources && resources.length === 1 && resources[0].text?.div && (
                     <Alert severity="success">
                         <AlertTitle>Answer</AlertTitle>
-                        <Box dangerouslySetInnerHTML={{ __html: resources[0].text?.div }} />
+                        <Box dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resources[0].text?.div) }} />
                     </Alert>
                 )}
                 {/*if we have a list of resources*/}
@@ -95,7 +96,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         <AlertTitle>Answer</AlertTitle>
                         <Box
                             dangerouslySetInnerHTML={{
-                                __html: resources[0].resource?.text?.div,
+                                __html: DOMPurify.sanitize(resources[0].resource?.text?.div),
                             }}
                         />
                     </Alert>

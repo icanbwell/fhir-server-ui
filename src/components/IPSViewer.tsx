@@ -209,16 +209,11 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
         return { headers, rows };
     };
 
-    const shouldDisaplaySection = (section: SectionData): boolean => {
+    const shouldDisplaySection = (section: SectionData): boolean => {
         // If the section has tables with data, display it
-        const combinedTableData = section.tablesData.reduce((acc, tableData) => {
-            return {
-                headers: [...acc.headers, ...tableData.headers],
-                rows: [...acc.rows, ...tableData.rows],
-            };
-        }, { headers: [], rows: [] } as TableData);
+        const hasTableRows = section.tablesData.some(table => table.rows.length > 0);
 
-        if (combinedTableData.rows.length > 0) {
+        if (hasTableRows) {
             return true;
         }
 
@@ -271,7 +266,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                                 const { tables, headings } = extractTablesFromHtml(section.text.div);
                                 const tablesData: TableData[] = [];
                                 if (tables && tables.length > 0) {
-                                    tables.map((table) => {
+                                    tables.forEach((table) => {
                                         const tableData = extractTableData(table);
                                         tablesData.push(tableData);
                                     });
@@ -415,7 +410,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                         {/* Render sections conditionally */}
                         {sectionData.map((section) => {
 
-                            if (!shouldDisaplaySection(section)) {
+                            if (!shouldDisplaySection(section)) {
                                 return null;
                             }
 
@@ -465,35 +460,36 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
             )}
 
             {/* List all resources in the bundle */}
-            <Box sx={{ mt: 4, mb: 2 }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        cursor: 'pointer',
-                        '&:hover': {
-                            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
-                        },
-                        p: 1,
-                        borderRadius: 1,
-                    }}
-                    onClick={toggleBundleResources}
-                >
-                    <Typography variant="h6">
-                        Bundle Resources ({Object.values(resourcesByType).reduce((sum, resources) => sum + resources.length, 0)})
-                    </Typography>
-                    <span
-                        className={`ips-collapse-icon ${bundleResourcesCollapsed ? 'collapsed' : ''}`}
-                        style={{
-                            transition: 'transform 0.2s ease',
-                            transform: bundleResourcesCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+            {Object.keys(resourcesByType).length > 0 && (
+                <Box sx={{ mt: 4, mb: 2 }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            '&:hover': {
+                                backgroundColor: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
+                            },
+                            p: 1,
+                            borderRadius: 1,
                         }}
+                        onClick={toggleBundleResources}
                     >
-                        ▼
-                    </span>
-                </Box>
-            </Box>
+                        <Typography variant="h6">
+                            Bundle Resources ({Object.values(resourcesByType).reduce((sum, resources) => sum + resources.length, 0)})
+                        </Typography>
+                        <span
+                            className={`ips-collapse-icon ${bundleResourcesCollapsed ? 'collapsed' : ''}`}
+                            style={{
+                                transition: 'transform 0.2s ease',
+                                transform: bundleResourcesCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+                            }}
+                        >
+                            ▼
+                        </span>
+                    </Box>
+                </Box>)}
 
             {!bundleResourcesCollapsed && Object.keys(resourcesByType).map((resourceType) => (
                 <Card key={resourceType} sx={{ mb: 2 }}>

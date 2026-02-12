@@ -33,7 +33,7 @@ const getIPSLink = ({
     return (
         <Tooltip title="View International Patient Summary">
             <Link
-                to={`/ips/4_0_0/Patient/${resource.resourceType === 'Person' ? 'person.' : ''}${uuid}/$summary`}
+                to={`/ips/4_0_0/Patient/${resource.resourceType === 'Person' ? 'person.' : ''}${uuid}/$summary?_includeSummaryCompositionOnly=true`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

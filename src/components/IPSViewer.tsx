@@ -22,6 +22,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import PaginatedTable from './PaginatedTable';
 import './IPSNarrative.css'; // Import the CSS file for styling the IPS narrative
 import PreJson from './PreJson';
+import { getMandatorySectionContent } from '../constants/ipsConstants';
 
 interface IPSViewerProps {
     relativeUrl: string;
@@ -45,6 +46,21 @@ interface Bundle {
     [key: string]: any;
 }
 
+export interface TableData {
+    headers: string[];
+    rows: string[][];
+}
+
+interface SectionData {
+    id: string;
+    title: string;
+    tables: HTMLElement[];
+    tablesData: TableData[];
+    headings: HTMLElement[];
+    content: string;
+}
+
+
 const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -52,7 +68,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
     const [rawResponse, setRawResponse] = useState<Object | null>(null);
     const [compositionHtml, setCompositionHtml] = useState<string>('');
     const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
-    const [sectionData, setSectionData] = useState<Array<{ id: string, title: string, headings: HTMLElement[], tables: HTMLTableElement[], content: string }>>([]);
+    const [sectionData, setSectionData] = useState<SectionData[]>([]);
     const [collapsedResourceTypes, setCollapsedResourceTypes] = useState<Set<string>>(new Set());
     const [bundleResourcesCollapsed, setBundleResourcesCollapsed] = useState<boolean>(true);
     const { isDarkMode } = useTheme();
@@ -137,6 +153,80 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
         return { tables, headings: tableHeadings };
     };
 
+    // Extract table data from HTML table element
+    const extractTableData = (table: HTMLTableElement): TableData => {
+        const headers: string[] = [];
+        const rows: string[][] = [];
+
+        // Extract headers - check for thead first, then first row
+        let headerRow = table.querySelector('thead tr');
+        if (!headerRow) {
+            // Try to find a row with th elements
+            headerRow = table.querySelector('tr:has(th)');
+        }
+        if (!headerRow) {
+            // Fallback to first row if it seems to be a header
+            const firstRow = table.querySelector('tr');
+            if (firstRow) {
+                const cells = firstRow.querySelectorAll('td, th');
+                const hasThElements = firstRow.querySelectorAll('th').length > 0;
+                if (hasThElements || cells.length <= 5) {
+                    // Assume header if few columns or th elements
+                    headerRow = firstRow;
+                }
+            }
+        }
+
+        if (headerRow) {
+            const headerCells = headerRow.querySelectorAll('th, td');
+            headerCells.forEach((cell) => {
+                headers.push(cell.textContent?.trim() || '');
+            });
+        }
+
+        // Extract data rows
+        let dataRows: HTMLTableRowElement[] = Array.from(table.querySelectorAll('tbody tr'));
+        if (dataRows.length === 0) {
+            // No tbody, get all rows
+            const allRows = Array.from(table.querySelectorAll('tr'));
+            dataRows = allRows.filter((row) => row !== headerRow);
+        }
+
+        dataRows.forEach((row) => {
+            const cells = row.querySelectorAll('td, th');
+            const rowData: string[] = [];
+            cells.forEach((cell) => {
+                // Handle nested elements in cells
+                let cellText = cell.textContent?.trim() || '';
+                rowData.push(cellText);
+            });
+            if (rowData.some((cell) => cell.length > 0)) {
+                // Only add rows with some content
+                rows.push(rowData);
+            }
+        });
+
+        return { headers, rows };
+    };
+
+    const shouldDisplaySection = (section: SectionData): boolean => {
+        // If the section has tables with data, display it
+        const hasTableRows = section.tablesData.some(table => table.rows.length > 0);
+
+        if (hasTableRows) {
+            return true;
+        }
+
+        // If the section is a mandatory IPS section, display it even if empty
+        const mandatoryContent = getMandatorySectionContent(section.title);
+        if (mandatoryContent) {
+            return true;
+        }
+
+        // Otherwise, hide sections without tables and not mandatory
+        return false;
+    };
+
     useEffect(() => {
         const fetchBundle = async () => {
             setIsLoading(true);
@@ -164,7 +254,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                         baseHtml += composition.text.div;
 
                         const sections = composition.section || [];
-                        const sectionsData: Array<{ id: string, title: string, tables: HTMLTableElement[], headings: HTMLElement[], content: string }> = [];
+                        const sectionsData: SectionData[] = [];
                         const allSectionIds = new Set<string>();
 
                         sections.forEach((section: any, index: number) => {
@@ -174,11 +264,18 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
 
                                 // Extract tables from the section content
                                 const { tables, headings } = extractTablesFromHtml(section.text.div);
-
+                                const tablesData: TableData[] = [];
+                                if (tables && tables.length > 0) {
+                                    tables.forEach((table) => {
+                                        const tableData = extractTableData(table);
+                                        tablesData.push(tableData);
+                                    });
+                                }
                                 sectionsData.push({
                                     id: sectionId,
                                     title: section.title || `Section ${index + 1}`,
                                     tables,
+                                    tablesData,
                                     headings,
                                     content: section.text.div
                                 });
@@ -311,76 +408,88 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                         <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(compositionHtml) }} />
 
                         {/* Render sections conditionally */}
-                        {sectionData.map((section) => (
-                            <div key={section.id} className="ips-section">
-                                <div
-                                    className="ips-section-header"
-                                    onClick={() => toggleSection(section.id)}
-                                >
-                                    <h2>{section.title}</h2>
-                                    <span
-                                        className={`ips-collapse-icon ${collapsedSections.has(section.id) ? 'collapsed' : ''}`}
+                        {sectionData.map((section) => {
+
+                            if (!shouldDisplaySection(section)) {
+                                return null;
+                            }
+
+                            return (
+                                <div key={section.id} className="ips-section">
+                                    <div
+                                        className="ips-section-header"
+                                        onClick={() => toggleSection(section.id)}
                                     >
-                                        ▼
-                                    </span>
-                                </div>
-                                {!collapsedSections.has(section.id) && (
-                                    <div className="ips-section-content">
-                                        {/* Render extracted tables with pagination */}
-                                        {section.tables.length > 0 && section.tables.map((table, tableIndex) => (
-                                            <PaginatedTable
-                                                key={`${section.id}-table-${tableIndex}`}
-                                                tableElement={table}
-                                                // eslint-disable-next-line security/detect-object-injection
-                                                title={section.headings[tableIndex]?.innerText}
-                                            />
-                                        ))}
-                                        {
-                                            section.tables.length === 0 &&
-                                            // set content received
-                                            <div
-                                                className="ips-section-content"
-                                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(section.content) }}
-                                            />
-                                        }
+                                        <h2>{section.title}</h2>
+                                        <span
+                                            className={`ips-collapse-icon ${collapsedSections.has(section.id) ? 'collapsed' : ''}`}
+                                        >
+                                            ▼
+                                        </span>
                                     </div>
-                                )}
-                            </div>
-                        ))}
+                                    {!collapsedSections.has(section.id) && (
+                                        <div className="ips-section-content">
+                                            {/* Render extracted tables with pagination */}
+                                            {section.tablesData.length > 0 && section.tablesData.map((table, tableIndex) => (
+                                                <PaginatedTable
+                                                    key={`${section.id}-table-${tableIndex}`}
+                                                    tableData={table}
+                                                    // eslint-disable-next-line security/detect-object-injection
+                                                    title={section.headings[tableIndex]?.innerText}
+                                                    sectionTitle={section.title}
+                                                />
+                                            ))}
+                                            {
+                                                section.tables.length === 0 &&
+                                                <div
+                                                    className="ips-section-content"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: DOMPurify.sanitize(
+                                                            getMandatorySectionContent(section.title) || section.content
+                                                        )
+                                                    }}
+                                                />
+                                            }
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </Box>
                 </Paper>
             )}
 
             {/* List all resources in the bundle */}
-            <Box sx={{ mt: 4, mb: 2 }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        cursor: 'pointer',
-                        '&:hover': {
-                            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
-                        },
-                        p: 1,
-                        borderRadius: 1,
-                    }}
-                    onClick={toggleBundleResources}
-                >
-                    <Typography variant="h6">
-                        Bundle Resources ({Object.values(resourcesByType).reduce((sum, resources) => sum + resources.length, 0)})
-                    </Typography>
-                    <span
-                        className={`ips-collapse-icon ${bundleResourcesCollapsed ? 'collapsed' : ''}`}
-                        style={{
-                            transition: 'transform 0.2s ease',
-                            transform: bundleResourcesCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+            {Object.keys(resourcesByType).length > 0 && (
+                <Box sx={{ mt: 4, mb: 2 }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            '&:hover': {
+                                backgroundColor: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
+                            },
+                            p: 1,
+                            borderRadius: 1,
                         }}
+                        onClick={toggleBundleResources}
                     >
-                        ▼
-                    </span>
-                </Box>
-            </Box>
+                        <Typography variant="h6">
+                            Bundle Resources ({Object.values(resourcesByType).reduce((sum, resources) => sum + resources.length, 0)})
+                        </Typography>
+                        <span
+                            className={`ips-collapse-icon ${bundleResourcesCollapsed ? 'collapsed' : ''}`}
+                            style={{
+                                transition: 'transform 0.2s ease',
+                                transform: bundleResourcesCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+                            }}
+                        >
+                            ▼
+                        </span>
+                    </Box>
+                </Box>)}
 
             {!bundleResourcesCollapsed && Object.keys(resourcesByType).map((resourceType) => (
                 <Card key={resourceType} sx={{ mb: 2 }}>

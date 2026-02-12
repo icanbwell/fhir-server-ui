@@ -11,78 +11,22 @@ import {
     Box,
     Typography,
 } from '@mui/material';
+import DOMPurify from 'dompurify';
+
+import { getMandatorySectionContent } from '../constants/ipsConstants';
+import { TableData } from './IPSViewer';
 
 interface PaginatedTableProps {
-    tableElement: HTMLTableElement;
+    tableData: TableData;
     title?: string;
+    sectionTitle: string
 }
 
-interface TableData {
-    headers: string[];
-    rows: string[][];
-}
 
-const PaginatedTable: React.FC<PaginatedTableProps> = ({ tableElement, title }) => {
+
+const PaginatedTable: React.FC<PaginatedTableProps> = ({ tableData, title, sectionTitle }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    // Extract table data from HTML table element
-    const extractTableData = (table: HTMLTableElement): TableData => {
-        const headers: string[] = [];
-        const rows: string[][] = [];
-
-        // Extract headers - check for thead first, then first row
-        let headerRow = table.querySelector('thead tr');
-        if (!headerRow) {
-            // Try to find a row with th elements
-            headerRow = table.querySelector('tr:has(th)');
-        }
-        if (!headerRow) {
-            // Fallback to first row if it seems to be a header
-            const firstRow = table.querySelector('tr');
-            if (firstRow) {
-                const cells = firstRow.querySelectorAll('td, th');
-                const hasThElements = firstRow.querySelectorAll('th').length > 0;
-                if (hasThElements || cells.length <= 5) {
-                    // Assume header if few columns or th elements
-                    headerRow = firstRow;
-                }
-            }
-        }
-
-        if (headerRow) {
-            const headerCells = headerRow.querySelectorAll('th, td');
-            headerCells.forEach((cell) => {
-                headers.push(cell.textContent?.trim() || '');
-            });
-        }
-
-        // Extract data rows
-        let dataRows: HTMLTableRowElement[] = Array.from(table.querySelectorAll('tbody tr'));
-        if (dataRows.length === 0) {
-            // No tbody, get all rows
-            const allRows = Array.from(table.querySelectorAll('tr'));
-            dataRows = allRows.filter((row) => row !== headerRow);
-        }
-
-        dataRows.forEach((row) => {
-            const cells = row.querySelectorAll('td, th');
-            const rowData: string[] = [];
-            cells.forEach((cell) => {
-                // Handle nested elements in cells
-                let cellText = cell.textContent?.trim() || '';
-                rowData.push(cellText);
-            });
-            if (rowData.some((cell) => cell.length > 0)) {
-                // Only add rows with some content
-                rows.push(rowData);
-            }
-        });
-
-        return { headers, rows };
-    };
-
-    const tableData = extractTableData(tableElement);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -94,7 +38,14 @@ const PaginatedTable: React.FC<PaginatedTableProps> = ({ tableElement, title }) 
     };
 
     if (tableData.rows.length === 0) {
-        return null;
+        return <div
+            className="ips-section-content"
+            dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                    getMandatorySectionContent(sectionTitle) || ''
+                )
+            }}
+        />;
     }
 
     // Determine if we should show pagination (only for more than 10 rows)

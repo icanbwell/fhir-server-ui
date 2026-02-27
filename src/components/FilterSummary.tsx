@@ -40,11 +40,17 @@ const FilterSummary = ({ queryString, resourceType }: FilterSummaryProps) => {
     // Format filter value for display
     const formatFilterValue = (key: string, value: string): string => {
         // Handle date comparisons
-        if (value.startsWith('ge') || value.startsWith('gt')) {
+        if (value.startsWith('ge')) {
             return `≥ ${value.substring(2)}`;
         }
-        if (value.startsWith('le') || value.startsWith('lt')) {
+        if (value.startsWith('gt')) {
+            return `> ${value.substring(2)}`;
+        }
+        if (value.startsWith('le')) {
             return `≤ ${value.substring(2)}`;
+        }
+        if (value.startsWith('lt')) {
+            return `< ${value.substring(2)}`;
         }
         return value;
     };

@@ -2,6 +2,10 @@
 
 UI to display FHIR resources in a web browser
 
+## Documentation
+
+For information about FHIR bundle filters and search parameters, see [docs/FILTERS.md](docs/FILTERS.md).
+
 ## Running FHIR Server UI in local environment
 
 To run the FHIR Server UI in a local environment:

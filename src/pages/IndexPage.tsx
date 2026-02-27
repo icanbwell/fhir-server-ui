@@ -18,6 +18,7 @@ import UserContext from '../context/UserContext';
 import GridOnIcon from '@mui/icons-material/GridOn'; // New icon for spreadsheet
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
+import FilterSummary from '../components/FilterSummary';
 
 /**
  * IndexPage/home/ubuntu/Documents/code/EFS/fhir-server/src/pages/SearchPage.jsx
@@ -282,6 +283,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </AccordionDetails>
                 </Accordion>
                 <div style={{ padding: '0 10px' }}>
+                    <FilterSummary queryString={queryString} resourceType={resourceType} />
                     <Box my={2}>{getBox()}</Box>
                 </div>
             </div>

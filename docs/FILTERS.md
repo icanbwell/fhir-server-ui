@@ -170,7 +170,7 @@ Date comparison operators are formatted for better readability:
 **Active Filters Displayed**:
 - Given Name: John
 - Family Name: Doe
-- Last Updated: ≥ 2024-01-01
+- Last Updated: > 2024-01-01
 
 ### Example 2: AuditEvent with Date Range
 

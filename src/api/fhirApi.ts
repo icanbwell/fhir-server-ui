@@ -54,7 +54,7 @@ class FhirApi extends BaseApi {
         if ((!id || id === '_history' || operation === '_history') && !queryParams.has('_count')) {
             queryParams.append('_count', '10');
         }
-        if (!queryParams.has('_metaUuid')) {
+        if (!queryParams.has('_metaUuid') && queryParams.get('_format') !== 'json') {
             queryParams.append('_metaUuid', '1');
         }
         if (resourceType === 'AuditEvent' && !queryParams.has('date')) {

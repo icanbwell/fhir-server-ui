@@ -22,6 +22,13 @@ interface GetUrlParams {
     operation?: string;
 }
 
+interface PostResourceParams {
+    resourceType: string;
+    id: string;
+    resource: object;
+    smartMerge?: boolean;
+}
+
 class FhirApi extends BaseApi {
     async getResource({ id, resourceType }: GetResourceParams) {
         const urlString = `/4_0_0/${resourceType}/${id}/`;
@@ -102,6 +109,11 @@ class FhirApi extends BaseApi {
         }
         this.addMissingRequiredParams({ queryParams: url.searchParams, id, resourceType, operation });
         return url;
+    }
+
+    async mergeResource({ resourceType, id, resource, smartMerge = true }: PostResourceParams) {
+        const urlString = `/4_0_0/${resourceType}/${id}/$merge?smartMerge=${smartMerge}`;
+        return await this.request({ urlString, method: 'POST', data: resource });
     }
 }
 

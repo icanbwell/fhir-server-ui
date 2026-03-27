@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, CardContent, CardHeader, Collapse, Tooltip } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, Collapse, IconButton, Tooltip } from '@mui/material';
 import ResourceItem from './ResourceItem';
 import Json from './Json';
 import { TResource } from '../types/resources/Resource';
@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DescriptionIcon from '@mui/icons-material/Description';
+import EditIcon from '@mui/icons-material/Edit';
 import { IdentifierSystem } from '../utils/identifierSystem';
 
 type TResourceCardProps = {
@@ -100,6 +101,19 @@ const ResourceCard = ({
                 title={`(${index + 1}) ${resource.resourceType}/${uuid ?? ''}`}
                 action={
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                        {resource.id && (
+                            <Tooltip title="Edit Resource">
+                                <IconButton
+                                    component={Link}
+                                    to={`/4_0_0/${resource.resourceType}/${uuid}/$merge`}
+                                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                                    size="small"
+                                    color="primary"
+                                >
+                                    <EditIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                         {resource.resourceType &&
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getIPSLink({ resource, uuid: uuid?.toString() })}

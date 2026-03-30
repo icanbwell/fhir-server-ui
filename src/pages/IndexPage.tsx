@@ -18,6 +18,7 @@ import UserContext from '../context/UserContext';
 import GridOnIcon from '@mui/icons-material/GridOn'; // New icon for spreadsheet
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
+import APIConsolePage from './APIConsolePage';
 
 /**
  * IndexPage/home/ubuntu/Documents/code/EFS/fhir-server/src/pages/SearchPage.jsx
@@ -87,7 +88,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                 {resources && resources.length === 1 && resources[0].text?.div && (
                     <Alert severity="success">
                         <AlertTitle>Answer</AlertTitle>
-                        <Box dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resources[0].text?.div) }} />
+                        <Box
+                            dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(resources[0].text?.div),
+                            }}
+                        />
                     </Alert>
                 )}
                 {/*if we have a list of resources*/}
@@ -148,7 +153,10 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             setResourceCardExpanded(true);
         }
         const callApi = async () => {
-            document.title = 'Helix FHIR Server';
+            document.title = 'FHIR Server';
+            if (operation === '$merge' || operation === '$graph' || operation === '$everything') {
+                return;
+            }
             if (search) {
                 setSearchTabExpanded(true);
                 return;
@@ -195,7 +203,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         if (json.id) {
                             document.title = `${json.id} (${resourceType})`;
                         } else {
-                            document.title = 'Helix FHIR Server';
+                            document.title = 'FHIR Server';
                         }
                     }
                 }
@@ -218,6 +226,10 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         location.search,
         shouldBeJsonFormat,
     ]);
+
+    if (operation === '$merge' || operation === '$graph' || operation === '$everything') {
+        return <APIConsolePage />;
+    }
 
     /**
      * Handle search event from child component

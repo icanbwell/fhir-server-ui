@@ -8,8 +8,10 @@ import PatientTimeline from '../PatientTimeline';
 import SearchPage from '../pages/SearchPage';
 import ExcelViewerPage from '../pages/ExcelViewerPage';
 import IPSViewerPage from '../pages/IPSViewerPage';
+import APIConsolePage from '../pages/APIConsolePage';
 
 export default [
+    <Route key="apiConsole" path="/api-console" element={<APIConsolePage />} />,
     <Route key="about" path="/about" element={<AboutPage />} />,
     <Route key="patientTimeline" path="/patientTimeline" element={<PatientTimeline />} />,
     <Route key="ObservationGraph" path="/observationGraph" element={<ObservationGraph />} />,

@@ -14,7 +14,7 @@ interface GetDataParams {
 interface RequestParams {
     urlString: string;
     params?: any;
-    method: 'GET' | 'POST' | 'DELETE';
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     data?: any;
 }
 

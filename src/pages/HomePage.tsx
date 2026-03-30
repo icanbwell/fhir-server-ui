@@ -47,7 +47,7 @@ const Home = () => {
     }, [debouncedSearch]);
 
     useEffect(() => {
-        document.title = 'Helix FHIR Server';
+        document.title = 'FHIR Server';
     }, []);
 
     return (
@@ -72,16 +72,26 @@ const Home = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         sx={{ width: '50vw' }}
                     />
-                    {userDetails?.isAdmin && (
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                        {userDetails?.isAdmin && (
+                            <Button
+                                variant="contained"
+                                component={Link}
+                                to="/admin"
+                                sx={{ height: '40px' }}
+                            >
+                                Visit Admin Dashboard
+                            </Button>
+                        )}
                         <Button
-                            variant="contained"
+                            variant="outlined"
                             component={Link}
-                            to="/admin"
-                            sx={{ ml: 2, height: '40px' }}
+                            to="/api-console"
+                            sx={{ height: '40px' }}
                         >
-                            Visit Admin Dashboard
+                            API Console
                         </Button>
-                    )}
+                    </Box>
                 </Box>
                     <TableContainer component={Paper} variant="outlined">
                         <Table stickyHeader className="sticky-table">

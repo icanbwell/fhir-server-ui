@@ -24,7 +24,7 @@ const adminLinks = [
 ];
 
 const AdminIndexPage: React.FC = () => {
-    document.title = 'Helix FHIR Server - Admin';
+    document.title = 'FHIR Server - Admin';
 
   return (
     <div style={{ width: '100%', padding: 0, margin: 0 }}>

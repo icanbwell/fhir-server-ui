@@ -121,11 +121,16 @@ function SelectableTable({
                       onChange={handleSelectRow(rowId)}
                     />
                   </TableCell>
-                  {columns.map((column: string, columnIndex: number) => (
-                    <TableCell key={`${rowId}-${columnIndex}`}>
-                      {row[column]}
-                    </TableCell>
-                  ))}
+                  {columns.map((column: string, columnIndex: number) => {
+                    const value = Object.prototype.hasOwnProperty.call(row, column) ? row[column] : undefined; // eslint-disable-line security/detect-object-injection
+                    return (
+                      <TableCell key={`${rowId}-${columnIndex}`}>
+                        {typeof value === 'object' && value !== null
+                          ? JSON.stringify(value)
+                          : String(value ?? '')}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               );
             })}

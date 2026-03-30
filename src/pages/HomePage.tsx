@@ -47,7 +47,7 @@ const Home = () => {
     }, [debouncedSearch]);
 
     useEffect(() => {
-        document.title = 'Helix FHIR Server';
+        document.title = 'FHIR Server';
     }, []);
 
     return (

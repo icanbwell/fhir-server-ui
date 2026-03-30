@@ -153,7 +153,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             setResourceCardExpanded(true);
         }
         const callApi = async () => {
-            document.title = 'Helix FHIR Server';
+            document.title = 'FHIR Server';
             if (operation === '$merge' || operation === '$graph' || operation === '$everything') {
                 return;
             }
@@ -203,7 +203,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         if (json.id) {
                             document.title = `${json.id} (${resourceType})`;
                         } else {
-                            document.title = 'Helix FHIR Server';
+                            document.title = 'FHIR Server';
                         }
                     }
                 }

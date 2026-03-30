@@ -18,7 +18,7 @@ import UserContext from '../context/UserContext';
 import GridOnIcon from '@mui/icons-material/GridOn'; // New icon for spreadsheet
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
-import MergePage from './MergePage';
+import APIConsolePage from './APIConsolePage';
 
 /**
  * IndexPage/home/ubuntu/Documents/code/EFS/fhir-server/src/pages/SearchPage.jsx
@@ -154,7 +154,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         }
         const callApi = async () => {
             document.title = 'Helix FHIR Server';
-            if (operation === '$merge') {
+            if (operation === '$merge' || operation === '$graph' || operation === '$everything') {
                 return;
             }
             if (search) {
@@ -227,8 +227,8 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         shouldBeJsonFormat,
     ]);
 
-    if (operation === '$merge') {
-        return <MergePage />;
+    if (operation === '$merge' || operation === '$graph' || operation === '$everything') {
+        return <APIConsolePage />;
     }
 
     /**

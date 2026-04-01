@@ -27,7 +27,6 @@
     "@mui/x-date-pickers": "^8.5.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
     "@sentry/react": "9.32.0",
-    "@sentry/webpack-plugin": "3.5.0",
     "@svgr/webpack": "^8.1.0",
     "@types/file-saver": "^2.0.7",
     "@types/jest": "^30.0.0",

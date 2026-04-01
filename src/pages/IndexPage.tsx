@@ -154,7 +154,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         }
         const callApi = async () => {
             document.title = 'FHIR Server';
-            if (operation === '$merge' || operation === '$graph' || operation === '$everything') {
+            if (operation === '$merge' && !shouldBeJsonFormat) {
                 return;
             }
             if (search) {
@@ -227,7 +227,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         shouldBeJsonFormat,
     ]);
 
-    if (operation === '$merge' || operation === '$graph' || operation === '$everything') {
+    if (operation === '$merge' && !shouldBeJsonFormat) {
         return <APIConsolePage />;
     }
 

@@ -10,6 +10,7 @@ const adminLinks = [
   { label: 'Person/Patient Linkage', href: '/admin/personPatientLink' },
   { label: 'Show/Delete Person/Patient Data', href: '/admin/patientData' },
   { label: 'Run Person Matching test', href: '/admin/personMatch' },
+  { label: 'Run 1:N Person Matching', href: '/admin/personOneToNMatch' },
   { divider: true },
   { label: 'Show Indexes', href: '/admin/indexes' },
   { label: 'Show Index Problems', href: '/admin/indexProblems' },

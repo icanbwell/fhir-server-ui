@@ -5,6 +5,14 @@ interface RunPersonMatchParams {
     sourceType: string;
     targetId: string;
     targetType: string;
+    includeMatchRequest?: boolean;
+}
+
+interface RunPersonOneToNMatchParams {
+    id: string;
+    resourceType: string;
+    matchResourceType?: string;
+    includeMatchRequest?: boolean;
 }
 
 interface GetUrlParams {
@@ -31,15 +39,35 @@ class AdminApi extends BaseApi {
         sourceType,
         targetId,
         targetType,
+        includeMatchRequest,
     }: RunPersonMatchParams): Promise<any> {
         const urlString = '/admin/runPersonMatch';
-        const params = {
+        const params: Record<string, string> = {
             sourceId,
             sourceType,
             targetId,
             targetType,
         };
+        if (includeMatchRequest) {
+            params.includeMatchRequest = 'true';
+        }
+        return await this.request({ urlString, params, method: 'GET' });
+    }
 
+    async runPersonOneToNMatch({
+        id,
+        resourceType,
+        matchResourceType,
+        includeMatchRequest,
+    }: RunPersonOneToNMatchParams): Promise<any> {
+        const urlString = '/admin/runPersonOneToNMatch';
+        const params: Record<string, string> = { id, resourceType };
+        if (includeMatchRequest) {
+            params.includeMatchRequest = 'true';
+        }
+        if (matchResourceType) {
+            params.matchResourceType = matchResourceType;
+        }
         return await this.request({ urlString, params, method: 'GET' });
     }
 

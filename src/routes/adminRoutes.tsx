@@ -8,9 +8,11 @@ import Indexes from '../admin/indexes';
 import SynchronizeIndexes from '../admin/synchronizeIndexes';
 import ManageExport from '../admin/manageExport';
 import InvalidateCache from '../admin/InvalidateCache';
+import PersonOneToNMatchPage from '../admin/personOneToNMatch';
 
 export default [
     <Route key="personMatch" path="personMatch/*" element={<PersonMatchPage />} />,
+    <Route key="personOneToNMatch" path="personOneToNMatch/*" element={<PersonOneToNMatchPage />} />,
     <Route key="patientData" path="patientData/*" element={<PatientDataPage />} />,
     <Route key="personPatientLink" path="personPatientLink/*" element={<PersonPatientLinkPage />} />,
     <Route key="searchLog" path="searchLog/*" element={<SearchLogsPage />} />,

@@ -19,15 +19,14 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import UserContext from '../context/UserContext';
 
-const PersonMatchPage: React.FC = () => {
+const PersonOneToNMatchPage: React.FC = () => {
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
     const adminApi = new AdminApi({ fhirUrl, setUserDetails });
     const location = useLocation();
-    const [sourceId, setSourceId] = useState<string>('');
-    const [sourceType, setSourceType] = useState<string>('Patient');
-    const [targetId, setTargetId] = useState<string>('');
-    const [targetType, setTargetType] = useState<string>('Patient');
+    const [id, setId] = useState<string>('');
+    const [resourceType, setResourceType] = useState<string>('Patient');
+    const [matchResourceType, setMatchResourceType] = useState<string>('Patient');
     const [includeMatchRequest, setIncludeMatchRequest] = useState<boolean>(true);
     const [matchRequest, setMatchRequest] = useState<any>(null);
     const [matchResponse, setMatchResponse] = useState<any>(null);
@@ -43,16 +42,19 @@ const PersonMatchPage: React.FC = () => {
         }
     }, [location.search]);
 
+    const handleMatchResourceTypeChange = (event: { target: { value: string } }) => {
+        setMatchResourceType(event.target.value.split(' ').join(''));
+    };
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsLoading(true);
         setMatchRequest(null);
         setMatchResponse(null);
-        const data = await adminApi.runPersonMatch({
-            sourceId,
-            sourceType,
-            targetId,
-            targetType,
+        const data = await adminApi.runPersonOneToNMatch({
+            id,
+            resourceType,
+            matchResourceType,
             includeMatchRequest,
         });
         const json = data.json;
@@ -72,22 +74,22 @@ const PersonMatchPage: React.FC = () => {
                 {isLoading && <LinearProgress />}
                 <div style={{ padding: '0 10px' }}>
                     <Box sx={{ mt: 1, mb: 2 }}>
-                    <Typography variant="h5">Run a Person Match diagnostic test</Typography>
+                    <Typography variant="h5">Run 1:N Person Matching</Typography>
                     <Typography style={{ color: '#494949' }}>
-                        Calls Person Matching service to give a diagnostic report on trying to match
-                        these two records
+                        Looks up a Patient or Person by ID and sends to the Person Matching service to find
+                        all matching candidates (1:N matching).
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <Box>
                             <FormControl sx={{ minWidth: '10rem', mt: 2, mr: 1 }}>
-                                <InputLabel id="sourceType-label">Source Type</InputLabel>
+                                <InputLabel id="resourceType-label">Resource Type</InputLabel>
                                 <Select
-                                    labelId="sourceType-label"
-                                    id="sourceType"
-                                    value={sourceType}
-                                    label="Source Type"
+                                    labelId="resourceType-label"
+                                    id="resourceType"
+                                    value={resourceType}
+                                    label="Resource Type"
                                     onChange={(event) =>
-                                        setSourceType(event.target.value.split(' ').join(''))
+                                        setResourceType(event.target.value.split(' ').join(''))
                                     }
                                 >
                                     <MenuItem value="Patient">Patient</MenuItem>
@@ -98,48 +100,32 @@ const PersonMatchPage: React.FC = () => {
                                 sx={{ minWidth: '22rem', mr: 2 }}
                                 margin="normal"
                                 required
-                                id="sourceId"
-                                label="Source Id"
-                                name="sourceId"
+                                id="id"
+                                label="Resource Id"
+                                name="id"
                                 autoComplete="off"
                                 autoFocus
-                                value={sourceId}
+                                value={id}
                                 onChange={(event) =>
-                                    setSourceId(event.target.value.split(' ').join(''))
+                                    setId(event.target.value.split(' ').join(''))
                                 }
                             />
-                            <FormControl sx={{ minWidth: '10rem', mt: 2, mr: 1 }}>
-                                <InputLabel id="targetType-label">Target Type</InputLabel>
+                            <FormControl sx={{ minWidth: '12rem', mt: 2, mr: 1 }}>
+                                <InputLabel id="matchResourceType-label">Match Resource Type</InputLabel>
                                 <Select
-                                    labelId="targetType-label"
-                                    id="targetType"
-                                    value={targetType}
-                                    label="Target Type"
-                                    onChange={(event) =>
-                                        setTargetType(event.target.value.split(' ').join(''))
-                                    }
+                                    labelId="matchResourceType-label"
+                                    id="matchResourceType"
+                                    value={matchResourceType}
+                                    label="Match Resource Type"
+                                    onChange={handleMatchResourceTypeChange}
                                 >
                                     <MenuItem value="Patient">Patient</MenuItem>
                                     <MenuItem value="Person">Person</MenuItem>
                                 </Select>
                             </FormControl>
-                            <TextField
-                                sx={{ minWidth: '22rem' }}
-                                margin="normal"
-                                required
-                                id="targetId"
-                                label="Target Id"
-                                name="targetId"
-                                autoComplete="off"
-                                autoFocus
-                                value={targetId}
-                                onChange={(event) =>
-                                    setTargetId(event.target.value.split(' ').join(''))
-                                }
-                            />
                         </Box>
                         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            Run Person Matching Service
+                            Run 1:N Person Matching
                         </Button>
                     </Box>
                     {(matchRequest || matchResponse) && (
@@ -168,4 +154,4 @@ const PersonMatchPage: React.FC = () => {
     );
 };
 
-export default PersonMatchPage;
+export default PersonOneToNMatchPage;

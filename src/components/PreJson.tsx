@@ -2,12 +2,12 @@ import React from 'react';
 import ReactJson from 'react-json-view';
 import { useTheme } from '../context/ThemeContext';
 
-const PreJson = ({ data }: { data: Object|String|null }): React.ReactElement => {
+const PreJson = ({ data, collapsed }: { data: Object|String|null; collapsed?: boolean | number }): React.ReactElement => {
     const { isDarkMode } = useTheme();
 
     return (
         <>
-            {!!data && (
+            {!!data && typeof data === 'object' && (
                 <ReactJson
                     src={data}
                     displayDataTypes={false}
@@ -16,6 +16,7 @@ const PreJson = ({ data }: { data: Object|String|null }): React.ReactElement => 
                         fontSize: '13px',
                         backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
                     }}
+                    collapsed={collapsed}
                 />
             )}
         </>

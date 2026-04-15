@@ -11,6 +11,8 @@ import {
     InputLabel,
     LinearProgress,
     Paper,
+    FormControlLabel,
+    Checkbox,
 } from '@mui/material';
 import AdminApi from '../api/adminApi';
 import EnvironmentContext from '../context/EnvironmentContext';
@@ -34,12 +36,10 @@ const PersonMatchPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if (location.search) {
-            const queryParams = new URLSearchParams(window.location.search);
-            const paramValue = queryParams.get('includeMatchRequest');
-            if (paramValue !== null) {
-                setIncludeMatchRequest(paramValue !== 'false');
-            }
+        const queryParams = new URLSearchParams(location.search);
+        const paramValue = queryParams.get('includeMatchRequest');
+        if (paramValue !== null) {
+            setIncludeMatchRequest(paramValue !== 'false');
         }
     }, [location.search]);
 
@@ -72,9 +72,9 @@ const PersonMatchPage: React.FC = () => {
                 {isLoading && <LinearProgress />}
                 <div style={{ padding: '0 10px' }}>
                     <Box sx={{ mt: 1, mb: 2 }}>
-                    <Typography variant="h5">Run a Person Match diagnostic test</Typography>
+                    <Typography variant="h5">Run 1:1 Matching Test</Typography>
                     <Typography style={{ color: '#494949' }}>
-                        Calls Person Matching service to give a diagnostic report on trying to match
+                        Calls <b>Person Matching Service</b> to give a diagnostic report on trying to match
                         these two records
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -138,12 +138,22 @@ const PersonMatchPage: React.FC = () => {
                                 }
                             />
                         </Box>
-                        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={includeMatchRequest}
+                                    onChange={(e) => setIncludeMatchRequest(e.target.checked)}
+                                />
+                            }
+                            label="Include Match Request"
+                        />
+                        <br />
+                        <Button type="submit" variant="contained" sx={{ mt: 1, mb: 2 }}>
                             Run Person Matching Service
                         </Button>
                     </Box>
                     {(matchRequest || matchResponse) && (
-                        includeMatchRequest ? (
+                        matchRequest ? (
                             <Box sx={{ display: 'flex', gap: 2, mt: 2, overflow: 'hidden' }}>
                                 <Paper variant="outlined" sx={{ flex: 1, minWidth: 0, overflow: 'auto', p: 2 }}>
                                     <Typography variant="h6" sx={{ mb: 1 }}>Match Request</Typography>

@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import {
     Button,
     TextField,
@@ -25,7 +24,6 @@ const PersonOneToNMatchPage: React.FC = () => {
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
     const adminApi = new AdminApi({ fhirUrl, setUserDetails });
-    const location = useLocation();
     const [id, setId] = useState<string>('');
     const [resourceType, setResourceType] = useState<string>('Patient');
     const [matchResourceType, setMatchResourceType] = useState<string>('Patient');
@@ -33,14 +31,6 @@ const PersonOneToNMatchPage: React.FC = () => {
     const [matchRequest, setMatchRequest] = useState<any>(null);
     const [matchResponse, setMatchResponse] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const paramValue = queryParams.get('includeMatchRequest');
-        if (paramValue !== null) {
-            setIncludeMatchRequest(paramValue !== 'false');
-        }
-    }, [location.search]);
 
     const handleMatchResourceTypeChange = (event: { target: { value: string } }) => {
         setMatchResourceType(event.target.value.split(' ').join(''));

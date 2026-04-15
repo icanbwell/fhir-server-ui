@@ -7,7 +7,7 @@ const PreJson = ({ data, collapsed }: { data: Object|String|null; collapsed?: bo
 
     return (
         <>
-            {!!data && (
+            {!!data && typeof data === 'object' && (
                 <ReactJson
                     src={data}
                     displayDataTypes={false}

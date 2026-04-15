@@ -147,16 +147,16 @@ const PersonMatchPage: React.FC = () => {
                             <Box sx={{ display: 'flex', gap: 2, mt: 2, overflow: 'hidden' }}>
                                 <Paper variant="outlined" sx={{ flex: 1, minWidth: 0, overflow: 'auto', p: 2 }}>
                                     <Typography variant="h6" sx={{ mb: 1 }}>Match Request</Typography>
-                                    <PreJson data={matchRequest} />
+                                    <PreJson data={matchRequest} collapsed={2} />
                                 </Paper>
                                 <Paper variant="outlined" sx={{ flex: 1, minWidth: 0, overflow: 'auto', p: 2 }}>
                                     <Typography variant="h6" sx={{ mb: 1 }}>Match Response</Typography>
-                                    <PreJson data={matchResponse} />
+                                    <PreJson data={matchResponse} collapsed={2} />
                                 </Paper>
                             </Box>
                         ) : (
                             <Box sx={{ mt: 2 }}>
-                                <PreJson data={matchResponse} />
+                                <PreJson data={matchResponse} collapsed={2} />
                             </Box>
                         )
                     )}

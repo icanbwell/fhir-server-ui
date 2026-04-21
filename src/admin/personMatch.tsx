@@ -198,7 +198,12 @@ const PersonMatchPage: React.FC = () => {
                                         <Box>
                                             <textarea
                                                 value={editedPayload}
-                                                onChange={(e) => setEditedPayload(e.target.value)}
+                                                onChange={(e) => {
+                                                    setEditedPayload(e.target.value);
+                                                    if (editError) {
+                                                        setEditError('');
+                                                    }
+                                                }}
                                                 style={{
                                                     width: '100%',
                                                     minHeight: '300px',

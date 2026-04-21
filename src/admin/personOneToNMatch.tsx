@@ -64,8 +64,15 @@ const PersonOneToNMatchPage: React.FC = () => {
         setIsLoading(false);
     };
 
+    const defaultPayloadTemplate = {
+        resourceType: 'Parameters',
+        parameter: [
+            { name: 'resource', resource: { resourceType: 'Patient' } }
+        ]
+    };
+
     const handleEditClick = () => {
-        setEditedPayload(JSON.stringify(matchRequest, null, 2));
+        setEditedPayload(JSON.stringify(matchRequest || defaultPayloadTemplate, null, 2));
         setEditError('');
         setIsEditing(true);
     };
@@ -159,12 +166,22 @@ const PersonOneToNMatchPage: React.FC = () => {
                             label="Include Match Request"
                         />
                         <br />
-                        <Button type="submit" variant="contained" sx={{ mt: 1, mb: 2 }}>
-                            Run 1:N Person Matching
-                        </Button>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                            <Button type="submit" variant="contained" sx={{ mt: 1, mb: 2 }}>
+                                Run 1:N Person Matching
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                sx={{ mt: 1, mb: 2 }}
+                                onClick={handleEditClick}
+                                startIcon={<EditIcon />}
+                            >
+                                Match using Demographics
+                            </Button>
+                        </Box>
                     </Box>
-                    {(matchRequest || matchResponse) && (
-                        matchRequest ? (
+                    {(matchRequest || matchResponse || isEditing) && (
+                        (matchRequest || isEditing) ? (
                             <Box sx={{ display: 'flex', gap: 2, mt: 2, overflow: 'hidden' }}>
                                 <Paper variant="outlined" sx={{ flex: 1, minWidth: 0, overflow: 'auto', p: 2 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>

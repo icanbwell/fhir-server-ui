@@ -71,6 +71,11 @@ class AdminApi extends BaseApi {
         return await this.request({ urlString, params, method: 'GET' });
     }
 
+    async runMatchWithPayload(parameters: object): Promise<any> {
+        const urlString = '/admin/runMatchWithPayload';
+        return await this.request({ urlString, method: 'POST', data: parameters });
+    }
+
     async getEverythingForPatient(patientId: string): Promise<any> {
         const urlString = '/4_0_0/Patient/$everything';
         const params = {

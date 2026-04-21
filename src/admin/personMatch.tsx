@@ -197,6 +197,7 @@ const PersonMatchPage: React.FC = () => {
                                     {isEditing ? (
                                         <Box>
                                             <textarea
+                                                aria-label="Edit match request payload"
                                                 value={editedPayload}
                                                 onChange={(e) => {
                                                     setEditedPayload(e.target.value);

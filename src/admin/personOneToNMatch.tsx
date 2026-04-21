@@ -170,7 +170,7 @@ const PersonOneToNMatchPage: React.FC = () => {
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                         <Typography variant="h6" sx={{ flexGrow: 1 }}>Match Request</Typography>
                                         {!isEditing && (
-                                            <IconButton size="small" onClick={handleEditClick} title="Edit payload">
+                                            <IconButton size="small" onClick={handleEditClick} aria-label="Edit payload">
                                                 <EditIcon fontSize="small" />
                                             </IconButton>
                                         )}
@@ -178,8 +178,9 @@ const PersonOneToNMatchPage: React.FC = () => {
                                     {isEditing ? (
                                         <Box>
                                             <textarea
+                                                aria-label="Edit match request payload"
                                                 value={editedPayload}
-                                                onChange={(e) => setEditedPayload(e.target.value)}
+                                                onChange={(e) => { setEditedPayload(e.target.value); setEditError(''); }}
                                                 style={{
                                                     width: '100%',
                                                     minHeight: '300px',

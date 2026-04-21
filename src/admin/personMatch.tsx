@@ -184,7 +184,12 @@ const PersonMatchPage: React.FC = () => {
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                         <Typography variant="h6" sx={{ flexGrow: 1 }}>Match Request</Typography>
                                         {!isEditing && (
-                                            <IconButton size="small" onClick={handleEditClick} title="Edit payload">
+                                            <IconButton
+                                                size="small"
+                                                onClick={handleEditClick}
+                                                title="Edit payload"
+                                                aria-label="Edit payload"
+                                            >
                                                 <EditIcon fontSize="small" />
                                             </IconButton>
                                         )}

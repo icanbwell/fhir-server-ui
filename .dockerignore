@@ -3,5 +3,22 @@
 .gitignore
 .github
 tmp
+
+# Editor
 .vscode
+.idea
+
+# Yarn PnP (container runs its own yarn install)
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
 node_modules
+
+# Build output
+build
+dist
+coverage
+
+# Env files
+.env
+.env.*

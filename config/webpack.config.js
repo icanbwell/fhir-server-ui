@@ -128,9 +128,7 @@ module.exports = function (webpackEnv) {
                 [
                 'postcss-preset-env',
                 {
-                    autoprefixer: {
-                    flexbox: 'no-2009',
-                    },
+                    autoprefixer: isEnvProduction ? { flexbox: 'no-2009' } : false,
                     stage: 3,
                 },
                 ],
@@ -144,9 +142,7 @@ module.exports = function (webpackEnv) {
                 [
                 'postcss-preset-env',
                 {
-                    autoprefixer: {
-                    flexbox: 'no-2009',
-                    },
+                    autoprefixer: isEnvProduction ? { flexbox: 'no-2009' } : false,
                     stage: 3,
                 },
                 ],

@@ -8,10 +8,8 @@ tmp
 .vscode
 .idea
 
-# Yarn PnP (container runs its own yarn install)
+# Dependencies (container runs its own yarn install)
 .yarn
-.pnp.cjs
-.pnp.loader.mjs
 node_modules
 
 # Build output

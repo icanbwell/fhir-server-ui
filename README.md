@@ -5,7 +5,7 @@ UI to display FHIR resources in a web browser
 ## Prerequisites
 
 1. Docker Desktop: https://docs.docker.com/desktop/mac/install/
-2. Node.js >= 24.2.0 (see `.nvmrc`)
+2. Node.js >= 24.14 (see `.nvmrc`)
 3. [Corepack](https://nodejs.org/api/corepack.html) (ships with Node 16+)
 
 ## Local Development Setup
@@ -37,9 +37,9 @@ UI to display FHIR resources in a web browser
 
 Or simply run `make init` to perform all the above steps.
 
-### Package Management (Yarn 4 PnP)
+### Package Management (Yarn 4)
 
-This project uses **Yarn 4** with [Plug'n'Play (PnP)](https://yarnpkg.com/features/pnp). There is no `node_modules/` directory — packages are stored as zip archives in Yarn's global cache and resolved at runtime via `.pnp.cjs`.
+This project uses **Yarn 4** with the standard `node-modules` linker.
 
 | Task | Command |
 |------|---------|
@@ -49,31 +49,6 @@ This project uses **Yarn 4** with [Plug'n'Play (PnP)](https://yarnpkg.com/featur
 | Upgrade all packages | `make upgrade_packages` |
 | Regenerate lockfile | `make update` |
 | Run a binary | `yarn <binary>` (e.g., `yarn jest`, `yarn eslint`) |
-
-> **Important:** All packages you `require()` or `import` must be explicitly listed in `package.json`. PnP enforces strict dependency resolution — packages cannot rely on hoisting from transitive dependencies. If you see a "Cannot find module" error at runtime, add the missing package as a direct dependency.
-
-### Editor Setup
-
-#### VS Code (recommended)
-
-PnP requires editor configuration for Go to Definition, IntelliSense, and linting to work with packages stored in zip archives.
-
-1. **Install the [ZipFS extension](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs)** — allows VS Code to open source files inside zip archives
-
-2. **Generate the editor SDK** (one-time setup):
-   ```bash
-   yarn dlx @yarnpkg/sdks vscode
-   ```
-
-3. **Select the workspace TypeScript version:**
-   - Open any `.ts` or `.tsx` file
-   - `Cmd+Shift+P` → "TypeScript: Select TypeScript Version" → "Use Workspace Version"
-
-4. **Reload the window:** `Cmd+Shift+P` → "Developer: Reload Window"
-
-#### Other Editors
-
-For WebStorm, Vim, Neovim, Emacs, etc., see the [Yarn Editor SDKs documentation](https://yarnpkg.com/getting-started/editor-sdks).
 
 ## Running FHIR Server UI
 

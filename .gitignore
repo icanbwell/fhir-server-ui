@@ -126,7 +126,6 @@ out
 
 # yarn v4
 .yarn/
-.pnp.*
 
 /.idea/
 !.idea/codestyles/

@@ -3,7 +3,7 @@
         "target": "ES2022",
         "module": "commonjs",
         "strict": true,
-        "lib": ["es6", "dom"],
+        "lib": ["ES2022", "dom", "dom.iterable"],
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,

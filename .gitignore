@@ -69,7 +69,7 @@ web_modules/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
+# Yarn Integrity file (Yarn 1 legacy)
 .yarn-integrity
 
 # dotenv environment variable files
@@ -120,15 +120,12 @@ out
 # TernJS port file
 .tern-port
 
-# Stores VSCode versions used for testing VSCode extensions
+# VSCode
+.vscode/
 .vscode-test
 
-# yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
+# yarn v4
+.yarn/
 
 /.idea/
 !.idea/codestyles/

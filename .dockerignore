@@ -3,5 +3,20 @@
 .gitignore
 .github
 tmp
+
+# Editor
 .vscode
+.idea
+
+# Dependencies (container runs its own yarn install)
+.yarn
 node_modules
+
+# Build output
+build
+dist
+coverage
+
+# Env files
+.env
+.env.*

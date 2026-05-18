@@ -7,9 +7,9 @@
     "build": "node scripts/build.js",
     "build:prod": "DISABLE_ESLINT_PLUGIN='true' node scripts/build.js",
     "start": "NODE_ENV=dev node scripts/start.js",
-    "lint": "NODE_ENV=test npm run test:lint",
+    "lint": "NODE_ENV=test yarn test:lint",
     "build:ts": "tsc",
-    "test:lint": "NODE_OPTIONS=--max-old-space-size=8096 eslint \"src/**/*.tsx\" \"src/**/*.ts\""
+    "test:lint": "NODE_OPTIONS=\"${NODE_OPTIONS:-} --max-old-space-size=8096\" eslint \"src/**/*.tsx\" \"src/**/*.ts\""
   },
   "keywords": [],
   "author": "",
@@ -18,12 +18,15 @@
     "@babel/core": "^7.27.7",
     "@babel/plugin-transform-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.27.1",
+    "@babel/runtime": "^7.29.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.2.6",
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
+    "@mui/system": "^9.0.1",
     "@mui/x-date-pickers": "^8.5.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
     "@sentry/react": "9.32.0",
@@ -35,6 +38,7 @@
     "@types/react-vertical-timeline-component": "^3.3.6",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/parser": "^8.35.0",
+    "ag-grid-community": "^35.2.1",
     "ag-grid-react": "^34.0.0",
     "axios": "^1.15.0",
     "babel-loader": "^10.0.0",
@@ -57,6 +61,7 @@
     "file-loader": "^6.2.0",
     "file-saver": "^2.0.5",
     "fs-extra": "^11.3.0",
+    "globals": "^16.2.0",
     "html-webpack-plugin": "^5.6.3",
     "jwt-decode": "^4.0.0",
     "lru-cache": "^11.1.0",
@@ -94,6 +99,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20.19.40",
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "babel-jest": "^30.0.2",
     "jest": "^30.0.3",
@@ -103,20 +109,15 @@
     "nock": "^14.0.5",
     "nodemon": "^3.1.10",
     "npm-check-updates": "^18.0.1",
-    "pre-commit": "^1.2.2",
     "prettier": "^3.6.1",
     "webpack": "^5.104.1",
     "webpack-dev-server": "^5.2.2"
   },
   "resolutions": {
-    "cross-spawn": "^7.0.5",
     "@babel/runtime": ">=7.27.1",
     "globals": "^16.2.0",
     "set-cookie-parser": "2.7.2"
   },
-  "pre-commit": [
-    "lint"
-  ],
   "jest": {
     "watchman": false,
     "watchPathIgnorePatterns": [
@@ -188,5 +189,6 @@
       "last 1 safari version"
     ]
   },
-  "tsconfig.json": "./tsconfig.json"
+  "tsconfig.json": "./tsconfig.json",
+  "packageManager": "yarn@4.14.1"
 }

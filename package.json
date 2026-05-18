@@ -109,7 +109,7 @@
     "jest-watch-typeahead": "^3.0.1",
     "npm-check-updates": "^18.0.1",
     "prettier": "^3.6.1",
-    "webpack-dev-server": "^5.2.2"
+    "webpack-dev-server": "^5.2.4"
   },
   "resolutions": {
     "@babel/runtime": ">=7.27.1",

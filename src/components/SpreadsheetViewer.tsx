@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useMemo, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import * as XLSX from 'xlsx';
+import { read, utils, type WorkBook } from 'xlsx';
 import {
     Typography,
     Box,
@@ -125,17 +125,17 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
 
                 const arrayBuffer = await response.data.arrayBuffer();
 
-                let workbook: XLSX.WorkBook;
+                let workbook: WorkBook;
                 if (format === 'text/csv') {
-                    workbook = XLSX.read(arrayBuffer, { type: 'buffer', codepage: 65001 });
+                    workbook = read(arrayBuffer, { type: 'buffer', codepage: 65001 });
                 } else {
-                    workbook = XLSX.read(arrayBuffer, { type: 'buffer' });
+                    workbook = read(arrayBuffer, { type: 'buffer' });
                 }
 
                 const parsedSheets: SheetData[] = workbook.SheetNames.map(
                     (sheetName, sheetIndex) => {
                         const worksheet = workbook.Sheets[`${sheetName}`];
-                        const rawData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
+                        const rawData: any[][] = utils.sheet_to_json(worksheet, {
                             header: 1,
                             raw: true,
                             rawNumbers: true,

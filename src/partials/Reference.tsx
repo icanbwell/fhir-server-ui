@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { Typography, Link, Box } from '@mui/material';
 import { TBaseResourceProps } from '../types/baseTypes';
 import { TExtension } from '../types/partials/Extension';
@@ -12,29 +12,24 @@ type TReferenceProps = TBaseResourceProps & {
 };
 
 function Reference({ reference: references = [], name, field }: TReferenceProps) {
-    const [uuidReferences, setUuidReferences] = useState<TReference[]>([]);
+    const uuidReferences = useMemo(() => {
+        const referenceArray = Array.isArray(references) ? references : [references];
 
-    useEffect(() => {
-        // Ensure that references is an array
-        let referenceArray = Array.isArray(references) ? references : [references];
-
-        setUuidReferences(
-            referenceArray
-                .map((reference: any) => {
-                    let uuidReference: string | undefined;
-                    if (field) {
-                        uuidReference = reference[`${field}`]?.extension?.find(
-                            (e: TExtension) => e.url === IdentifierSystem.uuid
-                        )?.valueString;
-                    } else {
-                        uuidReference = reference?.extension?.find(
-                            (e: TExtension) => e.url === IdentifierSystem.uuid
-                        )?.valueString;
-                    }
-                    return { reference: uuidReference, display: reference.display };
-                })
-                .filter((u: TReference) => u.reference)
-        );
+        return referenceArray
+            .map((reference: any) => {
+                let uuidReference: string | undefined;
+                if (field) {
+                    uuidReference = reference[`${field}`]?.extension?.find(
+                        (e: TExtension) => e.url === IdentifierSystem.uuid
+                    )?.valueString;
+                } else {
+                    uuidReference = reference?.extension?.find(
+                        (e: TExtension) => e.url === IdentifierSystem.uuid
+                    )?.valueString;
+                }
+                return { reference: uuidReference, display: reference.display };
+            })
+            .filter((u: TReference) => u.reference);
     }, [references, field]);
 
     return uuidReferences && uuidReferences.length > 0 && uuidReferences[0] ? (

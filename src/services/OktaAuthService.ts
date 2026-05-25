@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import axios, { AxiosResponse } from 'axios';
 import AuthUrlProvider from '../utils/authUrlProvider';
 import { IAuthService } from './IAuthService';
@@ -40,7 +39,7 @@ class OktaAuthService implements IAuthService {
             response_type: 'code',
             scope: 'openid profile email groups',
             redirect_uri: `${window.location.origin}/authcallback`,
-            state: Buffer.from(resourceUrl).toString('base64'),
+            state: btoa(resourceUrl),
             code_challenge: challenge,
             code_challenge_method: 'S256',
         });
@@ -51,8 +50,7 @@ class OktaAuthService implements IAuthService {
     async fetchTokenAsync(
         identityProvider: string,
         code: string,
-        // eslint-disable-next-line no-unused-vars
-        resourceUrl: string
+        _resourceUrl: string
     ): Promise<any> {
         const authUrls = await this.authUrlProvider.getAuthUrlsAsync(identityProvider);
         const authInfo = this.authUrlProvider.getAuthInfo(identityProvider);

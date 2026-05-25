@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getLocalData, setLocalData } from '../utils/localData.utils';
 import UserContext from '../context/UserContext';
 import { jwtParser } from '../utils/jwtParser';
-import { Buffer } from 'buffer';
 import AuthServiceFactory from '../services/AuthServiceFactory';
 import { IAuthService } from '../services/IAuthService';
 import { AxiosError } from 'axios';
@@ -68,7 +67,7 @@ const Auth = () => {
 
         try {
             const state = queryParams.get('state');
-            const resourceUrl = state ? Buffer.from(state, 'base64').toString('ascii') : '/';
+            const resourceUrl = state ? atob(state) : '/';
             const tokens = await authService.fetchTokenAsync(identityProvider, code, resourceUrl);
 
             setLocalData('jwt', tokens.access_token);
@@ -98,9 +97,9 @@ const Auth = () => {
         setIsProcessing(false);
 
         const state = queryParams.get('state');
-        const resourceUrl = state ? Buffer.from(state, 'base64').toString('ascii') : '/';
-        const authAppRedirectPath = process.env.REACT_APP_AUTH_REDIRECT_PATH;
-        if (authAppRedirectPath && resourceUrl === process.env.REACT_APP_AUTH_REDIRECT_STATE) {
+        const resourceUrl = state ? atob(state) : '/';
+        const authAppRedirectPath = import.meta.env.REACT_APP_AUTH_REDIRECT_PATH;
+        if (authAppRedirectPath && resourceUrl === import.meta.env.REACT_APP_AUTH_REDIRECT_STATE) {
             window.location.href = authAppRedirectPath + location.search;
 
             // Redirect to home page after callback

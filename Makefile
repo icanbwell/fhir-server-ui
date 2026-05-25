@@ -61,6 +61,10 @@ setup-pre-commit:
 run-pre-commit: setup-pre-commit
 	./.git/hooks/pre-commit
 
+.PHONY:generate_search_fields
+generate_search_fields:
+	python3 src/generator/generate_search_fields.py
+
 .PHONY:generate_components
 generate_components:
 	$(ACTIVATE_NODE) && \

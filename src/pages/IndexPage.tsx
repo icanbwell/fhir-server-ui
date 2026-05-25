@@ -65,7 +65,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         return (
             <>
                 {resources?.length > 1 && (
-                    <Box display="flex" justifyContent="end">
+                    <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                         <Button
                             onClick={() => {
                                 setExpandAll(true);
@@ -294,7 +294,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </AccordionDetails>
                 </Accordion>
                 <div style={{ padding: '0 10px' }}>
-                    <Box my={2}>{getBox()}</Box>
+                    <Box sx={{ my: 2 }}>{getBox()}</Box>
                 </div>
             </div>
             <Footer requestId={bundle?.id} links={bundle?.link} />

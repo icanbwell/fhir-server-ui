@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   Accordion,
   AccordionSummary,
@@ -7,7 +7,6 @@ import {
   Box,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Buffer } from 'buffer';
 import { TBaseResourceProps } from '../types/baseTypes';
 import { TAttachment } from '../types/partials/Attachment';
 
@@ -16,14 +15,11 @@ type TAttachmentProps = TBaseResourceProps & {
 };
 
 const Attachment = ({ attachment, name }: TAttachmentProps) => {
-  const [items, setItems] = useState<TAttachment[]>([]);
-
-  useEffect(() => {
-    if (attachment && !Array.isArray(attachment)) {
-      setItems([attachment]);
-    } else if (attachment) {
-      setItems(attachment);
+  const items = useMemo(() => {
+    if (!attachment) {
+      return [];
     }
+    return Array.isArray(attachment) ? attachment : [attachment];
   }, [attachment]);
 
   if (!attachment) {
@@ -33,11 +29,7 @@ const Attachment = ({ attachment, name }: TAttachmentProps) => {
     if (!ascii) {
       return '';
     }
-    const bytes = new Uint8Array(ascii.length);
-    for (let i = 0; i < ascii.length; i++) {
-      bytes[`${i}`] = ascii.charCodeAt(i);
-    }
-    return Buffer.from(bytes.buffer).toString('base64');
+    return btoa(String(ascii));
   };
 
   return (

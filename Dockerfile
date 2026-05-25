@@ -1,4 +1,4 @@
-FROM node:24.14-bookworm-slim
+FROM node:24.14-alpine
 
 # Enable Corepack for Yarn 4 (requires root)
 RUN corepack enable

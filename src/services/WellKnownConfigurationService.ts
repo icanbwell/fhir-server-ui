@@ -123,4 +123,5 @@ class WellKnownConfigurationService {
     }
 }
 
-export { WellKnownConfigurationService, WellKnownConfigurationInfo };
+export { WellKnownConfigurationService };
+export type { WellKnownConfigurationInfo };

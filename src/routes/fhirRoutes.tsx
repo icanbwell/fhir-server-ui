@@ -1,14 +1,15 @@
+import { lazy } from 'react';
 import { Route } from 'react-router-dom';
 
-import AboutPage from '../pages/AboutPage';
-import IndexPage from '../pages/IndexPage';
-import ObservationGraph from '../ObservationGraph';
-import ObservationTimeline from '../ObservationTimeline';
-import PatientTimeline from '../PatientTimeline';
-import SearchPage from '../pages/SearchPage';
-import ExcelViewerPage from '../pages/ExcelViewerPage';
-import IPSViewerPage from '../pages/IPSViewerPage';
-import APIConsolePage from '../pages/APIConsolePage';
+const AboutPage = lazy(() => import('../pages/AboutPage'));
+const IndexPage = lazy(() => import('../pages/IndexPage'));
+const ObservationGraph = lazy(() => import('../ObservationGraph'));
+const ObservationTimeline = lazy(() => import('../ObservationTimeline'));
+const PatientTimeline = lazy(() => import('../PatientTimeline'));
+const SearchPage = lazy(() => import('../pages/SearchPage'));
+const ExcelViewerPage = lazy(() => import('../pages/ExcelViewerPage'));
+const IPSViewerPage = lazy(() => import('../pages/IPSViewerPage'));
+const APIConsolePage = lazy(() => import('../pages/APIConsolePage'));
 
 export default [
     <Route key="apiConsole" path="/api-console" element={<APIConsolePage />} />,

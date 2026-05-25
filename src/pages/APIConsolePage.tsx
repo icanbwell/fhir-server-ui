@@ -20,6 +20,7 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import PreJson from '../components/PreJson';
 import FhirApi from '../api/fhirApi';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -69,7 +70,7 @@ const APIConsolePage = () => {
     const [urlSuffix, setUrlSuffix] = useState<string>(searchParams.get('urlSuffix') || '');
 
     const [resourceJson, setResourceJson] = useState<string>('');
-    const [responseJson, setResponseJson] = useState<string>('');
+    const [responseJson, setResponseJson] = useState<object | null>(null);
     const [responseStatus, setResponseStatus] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
@@ -200,7 +201,7 @@ const APIConsolePage = () => {
         }
         try {
             setLoading(true);
-            setResponseJson('');
+            setResponseJson(null);
             setResponseStatus(null);
             const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
             let data: object | undefined;
@@ -213,16 +214,14 @@ const APIConsolePage = () => {
                 data,
             });
             setResponseStatus(status);
-            setResponseJson(JSON.stringify(json, null, 2));
+            setResponseJson(json);
         } catch (error: any) {
             if (error instanceof SyntaxError) {
                 setResponseStatus(null);
-                setResponseJson(JSON.stringify({ error: 'Invalid JSON in editor' }, null, 2));
+                setResponseJson({ error: 'Invalid JSON in editor' });
             } else {
                 setResponseStatus(null);
-                setResponseJson(
-                    JSON.stringify({ error: error.message || 'Request failed' }, null, 2)
-                );
+                setResponseJson({ error: error.message || 'Request failed' });
             }
         } finally {
             setLoading(false);
@@ -528,18 +527,17 @@ const APIConsolePage = () => {
                                     />
                                 )}
                             </Box>
-                            <Box
-                                sx={{
-                                    flex: 1,
-                                    overflow: 'auto',
-                                    p: 1,
-                                    fontFamily: 'monospace',
-                                    fontSize: '0.875rem',
-                                    whiteSpace: 'pre-wrap',
-                                    wordBreak: 'break-word',
-                                }}
-                            >
-                                {responseJson || 'Response will appear here after sending...'}
+                            <Box sx={{ flex: 1, overflow: 'auto', p: 1 }}>
+                                {responseJson ? (
+                                    <PreJson data={responseJson} collapsed={2} />
+                                ) : (
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ fontFamily: 'monospace', color: 'text.secondary' }}
+                                    >
+                                        Response will appear here after sending...
+                                    </Typography>
+                                )}
                             </Box>
                         </Paper>
                     </Box>

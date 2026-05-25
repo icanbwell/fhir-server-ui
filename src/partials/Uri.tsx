@@ -13,7 +13,7 @@ function Uri({ name, uri }: TUriProps) {
   return (
     uri && uri.map((value: TUri, index) => (
       <Box key={index}>
-        <Typography variant="body1" display="inline">
+        <Typography variant="body1" sx={{ display: 'inline' }}>
           <b>{name}:</b>&nbsp;
         </Typography>
         <Link href={`${value}`}>{value}</Link>

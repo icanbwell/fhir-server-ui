@@ -1,5 +1,5 @@
-import advSearchJson from '../generator/json/definitions.json/search-parameters.json';
 import { TFieldInfo } from '../types/baseTypes';
+import searchFieldsByResource from '../generated/searchFieldsByResource';
 
 const givenNameField = (): TFieldInfo => {
     return {
@@ -140,28 +140,19 @@ const getFormData = (resourceName: string): TFieldInfo[] => {
 
 const getAdvSearchFormData = (resourceName: string): TFieldInfo[] => {
     const basicFormData = getFormData(resourceName);
+    const fieldNames = Object.hasOwn(searchFieldsByResource, resourceName)
+        ? searchFieldsByResource[resourceName as keyof typeof searchFieldsByResource]
+        : [];
 
-    let advFormData: TFieldInfo[] = [];
-    const resourceFields = advSearchJson.entry.filter((entry: any) => {
-        return entry.resource.base.includes(resourceName) && entry.resource.type === 'string';
-    });
-
-    resourceFields.forEach((advParam: any) => {
-        const foundBasic = basicFormData.find(
-            (formData) => formData.name === advParam.resource.name
-        );
-        if (foundBasic) {
-            return;
-        }
-        advFormData.push({
-            label: advParam.resource.name
+    return fieldNames
+        .filter((name) => !basicFormData.find((f) => f.name === name))
+        .map((name) => ({
+            label: name
                 .split('-')
                 .map((s: string) => s.charAt(0).toUpperCase() + s.substring(1))
                 .join(' '),
-            name: advParam.resource.name,
-        });
-    });
-    return advFormData;
+            name,
+        }));
 };
 
 export { getAdvSearchFormData, getFormData };

@@ -19,13 +19,19 @@ export default [
     {
         ...reactPlugin.configs.flat.recommended,
         settings: {
-            react: { version: 'detect' },
+            // Pinned (not 'detect') because eslint-plugin-react@7.37.5's version
+            // detection calls context.getFilename(), which was removed in ESLint 10.
+            // Revert to 'detect' once the plugin ships an ESLint-10-compatible release.
+            react: { version: '19' },
         },
     },
     {
         ...reactPlugin.configs.flat['jsx-runtime'],
         settings: {
-            react: { version: 'detect' },
+            // Pinned (not 'detect') because eslint-plugin-react@7.37.5's version
+            // detection calls context.getFilename(), which was removed in ESLint 10.
+            // Revert to 'detect' once the plugin ships an ESLint-10-compatible release.
+            react: { version: '19' },
         },
     },
     security.configs.recommended,

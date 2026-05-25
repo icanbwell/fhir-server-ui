@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, TextField, Typography, Box, LinearProgress } from '@mui/material';
 import AdminApi from '../api/adminApi';
@@ -21,6 +21,18 @@ const PersonPatientLinkPage: React.FC = () => {
         const bwellPersonId = queryParams.get('bwellPersonId') || '';
         return { bwellPersonId, results: '', highlighted: !!bwellPersonId };
     });
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const bwellPersonId = queryParams.get('bwellPersonId');
+        if (bwellPersonId) {
+            setShowLinkGraphData((prev) => ({
+                ...prev,
+                bwellPersonId,
+                highlighted: true,
+            }));
+        }
+    }, [location.search]);
 
     const [createPersonToPersonLinkData, setCreatePersonToPersonLinkData] = useState({
         bwellPersonId: '',

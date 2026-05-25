@@ -31,16 +31,11 @@ upgrade_packages:down
 	yarn install && \
 	yarn dlx npm-check-updates -u --reject @sentry/react
 
-.PHONY:tests
-tests:
-	$(ACTIVATE_NODE) && \
-	yarn jest
-
 .PHONY:lint
 lint:
 	$(ACTIVATE_NODE) && \
 	yarn lint && \
-	yarn build:ts
+	yarn tsc --noEmit
 
 .PHONY:fix-lint
 fix-lint:

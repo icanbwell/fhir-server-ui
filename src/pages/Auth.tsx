@@ -67,7 +67,14 @@ const Auth = () => {
 
         try {
             const state = queryParams.get('state');
-            const resourceUrl = state ? atob(state) : '/';
+            let resourceUrl = '/';
+            if (state) {
+                try {
+                    resourceUrl = atob(state);
+                } catch (decodeError) {
+                    console.error('Failed to decode state parameter, falling back to "/"', decodeError);
+                }
+            }
             const tokens = await authService.fetchTokenAsync(identityProvider, code, resourceUrl);
 
             setLocalData('jwt', tokens.access_token);
@@ -97,7 +104,14 @@ const Auth = () => {
         setIsProcessing(false);
 
         const state = queryParams.get('state');
-        const resourceUrl = state ? atob(state) : '/';
+        let resourceUrl = '/';
+        if (state) {
+            try {
+                resourceUrl = atob(state);
+            } catch (decodeError) {
+                console.error('Failed to decode state parameter, falling back to "/"', decodeError);
+            }
+        }
         const authAppRedirectPath = import.meta.env.REACT_APP_AUTH_REDIRECT_PATH;
         if (authAppRedirectPath && resourceUrl === import.meta.env.REACT_APP_AUTH_REDIRECT_STATE) {
             window.location.href = authAppRedirectPath + location.search;

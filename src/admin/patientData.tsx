@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, TextField, Typography, Box, LinearProgress } from '@mui/material';
 import AdminApi from '../api/adminApi';
@@ -30,6 +30,18 @@ const PatientDataPage: React.FC = () => {
         const personId = queryParams.get('personId') || '';
         return { personId, results: '', highlighted: !!personId };
     });
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const personId = queryParams.get('personId');
+        if (personId) {
+            setPersonDataForDelete((prev) => ({
+                ...prev,
+                personId,
+                highlighted: true,
+            }));
+        }
+    }, [location.search]);
 
     const handlePatientDataSubmit = async (event: React.FormEvent) => {
         event.preventDefault();

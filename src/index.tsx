@@ -3,21 +3,20 @@ import ReactDOM from 'react-dom/client';
 import { init, browserSessionIntegration } from '@sentry/react';
 import './index.css';
 // Get material fonts: https://mui.com/material-ui/getting-started/installation/#font-installation
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/latin-300.css';
+import '@fontsource/roboto/latin-400.css';
+import '@fontsource/roboto/latin-500.css';
+import '@fontsource/roboto/latin-700.css';
 
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 // Initialize Sentry
-if (process.env.REACT_APP_SENTRY_DSN) {
+if (import.meta.env.REACT_APP_SENTRY_DSN) {
   init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
-    environment: process.env.REACT_APP_ENVIRONMENT,
+    dsn: import.meta.env.REACT_APP_SENTRY_DSN,
+    environment: import.meta.env.REACT_APP_ENVIRONMENT,
     // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/#removing-a-default-integration
     integrations: function (integrations) {
       return integrations.filter(function (integration) {
@@ -42,7 +41,3 @@ if (container) {
   console.error('Container not found');
 }
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

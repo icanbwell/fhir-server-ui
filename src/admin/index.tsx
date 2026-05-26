@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { List, ListItem, Divider, Box, Typography, Button, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
@@ -25,7 +25,7 @@ const adminLinks = [
 ];
 
 const AdminIndexPage: React.FC = () => {
-    document.title = 'FHIR Server - Admin';
+    useEffect(() => { document.title = 'FHIR Server - Admin'; }, []);
 
   return (
     <div style={{ width: '100%', padding: 0, margin: 0 }}>

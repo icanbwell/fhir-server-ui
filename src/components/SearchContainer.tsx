@@ -13,25 +13,27 @@ export default function SearchContainer({
     onSearch: any;
     resourceType: string;
 }) {
-    const advSearchFormData = getAdvSearchFormData(resourceType);
     const formData = getFormData(resourceType);
-    let defaultValues: any;
+    const advSearchFormData = getAdvSearchFormData(resourceType);
     const { startDate, endDate } = getStartAndEndDate();
 
-    // create defaultValues for searchParams
-    defaultValues = resourceType === 'AuditEvent' ?
-        ({ start: startDate, end: endDate, resourceType }) :
-        ({ start: null, end: null, resourceType });
-    formData.forEach((data) => {
-        defaultValues[`${data.name}`] = '';
-    });
-    advSearchFormData.forEach((data) => {
-        defaultValues[`${data.name}`] = '';
-    });
-    const [searchParams, setSearchParams] = useState(defaultValues);
+    const buildDefaultValues = () => {
+        const defaults: any = resourceType === 'AuditEvent' ?
+            ({ start: startDate, end: endDate, resourceType }) :
+            ({ start: null, end: null, resourceType });
+        formData.forEach((data) => {
+            defaults[`${data.name}`] = '';
+        });
+        advSearchFormData.forEach((data) => {
+            defaults[`${data.name}`] = '';
+        });
+        return defaults;
+    };
+
+    const [searchParams, setSearchParams] = useState(buildDefaultValues);
 
     const resetFields = () => {
-        setSearchParams(defaultValues);
+        setSearchParams(buildDefaultValues());
     };
 
     const handleSearch = (e: any) => {

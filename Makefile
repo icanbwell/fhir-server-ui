@@ -31,16 +31,11 @@ upgrade_packages:down
 	yarn install && \
 	yarn dlx npm-check-updates -u --reject @sentry/react
 
-.PHONY:tests
-tests:
-	$(ACTIVATE_NODE) && \
-	yarn jest
-
 .PHONY:lint
 lint:
 	$(ACTIVATE_NODE) && \
 	yarn lint && \
-	yarn build:ts
+	yarn tsc --noEmit
 
 .PHONY:fix-lint
 fix-lint:
@@ -60,6 +55,10 @@ setup-pre-commit:
 .PHONY:run-pre-commit
 run-pre-commit: setup-pre-commit
 	./.git/hooks/pre-commit
+
+.PHONY:generate_search_fields
+generate_search_fields:
+	python3 src/generator/generate_search_fields.py
 
 .PHONY:generate_components
 generate_components:

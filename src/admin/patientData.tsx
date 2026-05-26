@@ -24,7 +24,24 @@ const PatientDataPage: React.FC = () => {
         results: '',
     });
     const [personDataForSearch, setPersonDataForSearch] = useState({ personId: '', results: '' });
-    const [personDataForDelete, setPersonDataForDelete] = useState({ personId: '', results: '', highlighted: false });
+    const location = useLocation();
+    const [personDataForDelete, setPersonDataForDelete] = useState(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const personId = queryParams.get('personId') || '';
+        return { personId, results: '', highlighted: !!personId };
+    });
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const personId = queryParams.get('personId');
+        if (personId) {
+            setPersonDataForDelete((prev) => ({
+                ...prev,
+                personId,
+                highlighted: true,
+            }));
+        }
+    }, [location.search]);
 
     const handlePatientDataSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -62,20 +79,6 @@ const PatientDataPage: React.FC = () => {
         setIsLoading(false);
     };
 
-    const location = useLocation();
-    useEffect(() => {
-        let personId: string = '';
-        if (location.search) {
-            const queryParams = new URLSearchParams(location.search);
-            const paramValue = queryParams.get('personId');
-            if (paramValue !== null) {
-                personId = paramValue;
-            }
-        }
-        if (personId) {
-            setPersonDataForDelete({ personId: personId, results: '', highlighted: true });
-        }
-    }, [location.state, location.search]);
 
     return (
         <div style={{ width: '100%', padding: 0, margin: 0 }}>

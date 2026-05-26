@@ -261,11 +261,7 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
     if (isLoading) {
         return (
             <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                height="100%"
+                sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}
             >
                 <CircularProgress />
                 <Typography variant="body2" sx={{ mt: 2 }}>

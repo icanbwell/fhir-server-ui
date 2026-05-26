@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import axios from 'axios';
 import AuthUrlProvider from '../utils/authUrlProvider';
 import { IAuthService } from './IAuthService';
@@ -39,7 +38,7 @@ class CognitoAuthService implements IAuthService {
             client_id: authInfo.clientId,
             response_type: 'code',
             redirect_uri: `${window.location.origin}/authcallback`,
-            state: Buffer.from(resourceUrl).toString('base64'),
+            state: btoa(resourceUrl),
             code_challenge: challenge,
             code_challenge_method: 'S256',
         });
@@ -55,8 +54,7 @@ class CognitoAuthService implements IAuthService {
     async fetchTokenAsync(
         identityProvider: string,
         code: string,
-        // eslint-disable-next-line no-unused-vars
-        resourceUrl: string
+        _resourceUrl: string
     ): Promise<any> {
         const authUrls = await this.authUrlProvider.getAuthUrlsAsync(identityProvider);
         const authInfo = this.authUrlProvider.getAuthInfo(identityProvider);

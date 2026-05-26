@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "module": "commonjs",
+        "module": "ESNext",
         "strict": true,
         "lib": ["ES2022", "dom", "dom.iterable"],
         "esModuleInterop": true,
@@ -11,23 +11,20 @@
         "rootDir": "./src",
         "sourceMap": true,
         "jsx": "react-jsx",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "allowJs": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true,
+        "types": ["vite/client"]
     },
     "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.html", "src/**/*.tsx"],
     "exclude": [
         "node_modules",
         "build",
-        "scripts",
-        "acceptance-tests",
-        "webpack",
-        "jest",
-        "src/setupTests.ts"
-    ],
-    "types": ["typePatches"]
+        "dist"
+    ]
 }

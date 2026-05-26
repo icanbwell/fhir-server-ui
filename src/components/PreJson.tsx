@@ -1,5 +1,7 @@
 import React from 'react';
-import ReactJson from 'react-json-view';
+import JsonView from 'react18-json-view';
+import 'react18-json-view/src/style.css';
+import 'react18-json-view/src/dark.css';
 import { useTheme } from '../context/ThemeContext';
 
 const PreJson = ({ data, collapsed }: { data: Object|String|null; collapsed?: boolean | number }): React.ReactElement => {
@@ -8,15 +10,12 @@ const PreJson = ({ data, collapsed }: { data: Object|String|null; collapsed?: bo
     return (
         <>
             {!!data && typeof data === 'object' && (
-                <ReactJson
+                <JsonView
                     src={data}
-                    displayDataTypes={false}
-                    theme={isDarkMode ? 'colors' : 'rjv-default'}
-                    style={{
-                        fontSize: '13px',
-                        backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-                    }}
+                    theme="vscode"
+                    dark={isDarkMode}
                     collapsed={collapsed}
+                    style={{ fontSize: '13px' }}
                 />
             )}
         </>

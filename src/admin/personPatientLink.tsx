@@ -15,11 +15,24 @@ const PersonPatientLinkPage: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [showLinkGraphData, setShowLinkGraphData] = useState({
-        bwellPersonId: '',
-        results: '',
-        highlighted: false
+    const location = useLocation();
+    const [showLinkGraphData, setShowLinkGraphData] = useState(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const bwellPersonId = queryParams.get('bwellPersonId') || '';
+        return { bwellPersonId, results: '', highlighted: !!bwellPersonId };
     });
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const bwellPersonId = queryParams.get('bwellPersonId');
+        if (bwellPersonId) {
+            setShowLinkGraphData((prev) => ({
+                ...prev,
+                bwellPersonId,
+                highlighted: true,
+            }));
+        }
+    }, [location.search]);
 
     const [createPersonToPersonLinkData, setCreatePersonToPersonLinkData] = useState({
         bwellPersonId: '',
@@ -157,24 +170,6 @@ const PersonPatientLinkPage: React.FC = () => {
         setIsLoading(false);
     };
 
-    const location = useLocation();
-    useEffect(() => {
-        let bwellPersonId: string = '';
-        if (location.search) {
-            const queryParams = new URLSearchParams(window.location.search);
-            const paramValue = queryParams.get('bwellPersonId');
-            if (paramValue !== null) {
-                bwellPersonId = paramValue;
-            }
-        }
-        if (bwellPersonId) {
-            setShowLinkGraphData({
-                bwellPersonId: bwellPersonId,
-                results: '',
-                highlighted: true,
-            });
-        }
-    }, [location.state, location.search]);
 
     return (
         <div style={{ width: '100%', padding: 0, margin: 0 }}>

@@ -2,178 +2,64 @@
   "name": "fhir-server-ui",
   "version": "1.0.0",
   "description": "UI to display FHIR resources in a web browser",
-  "main": "src/index.tsx",
+  "type": "module",
   "scripts": {
-    "build": "node scripts/build.js",
-    "build:prod": "DISABLE_ESLINT_PLUGIN='true' node scripts/build.js",
-    "start": "NODE_ENV=dev node scripts/start.js",
-    "lint": "NODE_ENV=test yarn test:lint",
-    "build:ts": "tsc",
-    "test:lint": "NODE_OPTIONS=\"${NODE_OPTIONS:-} --max-old-space-size=8096\" eslint \"src/**/*.tsx\" \"src/**/*.ts\""
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\""
   },
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@babel/core": "^7.27.7",
-    "@babel/plugin-transform-private-property-in-object": "^7.21.11",
-    "@babel/preset-env": "^7.27.2",
-    "@babel/preset-react": "^7.28.5",
-    "@babel/preset-typescript": "^7.27.1",
-    "@babel/runtime": "^7.29.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@fontsource/roboto": "^5.2.6",
-    "@mui/icons-material": "^7.1.2",
-    "@mui/material": "^7.1.2",
-    "@mui/system": "^9.0.1",
-    "@mui/x-date-pickers": "^8.5.3",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
-    "@sentry/react": "9.32.0",
-    "@svgr/webpack": "^8.1.0",
+    "@fontsource/roboto": "^5.2.10",
+    "@mui/icons-material": "^9.0.1",
+    "@mui/material": "^9.0.1",
+    "@mui/x-date-pickers": "^9.3.0",
+    "@sentry/react": "10.53.1",
     "@types/file-saver": "^2.0.7",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^20.19.40",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
     "@types/react-vertical-timeline-component": "^3.3.6",
-    "@types/uuid": "^10.0.0",
-    "@typescript-eslint/parser": "^8.35.0",
+    "@types/uuid": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
+    "@vitejs/plugin-react": "^6.0.2",
     "ag-grid-community": "^35.3.0",
     "ag-grid-react": "^35.3.0",
-    "axios": "^1.15.2",
-    "babel-loader": "^10.0.0",
-    "browserslist": "^4.25.1",
-    "buffer": "^6.0.3",
-    "camelcase": "^8.0.0",
-    "case-sensitive-paths-webpack-plugin": "^2.4.0",
-    "chart.js": "^4.5.0",
-    "css-loader": "^7.1.2",
-    "css-minimizer-webpack-plugin": "^7.0.2",
-    "dayjs": "^1.11.13",
-    "dompurify": "^3.4.0",
-    "dotenv": "^16.6.0",
-    "dotenv-expand": "^12.0.2",
-    "eslint": "^9.29.0",
+    "axios": "^1.16.1",
+    "chart.js": "^4.5.1",
+    "dayjs": "^1.11.20",
+    "dompurify": "^3.4.5",
+    "eslint": "^10.4.0",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-security": "^3.0.1",
-    "eslint-webpack-plugin": "^5.0.2",
-    "file-loader": "^6.2.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-security": "^4.0.0",
     "file-saver": "^2.0.5",
-    "fs-extra": "^11.3.0",
-    "globals": "^16.2.0",
-    "html-webpack-plugin": "^5.6.3",
+    "globals": "^17.6.0",
     "jwt-decode": "^4.0.0",
-    "lru-cache": "^11.1.0",
-    "mini-css-extract-plugin": "^2.9.2",
-    "postcss": "^8.5.10",
+    "lru-cache": "^11.5.0",
+    "postcss": "^8.5.15",
     "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-loader": "^8.1.1",
-    "postcss-normalize": "^13.0.1",
-    "postcss-preset-env": "^10.2.4",
-    "react": "^19.1.0",
-    "react-chartjs-2": "^5.3.0",
-    "react-dev-utils": "^12.0.1",
-    "react-dom": "^19.1.0",
-    "react-json-view": "^1.21.3",
-    "react-refresh": "^0.17.0",
-    "react-router-dom": "7.12.0",
-    "react-vertical-timeline-component": "^3.6.0",
-    "resolve": "^1.22.10",
-    "resolve-url-loader": "^5.0.0",
-    "sass-loader": "^16.0.5",
-    "semver": "^7.7.2",
-    "source-map-loader": "^5.0.0",
-    "style-loader": "^4.0.0",
-    "tailwindcss": "^4.1.11",
-    "terser-webpack-plugin": "^5.3.14",
-    "typescript": "^5.8.3",
+    "postcss-preset-env": "^11.3.0",
+    "react": "^19.2.6",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.6",
+    "react-router-dom": "7.15.1",
+    "react-vertical-timeline-component": "^4.0.0",
+    "react18-json-view": "^0.2.10",
+    "typescript": "^6.0.3",
     "uuid": "^14.0.0",
-    "web-vitals": "^5.0.3",
-    "webpack": "^5.104.1",
-    "webpack-manifest-plugin": "^5.0.1",
-    "workbox-webpack-plugin": "^7.3.0",
+    "vite": "^8.0.14",
+    "vite-plugin-svgr": "^5.2.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@typescript-eslint/eslint-plugin": "^8.35.0",
-    "babel-jest": "^30.0.2",
-    "jest": "^30.0.3",
-    "jest-matcher-utils": "^30.0.3",
-    "jest-resolve": "^30.0.2",
-    "jest-watch-typeahead": "^3.0.1",
-    "npm-check-updates": "^18.0.1",
-    "prettier": "^3.6.1",
-    "webpack-dev-server": "^5.2.2"
-  },
-  "resolutions": {
-    "@babel/runtime": ">=7.27.1",
-    "globals": "^16.2.0",
-    "set-cookie-parser": "2.7.2"
-  },
-  "jest": {
-    "watchman": false,
-    "watchPathIgnorePatterns": [
-      "globalConfig"
-    ],
-    "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules/",
-      "<rootDir>/src/"
-    ],
-    "setupFiles": [
-      "<rootDir>/jest/setEnvVars.js"
-    ],
-    "roots": [
-      "<rootDir>/src/"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.js"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "transform": {
-      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/src/config/jest/babelTransform.js",
-      "^.+\\.css$": "<rootDir>/src/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/src/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "modulePaths": [],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ],
-    "resetMocks": true
+    "prettier": "^3.8.3"
   },
   "browserslist": {
     "production": [
@@ -187,6 +73,5 @@
       "last 1 safari version"
     ]
   },
-  "tsconfig.json": "./tsconfig.json",
   "packageManager": "yarn@4.14.1"
 }

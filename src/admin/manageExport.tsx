@@ -37,7 +37,7 @@ const ManageExportPage: React.FC = () => {
     const handleExpand = () => {
         setSearchTabExpanded(!searchTabExpanded);
     };
-    const [resourceCardExpanded, setResourceCardExpanded] = useState(false);
+    const resourceCardExpanded = !!id;
     const [expandAll, setExpandAll] = useState(false);
     const [collapseAll, setCollapseAll] = useState(false);
 
@@ -75,7 +75,7 @@ const ManageExportPage: React.FC = () => {
         return (
             <>
                 {resources?.length > 1 &&
-                    <Box display='flex' justifyContent='end'>
+                    <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                         <Button onClick={() => { setExpandAll(true); setCollapseAll(false); }}>Expand All</Button>
                         <Button onClick={() => { setExpandAll(false); setCollapseAll(true); }}>Collapse All</Button>
                     </Box>
@@ -100,11 +100,6 @@ const ManageExportPage: React.FC = () => {
     };
 
     useEffect(() => {
-        if (id) {
-            setResourceCardExpanded(true);
-        } else {
-            setResourceCardExpanded(false);
-        }
         const callApi = async () => {
             try {
                 setLoading(true);
@@ -180,7 +175,7 @@ const ManageExportPage: React.FC = () => {
                     </AccordionDetails>
                 </Accordion>
                 <div style={{ padding: '0 10px' }}>
-                    <Box my={2}>{getBox()}</Box>
+                    <Box sx={{ my: 2 }}>{getBox()}</Box>
                 </div>
             </div>
             <Footer requestId={bundle?.id} links={bundle?.link} />

@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 export enum IPSMandatorySections {
   ALLERGIES = 'Allergies and Intolerances',
   MEDICATIONS = 'Medication Summary',

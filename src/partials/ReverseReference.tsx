@@ -12,11 +12,12 @@ type TReverseReferenceProps = TBaseResourceProps & {
 };
 
 function ReverseReference({ id, reverseReferences, resourceType }: TReverseReferenceProps) {
+    let resolvedId = id;
     if (resourceType === 'Patient') {
-        id = `Patient/${id}`;
+        resolvedId = `Patient/${id}`;
     }
     if (resourceType === 'Person') {
-        id = `Patient/person.${id}`;
+        resolvedId = `Patient/person.${id}`;
     }
 
     const getReference = (reference: any) => {
@@ -24,9 +25,9 @@ function ReverseReference({ id, reverseReferences, resourceType }: TReverseRefer
             const currDate = new Date().toISOString().split('T')[0];
             const dateBeforeWeek = new Date();
             dateBeforeWeek.setDate(dateBeforeWeek.getDate() - 7);
-            return `/4_0_0/${reference.target}?${reference.property}=${id}&date=lt.${currDate}&date=gt.${dateBeforeWeek.toISOString().split('T')[0]}`;
+            return `/4_0_0/${reference.target}?${reference.property}=${resolvedId}&date=lt.${currDate}&date=gt.${dateBeforeWeek.toISOString().split('T')[0]}`;
         }
-        return `/4_0_0/${reference.target}?${reference.property}=${id}`;
+        return `/4_0_0/${reference.target}?${reference.property}=${resolvedId}`;
     };
 
     const getLabel = (reference: any) => {

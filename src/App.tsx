@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useContext, useState } from 'react';
+import React, { Suspense, useContext, useState } from 'react';
 import {
     Routes,
     Route,
@@ -14,7 +14,7 @@ import ErrorPage from './pages/ErrorPage';
 import Auth from './pages/Auth';
 import FhirRoutes from './routes/fhirRoutes';
 import AdminRoutes from './routes/adminRoutes';
-import AdminIndexPage from './admin/index';
+const AdminIndexPage = React.lazy(() => import('./admin/index'));
 import EnvContext from './context/EnvironmentContext';
 import UserContext from './context/UserContext';
 import { ThemeContextProvider } from './context/ThemeContext';
@@ -35,41 +35,43 @@ function App(): React.ReactElement {
         const location = useLocation();
 
         return (
-            <Routes>
-                <Route key="home" path="/" element={<HomePage />} />
-                <Route
-                    element={
-                        !userDetails ? (
-                            <Outlet />
-                        ) : (
-                            <Navigate to="/" />
-                        )
-                    }
-                >
-                    <Route key="identityProvider" path="/select-idp" element={<IdentityProviderSelection />} />
-                </Route>
-                <Route key="authcallback" path="/authcallback" element={<Auth />} />
-                <Route
-                    element={
-                        userDetails ? (
-                            <Outlet />
-                        ) : (
-                            <Navigate to="/select-idp" state={{ resourceUrl: `${location.pathname}${location.search}` }} />
-                        )
-                    }
-                >
-                    {FhirRoutes}
-
-                    <Route path="admin" element={
-                        userDetails?.isAdmin ? <Outlet /> : <AccessDenied />
-                    }>
-                        <Route index element={<AdminIndexPage />} />
-                        {AdminRoutes}
+            <Suspense>
+                <Routes>
+                    <Route key="home" path="/" element={<HomePage />} />
+                    <Route
+                        element={
+                            !userDetails ? (
+                                <Outlet />
+                            ) : (
+                                <Navigate to="/" />
+                            )
+                        }
+                    >
+                        <Route key="identityProvider" path="/select-idp" element={<IdentityProviderSelection />} />
                     </Route>
-                </Route>
+                    <Route key="authcallback" path="/authcallback" element={<Auth />} />
+                    <Route
+                        element={
+                            userDetails ? (
+                                <Outlet />
+                            ) : (
+                                <Navigate to="/select-idp" state={{ resourceUrl: `${location.pathname}${location.search}` }} />
+                            )
+                        }
+                    >
+                        {FhirRoutes}
 
-                <Route key="notFoundPage" path="/*" element={<NotFoundPage />} />
-            </Routes>
+                        <Route path="admin" element={
+                            userDetails?.isAdmin ? <Outlet /> : <AccessDenied />
+                        }>
+                            <Route index element={<AdminIndexPage />} />
+                            {AdminRoutes}
+                        </Route>
+                    </Route>
+
+                    <Route key="notFoundPage" path="/*" element={<NotFoundPage />} />
+                </Routes>
+            </Suspense>
         );
     }
 

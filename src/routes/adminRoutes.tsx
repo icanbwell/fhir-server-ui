@@ -1,14 +1,15 @@
+import { lazy } from 'react';
 import { Route } from 'react-router-dom';
 
-import PersonMatchPage from '../admin/personMatch';
-import PatientDataPage from '../admin/patientData';
-import PersonPatientLinkPage from '../admin/personPatientLink';
-import SearchLogsPage from '../admin/searchLogs';
-import Indexes from '../admin/indexes';
-import SynchronizeIndexes from '../admin/synchronizeIndexes';
-import ManageExport from '../admin/manageExport';
-import InvalidateCache from '../admin/InvalidateCache';
-import PersonOneToNMatchPage from '../admin/personOneToNMatch';
+const PersonMatchPage = lazy(() => import('../admin/personMatch'));
+const PatientDataPage = lazy(() => import('../admin/patientData'));
+const PersonPatientLinkPage = lazy(() => import('../admin/personPatientLink'));
+const SearchLogsPage = lazy(() => import('../admin/searchLogs'));
+const Indexes = lazy(() => import('../admin/indexes'));
+const SynchronizeIndexes = lazy(() => import('../admin/synchronizeIndexes'));
+const ManageExport = lazy(() => import('../admin/manageExport'));
+const InvalidateCache = lazy(() => import('../admin/InvalidateCache'));
+const PersonOneToNMatchPage = lazy(() => import('../admin/personOneToNMatch'));
 
 export default [
     <Route key="personMatch" path="personMatch/*" element={<PersonMatchPage />} />,

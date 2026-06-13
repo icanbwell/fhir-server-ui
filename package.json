@@ -34,7 +34,7 @@
     "axios": "^1.16.1",
     "chart.js": "^4.5.1",
     "dayjs": "^1.11.20",
-    "dompurify": "^3.4.5",
+    "dompurify": "^3.4.8",
     "eslint": "^10.4.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",

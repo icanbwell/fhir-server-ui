@@ -16,6 +16,8 @@ class AuthServiceFactory {
                 return new OktaAuthService();
             case 'cognito':
                 return new CognitoAuthService();
+            case 'bwell':
+                return new CognitoAuthService();
             default:
                 throw new Error(`Unsupported identity provider: ${identityProvider}`);
         }

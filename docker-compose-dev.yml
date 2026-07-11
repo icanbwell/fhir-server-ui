@@ -1,0 +1,20 @@
+services:
+  app:
+    environment:
+      REACT_APP_FHIR_SERVER_URL: 'https://fhir.dev.icanbwell.com'
+      REACT_APP_AUTH_PROVIDERS: 'cognito,okta,bwell'
+      REACT_APP_AUTH_OKTA_CUSTOM_USERNAME: 'preferred_username'
+      REACT_APP_AUTH_OKTA_CUSTOM_GROUP: 'groups'
+      REACT_APP_AUTH_OKTA_CUSTOM_SCOPE: 'custom:scope'
+      REACT_APP_AUTH_OKTA_CLIENT_ID: '0oargxz9fkFFcSM38697'
+      REACT_APP_AUTH_OKTA_WELL_KNOWN_URL: 'https://icanbwell.okta.com/.well-known/openid-configuration'
+      REACT_APP_AUTH_OKTA_TOKEN_FOR_USER_DETAILS: 'id_token'
+      REACT_APP_AUTH_OKTA_REMOVE_SCOPE_PREFIX: 'fhir/prod/'
+      REACT_APP_AUTH_BWELL_CUSTOM_USERNAME: 'cognito:username'
+      REACT_APP_AUTH_BWELL_CUSTOM_GROUP: 'cognito:groups'
+      REACT_APP_AUTH_BWELL_CUSTOM_SCOPE: 'custom:scope'
+      REACT_APP_AUTH_BWELL_CLIENT_ID: '3i43562q02ghinf28av0nqv6di'
+      REACT_APP_AUTH_BWELL_REDIRECT_URL: 'http://localhost:5051/authcallback'
+      REACT_APP_AUTH_BWELL_WELL_KNOWN_URL: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_o71QMdxTG/.well-known/openid-configuration'
+      REACT_APP_AUTH_BWELL_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
+      REACT_APP_AUTH_BWELL_TOKEN_FOR_USER_DETAILS: 'jwt'

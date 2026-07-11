@@ -9,7 +9,15 @@ export const jwtParser = (): TUserDetails | null => {
     if (!identityProvider) {
         return null; // no identity provider has been chosen by the user yet
     }
-    const authInfo = new AuthUrlProvider().getAuthInfo(identityProvider);
+    let authInfo;
+    try {
+        authInfo = new AuthUrlProvider().getAuthInfo(identityProvider);
+    } catch {
+        // the stored identityProvider isn't configured in this environment (e.g. stale
+        // localStorage from a different env) - treat it like an invalid session
+        removeAuthData();
+        return null;
+    }
     const token = getLocalData(authInfo.tokenForUserDetails || 'jwt');
     if (!token) {
         return null;

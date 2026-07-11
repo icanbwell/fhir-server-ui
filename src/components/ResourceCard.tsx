@@ -55,6 +55,32 @@ const getIPSLink = ({
     );
 };
 
+const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) => {
+    return (
+        <Tooltip title="View Composition Summary">
+            <Link
+                to={`/composition-summary/4_0_0/Composition/${uuid}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    textDecoration: 'none',
+                    color: 'inherit',
+                }}
+            >
+                <DescriptionIcon color="primary" fontSize="small" />
+                <Typography variant="body2" color="primary">
+                    Summary
+                </Typography>
+                <OpenInNewIcon color="primary" fontSize="small" />
+            </Link>
+        </Tooltip>
+    );
+};
+
 const ResourceCard = ({
     index,
     resource,
@@ -117,6 +143,8 @@ const ResourceCard = ({
                         {resource.resourceType &&
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getIPSLink({ resource, uuid: uuid?.toString() })}
+                        {resource.resourceType === 'Composition' &&
+                            getCompositionSummaryLink({ uuid: uuid?.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
                     </Box>
                 }

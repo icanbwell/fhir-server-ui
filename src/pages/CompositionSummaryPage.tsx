@@ -48,13 +48,6 @@ const CompositionSummaryPage: React.FC = () => {
         return url;
     }, [resourceType, id, operation]);
 
-    const downloadUri = useMemo(() => {
-        if (!relativeUrl) {
-            return '';
-        }
-        return new URL(relativeUrl, fhirUrl).toString();
-    }, [relativeUrl, fhirUrl]);
-
     useEffect(() => {
         if (!relativeUrl) {
             return;
@@ -116,7 +109,7 @@ const CompositionSummaryPage: React.FC = () => {
                 {!isLoading && !errorMessage && resource && (
                     <CompositionSummary
                         resource={resource}
-                        rawJsonHref={`${downloadUri}${downloadUri.includes('?') ? '&' : '?'}_format=json`}
+                        rawJsonHref={`${relativeUrl}${relativeUrl.includes('?') ? '&' : '?'}_format=json`}
                     />
                 )}
             </Box>

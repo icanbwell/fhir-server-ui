@@ -27,6 +27,7 @@ import { TComposition } from '../types/resources/Composition';
 import { TCompositionSection } from '../types/partials/CompositionSection';
 import { TCoding } from '../types/partials/Coding';
 import { TReference } from '../types/partials/Reference';
+import { TDateTime } from '../types/simpleTypes/DateTime';
 
 type TCompositionSummaryProps = {
     resource: TComposition;
@@ -60,6 +61,57 @@ const ReferenceLink = ({ reference }: { reference?: TReference }) => {
             {label}
             <OpenInNewIcon fontSize="inherit" />
         </Link>
+    );
+};
+
+// FHIR dateTime values can be date-only or include a time component; format accordingly
+// and let the caller show the raw value alongside for anyone who needs the exact string.
+// dateStyle/timeStyle can't be combined with timeZoneName (Intl throws), so time values use
+// individual field options instead so the viewer's local timezone abbreviation is visible.
+const formatHumanDate = (value?: TDateTime): string | null => {
+    if (!value) {
+        return null;
+    }
+    const parsed = new Date(String(value));
+    if (isNaN(parsed.getTime())) {
+        return null;
+    }
+    const hasTime = String(value).includes('T');
+    return parsed.toLocaleString(
+        undefined,
+        hasTime
+            ? {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  timeZoneName: 'short',
+              }
+            : { year: 'numeric', month: 'short', day: 'numeric' }
+    );
+};
+
+// FHIR narrative field values are untyped strings, so a date is only recognizable by shape.
+// Kept as two flat alternatives (rather than one regex with nested optional groups) to avoid
+// the catastrophic-backtracking shape eslint-plugin-security's detect-unsafe-regex flags.
+const DATE_ONLY_REGEX = /^\d{4}(-\d{2})?(-\d{2})?$/;
+const DATE_TIME_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:\d{2})?$/;
+
+const looksLikeIsoDate = (value: string): boolean => DATE_ONLY_REGEX.test(value) || DATE_TIME_REGEX.test(value);
+
+const DateValue = ({ value }: { value?: TDateTime }) => {
+    if (!value) {
+        return <>—</>;
+    }
+    const humanReadable = formatHumanDate(value);
+    if (!humanReadable) {
+        return <>{String(value)}</>;
+    }
+    return (
+        <>
+            {humanReadable} ({String(value)})
+        </>
     );
 };
 
@@ -117,6 +169,33 @@ const countLeafFields = (sections?: TCompositionSection[]): number => {
     }, 0);
 };
 
+// Grabs the first `limit` non-empty leaf field values, in document order, for a
+// collapsed-section preview — same traversal order as countLeafFields/SectionGroup.
+const collectLeafFieldValues = (sections: TCompositionSection[] | undefined, limit: number): string[] => {
+    const values: string[] = [];
+    const walk = (secs?: TCompositionSection[]) => {
+        if (!secs) {
+            return;
+        }
+        for (const s of secs) {
+            if (values.length >= limit) {
+                return;
+            }
+            const isLeaf = !s.section || s.section.length === 0;
+            if (isLeaf) {
+                const value = s.text?.div ? String(s.text.div).trim() : '';
+                if (value) {
+                    values.push(value);
+                }
+            } else {
+                walk(s.section);
+            }
+        }
+    };
+    walk(sections);
+    return values;
+};
+
 // A composition's section[] narrative is a sequence of {title, text.div} rows keyed by
 // title (not fixed field names — see the b.well composition reference doc), interleaved
 // with deeper section[] groups for financial/coverage domains (EOB, Member, Payer-Member).
@@ -137,14 +216,19 @@ const SectionGroup = ({ sections }: { sections?: TCompositionSection[] }) => {
             <TableContainer key={key} component={Paper} variant="outlined" sx={{ mb: 1 }}>
                 <Table size="small">
                     <TableBody>
-                        {leafRun.map((row, index) => (
-                            <TableRow key={index}>
-                                <TableCell sx={{ fontWeight: 600, width: '35%' }}>
-                                    {row.title}
-                                </TableCell>
-                                <TableCell>{row.text?.div || '—'}</TableCell>
-                            </TableRow>
-                        ))}
+                        {leafRun.map((row, index) => {
+                            const value = row.text?.div ? String(row.text.div).trim() : '';
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell sx={{ fontWeight: 600, width: '35%' }}>
+                                        {row.title}
+                                    </TableCell>
+                                    <TableCell>
+                                        {value ? (looksLikeIsoDate(value) ? <DateValue value={value} /> : value) : '—'}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -232,7 +316,9 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                                 </TableRow>
                                 <TableRow>
                                     <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
-                                    <TableCell>{resource.date ? String(resource.date) : '—'}</TableCell>
+                                    <TableCell>
+                                        <DateValue value={resource.date} />
+                                    </TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell sx={{ fontWeight: 600 }}>Author</TableCell>
@@ -290,6 +376,7 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                     codingLabel && codingLabel.trim().toLowerCase() !== title.trim().toLowerCase();
                 const fieldCount = countLeafFields(section.section);
                 const linkCount = section.entry?.length || 0;
+                const previewValues = collectLeafFieldValues(section.section, 5);
                 return (
                     <Accordion key={section.id ? String(section.id) : index} sx={{ mb: 2 }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -297,17 +384,29 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                                 sx={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
-                                    alignItems: 'center',
+                                    alignItems: 'flex-start',
                                     width: '100%',
                                     mr: 1,
                                 }}
                             >
-                                <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-                                    <Typography variant="h6">{title}</Typography>
-                                    <Typography variant="caption" color="text.secondary">
-                                        {fieldCount} field{fieldCount === 1 ? '' : 's'} · {linkCount} link
-                                        {linkCount === 1 ? '' : 's'}
-                                    </Typography>
+                                <Box sx={{ minWidth: 0, flex: 1 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+                                        <Typography variant="h6">{title}</Typography>
+                                        <Typography variant="caption" color="text.secondary">
+                                            {fieldCount} field{fieldCount === 1 ? '' : 's'} · {linkCount} link
+                                            {linkCount === 1 ? '' : 's'}
+                                        </Typography>
+                                    </Box>
+                                    {previewValues.length > 0 && (
+                                        <Typography
+                                            variant="body2"
+                                            color="text.secondary"
+                                            noWrap
+                                            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                        >
+                                            {previewValues.join(' • ')}
+                                        </Typography>
+                                    )}
                                 </Box>
                                 {showCodingChip && (
                                     <Chip size="small" label={codingLabel} variant="outlined" />

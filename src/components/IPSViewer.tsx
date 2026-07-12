@@ -81,11 +81,6 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
         [fhirUrl, setUserDetails]
     );
 
-    const downloadUri = React.useMemo(() => {
-        const uri = new URL(relativeUrl, fhirUrl);
-        return uri.toString();
-    }, [relativeUrl, fhirUrl]);
-
     const toggleSection = (sectionId: string) => {
         setCollapsedSections(prev => {
             const newSet = new Set(prev);
@@ -233,7 +228,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
             setErrorMessage(null);
 
             try {
-                const response = await baseApi.getData({ urlString: downloadUri });
+                const response = await baseApi.getData({ urlString: relativeUrl });
                 const bundleData: Bundle = response.json;
                 setRawResponse(bundleData);
 
@@ -311,7 +306,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
         };
 
         fetchBundle();
-    }, [downloadUri, baseApi]);
+    }, [relativeUrl, baseApi]);
 
     if (isLoading) {
         return (
@@ -343,7 +338,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                 <Typography variant="h5">International Patient Summary</Typography>
                 <Tooltip title="View the raw JSON of this bundle" arrow placement="top">
                     <Link
-                        href={`${downloadUri}${downloadUri.includes('?') ? '&' : '?'}_format=json`}
+                        href={`${relativeUrl}${relativeUrl.includes('?') ? '&' : '?'}_format=json`}
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}

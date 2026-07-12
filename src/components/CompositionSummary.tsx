@@ -78,27 +78,32 @@ const EntryChips = ({ entries }: { entries?: TReference[] }) => {
         return null;
     }
     return (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
-            {entries.map((entry, index) => {
-                const parsed = parseReference(entry.reference);
-                if (!parsed) {
-                    return null;
-                }
-                return (
-                    <Chip
-                        key={index}
-                        size="small"
-                        variant="outlined"
-                        component="a"
-                        href={`/4_0_0/${parsed.resourceType}/${parsed.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        clickable
-                        icon={<OpenInNewIcon fontSize="inherit" />}
-                        label={entry.display || `${parsed.resourceType}/${parsed.id}`}
-                    />
-                );
-            })}
+        <Box sx={{ mt: 1 }}>
+            <Typography variant="caption" color="text.secondary">
+                Linked Entries ({entries.length})
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
+                {entries.map((entry, index) => {
+                    const parsed = parseReference(entry.reference);
+                    if (!parsed) {
+                        return null;
+                    }
+                    return (
+                        <Chip
+                            key={index}
+                            size="small"
+                            variant="outlined"
+                            component="a"
+                            href={`/4_0_0/${parsed.resourceType}/${parsed.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            clickable
+                            icon={<OpenInNewIcon fontSize="inherit" />}
+                            label={entry.display || `${parsed.resourceType}/${parsed.id}`}
+                        />
+                    );
+                })}
+            </Box>
         </Box>
     );
 };
@@ -162,10 +167,16 @@ const SectionGroup = ({ sections }: { sections?: TCompositionSection[] }) => {
 };
 
 const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps) => {
+    const sectionCount = resource.section?.length || 0;
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                <Typography variant="h5">{resource.title || 'Composition'}</Typography>
+                <Box>
+                    <Typography variant="h5">{resource.title || 'Composition'}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {sectionCount} section{sectionCount === 1 ? '' : 's'}
+                    </Typography>
+                </Box>
                 {rawJsonHref && (
                     <Tooltip title="View the raw JSON of this resource" arrow placement="top">
                         <Link
@@ -236,6 +247,10 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
 
             {(resource.section || []).map((section, index) => {
                 const coding = preferredCoding(section.code?.coding);
+                const codingLabel = coding?.display || coding?.code;
+                const title = section.title || `Section ${index + 1}`;
+                const showCodingChip =
+                    codingLabel && codingLabel.trim().toLowerCase() !== title.trim().toLowerCase();
                 return (
                     <Accordion key={section.id ? String(section.id) : index} sx={{ mb: 2 }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -248,9 +263,9 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                                     mr: 1,
                                 }}
                             >
-                                <Typography variant="h6">{section.title || `Section ${index + 1}`}</Typography>
-                                {coding && (
-                                    <Chip size="small" label={coding.display || coding.code} variant="outlined" />
+                                <Typography variant="h6">{title}</Typography>
+                                {showCodingChip && (
+                                    <Chip size="small" label={codingLabel} variant="outlined" />
                                 )}
                             </Box>
                         </AccordionSummary>

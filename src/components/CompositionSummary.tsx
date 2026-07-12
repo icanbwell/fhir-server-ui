@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Accordion,
     AccordionDetails,
@@ -15,12 +15,14 @@ import {
     TableCell,
     TableContainer,
     TableRow,
+    TextField,
     Tooltip,
     Typography,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CodeIcon from '@mui/icons-material/Code';
+import SearchIcon from '@mui/icons-material/Search';
 import { TComposition } from '../types/resources/Composition';
 import { TCompositionSection } from '../types/partials/CompositionSection';
 import { TCoding } from '../types/partials/Coding';
@@ -78,34 +80,41 @@ const EntryChips = ({ entries }: { entries?: TReference[] }) => {
         return null;
     }
     return (
-        <Box sx={{ mt: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-                Linked Entries ({entries.length})
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
-                {entries.map((entry, index) => {
-                    const parsed = parseReference(entry.reference);
-                    if (!parsed) {
-                        return null;
-                    }
-                    return (
-                        <Chip
-                            key={index}
-                            size="small"
-                            variant="outlined"
-                            component="a"
-                            href={`/4_0_0/${parsed.resourceType}/${parsed.id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            clickable
-                            icon={<OpenInNewIcon fontSize="inherit" />}
-                            label={entry.display || `${parsed.resourceType}/${parsed.id}`}
-                        />
-                    );
-                })}
-            </Box>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
+            {entries.map((entry, index) => {
+                const parsed = parseReference(entry.reference);
+                if (!parsed) {
+                    return null;
+                }
+                return (
+                    <Chip
+                        key={index}
+                        size="small"
+                        variant="outlined"
+                        component="a"
+                        href={`/4_0_0/${parsed.resourceType}/${parsed.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        clickable
+                        icon={<OpenInNewIcon fontSize="inherit" />}
+                        label={entry.display || `${parsed.resourceType}/${parsed.id}`}
+                    />
+                );
+            })}
         </Box>
     );
+};
+
+// Counts narrative leaf rows (Field | Value table rows) across a section's nested
+// section[] groups, recursing through the extra nesting level used by financial/coverage domains.
+const countLeafFields = (sections?: TCompositionSection[]): number => {
+    if (!sections || sections.length === 0) {
+        return 0;
+    }
+    return sections.reduce((count, s) => {
+        const isLeaf = !s.section || s.section.length === 0;
+        return count + (isLeaf ? 1 : countLeafFields(s.section));
+    }, 0);
 };
 
 // A composition's section[] narrative is a sequence of {title, text.div} rows keyed by
@@ -167,7 +176,15 @@ const SectionGroup = ({ sections }: { sections?: TCompositionSection[] }) => {
 };
 
 const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps) => {
+    const [searchQuery, setSearchQuery] = useState('');
     const sectionCount = resource.section?.length || 0;
+    const indexedSections = (resource.section || []).map((section, index) => ({ section, index }));
+    const query = searchQuery.trim().toLowerCase();
+    const filteredSections = query
+        ? indexedSections.filter(({ section, index }) =>
+              (section.title || `Section ${index + 1}`).toLowerCase().includes(query)
+          )
+        : indexedSections;
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -245,12 +262,34 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                 </CardContent>
             </Card>
 
-            {(resource.section || []).map((section, index) => {
+            <TextField
+                fullWidth
+                size="small"
+                placeholder="Search sections by name…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                sx={{ mb: 2 }}
+                slotProps={{
+                    input: {
+                        startAdornment: <SearchIcon fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />,
+                    },
+                }}
+            />
+
+            {filteredSections.length === 0 && (
+                <Typography variant="body2" color="text.secondary">
+                    No sections match &ldquo;{searchQuery}&rdquo;.
+                </Typography>
+            )}
+
+            {filteredSections.map(({ section, index }) => {
                 const coding = preferredCoding(section.code?.coding);
                 const codingLabel = coding?.display || coding?.code;
                 const title = section.title || `Section ${index + 1}`;
                 const showCodingChip =
                     codingLabel && codingLabel.trim().toLowerCase() !== title.trim().toLowerCase();
+                const fieldCount = countLeafFields(section.section);
+                const linkCount = section.entry?.length || 0;
                 return (
                     <Accordion key={section.id ? String(section.id) : index} sx={{ mb: 2 }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -263,7 +302,13 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                                     mr: 1,
                                 }}
                             >
-                                <Typography variant="h6">{title}</Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+                                    <Typography variant="h6">{title}</Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                        {fieldCount} field{fieldCount === 1 ? '' : 's'} · {linkCount} link
+                                        {linkCount === 1 ? '' : 's'}
+                                    </Typography>
+                                </Box>
                                 {showCodingChip && (
                                     <Chip size="small" label={codingLabel} variant="outlined" />
                                 )}

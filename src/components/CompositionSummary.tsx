@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import DOMPurify from 'dompurify';
 import {
     Accordion,
     AccordionDetails,
@@ -34,15 +35,27 @@ type TCompositionSummaryProps = {
     rawJsonHref?: string;
 };
 
+// Narrative.div is XHTML per the FHIR spec — it may arrive wrapped in a
+// `<div xmlns="...">…</div>` (or contain other markup). These field values are rendered as
+// plain text, so strip any tags rather than showing them escaped and literal.
+const narrativeText = (div?: String): string => (div ? DOMPurify.sanitize(String(div), { ALLOWED_TAGS: [] }).trim() : '');
+
+// Matches the ResourceType/id pair at the end of a FHIR reference, ignoring any preceding
+// server URL and any trailing /_history/version — handles both relative and absolute forms.
+// The two character classes match disjoint character sets ([^/]+ excludes '/'), so there's no
+// ambiguous overlap for the backtracker to explore; eslint-plugin-security's detect-unsafe-regex
+// flags this on shape alone (see the DATE_*_REGEX comment below for the same false positive).
+const REFERENCE_REGEX = /([A-Za-z]+)\/([^/]+)(?:\/_history\/[^/]+)?$/;
+
 const parseReference = (reference?: String): { resourceType: string; id: string } | null => {
     if (!reference) {
         return null;
     }
-    const parts = String(reference).split('/');
-    if (parts.length < 2) {
+    const match = reference.match(REFERENCE_REGEX);
+    if (!match) {
         return null;
     }
-    return { resourceType: parts[0], id: parts.slice(1).join('/') };
+    return { resourceType: match[1], id: match[2] };
 };
 
 const ReferenceLink = ({ reference }: { reference?: TReference }) => {
@@ -122,7 +135,7 @@ const preferredCoding = (coding?: TCoding[]): TCoding | undefined => {
         return undefined;
     }
     const preferred = coding.find((c) =>
-        c.extension?.some((e) => e.id === 'preferred' || e.valueCode === 'preferred')
+        c.extension?.some((e) => e.url === 'preferred' && e.valueBoolean === true)
     );
     return preferred || coding[0];
 };
@@ -136,7 +149,9 @@ const EntryChips = ({ entries }: { entries?: TReference[] }) => {
             {entries.map((entry, index) => {
                 const parsed = parseReference(entry.reference);
                 if (!parsed) {
-                    return null;
+                    return entry.display ? (
+                        <Chip key={index} size="small" variant="outlined" label={entry.display} />
+                    ) : null;
                 }
                 return (
                     <Chip
@@ -157,35 +172,23 @@ const EntryChips = ({ entries }: { entries?: TReference[] }) => {
     );
 };
 
-// Counts narrative leaf rows (Field | Value table rows) across a section's nested
-// section[] groups, recursing through the extra nesting level used by financial/coverage domains.
-const countLeafFields = (sections?: TCompositionSection[]): number => {
-    if (!sections || sections.length === 0) {
-        return 0;
-    }
-    return sections.reduce((count, s) => {
-        const isLeaf = !s.section || s.section.length === 0;
-        return count + (isLeaf ? 1 : countLeafFields(s.section));
-    }, 0);
-};
-
-// Grabs the first `limit` non-empty leaf field values, in document order, for a
-// collapsed-section preview — same traversal order as countLeafFields/SectionGroup.
-const collectLeafFieldValues = (sections: TCompositionSection[] | undefined, limit: number): string[] => {
-    const values: string[] = [];
+// Walks a section's nested section[] groups (recursing through the extra nesting level
+// used by financial/coverage domains) to count narrative leaf rows and collect their
+// non-empty values, in the same document order SectionGroup renders them.
+const summarizeLeafFields = (sections?: TCompositionSection[]): { count: number; previewValues: string[] } => {
+    let count = 0;
+    const previewValues: string[] = [];
     const walk = (secs?: TCompositionSection[]) => {
         if (!secs) {
             return;
         }
         for (const s of secs) {
-            if (values.length >= limit) {
-                return;
-            }
             const isLeaf = !s.section || s.section.length === 0;
             if (isLeaf) {
-                const value = s.text?.div ? String(s.text.div).trim() : '';
+                count += 1;
+                const value = narrativeText(s.text?.div);
                 if (value) {
-                    values.push(value);
+                    previewValues.push(value);
                 }
             } else {
                 walk(s.section);
@@ -193,7 +196,7 @@ const collectLeafFieldValues = (sections: TCompositionSection[] | undefined, lim
         }
     };
     walk(sections);
-    return values;
+    return { count, previewValues };
 };
 
 // A composition's section[] narrative is a sequence of {title, text.div} rows keyed by
@@ -217,7 +220,7 @@ const SectionGroup = ({ sections }: { sections?: TCompositionSection[] }) => {
                 <Table size="small">
                     <TableBody>
                         {leafRun.map((row, index) => {
-                            const value = row.text?.div ? String(row.text.div).trim() : '';
+                            const value = narrativeText(row.text?.div);
                             return (
                                 <TableRow key={index}>
                                     <TableCell sx={{ fontWeight: 600, width: '35%' }}>
@@ -261,14 +264,31 @@ const SectionGroup = ({ sections }: { sections?: TCompositionSection[] }) => {
 
 const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps) => {
     const [searchQuery, setSearchQuery] = useState('');
-    const sectionCount = resource.section?.length || 0;
-    const indexedSections = (resource.section || []).map((section, index) => ({ section, index }));
+    const sections = resource.section;
+    const sectionCount = sections?.length || 0;
+
+    // Derived per-section metadata requires walking each section's nested tree, so it's
+    // memoized on `sections` — typing in the search box below must not re-walk every section.
+    const sectionMeta = useMemo(
+        () =>
+            (sections || []).map((section, index) => {
+                const { count: fieldCount, previewValues } = summarizeLeafFields(section.section);
+                return {
+                    section,
+                    index,
+                    title: section.title || `Section ${index + 1}`,
+                    fieldCount,
+                    previewValues,
+                };
+            }),
+        [sections]
+    );
+
     const query = searchQuery.trim().toLowerCase();
-    const filteredSections = query
-        ? indexedSections.filter(({ section, index }) =>
-              (section.title || `Section ${index + 1}`).toLowerCase().includes(query)
-          )
-        : indexedSections;
+    const filteredSections = useMemo(
+        () => (query ? sectionMeta.filter((s) => s.title.toLowerCase().includes(query)) : sectionMeta),
+        [sectionMeta, query]
+    );
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -368,15 +388,12 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                 </Typography>
             )}
 
-            {filteredSections.map(({ section, index }) => {
+            {filteredSections.map(({ section, index, title, fieldCount, previewValues }) => {
                 const coding = preferredCoding(section.code?.coding);
                 const codingLabel = coding?.display || coding?.code;
-                const title = section.title || `Section ${index + 1}`;
                 const showCodingChip =
                     codingLabel && codingLabel.trim().toLowerCase() !== title.trim().toLowerCase();
-                const fieldCount = countLeafFields(section.section);
                 const linkCount = section.entry?.length || 0;
-                const previewValues = collectLeafFieldValues(section.section, 5);
                 return (
                     <Accordion key={section.id ? String(section.id) : index} sx={{ mb: 2 }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -390,20 +407,17 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                                 }}
                             >
                                 <Box sx={{ minWidth: 0, flex: 1 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-                                        <Typography variant="h6">{title}</Typography>
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: 1 }}>
+                                        <Typography variant="h6" sx={{ wordBreak: 'break-word' }}>
+                                            {title}
+                                        </Typography>
                                         <Typography variant="caption" color="text.secondary">
                                             {fieldCount} field{fieldCount === 1 ? '' : 's'} · {linkCount} link
                                             {linkCount === 1 ? '' : 's'}
                                         </Typography>
                                     </Box>
                                     {previewValues.length > 0 && (
-                                        <Typography
-                                            variant="body2"
-                                            color="text.secondary"
-                                            noWrap
-                                            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                                        >
+                                        <Typography variant="body2" color="text.secondary">
                                             {previewValues.join(' • ')}
                                         </Typography>
                                     )}

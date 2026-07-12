@@ -9,6 +9,7 @@ import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
 import { TComposition } from '../types/resources/Composition';
+import { appendFormatJson } from '../utils/url.utils';
 
 const CompositionSummaryPage: React.FC = () => {
     const { resourceType, id, operation } = useParams<{
@@ -107,10 +108,7 @@ const CompositionSummaryPage: React.FC = () => {
                     </>
                 )}
                 {!isLoading && !errorMessage && resource && (
-                    <CompositionSummary
-                        resource={resource}
-                        rawJsonHref={`${relativeUrl}${relativeUrl.includes('?') ? '&' : '?'}_format=json`}
-                    />
+                    <CompositionSummary resource={resource} rawJsonHref={appendFormatJson(relativeUrl)} />
                 )}
             </Box>
             <Footer />

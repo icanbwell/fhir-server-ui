@@ -115,6 +115,7 @@ const ResourceCard = ({
     // List of resource types that should show FileDownload
     const spreadSheetResourceTypes = ['Patient', 'Person', 'Practitioner'];
     const summaryResourceTypes = ['Patient', 'Person'];
+    const compositionSummaryResourceTypes = ['Composition'];
 
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
@@ -143,7 +144,8 @@ const ResourceCard = ({
                         {resource.resourceType &&
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getIPSLink({ resource, uuid: uuid?.toString() })}
-                        {resource.resourceType === 'Composition' &&
+                        {resource.resourceType &&
+                            compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
                     </Box>
@@ -158,7 +160,7 @@ const ResourceCard = ({
                     {/* Conditionally render FileDownload based on resource type */}
                     {resource.resourceType &&
                         (spreadSheetResourceTypes.includes(resource.resourceType.toString()) ||
-                            resource.resourceType === 'Composition') && (
+                            compositionSummaryResourceTypes.includes(resource.resourceType.toString())) && (
                             <Box
                                 sx={{
                                     display: 'flex',
@@ -199,7 +201,7 @@ const ResourceCard = ({
                                     resource.resourceType.toString()
                                 ) && <Box>{getIPSLink({ resource, uuid: uuid?.toString() })}</Box>}
 
-                                {resource.resourceType === 'Composition' && (
+                                {compositionSummaryResourceTypes.includes(resource.resourceType.toString()) && (
                                     <Box>{getCompositionSummaryLink({ uuid: uuid?.toString() })}</Box>
                                 )}
                             </Box>

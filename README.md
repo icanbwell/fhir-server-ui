@@ -99,6 +99,10 @@ To generate types:
 make generate_types
 ```
 
+## Feature Documentation
+
+- [Composition Summary Screen](docs/composition-summary-screen.md) — how the readable Composition view (`/composition-summary/...`) is implemented.
+
 ## Terminal Warning
 When running the application, you might encounter the following warning in the terminal `Failed to parse source map`.
 This warning occurs because the `graphiql` package references a source map file (`graphiql.css.map`) that is not present in the package. Source maps are used by development tools to map minified code back to the original source code, which can be useful for debugging. However, the absence of this source map file does not affect the functionality of the application.

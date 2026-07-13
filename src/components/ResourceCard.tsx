@@ -55,6 +55,32 @@ const getIPSLink = ({
     );
 };
 
+const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) => {
+    return (
+        <Tooltip title="View Composition Summary">
+            <Link
+                to={`/composition-summary/4_0_0/Composition/${uuid}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    textDecoration: 'none',
+                    color: 'inherit',
+                }}
+            >
+                <DescriptionIcon color="primary" fontSize="small" />
+                <Typography variant="body2" color="primary">
+                    Composition View
+                </Typography>
+                <OpenInNewIcon color="primary" fontSize="small" />
+            </Link>
+        </Tooltip>
+    );
+};
+
 const ResourceCard = ({
     index,
     resource,
@@ -89,6 +115,7 @@ const ResourceCard = ({
     // List of resource types that should show FileDownload
     const spreadSheetResourceTypes = ['Patient', 'Person', 'Practitioner'];
     const summaryResourceTypes = ['Patient', 'Person'];
+    const compositionSummaryResourceTypes = ['Composition'];
 
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
@@ -117,6 +144,9 @@ const ResourceCard = ({
                         {resource.resourceType &&
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getIPSLink({ resource, uuid: uuid?.toString() })}
+                        {resource.resourceType &&
+                            compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
+                            getCompositionSummaryLink({ uuid: uuid?.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
                     </Box>
                 }
@@ -129,7 +159,8 @@ const ResourceCard = ({
                     <Json resource={resource} error={error} />
                     {/* Conditionally render FileDownload based on resource type */}
                     {resource.resourceType &&
-                        spreadSheetResourceTypes.includes(resource.resourceType.toString()) && (
+                        (spreadSheetResourceTypes.includes(resource.resourceType.toString()) ||
+                            compositionSummaryResourceTypes.includes(resource.resourceType.toString())) && (
                             <Box
                                 sx={{
                                     display: 'flex',
@@ -138,35 +169,41 @@ const ResourceCard = ({
                                     mt: 2,
                                 }}
                             >
-                                <Box>
-                                    <Tooltip title="Open Summary in New Spreadsheet Tab">
-                                        {/* The resource type is included twice in the URL to meet API requirements:
-                                            - The first occurrence specifies the resource type and ID for the main resource.
-                                            - The second occurrence in `$everything/{resourceType}` specifies the summary type. */}
-                                        <Link
-                                            to={`/excel/4_0_0/${resource.resourceType}/${resource.id}/$everything/${resource.resourceType}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: 8,
-                                                textDecoration: 'none',
-                                                color: 'inherit',
-                                            }}
-                                        >
-                                            <GridOnIcon color="primary" fontSize="small" />
-                                            <Typography variant="body1" color="primary">
-                                                Open as Spreadsheet
-                                            </Typography>
-                                            <OpenInNewIcon color="primary" />
-                                        </Link>
-                                    </Tooltip>
-                                </Box>
+                                {spreadSheetResourceTypes.includes(resource.resourceType.toString()) && (
+                                    <Box>
+                                        <Tooltip title="Open Summary in New Spreadsheet Tab">
+                                            {/* The resource type is included twice in the URL to meet API requirements:
+                                                - The first occurrence specifies the resource type and ID for the main resource.
+                                                - The second occurrence in `$everything/{resourceType}` specifies the summary type. */}
+                                            <Link
+                                                to={`/excel/4_0_0/${resource.resourceType}/${resource.id}/$everything/${resource.resourceType}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: 8,
+                                                    textDecoration: 'none',
+                                                    color: 'inherit',
+                                                }}
+                                            >
+                                                <GridOnIcon color="primary" fontSize="small" />
+                                                <Typography variant="body1" color="primary">
+                                                    Open as Spreadsheet
+                                                </Typography>
+                                                <OpenInNewIcon color="primary" />
+                                            </Link>
+                                        </Tooltip>
+                                    </Box>
+                                )}
 
                                 {summaryResourceTypes.includes(
                                     resource.resourceType.toString()
                                 ) && <Box>{getIPSLink({ resource, uuid: uuid?.toString() })}</Box>}
+
+                                {compositionSummaryResourceTypes.includes(resource.resourceType.toString()) && (
+                                    <Box>{getCompositionSummaryLink({ uuid: uuid?.toString() })}</Box>
+                                )}
                             </Box>
                         )}
                 </CardContent>

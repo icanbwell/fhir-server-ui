@@ -23,6 +23,7 @@ import PaginatedTable from './PaginatedTable';
 import './IPSNarrative.css'; // Import the CSS file for styling the IPS narrative
 import PreJson from './PreJson';
 import { getMandatorySectionContent } from '../constants/ipsConstants';
+import { appendFormatJson } from '../utils/url.utils';
 
 interface IPSViewerProps {
     relativeUrl: string;
@@ -80,11 +81,6 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
         () => new BaseApi({ fhirUrl, setUserDetails }),
         [fhirUrl, setUserDetails]
     );
-
-    const downloadUri = React.useMemo(() => {
-        const uri = new URL(relativeUrl, fhirUrl);
-        return uri.toString();
-    }, [relativeUrl, fhirUrl]);
 
     const toggleSection = (sectionId: string) => {
         setCollapsedSections(prev => {
@@ -233,7 +229,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
             setErrorMessage(null);
 
             try {
-                const response = await baseApi.getData({ urlString: downloadUri });
+                const response = await baseApi.getData({ urlString: relativeUrl });
                 const bundleData: Bundle = response.json;
                 setRawResponse(bundleData);
 
@@ -311,7 +307,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
         };
 
         fetchBundle();
-    }, [downloadUri, baseApi]);
+    }, [relativeUrl, baseApi]);
 
     if (isLoading) {
         return (
@@ -343,7 +339,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                 <Typography variant="h5">International Patient Summary</Typography>
                 <Tooltip title="View the raw JSON of this bundle" arrow placement="top">
                     <Link
-                        href={`${downloadUri}${downloadUri.includes('?') ? '&' : '?'}_format=json`}
+                        href={appendFormatJson(relativeUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}

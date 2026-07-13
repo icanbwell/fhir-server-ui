@@ -9,6 +9,7 @@ const PatientTimeline = lazy(() => import('../PatientTimeline'));
 const SearchPage = lazy(() => import('../pages/SearchPage'));
 const ExcelViewerPage = lazy(() => import('../pages/ExcelViewerPage'));
 const IPSViewerPage = lazy(() => import('../pages/IPSViewerPage'));
+const CompositionSummaryPage = lazy(() => import('../pages/CompositionSummaryPage'));
 const APIConsolePage = lazy(() => import('../pages/APIConsolePage'));
 
 export default [
@@ -25,4 +26,14 @@ export default [
     <Route key="excelOperation" path="/excel/4_0_0/:resourceType/:operation?/*" element={<ExcelViewerPage />} />,
     <Route key="ipsIdOperation" path="/ips/4_0_0/:resourceType/:id?/:operation?/*" element={<IPSViewerPage />} />,
     <Route key="ipsOperation" path="/ips/4_0_0/:resourceType/:operation?/*" element={<IPSViewerPage />} />,
+    <Route
+        key="compositionSummaryIdOperation"
+        path="/composition-summary/4_0_0/:resourceType/:id?/:operation?/*"
+        element={<CompositionSummaryPage />}
+    />,
+    <Route
+        key="compositionSummaryOperation"
+        path="/composition-summary/4_0_0/:resourceType/:operation?/*"
+        element={<CompositionSummaryPage />}
+    />,
 ];

@@ -329,6 +329,24 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                                     <TableCell>{resource.identifier?.value || '—'}</TableCell>
                                 </TableRow>
                                 <TableRow>
+                                    <TableCell sx={{ fontWeight: 600 }}>Source</TableCell>
+                                    <TableCell>
+                                        {resource.meta?.source ? (
+                                            <Link
+                                                href={String(resource.meta.source)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}
+                                            >
+                                                {String(resource.meta.source)}
+                                                <OpenInNewIcon fontSize="inherit" />
+                                            </Link>
+                                        ) : (
+                                            '—'
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
                                     <TableCell sx={{ fontWeight: 600 }}>Subject</TableCell>
                                     <TableCell>
                                         <ReferenceLink reference={resource.subject} />

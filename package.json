@@ -31,7 +31,7 @@
     "@vitejs/plugin-react": "^6.0.2",
     "ag-grid-community": "^35.3.0",
     "ag-grid-react": "^35.3.0",
-    "axios": "^1.16.1",
+    "axios": "^1.18.0",
     "chart.js": "^4.5.1",
     "dayjs": "^1.11.20",
     "dompurify": "^3.4.5",

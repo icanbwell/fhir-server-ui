@@ -120,15 +120,76 @@ class FhirApi extends BaseApi {
         method,
         urlPath,
         data,
+        headers,
+        onChunk,
+        signal,
     }: {
-        method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+        method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
         urlPath: string;
         data?: object;
-    }) {
-        if (method === 'GET') {
-            return await this.getData({ urlString: urlPath });
+        headers?: Record<string, string>;
+        onChunk?: (text: string) => void;
+        signal?: AbortSignal;
+    }): Promise<{ status: number | undefined; json: any; headers: Record<string, string>; rawText: string }> {
+        let path = urlPath;
+        if (path.includes(window.location.origin)) {
+            path = path.replace(window.location.origin, '');
         }
-        return await this.request({ urlString: urlPath, method, data });
+        const url = new URL(path, this.getBaseUrl());
+        const requestHeaders = this.buildHeaders({
+            'Content-Type': 'application/fhir+json',
+            ...headers,
+        });
+
+        let response: Response;
+        try {
+            response = await fetch(url.toString(), {
+                method,
+                headers: requestHeaders,
+                body: data !== undefined ? JSON.stringify(data) : undefined,
+                signal,
+            });
+        } catch (err: any) {
+            if (err?.name === 'AbortError') {
+                throw err;
+            }
+            return { status: undefined, json: { error: err.message || 'Request failed' }, headers: {}, rawText: '' };
+        }
+
+        const responseHeaders: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+            responseHeaders[key] = value;
+        });
+
+        await this.handleUnauthorized(response.status);
+
+        let rawText = '';
+        if (response.body) {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let done = false;
+            while (!done) {
+                const result = await reader.read();
+                done = result.done;
+                if (result.value) {
+                    const chunkText = decoder.decode(result.value, { stream: true });
+                    rawText += chunkText;
+                    onChunk?.(chunkText);
+                }
+            }
+        } else {
+            rawText = await response.text();
+            onChunk?.(rawText);
+        }
+
+        let json: any;
+        try {
+            json = rawText ? JSON.parse(rawText) : undefined;
+        } catch {
+            json = undefined;
+        }
+
+        return { status: response.status, json, headers: responseHeaders, rawText };
     }
 }
 

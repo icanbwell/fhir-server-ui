@@ -122,6 +122,7 @@ class FhirApi extends BaseApi {
         data,
         headers,
         onChunk,
+        onHeaders,
         signal,
     }: {
         method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -129,6 +130,7 @@ class FhirApi extends BaseApi {
         data?: object;
         headers?: Record<string, string>;
         onChunk?: (text: string) => void;
+        onHeaders?: (status: number, headers: Record<string, string>) => void;
         signal?: AbortSignal;
     }): Promise<{ status: number | undefined; json: any; headers: Record<string, string>; rawText: string }> {
         let path = urlPath;
@@ -136,6 +138,21 @@ class FhirApi extends BaseApi {
             path = path.replace(window.location.origin, '');
         }
         const url = new URL(path, this.getBaseUrl());
+
+        // The session's bearer token must never leave the configured FHIR server. A
+        // scheme-relative path (e.g. "//evil.com/collect") resolves to a different origin via
+        // new URL(), so compare the resolved origin against the base URL's origin and refuse
+        // before any fetch happens. This is the single chokepoint every URL mode goes through
+        // (guided builder and free-form path alike), so the invariant can't be re-broken in the UI.
+        if (url.origin !== new URL(this.getBaseUrl()).origin) {
+            return {
+                status: undefined,
+                json: { error: 'Request path must stay on the configured FHIR server' },
+                headers: {},
+                rawText: '',
+            };
+        }
+
         const requestHeaders = this.buildHeaders({
             'Content-Type': 'application/fhir+json',
             ...headers,
@@ -160,6 +177,11 @@ class FhirApi extends BaseApi {
         response.headers.forEach((value, key) => {
             responseHeaders[key] = value;
         });
+
+        // Surface status/headers to the caller as soon as fetch() resolves — i.e. before the
+        // body streaming loop below starts — so the UI can populate them without waiting for
+        // the whole body to arrive.
+        onHeaders?.(response.status, responseHeaders);
 
         await this.handleUnauthorized(response.status);
 

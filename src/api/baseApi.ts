@@ -53,18 +53,41 @@ class BaseApi {
         }
         const token = getLocalData(tokenToSendToFhirServer);
 
-        const headers: Record<string, string> = {
-            Accept: 'application/json',
-            'Cache-Control': 'no-cache',
-            Pragma: 'no-cache',
-            Expires: '0',
-            'Origin-Service': 'fhir-ui',
-            ...extra,
+        // HTTP header names are case-insensitive, but a plain object treats `Content-Type` and
+        // `content-type` as two distinct keys — and fetch()'s Headers constructor then
+        // comma-joins their values instead of letting the caller cleanly override the default.
+        // Keying by the lower-cased name (while remembering the original spelling) guarantees
+        // only one entry per header survives, with the last one set winning, matching HTTP
+        // header semantics.
+        const merged = new Map<string, { name: string; value: string }>();
+        const setHeader = (name: string, value: string) => {
+            merged.set(name.toLowerCase(), { name, value });
         };
+
+        setHeader('Accept', 'application/json');
+        setHeader('Cache-Control', 'no-cache');
+        setHeader('Pragma', 'no-cache');
+        setHeader('Expires', '0');
+        setHeader('Origin-Service', 'fhir-ui');
+
+        Object.entries(extra || {}).forEach(([name, value]) => {
+            // `Authorization` is owned exclusively by the session token (below) and can never be
+            // overridden or blanked by a caller-supplied header. Enforced here rather than at the
+            // call site so every caller of buildHeaders/sendRequest gets the guarantee, whether
+            // or not a session token exists.
+            if (name.toLowerCase() === 'authorization') {
+                return;
+            }
+            setHeader(name, value);
+        });
+
         if (typeof token === 'string') {
-            headers.Authorization = `Bearer ${token}`;
+            setHeader('Authorization', `Bearer ${token}`);
         }
-        return headers;
+
+        return Object.fromEntries(
+            Array.from(merged.values(), ({ name, value }) => [name, value] as [string, string])
+        );
     }
 
     protected async handleUnauthorized(status: number | undefined): Promise<void> {

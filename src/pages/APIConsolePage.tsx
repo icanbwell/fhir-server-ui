@@ -253,8 +253,17 @@ const APIConsolePage = () => {
                     }
                     setStreamedText((prev) => prev + chunk);
                 },
+                // Populate status/headers as soon as the response headers arrive, before the
+                // body finishes streaming.
+                onHeaders: (earlyStatus, earlyHeaders) => {
+                    if (controller.signal.aborted) {
+                        return;
+                    }
+                    setResponseStatus(earlyStatus);
+                    setResponseHeaders(earlyHeaders);
+                },
             });
-            setResponseStatus(status);
+            setResponseStatus(status ?? null);
             setResponseJson(json);
             setResponseHeaders(headers || {});
         } catch (error: any) {
@@ -269,8 +278,13 @@ const APIConsolePage = () => {
                 setResponseJson({ error: error.message || 'Request failed' });
             }
         } finally {
-            setIsStreaming(false);
-            setLoading(false);
+            // Only the most recent request owns this UI state. A superseded request's finally
+            // block still runs (a `return` inside try does not skip finally), and clearing these
+            // flags would disable the streaming UI for the newer request that is still in flight.
+            if (abortControllerRef.current === controller) {
+                setIsStreaming(false);
+                setLoading(false);
+            }
         }
     };
 

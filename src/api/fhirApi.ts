@@ -132,10 +132,16 @@ class FhirApi extends BaseApi {
         onChunk?: (text: string) => void;
         onHeaders?: (status: number, headers: Record<string, string>) => void;
         signal?: AbortSignal;
-    }): Promise<{ status: number | undefined; json: any; headers: Record<string, string>; rawText: string }> {
+    }): Promise<{
+        status: number | undefined;
+        json: any;
+        headers: Record<string, string>;
+        rawText: string;
+        incomplete?: boolean;
+    }> {
         let path = urlPath;
-        if (path.includes(window.location.origin)) {
-            path = path.replace(window.location.origin, '');
+        if (path.startsWith(window.location.origin)) {
+            path = path.slice(window.location.origin.length);
         }
         const url = new URL(path, this.getBaseUrl());
 
@@ -186,22 +192,45 @@ class FhirApi extends BaseApi {
         await this.handleUnauthorized(response.status);
 
         let rawText = '';
-        if (response.body) {
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let done = false;
-            while (!done) {
-                const result = await reader.read();
-                done = result.done;
-                if (result.value) {
-                    const chunkText = decoder.decode(result.value, { stream: true });
-                    rawText += chunkText;
-                    onChunk?.(chunkText);
+        try {
+            if (response.body) {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let done = false;
+                while (!done) {
+                    const result = await reader.read();
+                    done = result.done;
+                    if (result.value) {
+                        const chunkText = decoder.decode(result.value, { stream: true });
+                        rawText += chunkText;
+                        onChunk?.(chunkText);
+                    }
                 }
+            } else {
+                rawText = await response.text();
+                onChunk?.(rawText);
             }
-        } else {
-            rawText = await response.text();
-            onChunk?.(rawText);
+        } catch (err: any) {
+            if (err?.name === 'AbortError') {
+                throw err;
+            }
+            // A mid-stream connection drop rejects here. The status/headers were already
+            // surfaced via onHeaders and the partial body via onChunk, so resolve with what
+            // arrived instead of throwing — the caller's catch-all would otherwise discard
+            // both in favor of a generic error.
+            let partialJson: any;
+            try {
+                partialJson = rawText ? JSON.parse(rawText) : undefined;
+            } catch {
+                partialJson = undefined;
+            }
+            return {
+                status: response.status,
+                json: partialJson,
+                headers: responseHeaders,
+                rawText,
+                incomplete: true,
+            };
         }
 
         let json: any;

@@ -83,6 +83,7 @@ const APIConsolePage = () => {
     const [leftWidthPercent, setLeftWidthPercent] = useState<number>(50);
     const [streamedText, setStreamedText] = useState<string>('');
     const [isStreaming, setIsStreaming] = useState<boolean>(false);
+    const [responseIncomplete, setResponseIncomplete] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const isDragging = useRef(false);
@@ -229,6 +230,7 @@ const APIConsolePage = () => {
             setResponseStatus(null);
             setResponseHeaders({});
             setStreamedText('');
+            setResponseIncomplete(false);
             const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
             let data: object | undefined;
             if (resourceJson.trim() && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
@@ -241,7 +243,7 @@ const APIConsolePage = () => {
                 }
                 return acc;
             }, {});
-            const { json, status, headers } = await fhirApi.sendRequest({
+            const { json, status, headers, incomplete } = await fhirApi.sendRequest({
                 method,
                 urlPath: requestUrl,
                 data,
@@ -266,6 +268,7 @@ const APIConsolePage = () => {
             setResponseStatus(status ?? null);
             setResponseJson(json);
             setResponseHeaders(headers || {});
+            setResponseIncomplete(!!incomplete);
         } catch (error: any) {
             if (error?.name === 'AbortError') {
                 return;
@@ -599,6 +602,14 @@ const APIConsolePage = () => {
                                         label={responseStatus}
                                         size="small"
                                         color={getStatusColor(responseStatus)}
+                                        variant="outlined"
+                                    />
+                                )}
+                                {responseIncomplete && (
+                                    <Chip
+                                        label="Connection dropped — response incomplete"
+                                        size="small"
+                                        color="warning"
                                         variant="outlined"
                                     />
                                 )}

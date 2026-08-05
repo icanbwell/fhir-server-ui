@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState, FormEvent } from 'react';
+import { useContext, useEffect, useMemo, useState, FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
     Typography,
@@ -13,7 +13,7 @@ import {
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import UserContext from '../context/UserContext';
-import { setLocalData } from '../utils/localData.utils';
+import { getLocalData, setLocalData } from '../utils/localData.utils';
 import { jwtParser } from '../utils/jwtParser';
 import { removeAuthData } from '../utils/auth.utils';
 import { login, parseClientKeys } from '../services/BwellAppAuthService';
@@ -50,6 +50,13 @@ const BwellAppLogin = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        if (getLocalData('jwt')) {
+            navigate(resourceUrl);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handleClientChange = (event: SelectChangeEvent) => {
         setSelectedClientName(event.target.value);
     };
@@ -78,6 +85,7 @@ const BwellAppLogin = () => {
             setLocalData('identityProvider', 'bwellapp');
             const userDetails = jwtParser();
             if (!userDetails) {
+                removeAuthData();
                 setError(
                     'Signed in, but the session could not be established. Please contact support.'
                 );
@@ -179,7 +187,7 @@ const BwellAppLogin = () => {
                         <Link
                             component="button"
                             type="button"
-                            onClick={() => navigate('/select-idp')}
+                            onClick={() => navigate('/select-idp', { state: { resourceUrl } })}
                         >
                             Back
                         </Link>

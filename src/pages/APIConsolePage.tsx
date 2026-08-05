@@ -214,8 +214,9 @@ const APIConsolePage = () => {
                 data = JSON.parse(resourceJson);
             }
             const headersToSend = customHeaders.reduce<Record<string, string>>((acc, row) => {
-                if (row.key.trim()) {
-                    acc[row.key.trim()] = row.value;
+                const key = row.key.trim();
+                if (key && key.toLowerCase() !== 'authorization') {
+                    acc[key] = row.value;
                 }
                 return acc;
             }, {});

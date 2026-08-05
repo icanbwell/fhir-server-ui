@@ -26,6 +26,10 @@ It falls short of "specify a url" in a few concrete ways:
   the user to add or override headers.
 - **No response headers.** `getData`/`request` return `{ status, json }` only
   (`src/api/baseApi.ts:62`, `:83`) — response headers are discarded.
+- **No streaming.** `FhirApi.sendRequest` (`fhirApi.ts:119-132`) delegates to axios'
+  `getData`/`request`, which buffer the entire response body before resolving — the UI
+  can't show anything until the whole response has arrived, even when the FHIR server
+  sends a large bundle with `Transfer-Encoding: chunked`.
 
 ## Goal
 
@@ -35,6 +39,9 @@ Extend `APIConsolePage` so a signed-in user can:
    resourceType/operation builder entirely), for all of GET/POST/PUT/PATCH/DELETE.
 2. Add custom request headers.
 3. See the response status, headers, and body.
+4. See the response body render progressively as it streams in, rather than waiting for
+   the full response to buffer — reflecting the FHIR server's actual chunked
+   transfer-encoding instead of hiding it behind a single "loading" spinner.
 
 All of this using the credentials already attached by the existing auth interceptor — no
 new auth code.
@@ -111,43 +118,106 @@ These are merged into the request's headers, on top of the interceptor's default
 is not overridable this way — it stays exclusively controlled by the interceptor, since
 overriding it would defeat "using the credentials in the session."
 
-Plumbing: `BaseApi.request`'s `RequestParams` gains an optional `headers?: Record<string,
-string>`, merged into the axios call's `headers` object
-(`baseApi.ts:79-81` becomes a merge of the hardcoded default + the caller's headers).
-`BaseApi.getData` gains the same optional `headers` param, passed through to the
-underlying `axiosInstance.get` call. `FhirApi.sendRequest` gains an optional `headers`
-param and threads it through to both branches (`fhirApi.ts:128-131`).
+Plumbing: headers need to reach the new fetch-based send path (see below), not axios —
+`FhirApi.sendRequest`'s params gain an optional `headers?: Record<string, string>`.
+`BaseApi.getData`/`BaseApi.request` (axios) are untouched by this design, since
+`sendRequest` stops calling them (see next section) and no other caller needs custom
+headers today.
 
-### 4. Response: status, headers, and body
+### 4. Streaming send path (`FhirApi.sendRequest` rewritten on top of `fetch`)
 
-`BaseApi.getData` and `BaseApi.request` change their return shape from `{ status, json }`
-to `{ status, json, headers }`, populated from `response.headers` (axios exposes this as
-a plain object today, same shape `downloadFile` already returns at `baseApi.ts:100`) —
-including on the error path, from `err.response?.headers`.
+Axios in the browser buffers the full response body before resolving, so it can't drive
+a "render as it arrives" UI. `sendRequest` (`fhirApi.ts:119-132`) is rewritten to use the
+`fetch()` API directly instead of delegating to `getData`/`request`, for every method
+(GET included) — this is the one send path the console uses regardless of which URL
+mode built the request, so both the guided builder and the new free-form path get
+streaming for free.
 
-In `APIConsolePage`, a new `responseHeaders` state stores this. The response pane keeps
-its status chip as-is, but gains a small tab switcher ("Body" / "Headers") above the
-content area:
+- **Auth headers**: today's axios request interceptor
+  (`baseApi.ts:110-127`) builds `Authorization`, `Accept`, `Cache-Control`, `Pragma`,
+  `Expires`, and `Origin-Service` from `getLocalData`/`AuthUrlProvider` — logic specific
+  to axios' `InternalAxiosRequestConfig`. Extract the header *values* into a plain
+  `protected buildHeaders(extra?: Record<string, string>): Record<string, string>`
+  method on `BaseApi`, used by both the existing axios interceptor (unchanged behavior)
+  and the new fetch call. Caller-supplied `extra` headers (the console's custom-headers
+  editor, item 3) are merged in last, so they can override defaults — except
+  `Authorization`, which `buildHeaders` always sets from the session token regardless of
+  what's passed in, so a custom header row can never blank out or spoof the session's
+  auth.
+- **Request**: `fetch(new URL(urlPath, fhirUrl), { method, headers: this.buildHeaders(headers), body: data ? JSON.stringify(data) : undefined })`.
+- **Reading the response**: `fetch()`'s promise resolves as soon as headers arrive —
+  `response.status` and `response.headers` are available immediately, before the body is
+  read at all. The body is then read incrementally via
+  `response.body.getReader()` + `TextDecoder`, appending each decoded chunk to an
+  accumulator string and invoking an `onChunk(text: string)` callback (new param on
+  `sendRequest`) so the UI can render progressively. When the reader signals `done`,
+  `sendRequest` resolves with `{ status, headers, json, rawText }`, attempting
+  `JSON.parse(rawText)` for `json` (`undefined` if it doesn't parse — e.g. an empty 204
+  body, or a non-JSON error page).
+- **401 handling**: fetch doesn't throw on HTTP error statuses like axios does, so
+  `sendRequest` explicitly checks `response.status === 401` after the fetch resolves and
+  triggers the same `logout` call the axios paths make today
+  (`baseApi.ts:64-65`/`85-86`) — extracted into a small shared
+  `protected async handleUnauthorized(status: number)` helper so the logic isn't
+  duplicated a third time.
+- **Cancellation**: `APIConsolePage` keeps an `AbortController` ref for the in-flight
+  request, passed as `fetch`'s `signal`. A new Send click (or the component unmounting)
+  aborts the previous controller first, so a stale stream can't keep writing into state
+  after the user has moved on.
 
-- **Body tab** (default): unchanged — the existing `PreJson` viewer.
-- **Headers tab**: a simple two-column key/value list (header name | value), same visual
-  treatment as the request-headers editor's rows but read-only.
+### 5. Response rendering: status/headers first, body streams in
 
-### 5. State scope
+`APIConsolePage` adds `streamedText` (raw accumulator, updated on every `onChunk`),
+`responseHeaders`, and `isStreaming` state. `handleSend` clears all response state, opens
+a fresh `AbortController`, then calls the rewritten `sendRequest` with an `onChunk` that
+appends to `streamedText`.
 
-All new state (custom headers, `responseHeaders`, active response tab) is plain
-in-memory `useState`, not synced to search params — consistent with the "session-only,
-lost on refresh" requirement, and consistent with how `resourceJson` (the request body)
-already behaves today (not persisted to the URL either).
+The response pane keeps its status chip, gaining a small tab switcher ("Body" /
+"Headers") above the content area:
+
+- **Status + Headers tab** populate as soon as `sendRequest`'s fetch call resolves —
+  before the body finishes streaming — since headers arrive first over the wire. It's a
+  simple two-column key/value list (header name | value), same visual treatment as the
+  request-headers editor's rows but read-only.
+- **Body tab**: while `isStreaming` is true, renders `streamedText` as plain growing
+  monospace text (a `<Typography>`/`<pre>` block, not `PreJson`) with a small "Receiving…"
+  indicator next to the tab label — this is the "raw growing text" v1 behavior; no
+  incremental JSON parsing is attempted mid-stream. Once the stream ends
+  (`isStreaming` becomes false), if `sendRequest`'s resolved `json` parsed successfully,
+  the Body tab swaps to today's `PreJson` tree viewer over that parsed object (matching
+  current behavior exactly once complete); if it didn't parse, the tab keeps showing the
+  raw text permanently instead of erroring.
+
+### 6. State scope
+
+All new state (custom headers, `streamedText`, `responseHeaders`, `isStreaming`, active
+response tab) is plain in-memory `useState`, not synced to search params — consistent
+with the "session-only, lost on refresh" requirement, and consistent with how
+`resourceJson` (the request body) already behaves today (not persisted to the URL
+either).
 
 ## Error handling
 
-Unchanged shape from today: `handleSend`'s try/catch (`APIConsolePage.tsx:198-229`)
-still distinguishes a `SyntaxError` (invalid JSON in the body editor) from a generic
-request failure, setting `responseJson` to an `{ error: ... }` object either way. Since
-`responseJson`/`responseStatus` are cleared before sending and `responseHeaders`
-should be too, an error response leaves the Headers tab empty (no crash, just nothing to
-show) rather than showing stale headers from a previous request.
+`handleSend`'s try/catch (`APIConsolePage.tsx:198-229`) keeps distinguishing a
+`SyntaxError` (invalid JSON in the request-body editor, caught before any network call)
+from a request failure — but "request failure" now covers a few more cases than a
+rejected axios promise:
+
+- **Network-level failure** (`fetch` itself rejects — offline, CORS, DNS): caught by the
+  `try/catch`, shown as an `{ error: ... }` body same as today, `isStreaming` set false.
+- **Abort** (superseded by a newer Send click, or the page navigated away):
+  `AbortController`'s abort causes `fetch` to reject with an `AbortError` — this is
+  swallowed silently (it's not a real failure to surface) rather than shown as an error,
+  since state may already belong to the new in-flight request by the time it happens.
+- **HTTP error status with a streamed body** (e.g. a 400 with an `OperationOutcome`):
+  not an exception at all under `fetch` — `sendRequest` resolves normally with
+  `status >= 400`; the status chip already turns red for this via existing
+  `getStatusColor` logic, and the body still streams and renders like any other
+  response.
+
+All response state (`streamedText`, `responseJson`, `responseStatus`, `responseHeaders`,
+`isStreaming`) is cleared at the start of `handleSend`, so an error from one send never
+leaves stale headers/body visible from a previous request.
 
 ## Testing
 
@@ -162,7 +232,15 @@ show) rather than showing stale headers from a previous request.
     reach the server (verify via a request that echoes headers, or via server-side
     logging/Groundcover if available).
   - Confirm the Headers tab on the response shows the FHIR server's actual response
-    headers, and the Body tab still renders as before.
+    headers, and that it populates before the body finishes streaming on a
+    slow/large request (e.g. an unbounded `_search`).
+  - Send a request returning a large bundle and confirm the Body tab's raw text visibly
+    grows in chunks rather than appearing all at once, then swaps to the pretty
+    `PreJson` tree once the stream completes.
+  - Fire a second Send while the first is still streaming; confirm the first request's
+    late-arriving chunks don't appear mixed into the second's response (abort works).
+  - Send a request producing a non-JSON or empty (204) response; confirm the Body tab
+    falls back to showing raw text (possibly empty) rather than erroring.
   - Click into `/api-console` via the `ResourceCard` redirect flow, confirm that path
     still auto-fetches and disables fields exactly as it does today (no regression from
     the free-form-path change, since it never touches the `isFromRedirect` branch).

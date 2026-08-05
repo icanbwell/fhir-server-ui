@@ -40,6 +40,26 @@ services:
       # REACT_APP_AUTH_BWELLAPP_CLIENT_ID: 'bwellapp'
       # REACT_APP_AUTH_BWELLAPP_TOKEN_FOR_USER_DETAILS: 'jwt'
       # REACT_APP_AUTH_BWELLAPP_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
+      # To configure Cognito client-credentials sign-in, uncomment the following lines
+      # and set the appropriate values, and add 'clientcredentials' to REACT_APP_AUTH_PROVIDERS
+      #
+      # REACT_APP_AUTH_COGNITOCC_TOKEN_URL: 'https://<domain>.auth.<region>.amazoncognito.com/oauth2/token'
+      # REACT_APP_AUTH_COGNITOCC_CUSTOM_USERNAME: 'client_id'
+      # REACT_APP_AUTH_COGNITOCC_CUSTOM_GROUP: 'scope'
+      # REACT_APP_AUTH_COGNITOCC_CUSTOM_SCOPE: 'scope'
+      # REACT_APP_AUTH_COGNITOCC_CLIENT_ID: 'cognitocc'
+      # REACT_APP_AUTH_COGNITOCC_TOKEN_FOR_USER_DETAILS: 'jwt'
+      # REACT_APP_AUTH_COGNITOCC_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
+      # To configure Descope client-credentials sign-in, uncomment the following lines
+      # and set the appropriate values, and add 'clientcredentials' to REACT_APP_AUTH_PROVIDERS
+      #
+      # REACT_APP_AUTH_DESCOPECC_TOKEN_URL: 'https://api.descope.com/oauth2/v1/apps/token'
+      # REACT_APP_AUTH_DESCOPECC_CUSTOM_USERNAME: 'client_id'
+      # REACT_APP_AUTH_DESCOPECC_CUSTOM_GROUP: 'scope'
+      # REACT_APP_AUTH_DESCOPECC_CUSTOM_SCOPE: 'scope'
+      # REACT_APP_AUTH_DESCOPECC_CLIENT_ID: 'descopecc'
+      # REACT_APP_AUTH_DESCOPECC_TOKEN_FOR_USER_DETAILS: 'jwt'
+      # REACT_APP_AUTH_DESCOPECC_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
     ports:
       - '5051:5051'
     volumes:

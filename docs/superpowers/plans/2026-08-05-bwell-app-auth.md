@@ -98,10 +98,18 @@ Run `yarn dev` and confirm the app still boots at `http://localhost:5051` with n
 
 - [ ] **Step 4: Commit**
 
+`.env` is git-ignored and untracked (`git ls-files .env` returns nothing) — it's a
+local-only file each developer maintains themselves, not the shared source of
+truth. Only `docker-compose.yml` is tracked and gets committed:
+
 ```bash
-git add .env docker-compose.yml
-git commit -m "config: replace dangling bwell env vars with b.well App provider config"
+git add docker-compose.yml
+git commit -m "config: add b.well App provider example config, remove dangling bwell case"
 ```
+
+(The `.env` edit from Step 1 stays in your local working copy, uncommitted — that's
+expected and matches how the pre-existing `REACT_APP_AUTH_BWELL_*` values got there
+in the first place.)
 
 ---
 

@@ -21,6 +21,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PreJson from '../components/PreJson';
+import KeyValueRows, { KeyValueRow } from '../components/KeyValueRows';
 import FhirApi from '../api/fhirApi';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -70,6 +71,7 @@ const APIConsolePage = () => {
     const [urlSuffix, setUrlSuffix] = useState<string>(searchParams.get('urlSuffix') || '');
 
     const [resourceJson, setResourceJson] = useState<string>('');
+    const [customHeaders, setCustomHeaders] = useState<KeyValueRow[]>([{ key: '', value: '' }]);
     const [responseJson, setResponseJson] = useState<object | null>(null);
     const [responseStatus, setResponseStatus] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -211,10 +213,17 @@ const APIConsolePage = () => {
             if (resourceJson.trim() && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
                 data = JSON.parse(resourceJson);
             }
+            const headersToSend = customHeaders.reduce<Record<string, string>>((acc, row) => {
+                if (row.key.trim()) {
+                    acc[row.key.trim()] = row.value;
+                }
+                return acc;
+            }, {});
             const { json, status } = await fhirApi.sendRequest({
                 method,
                 urlPath: requestUrl,
                 data,
+                headers: headersToSend,
             });
             setResponseStatus(status);
             setResponseJson(json);
@@ -410,6 +419,17 @@ const APIConsolePage = () => {
                             {loading ? 'Sending...' : 'Send'}
                         </Button>
                     </Box>
+
+                    {/* Custom request headers */}
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                        Request Headers
+                    </Typography>
+                    <KeyValueRows
+                        rows={customHeaders}
+                        onChange={setCustomHeaders}
+                        keyLabel="Header name"
+                        valueLabel="Value"
+                    />
 
                     {/* URL preview */}
                     {requestUrl && (

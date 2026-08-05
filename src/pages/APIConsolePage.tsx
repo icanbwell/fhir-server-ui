@@ -247,7 +247,12 @@ const APIConsolePage = () => {
                 data,
                 headers: headersToSend,
                 signal: controller.signal,
-                onChunk: (chunk) => setStreamedText((prev) => prev + chunk),
+                onChunk: (chunk) => {
+                    if (controller.signal.aborted) {
+                        return;
+                    }
+                    setStreamedText((prev) => prev + chunk);
+                },
             });
             setResponseStatus(status);
             setResponseJson(json);

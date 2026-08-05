@@ -13,6 +13,8 @@ import {
     MenuItem,
     Paper,
     Select,
+    Tab,
+    Tabs,
     TextField,
     Tooltip,
     Typography,
@@ -74,6 +76,8 @@ const APIConsolePage = () => {
     const [customHeaders, setCustomHeaders] = useState<KeyValueRow[]>([{ key: '', value: '' }]);
     const [responseJson, setResponseJson] = useState<object | null>(null);
     const [responseStatus, setResponseStatus] = useState<number | null>(null);
+    const [responseHeaders, setResponseHeaders] = useState<Record<string, string>>({});
+    const [activeResponseTab, setActiveResponseTab] = useState<'body' | 'headers'>('body');
     const [loading, setLoading] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
     const [leftWidthPercent, setLeftWidthPercent] = useState<number>(50);
@@ -208,6 +212,7 @@ const APIConsolePage = () => {
             setLoading(true);
             setResponseJson(null);
             setResponseStatus(null);
+            setResponseHeaders({});
             const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
             let data: object | undefined;
             if (resourceJson.trim() && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
@@ -220,7 +225,7 @@ const APIConsolePage = () => {
                 }
                 return acc;
             }, {});
-            const { json, status } = await fhirApi.sendRequest({
+            const { json, status, headers } = await fhirApi.sendRequest({
                 method,
                 urlPath: requestUrl,
                 data,
@@ -228,6 +233,7 @@ const APIConsolePage = () => {
             });
             setResponseStatus(status);
             setResponseJson(json);
+            setResponseHeaders(headers || {});
         } catch (error: any) {
             if (error instanceof SyntaxError) {
                 setResponseStatus(null);
@@ -555,9 +561,34 @@ const APIConsolePage = () => {
                                         variant="outlined"
                                     />
                                 )}
+                                <Tabs
+                                    value={activeResponseTab}
+                                    onChange={(_, val) => setActiveResponseTab(val)}
+                                    sx={{ minHeight: 0, ml: 'auto' }}
+                                >
+                                    <Tab label="Body" value="body" sx={{ minHeight: 0, py: 0.5 }} />
+                                    <Tab label="Headers" value="headers" sx={{ minHeight: 0, py: 0.5 }} />
+                                </Tabs>
                             </Box>
                             <Box sx={{ flex: 1, overflow: 'auto', p: 1 }}>
-                                {responseJson ? (
+                                {activeResponseTab === 'headers' ? (
+                                    Object.keys(responseHeaders).length > 0 ? (
+                                        <KeyValueRows
+                                            rows={Object.entries(responseHeaders).map(([key, value]) => ({
+                                                key,
+                                                value,
+                                            }))}
+                                            readOnly
+                                        />
+                                    ) : (
+                                        <Typography
+                                            variant="body2"
+                                            sx={{ fontFamily: 'monospace', color: 'text.secondary' }}
+                                        >
+                                            No response headers yet.
+                                        </Typography>
+                                    )
+                                ) : responseJson ? (
                                     <PreJson data={responseJson} collapsed={2} />
                                 ) : (
                                     <Typography

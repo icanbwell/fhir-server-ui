@@ -17,6 +17,7 @@ import { setLocalData } from '../utils/localData.utils';
 import { jwtParser } from '../utils/jwtParser';
 import { removeAuthData } from '../utils/auth.utils';
 import { getClientCredentialsToken } from '../services/ClientCredentialsAuthService';
+import AuthUrlProvider from '../utils/authUrlProvider';
 
 type ProviderOption = {
     label: string;
@@ -55,12 +56,23 @@ const ClientCredentialsLogin = () => {
     const selectedProvider =
         PROVIDERS.find((p) => p.identityProvider === selectedProviderKey) ?? PROVIDERS[0];
 
-    const configError = !selectedProvider.tokenUrl
-        ? `${selectedProvider.label} client credentials sign-in is not configured (missing token URL).`
-        : null;
+    const configError = (() => {
+        if (!selectedProvider.tokenUrl) {
+            return `${selectedProvider.label} client credentials sign-in is not configured (missing token URL).`;
+        }
+        try {
+            new AuthUrlProvider().getAuthInfo(selectedProvider.identityProvider);
+        } catch {
+            return `${selectedProvider.label} client credentials sign-in is not configured (missing required auth config).`;
+        }
+        return null;
+    })();
 
     const handleProviderChange = (event: SelectChangeEvent) => {
         setSelectedProviderKey(event.target.value);
+        setClientId('');
+        setClientSecret('');
+        setError(null);
     };
 
     const handleSubmit = async (formEvent: FormEvent<HTMLFormElement>) => {
@@ -84,6 +96,7 @@ const ClientCredentialsLogin = () => {
             setLocalData('identityProvider', selectedProvider.identityProvider);
             const userDetails = jwtParser();
             if (!userDetails) {
+                removeAuthData();
                 setError(
                     'Signed in, but the session could not be established. Please contact support.'
                 );
@@ -134,7 +147,12 @@ const ClientCredentialsLogin = () => {
                 <Typography variant="h4" gutterBottom>
                     Login With Client Credentials
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, width: '100%' }}>
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    autoComplete="off"
+                    sx={{ mt: 4, width: '100%' }}
+                >
                     <Select
                         fullWidth
                         value={selectedProviderKey}
@@ -159,6 +177,7 @@ const ClientCredentialsLogin = () => {
                                 value={clientId}
                                 onChange={(e) => setClientId(e.target.value)}
                                 sx={{ mb: 2 }}
+                                autoComplete="off"
                                 required
                             />
                             <TextField
@@ -168,6 +187,7 @@ const ClientCredentialsLogin = () => {
                                 value={clientSecret}
                                 onChange={(e) => setClientSecret(e.target.value)}
                                 sx={{ mb: 2 }}
+                                autoComplete="new-password"
                                 required
                             />
                             <TextField

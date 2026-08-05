@@ -6,15 +6,15 @@ import Footer from '../components/Footer';
 import EnvContext from '../context/EnvironmentContext';
 import { setLocalData } from '../utils/localData.utils';
 
-const PROVIDER_LABELS: Record<string, string> = {
+const PROVIDER_LABELS: Record<string, string> = Object.assign(Object.create(null), {
     bwellapp: 'b.well App',
     clientcredentials: 'Client Credentials',
-};
+});
 
-const PROVIDER_ROUTES: Record<string, string> = {
+const PROVIDER_ROUTES: Record<string, string> = Object.assign(Object.create(null), {
     bwellapp: '/bwell-login',
     clientcredentials: '/client-credentials-login',
-};
+});
 
 const IdentityProviderSelection = () => {
     const env = useContext(EnvContext);

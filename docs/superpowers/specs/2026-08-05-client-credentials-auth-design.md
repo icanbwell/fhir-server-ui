@@ -39,9 +39,15 @@ rest of the app (FHIR calls via `BaseApi`, logout) works unmodified.
 - Storing or pre-filling `client_id`/`client_secret` from any config source.
 - A backend/proxy service — this stays a direct browser-to-token-endpoint
   POST, matching the b.well App PR's precedent.
-- Building this for end users — it's dev/test tooling, gated only by whether
-  `clientcredentials` is included in `REACT_APP_AUTH_PROVIDERS` per
-  environment (omit it from prod config).
+- Building this for end users — it's dev/test tooling. The `/client-credentials-login`
+  route itself is registered unconditionally in `App.tsx` (matching
+  `/bwell-login`'s existing precedent) and is reachable by direct URL
+  regardless of the picker. The effective gate per environment is two-fold:
+  omitting `clientcredentials` from `REACT_APP_AUTH_PROVIDERS` hides the
+  picker button, and leaving `REACT_APP_AUTH_COGNITOCC_TOKEN_URL`/
+  `REACT_APP_AUTH_DESCOPECC_TOKEN_URL` unset makes the page itself refuse to
+  submit (it renders an on-page config error instead of the form) even if
+  someone navigates to it directly.
 - Reusing the existing `cognito` OIDC provider's app client — AWS Cognito
   requires a distinct, confidential app client for `client_credentials`
   (cannot share the public PKCE client already configured as `fhir-ui`).

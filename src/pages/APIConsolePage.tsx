@@ -29,7 +29,7 @@ import { resourceDefinitions } from '../utils/resourceDefinitions';
 
 const MIN_PANEL_WIDTH = 200;
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 type Operation = '' | '$merge' | '$graph' | '$everything';
 
 const RESOURCE_NAMES = resourceDefinitions.map((r) => r.name);
@@ -208,7 +208,7 @@ const APIConsolePage = () => {
             setResponseStatus(null);
             const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
             let data: object | undefined;
-            if (resourceJson.trim() && (method === 'POST' || method === 'PUT')) {
+            if (resourceJson.trim() && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
                 data = JSON.parse(resourceJson);
             }
             const { json, status } = await fhirApi.sendRequest({
@@ -246,6 +246,7 @@ const APIConsolePage = () => {
             case 'GET': return '#4caf50';
             case 'POST': return '#ff9800';
             case 'PUT': return '#2196f3';
+            case 'PATCH': return '#9c27b0';
             case 'DELETE': return '#f44336';
         }
     };
@@ -278,7 +279,7 @@ const APIConsolePage = () => {
                                     color: getMethodColor(method),
                                 }}
                             >
-                                {(['GET', 'POST', 'PUT', 'DELETE'] as HttpMethod[]).map((m) => (
+                                {(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as HttpMethod[]).map((m) => (
                                     <MenuItem key={m} value={m} sx={{ fontWeight: 'bold', color: getMethodColor(m) }}>
                                         {m}
                                     </MenuItem>

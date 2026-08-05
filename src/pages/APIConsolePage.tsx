@@ -112,7 +112,10 @@ const APIConsolePage = () => {
     // Build the request URL preview
     const requestUrl = useMemo(() => {
         if (!selectedResourceType) {
-            return '';
+            if (!urlSuffix) {
+                return '';
+            }
+            return urlSuffix.startsWith('/') ? urlSuffix : `/${urlSuffix}`;
         }
         let url = `/4_0_0/${selectedResourceType}`;
         if (operation) {
@@ -381,11 +384,15 @@ const APIConsolePage = () => {
 
                                 <Typography sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>/</Typography>
 
-                                {/* Free-text URL suffix */}
+                                {/* Free-text URL suffix / full request path */}
                                 <TextField
                                     size="small"
-                                    label="URL path"
-                                    placeholder="e.g. 123/$graph?contained=true or _search?name=John"
+                                    label={selectedResourceType ? 'URL path' : 'Request Path'}
+                                    placeholder={
+                                        selectedResourceType
+                                            ? 'e.g. 123/$graph?contained=true or _search?name=John'
+                                            : 'Full path, e.g. /4_0_0/Patient/123 or /version'
+                                    }
                                     value={urlSuffix}
                                     onChange={(e) => setUrlSuffix(e.target.value)}
                                     sx={{ flex: 1, minWidth: 250 }}
@@ -396,7 +403,7 @@ const APIConsolePage = () => {
                         <Button
                             variant="contained"
                             onClick={handleSend}
-                            disabled={loading || fetching || !selectedResourceType}
+                            disabled={loading || fetching || !requestUrl}
                             startIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
                         >
                             {loading ? 'Sending...' : 'Send'}

@@ -35,8 +35,14 @@ export function parseClientKeys(
         .map((pair) => pair.trim())
         .filter((pair) => pair.length > 0)
         .map((pair) => {
-            const [name, key] = pair.split('=').map((s) => s.trim());
-            return { name, key };
+            const equalsIndex = pair.indexOf('=');
+            if (equalsIndex < 0) {
+                return { name: '', key: '' };
+            }
+            return {
+                name: pair.slice(0, equalsIndex).trim(),
+                key: pair.slice(equalsIndex + 1).trim(),
+            };
         })
         .filter((entry) => entry.name && entry.key);
 }

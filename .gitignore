@@ -138,3 +138,6 @@ __pycache__/
 
 # superpowers subagent-driven-development scratch workspace
 .superpowers/
+
+# Playwright MCP manual verification artifacts
+.playwright-mcp/

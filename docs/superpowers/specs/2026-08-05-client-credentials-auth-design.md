@@ -191,8 +191,11 @@ Page shell matching `BwellAppLogin.tsx`'s structure:
   optional Scope `<TextField>` (useful since both providers' client_credentials
   tokens are scoped to resource-server permissions the FHIR server may
   require).
-- Config fail-fast: if the selected provider's `TOKEN_URL` env var is
-  missing, render an on-page config error instead of the form.
+- Config fail-fast: the provider `<Select>` is always rendered (so switching
+  providers is never blocked); if the selected provider's `TOKEN_URL` env var
+  is missing, render an on-page config error in place of the credential
+  fields and submit button below the Select, instead of hiding the whole
+  form.
 - On submit: `getClientCredentialsToken(tokenUrl, clientId, clientSecret,
   scope)`. On success: `removeAuthData()`, then `setLocalData('jwt',
   accessToken)`, `setLocalData('identityProvider', selectedProviderKey)`,

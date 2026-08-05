@@ -135,3 +135,6 @@ out
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# superpowers subagent-driven-development scratch workspace
+.superpowers/

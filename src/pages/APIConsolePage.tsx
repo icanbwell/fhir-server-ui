@@ -81,9 +81,12 @@ const APIConsolePage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
     const [leftWidthPercent, setLeftWidthPercent] = useState<number>(50);
+    const [streamedText, setStreamedText] = useState<string>('');
+    const [isStreaming, setIsStreaming] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const isDragging = useRef(false);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     // Sync state to search params (only for standalone /api-console route)
     useEffect(() => {
@@ -204,15 +207,28 @@ const APIConsolePage = () => {
         fetchResource();
     }, [fhirUrl, routeId, routeResourceType, isFromRedirect, setUserDetails]);
 
+    // Abort any in-flight request when navigating away or unmounting
+    useEffect(() => {
+        return () => {
+            abortControllerRef.current?.abort();
+        };
+    }, []);
+
     const handleSend = async () => {
         if (!fhirUrl || !requestUrl) {
             return;
         }
+        abortControllerRef.current?.abort();
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+
         try {
             setLoading(true);
+            setIsStreaming(true);
             setResponseJson(null);
             setResponseStatus(null);
             setResponseHeaders({});
+            setStreamedText('');
             const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
             let data: object | undefined;
             if (resourceJson.trim() && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
@@ -230,11 +246,16 @@ const APIConsolePage = () => {
                 urlPath: requestUrl,
                 data,
                 headers: headersToSend,
+                signal: controller.signal,
+                onChunk: (chunk) => setStreamedText((prev) => prev + chunk),
             });
             setResponseStatus(status);
             setResponseJson(json);
             setResponseHeaders(headers || {});
         } catch (error: any) {
+            if (error?.name === 'AbortError') {
+                return;
+            }
             if (error instanceof SyntaxError) {
                 setResponseStatus(null);
                 setResponseJson({ error: 'Invalid JSON in editor' });
@@ -243,6 +264,7 @@ const APIConsolePage = () => {
                 setResponseJson({ error: error.message || 'Request failed' });
             }
         } finally {
+            setIsStreaming(false);
             setLoading(false);
         }
     };
@@ -566,7 +588,11 @@ const APIConsolePage = () => {
                                     onChange={(_, val) => setActiveResponseTab(val)}
                                     sx={{ minHeight: 0, ml: 'auto' }}
                                 >
-                                    <Tab label="Body" value="body" sx={{ minHeight: 0, py: 0.5 }} />
+                                    <Tab
+                                        label={isStreaming ? 'Body (Receiving…)' : 'Body'}
+                                        value="body"
+                                        sx={{ minHeight: 0, py: 0.5 }}
+                                    />
                                     <Tab label="Headers" value="headers" sx={{ minHeight: 0, py: 0.5 }} />
                                 </Tabs>
                             </Box>
@@ -588,8 +614,22 @@ const APIConsolePage = () => {
                                             No response headers yet.
                                         </Typography>
                                     )
+                                ) : isStreaming ? (
+                                    <Typography
+                                        component="pre"
+                                        sx={{ fontFamily: 'monospace', fontSize: '0.875rem', whiteSpace: 'pre-wrap', m: 0 }}
+                                    >
+                                        {streamedText}
+                                    </Typography>
                                 ) : responseJson ? (
                                     <PreJson data={responseJson} collapsed={2} />
+                                ) : streamedText ? (
+                                    <Typography
+                                        component="pre"
+                                        sx={{ fontFamily: 'monospace', fontSize: '0.875rem', whiteSpace: 'pre-wrap', m: 0 }}
+                                    >
+                                        {streamedText}
+                                    </Typography>
                                 ) : (
                                     <Typography
                                         variant="body2"

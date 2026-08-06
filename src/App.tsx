@@ -21,6 +21,7 @@ import { ThemeContextProvider } from './context/ThemeContext';
 import { TUserDetails } from './types/baseTypes';
 import { jwtParser } from './utils/jwtParser';
 import IdentityProviderSelection from './pages/IdentityProviderSelection';
+import BwellAppLogin from './pages/BwellAppLogin';
 import { useLocation } from 'react-router-dom';
 import NotFoundPage from './pages/NotFoundPage';
 import AccessDenied from './pages/AccessDenied';
@@ -50,6 +51,7 @@ function App(): React.ReactElement {
                         <Route key="identityProvider" path="/select-idp" element={<IdentityProviderSelection />} />
                     </Route>
                     <Route key="authcallback" path="/authcallback" element={<Auth />} />
+                    <Route key="bwellLogin" path="/bwell-login" element={<BwellAppLogin />} />
                     <Route
                         element={
                             userDetails ? (

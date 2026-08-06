@@ -1,5 +1,5 @@
 import './App.css';
-import React, { Suspense, useCallback, useContext, useState } from 'react';
+import React, { Suspense, useCallback, useContext, useMemo, useState } from 'react';
 import {
     Routes,
     Route,
@@ -17,7 +17,7 @@ import AdminRoutes from './routes/adminRoutes';
 const AdminIndexPage = React.lazy(() => import('./admin/index'));
 import EnvContext from './context/EnvironmentContext';
 import UserContext from './context/UserContext';
-import LastRequestContext, { TLastRequest } from './context/LastRequestContext';
+import LastRequestContext, { TLastRequest, TRequestInfo } from './context/LastRequestContext';
 import { ThemeContextProvider } from './context/ThemeContext';
 import { TUserDetails } from './types/baseTypes';
 import { jwtParser } from './utils/jwtParser';
@@ -75,6 +75,11 @@ function Root() {
     );
 }
 
+// `recordRequest` (below) stamps `pathname` from `window.location.pathname`, which includes
+// any basename, while `Header.tsx` compares that stamp against react-router's own
+// `location.pathname` (basename-stripped). The two only agree today because `basename` is
+// hardcoded to '/' (a no-op prefix). If this app is ever served from a real subpath, that
+// comparison would need to strip the basename from one side or the other.
 const router = createBrowserRouter(
     [{ path: '*', Component: Root, errorElement: <ErrorPage /> }],
     { basename: '/' }
@@ -84,15 +89,26 @@ function App(): React.ReactElement {
     const env = useContext(EnvContext);
     const [userDetails, setUserDetails] = useState<TUserDetails | null>(jwtParser());
     const [lastRequest, setLastRequest] = useState<TLastRequest>(null);
-    const recordRequest = useCallback((info: { method: string; url: string }) => {
+    const recordRequest = useCallback((info: TRequestInfo) => {
         setLastRequest({ ...info, pathname: window.location.pathname });
     }, []);
     console.log(`Setting fhirUrl to ${env.fhirUrl}`);
 
+    // Memoized so a `lastRequest` update (which now fires on every FHIR fetch) doesn't hand
+    // every UserContext consumer a new-but-equal value and force an unnecessary re-render.
+    const userContextValue = useMemo(
+        () => ({ userDetails, setUserDetails }),
+        [userDetails, setUserDetails]
+    );
+    const lastRequestContextValue = useMemo(
+        () => ({ lastRequest, recordRequest }),
+        [lastRequest, recordRequest]
+    );
+
     return (
         <ThemeContextProvider>
-            <UserContext.Provider value={{ userDetails, setUserDetails }}>
-                <LastRequestContext.Provider value={{ lastRequest, recordRequest }}>
+            <UserContext.Provider value={userContextValue}>
+                <LastRequestContext.Provider value={lastRequestContextValue}>
                     <RouterProvider router={router} />
                 </LastRequestContext.Provider>
             </UserContext.Provider>

@@ -150,8 +150,7 @@ Manual only, matching this repo's existing convention (no automated test framewo
 - `yarn lint` / `yarn tsc --noEmit` clean.
 - Resource search and show pages: button opens the console in a new tab, prefilled with
   the exact GET the page issued, not yet sent.
-- `IPSViewer`, `SpreadsheetViewer`, `CompositionSummaryPage`: same, each reflecting its own
-  request.
+- `IPSViewer`, `CompositionSummaryPage`: same, each reflecting its own request.
 - A page that hasn't fetched anything yet (e.g. `HomePage` right after login): button
   stays disabled.
 - Navigate from a fetching page to a non-fetching page: button goes back to disabled

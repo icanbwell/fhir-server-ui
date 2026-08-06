@@ -5,6 +5,7 @@ import { getLocalData } from '../utils/localData.utils';
 import { TUserDetails } from '../types/baseTypes';
 import AuthUrlProvider from '../utils/authUrlProvider';
 import { logout } from '../utils/auth.utils';
+import { HttpMethod, TRequestInfo } from '../context/LastRequestContext';
 
 interface GetDataParams {
     urlString: string;
@@ -14,7 +15,7 @@ interface GetDataParams {
 interface RequestParams {
     urlString: string;
     params?: any;
-    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+    method: HttpMethod;
     data?: any;
 }
 
@@ -24,7 +25,7 @@ class BaseApi {
         | React.Dispatch<React.SetStateAction<TUserDetails | null>>
         | undefined;
     private readonly axiosInstance: AxiosInstance;
-    protected readonly onRequest?: (info: { method: string; url: string }) => void;
+    protected readonly onRequest?: (info: TRequestInfo) => void;
 
     constructor({
         fhirUrl,
@@ -33,7 +34,7 @@ class BaseApi {
     }: {
         fhirUrl: string | undefined;
         setUserDetails: React.Dispatch<React.SetStateAction<TUserDetails | null>> | undefined;
-        onRequest?: (info: { method: string; url: string }) => void;
+        onRequest?: (info: TRequestInfo) => void;
     }) {
         this.fhirUrl = fhirUrl;
         this.setUserDetails = setUserDetails;
@@ -125,6 +126,11 @@ class BaseApi {
     }
 
     async request({ urlString, params, method, data }: RequestParams): Promise<any> {
+        // Unlike getData, this doesn't normalize urlString to a relative pathname+search (it
+        // may still carry an origin) and it ignores `params` (which axios appends to the query
+        // string below) — so the captured url can diverge from what's actually requested. No
+        // reachable caller passes onRequest today (see FhirApi.mergeResource), so this is a
+        // known gap for whoever gives this method its first real caller, not a live bug.
         this.onRequest?.({ method, url: urlString });
 
         try {

@@ -43,7 +43,7 @@
     "globals": "^17.6.0",
     "jwt-decode": "^4.0.0",
     "lru-cache": "^11.5.0",
-    "postcss": "^8.5.23",
+    "postcss": "^8.5.25",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^11.3.0",
     "react": "^19.2.6",
@@ -60,6 +60,10 @@
   },
   "devDependencies": {
     "prettier": "^3.8.3"
+  },
+  "resolutions": {
+    "postcss@npm:^8.5.15": "^8.5.25",
+    "brace-expansion@npm:^5.0.5": "^5.0.9"
   },
   "browserslist": {
     "production": [

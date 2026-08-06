@@ -1,14 +1,11 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import {
-    Autocomplete,
     Box,
     Button,
-    Checkbox,
     Chip,
     CircularProgress,
     FormControl,
-    FormControlLabel,
     InputLabel,
     MenuItem,
     Paper,
@@ -16,7 +13,6 @@ import {
     Tab,
     Tabs,
     TextField,
-    Tooltip,
     Typography,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
@@ -28,20 +24,10 @@ import FhirApi from '../api/fhirApi';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import { getLocalData } from '../utils/localData.utils';
-import { resourceDefinitions } from '../utils/resourceDefinitions';
 
 const MIN_PANEL_WIDTH = 200;
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-type Operation = '' | '$merge' | '$graph' | '$everything';
-
-const RESOURCE_NAMES = resourceDefinitions.map((r) => r.name);
-const OPERATIONS: { value: Operation; label: string }[] = [
-    { value: '', label: 'None' },
-    { value: '$merge', label: '$merge' },
-    { value: '$graph', label: '$graph' },
-    { value: '$everything', label: '$everything' },
-];
 
 const APIConsolePage = () => {
     const { fhirUrl } = useContext(EnvironmentContext);
@@ -57,20 +43,14 @@ const APIConsolePage = () => {
     const [method, setMethod] = useState<HttpMethod>(
         (searchParams.get('method') as HttpMethod) || (isFromRedirect ? 'POST' : 'GET')
     );
-    const [selectedResourceType, setSelectedResourceType] = useState<string>(
-        routeResourceType || searchParams.get('resourceType') || ''
+    // When arriving via a ResourceCard redirect, there's no separate resourceType/id/
+    // operation state anymore — compose the one field's initial value directly from the
+    // route params so it starts pre-filled correctly.
+    const [urlSuffix, setUrlSuffix] = useState<string>(
+        isFromRedirect && routeResourceType && routeId && routeOperation
+            ? `/4_0_0/${routeResourceType}/${routeId}/${routeOperation}`
+            : searchParams.get('urlSuffix') || ''
     );
-    const [operation, setOperation] = useState<Operation>(
-        (isFromRedirect ? routeOperation as Operation : searchParams.get('operation') as Operation) || ''
-    );
-    const [resourceId, setResourceId] = useState<string>(
-        routeId || searchParams.get('id') || ''
-    );
-    const [params, setParams] = useState<string>(searchParams.get('params') || '');
-    const [smartMerge, setSmartMerge] = useState<boolean>(
-        searchParams.get('smartMerge') !== 'false'
-    );
-    const [urlSuffix, setUrlSuffix] = useState<string>(searchParams.get('urlSuffix') || '');
 
     const [resourceJson, setResourceJson] = useState<string>('');
     const [customHeaders, setCustomHeaders] = useState<KeyValueRow[]>([{ key: '', value: '' }]);
@@ -98,57 +78,19 @@ const APIConsolePage = () => {
         if (method && method !== 'GET') {
             newParams.method = method;
         }
-        if (selectedResourceType) {
-            newParams.resourceType = selectedResourceType;
-        }
-        if (operation) {
-            newParams.operation = operation;
-        }
-        if (resourceId) {
-            newParams.id = resourceId;
-        }
-        if (params) {
-            newParams.params = params;
-        }
-        if (operation === '$merge' && !smartMerge) {
-            newParams.smartMerge = 'false';
-        }
-        if (!operation && urlSuffix) {
+        if (urlSuffix) {
             newParams.urlSuffix = urlSuffix;
         }
         setSearchParams(newParams, { replace: true });
-    }, [method, selectedResourceType, operation, resourceId, params, smartMerge, urlSuffix, isFromRedirect, setSearchParams]);
+    }, [method, urlSuffix, isFromRedirect, setSearchParams]);
 
     // Build the request URL preview
     const requestUrl = useMemo(() => {
-        if (!selectedResourceType) {
-            if (!urlSuffix) {
-                return '';
-            }
-            return urlSuffix.startsWith('/') ? urlSuffix : `/${urlSuffix}`;
+        if (!urlSuffix) {
+            return '';
         }
-        let url = `/4_0_0/${selectedResourceType}`;
-        if (operation) {
-            if (resourceId) {
-                url += `/${resourceId}`;
-            }
-            url += `/${operation}`;
-            const queryParts: string[] = [];
-            if (operation === '$merge') {
-                queryParts.push(`smartMerge=${smartMerge}`);
-            }
-            if (params) {
-                queryParts.push(params);
-            }
-            if (queryParts.length) {
-                url += `?${queryParts.join('&')}`;
-            }
-        } else if (urlSuffix) {
-            const separator = urlSuffix.startsWith('/') || urlSuffix.startsWith('?') ? '' : '/';
-            url += `${separator}${urlSuffix}`;
-        }
-        return url;
-    }, [selectedResourceType, operation, resourceId, params, smartMerge, urlSuffix]);
+        return urlSuffix.startsWith('/') ? urlSuffix : `/${urlSuffix}`;
+    }, [urlSuffix]);
 
     // Draggable divider logic
     const handleMouseMove = useCallback((e: MouseEvent) => {
@@ -347,119 +289,15 @@ const APIConsolePage = () => {
                             </Select>
                         </FormControl>
 
-                        {/* Resource Type */}
-                        <Autocomplete
+                        {/* Request path — the literal, complete path sent, unmodified */}
+                        <TextField
                             size="small"
-                            sx={{ width: 220 }}
-                            disabled={isFromRedirect}
-                            options={RESOURCE_NAMES}
-                            value={selectedResourceType || null}
-                            onChange={(_, val) => setSelectedResourceType(val || '')}
-                            renderInput={(inputProps) => (
-                                <TextField {...inputProps} label="Resource Type" />
-                            )}
+                            label="Request Path"
+                            placeholder="Full path, e.g. /4_0_0/Patient/123 or /version"
+                            value={urlSuffix}
+                            onChange={(e) => setUrlSuffix(e.target.value)}
+                            sx={{ flex: 1, minWidth: 250 }}
                         />
-
-                        <Typography sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>/</Typography>
-
-                        {operation ? (
-                            <>
-                                {/* ID input */}
-                                <TextField
-                                    size="small"
-                                    label="ID (optional)"
-                                    disabled={isFromRedirect}
-                                    value={resourceId}
-                                    onChange={(e) => setResourceId(e.target.value)}
-                                    sx={{ width: 160 }}
-                                />
-
-                                <Typography sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>/</Typography>
-
-                                {/* Operation */}
-                                <FormControl size="small" sx={{ minWidth: 140 }}>
-                                    <InputLabel>Operation</InputLabel>
-                                    <Select
-                                        value={operation}
-                                        label="Operation"
-                                        disabled={isFromRedirect}
-                                        onChange={(e) => setOperation(e.target.value as Operation)}
-                                    >
-                                        {OPERATIONS.map((op) => (
-                                            <MenuItem key={op.value} value={op.value}>
-                                                {op.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <Typography sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>/</Typography>
-
-                                {/* Params input */}
-                                <TextField
-                                    size="small"
-                                    label="Query params (optional)"
-                                    placeholder="key=value&key2=value2"
-                                    value={params}
-                                    onChange={(e) => setParams(e.target.value)}
-                                    sx={{ minWidth: 200, flex: 1 }}
-                                />
-
-                                {/* smartMerge checkbox */}
-                                {operation === '$merge' && (
-                                    <Tooltip
-                                        title="smartMerge true will merge the resource with existing data. false will replace the whole existing resource."
-                                        arrow
-                                    >
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={smartMerge}
-                                                    onChange={(e) => setSmartMerge(e.target.checked)}
-                                                    size="small"
-                                                />
-                                            }
-                                            label="smartMerge"
-                                        />
-                                    </Tooltip>
-                                )}
-                            </>
-                        ) : (
-                            <>
-                                {/* Operation selector (shows None selected) */}
-                                <FormControl size="small" sx={{ minWidth: 140 }}>
-                                    <InputLabel>Operation</InputLabel>
-                                    <Select
-                                        value={operation}
-                                        label="Operation"
-                                        disabled={isFromRedirect}
-                                        onChange={(e) => setOperation(e.target.value as Operation)}
-                                    >
-                                        {OPERATIONS.map((op) => (
-                                            <MenuItem key={op.value} value={op.value}>
-                                                {op.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <Typography sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>/</Typography>
-
-                                {/* Free-text URL suffix / full request path */}
-                                <TextField
-                                    size="small"
-                                    label={selectedResourceType ? 'URL path' : 'Request Path'}
-                                    placeholder={
-                                        selectedResourceType
-                                            ? 'e.g. 123/$graph?contained=true or _search?name=John'
-                                            : 'Full path, e.g. /4_0_0/Patient/123 or /version'
-                                    }
-                                    value={urlSuffix}
-                                    onChange={(e) => setUrlSuffix(e.target.value)}
-                                    sx={{ flex: 1, minWidth: 250 }}
-                                />
-                            </>
-                        )}
 
                         <Button
                             variant="contained"

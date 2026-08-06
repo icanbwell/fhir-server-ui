@@ -159,6 +159,8 @@ class FhirApi extends BaseApi {
             };
         }
 
+        this.onRequest?.({ method, url: url.pathname + url.search });
+
         const requestHeaders = this.buildHeaders({
             'Content-Type': 'application/fhir+json',
             ...headers,

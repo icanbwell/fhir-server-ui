@@ -7,6 +7,7 @@ import CompositionSummary from '../components/CompositionSummary';
 import PreJson from '../components/PreJson';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
+import LastRequestContext from '../context/LastRequestContext';
 import BaseApi from '../api/baseApi';
 import { TComposition } from '../types/resources/Composition';
 import { appendFormatJson } from '../utils/url.utils';
@@ -25,10 +26,11 @@ const CompositionSummaryPage: React.FC = () => {
 
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
+    const { recordRequest } = useContext(LastRequestContext);
 
     const baseApi = useMemo(
-        () => new BaseApi({ fhirUrl, setUserDetails }),
-        [fhirUrl, setUserDetails]
+        () => new BaseApi({ fhirUrl, setUserDetails, onRequest: recordRequest }),
+        [fhirUrl, setUserDetails, recordRequest]
     );
 
     const relativeUrl = useMemo(() => {

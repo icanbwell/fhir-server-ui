@@ -69,16 +69,22 @@ axios/fetch call fires — so a request that later errors or times out is still 
 inherited `getData`/`request`) makes the same call directly, since it's the one other
 place traffic leaves the app.
 
-Only the call sites that construct `FhirApi`/`BaseApi` for genuine FHIR-page traffic pass
-this hook, sourced from the new context (below):
+Only the call sites that construct `FhirApi`/`BaseApi` and then actually issue a
+`getData`/`request`/`sendRequest` call pass this hook, sourced from the new context
+(below):
 
-- `IndexPage.tsx` (both instantiations — initial load and `handleSearch`)
-- `CompositionSummaryPage.tsx`
-- `SpreadsheetViewer.tsx`
-- `IPSViewer.tsx`
+- `IndexPage.tsx`'s `callApi` effect (the `FhirApi` instantiation that calls
+  `getBundleAsync`). Its second instantiation, inside `handleSearch`, only calls
+  `getUrl()` to build a URL for `navigate()` — no network call happens there, so nothing
+  to capture; the actual fetch after navigating is the `callApi` effect re-running, which
+  is already covered.
+- `CompositionSummaryPage.tsx` (its `baseApi.getData` call).
+- `IPSViewer.tsx` (its `baseApi.getData` call).
 
+`SpreadsheetViewer.tsx` and `FileDownload.tsx` both construct a `BaseApi` but only ever
+call `downloadFile` — excluded per the non-goal above, so neither is wired.
 `AdminApi` (`ExportStatus.tsx`) and the module-level version check in
-`EnvironmentContext.ts` do not pass it.
+`EnvironmentContext.ts` do not pass it either.
 
 ### 2. Storage: `LastRequestContext`
 

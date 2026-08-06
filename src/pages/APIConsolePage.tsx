@@ -274,7 +274,6 @@ const APIConsolePage = () => {
                             <Select
                                 value={method}
                                 label="Method"
-                                disabled={isFromRedirect}
                                 onChange={(e) => setMethod(e.target.value as HttpMethod)}
                                 sx={{
                                     fontWeight: 'bold',

@@ -88,7 +88,7 @@ call `downloadFile` — excluded per the non-goal above, so neither is wired.
 
 ### 2. Storage: `LastRequestContext`
 
-A new context/provider, `src/context/LastRequestContext.tsx`, following the existing
+A new context/provider, `src/context/LastRequestContext.ts`, following the existing
 pattern of `EnvironmentContext`/`UserContext`. State shape:
 
 ```ts

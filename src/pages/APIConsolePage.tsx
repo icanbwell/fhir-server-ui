@@ -13,6 +13,8 @@ import {
     MenuItem,
     Paper,
     Select,
+    Tab,
+    Tabs,
     TextField,
     Tooltip,
     Typography,
@@ -21,6 +23,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PreJson from '../components/PreJson';
+import KeyValueRows, { KeyValueRow } from '../components/KeyValueRows';
 import FhirApi from '../api/fhirApi';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -29,7 +32,7 @@ import { resourceDefinitions } from '../utils/resourceDefinitions';
 
 const MIN_PANEL_WIDTH = 200;
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 type Operation = '' | '$merge' | '$graph' | '$everything';
 
 const RESOURCE_NAMES = resourceDefinitions.map((r) => r.name);
@@ -70,14 +73,21 @@ const APIConsolePage = () => {
     const [urlSuffix, setUrlSuffix] = useState<string>(searchParams.get('urlSuffix') || '');
 
     const [resourceJson, setResourceJson] = useState<string>('');
+    const [customHeaders, setCustomHeaders] = useState<KeyValueRow[]>([{ key: '', value: '' }]);
     const [responseJson, setResponseJson] = useState<object | null>(null);
     const [responseStatus, setResponseStatus] = useState<number | null>(null);
+    const [responseHeaders, setResponseHeaders] = useState<Record<string, string>>({});
+    const [activeResponseTab, setActiveResponseTab] = useState<'body' | 'headers'>('body');
     const [loading, setLoading] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
     const [leftWidthPercent, setLeftWidthPercent] = useState<number>(50);
+    const [streamedText, setStreamedText] = useState<string>('');
+    const [isStreaming, setIsStreaming] = useState<boolean>(false);
+    const [responseIncomplete, setResponseIncomplete] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const isDragging = useRef(false);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     // Sync state to search params (only for standalone /api-console route)
     useEffect(() => {
@@ -112,7 +122,10 @@ const APIConsolePage = () => {
     // Build the request URL preview
     const requestUrl = useMemo(() => {
         if (!selectedResourceType) {
-            return '';
+            if (!urlSuffix) {
+                return '';
+            }
+            return urlSuffix.startsWith('/') ? urlSuffix : `/${urlSuffix}`;
         }
         let url = `/4_0_0/${selectedResourceType}`;
         if (operation) {
@@ -195,27 +208,71 @@ const APIConsolePage = () => {
         fetchResource();
     }, [fhirUrl, routeId, routeResourceType, isFromRedirect, setUserDetails]);
 
+    // Abort any in-flight request when navigating away or unmounting
+    useEffect(() => {
+        return () => {
+            abortControllerRef.current?.abort();
+        };
+    }, []);
+
     const handleSend = async () => {
         if (!fhirUrl || !requestUrl) {
             return;
         }
+        abortControllerRef.current?.abort();
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+
         try {
             setLoading(true);
+            setIsStreaming(true);
             setResponseJson(null);
             setResponseStatus(null);
+            setResponseHeaders({});
+            setStreamedText('');
+            setResponseIncomplete(false);
             const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
             let data: object | undefined;
-            if (resourceJson.trim() && (method === 'POST' || method === 'PUT')) {
+            if (resourceJson.trim() && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
                 data = JSON.parse(resourceJson);
             }
-            const { json, status } = await fhirApi.sendRequest({
+            const headersToSend = customHeaders.reduce<Record<string, string>>((acc, row) => {
+                const key = row.key.trim();
+                if (key && key.toLowerCase() !== 'authorization') {
+                    acc[key] = row.value;
+                }
+                return acc;
+            }, {});
+            const { json, status, headers, incomplete } = await fhirApi.sendRequest({
                 method,
                 urlPath: requestUrl,
                 data,
+                headers: headersToSend,
+                signal: controller.signal,
+                onChunk: (chunk) => {
+                    if (controller.signal.aborted) {
+                        return;
+                    }
+                    setStreamedText((prev) => prev + chunk);
+                },
+                // Populate status/headers as soon as the response headers arrive, before the
+                // body finishes streaming.
+                onHeaders: (earlyStatus, earlyHeaders) => {
+                    if (controller.signal.aborted) {
+                        return;
+                    }
+                    setResponseStatus(earlyStatus);
+                    setResponseHeaders(earlyHeaders);
+                },
             });
-            setResponseStatus(status);
+            setResponseStatus(status ?? null);
             setResponseJson(json);
+            setResponseHeaders(headers || {});
+            setResponseIncomplete(!!incomplete);
         } catch (error: any) {
+            if (error?.name === 'AbortError') {
+                return;
+            }
             if (error instanceof SyntaxError) {
                 setResponseStatus(null);
                 setResponseJson({ error: 'Invalid JSON in editor' });
@@ -224,7 +281,13 @@ const APIConsolePage = () => {
                 setResponseJson({ error: error.message || 'Request failed' });
             }
         } finally {
-            setLoading(false);
+            // Only the most recent request owns this UI state. A superseded request's finally
+            // block still runs (a `return` inside try does not skip finally), and clearing these
+            // flags would disable the streaming UI for the newer request that is still in flight.
+            if (abortControllerRef.current === controller) {
+                setIsStreaming(false);
+                setLoading(false);
+            }
         }
     };
 
@@ -243,6 +306,7 @@ const APIConsolePage = () => {
             case 'GET': return '#4caf50';
             case 'POST': return '#ff9800';
             case 'PUT': return '#2196f3';
+            case 'PATCH': return '#9c27b0';
             case 'DELETE': return '#f44336';
         }
     };
@@ -275,7 +339,7 @@ const APIConsolePage = () => {
                                     color: getMethodColor(method),
                                 }}
                             >
-                                {(['GET', 'POST', 'PUT', 'DELETE'] as HttpMethod[]).map((m) => (
+                                {(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as HttpMethod[]).map((m) => (
                                     <MenuItem key={m} value={m} sx={{ fontWeight: 'bold', color: getMethodColor(m) }}>
                                         {m}
                                     </MenuItem>
@@ -381,11 +445,15 @@ const APIConsolePage = () => {
 
                                 <Typography sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>/</Typography>
 
-                                {/* Free-text URL suffix */}
+                                {/* Free-text URL suffix / full request path */}
                                 <TextField
                                     size="small"
-                                    label="URL path"
-                                    placeholder="e.g. 123/$graph?contained=true or _search?name=John"
+                                    label={selectedResourceType ? 'URL path' : 'Request Path'}
+                                    placeholder={
+                                        selectedResourceType
+                                            ? 'e.g. 123/$graph?contained=true or _search?name=John'
+                                            : 'Full path, e.g. /4_0_0/Patient/123 or /version'
+                                    }
                                     value={urlSuffix}
                                     onChange={(e) => setUrlSuffix(e.target.value)}
                                     sx={{ flex: 1, minWidth: 250 }}
@@ -396,12 +464,23 @@ const APIConsolePage = () => {
                         <Button
                             variant="contained"
                             onClick={handleSend}
-                            disabled={loading || fetching || !selectedResourceType}
+                            disabled={loading || fetching || !requestUrl}
                             startIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
                         >
                             {loading ? 'Sending...' : 'Send'}
                         </Button>
                     </Box>
+
+                    {/* Custom request headers */}
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                        Request Headers
+                    </Typography>
+                    <KeyValueRows
+                        rows={customHeaders}
+                        onChange={setCustomHeaders}
+                        keyLabel="Header name"
+                        valueLabel="Value"
+                    />
 
                     {/* URL preview */}
                     {requestUrl && (
@@ -526,10 +605,61 @@ const APIConsolePage = () => {
                                         variant="outlined"
                                     />
                                 )}
+                                {responseIncomplete && (
+                                    <Chip
+                                        label="Connection dropped — response incomplete"
+                                        size="small"
+                                        color="warning"
+                                        variant="outlined"
+                                    />
+                                )}
+                                <Tabs
+                                    value={activeResponseTab}
+                                    onChange={(_, val) => setActiveResponseTab(val)}
+                                    sx={{ minHeight: 0, ml: 'auto' }}
+                                >
+                                    <Tab
+                                        label={isStreaming ? 'Body (Receiving…)' : 'Body'}
+                                        value="body"
+                                        sx={{ minHeight: 0, py: 0.5 }}
+                                    />
+                                    <Tab label="Headers" value="headers" sx={{ minHeight: 0, py: 0.5 }} />
+                                </Tabs>
                             </Box>
                             <Box sx={{ flex: 1, overflow: 'auto', p: 1 }}>
-                                {responseJson ? (
+                                {activeResponseTab === 'headers' ? (
+                                    Object.keys(responseHeaders).length > 0 ? (
+                                        <KeyValueRows
+                                            rows={Object.entries(responseHeaders).map(([key, value]) => ({
+                                                key,
+                                                value,
+                                            }))}
+                                            readOnly
+                                        />
+                                    ) : (
+                                        <Typography
+                                            variant="body2"
+                                            sx={{ fontFamily: 'monospace', color: 'text.secondary' }}
+                                        >
+                                            No response headers yet.
+                                        </Typography>
+                                    )
+                                ) : isStreaming ? (
+                                    <Typography
+                                        component="pre"
+                                        sx={{ fontFamily: 'monospace', fontSize: '0.875rem', whiteSpace: 'pre-wrap', m: 0 }}
+                                    >
+                                        {streamedText}
+                                    </Typography>
+                                ) : responseJson ? (
                                     <PreJson data={responseJson} collapsed={2} />
+                                ) : streamedText ? (
+                                    <Typography
+                                        component="pre"
+                                        sx={{ fontFamily: 'monospace', fontSize: '0.875rem', whiteSpace: 'pre-wrap', m: 0 }}
+                                    >
+                                        {streamedText}
+                                    </Typography>
                                 ) : (
                                     <Typography
                                         variant="body2"

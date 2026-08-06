@@ -14,7 +14,7 @@ interface GetDataParams {
 interface RequestParams {
     urlString: string;
     params?: any;
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
     data?: any;
 }
 
@@ -37,11 +37,63 @@ class BaseApi {
 
         // Create a dedicated axios instance for this BaseApi instance
         this.axiosInstance = axios.create();
-        this.axiosInstance.interceptors.request.use(this.requestInterceptor);
+        this.axiosInstance.interceptors.request.use(this.requestInterceptor.bind(this));
     }
 
-    private getBaseUrl(): string {
+    protected getBaseUrl(): string {
         return this.fhirUrl || '';
+    }
+
+    protected buildHeaders(extra?: Record<string, string>): Record<string, string> {
+        let tokenToSendToFhirServer = 'jwt';
+        const identityProvider = getLocalData('identityProvider');
+        if (identityProvider) {
+            const authInfo = new AuthUrlProvider().getAuthInfo(identityProvider);
+            tokenToSendToFhirServer = authInfo.tokenToSendToFhirServer || tokenToSendToFhirServer;
+        }
+        const token = getLocalData(tokenToSendToFhirServer);
+
+        // HTTP header names are case-insensitive, but a plain object treats `Content-Type` and
+        // `content-type` as two distinct keys — and fetch()'s Headers constructor then
+        // comma-joins their values instead of letting the caller cleanly override the default.
+        // Keying by the lower-cased name (while remembering the original spelling) guarantees
+        // only one entry per header survives, with the last one set winning, matching HTTP
+        // header semantics.
+        const merged = new Map<string, { name: string; value: string }>();
+        const setHeader = (name: string, value: string) => {
+            merged.set(name.toLowerCase(), { name, value });
+        };
+
+        setHeader('Accept', 'application/json');
+        setHeader('Cache-Control', 'no-cache');
+        setHeader('Pragma', 'no-cache');
+        setHeader('Expires', '0');
+        setHeader('Origin-Service', 'fhir-ui');
+
+        Object.entries(extra || {}).forEach(([name, value]) => {
+            // `Authorization` is owned exclusively by the session token (below) and can never be
+            // overridden or blanked by a caller-supplied header. Enforced here rather than at the
+            // call site so every caller of buildHeaders/sendRequest gets the guarantee, whether
+            // or not a session token exists.
+            if (name.toLowerCase() === 'authorization') {
+                return;
+            }
+            setHeader(name, value);
+        });
+
+        if (typeof token === 'string') {
+            setHeader('Authorization', `Bearer ${token}`);
+        }
+
+        return Object.fromEntries(
+            Array.from(merged.values(), ({ name, value }) => [name, value] as [string, string])
+        );
+    }
+
+    protected async handleUnauthorized(status: number | undefined): Promise<void> {
+        if (status === 401 && this.setUserDetails) {
+            await logout(this.setUserDetails);
+        }
     }
 
     async getVersion(): Promise<string> {
@@ -61,9 +113,7 @@ class BaseApi {
             const response = await this.axiosInstance.get(url.toString());
             return { status: response.status, json: response.data };
         } catch (err: any) {
-            if (err.response?.status === 401 && this.setUserDetails) {
-                await logout(this.setUserDetails);
-            }
+            await this.handleUnauthorized(err.response?.status);
             return { status: err.response?.status, json: err.response?.data };
         }
     }
@@ -82,9 +132,7 @@ class BaseApi {
             });
             return { status: response.status, json: response.data };
         } catch (err: any) {
-            if (err.response?.status === 401 && this.setUserDetails) {
-                await logout(this.setUserDetails);
-            }
+            await this.handleUnauthorized(err.response?.status);
             return { status: err.response?.status, json: err.response?.data };
         }
     }
@@ -108,21 +156,10 @@ class BaseApi {
     }
 
     requestInterceptor(req: InternalAxiosRequestConfig<any>): InternalAxiosRequestConfig<any> {
-        let tokenToSendToFhirServer = 'jwt';
-        const identityProvider = getLocalData('identityProvider');
-        if (identityProvider) {
-            const authInfo = new AuthUrlProvider().getAuthInfo(identityProvider);
-            tokenToSendToFhirServer = authInfo.tokenToSendToFhirServer || tokenToSendToFhirServer;
-        }
-        const token = getLocalData(tokenToSendToFhirServer);
-        if (typeof token === 'string') {
-            req.headers.Authorization = `Bearer ${token}`;
-        }
-        req.headers.Accept = 'application/json';
-        req.headers['Cache-Control'] = 'no-cache';
-        req.headers['Pragma'] = 'no-cache';
-        req.headers['Expires'] = '0';
-        req.headers['Origin-Service'] = 'fhir-ui';
+        const headers = this.buildHeaders();
+        Object.entries(headers).forEach(([key, value]) => {
+            req.headers[key] = value;
+        });
         return req;
     }
 }

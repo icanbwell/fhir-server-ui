@@ -24,16 +24,20 @@ class BaseApi {
         | React.Dispatch<React.SetStateAction<TUserDetails | null>>
         | undefined;
     private readonly axiosInstance: AxiosInstance;
+    protected readonly onRequest?: (info: { method: string; url: string }) => void;
 
     constructor({
         fhirUrl,
         setUserDetails,
+        onRequest,
     }: {
         fhirUrl: string | undefined;
         setUserDetails: React.Dispatch<React.SetStateAction<TUserDetails | null>> | undefined;
+        onRequest?: (info: { method: string; url: string }) => void;
     }) {
         this.fhirUrl = fhirUrl;
         this.setUserDetails = setUserDetails;
+        this.onRequest = onRequest;
 
         // Create a dedicated axios instance for this BaseApi instance
         this.axiosInstance = axios.create();
@@ -109,6 +113,8 @@ class BaseApi {
             url.search = new URLSearchParams(params).toString();
         }
 
+        this.onRequest?.({ method: 'GET', url: url.pathname + url.search });
+
         try {
             const response = await this.axiosInstance.get(url.toString());
             return { status: response.status, json: response.data };
@@ -119,6 +125,8 @@ class BaseApi {
     }
 
     async request({ urlString, params, method, data }: RequestParams): Promise<any> {
+        this.onRequest?.({ method, url: urlString });
+
         try {
             const response = await this.axiosInstance.request({
                 baseURL: this.getBaseUrl(),

@@ -16,6 +16,7 @@ import {
 import DOMPurify from 'dompurify';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
+import LastRequestContext from '../context/LastRequestContext';
 import BaseApi from '../api/baseApi';
 import { useTheme } from '../context/ThemeContext';
 import CodeIcon from '@mui/icons-material/Code';
@@ -76,10 +77,11 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
 
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
+    const { recordRequest } = useContext(LastRequestContext);
 
     const baseApi = React.useMemo(
-        () => new BaseApi({ fhirUrl, setUserDetails }),
-        [fhirUrl, setUserDetails]
+        () => new BaseApi({ fhirUrl, setUserDetails, onRequest: recordRequest }),
+        [fhirUrl, setUserDetails, recordRequest]
     );
 
     const toggleSection = (sectionId: string) => {

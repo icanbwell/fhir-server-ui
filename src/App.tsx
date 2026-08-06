@@ -1,5 +1,5 @@
 import './App.css';
-import React, { Suspense, useContext, useState } from 'react';
+import React, { Suspense, useCallback, useContext, useState } from 'react';
 import {
     Routes,
     Route,
@@ -17,6 +17,7 @@ import AdminRoutes from './routes/adminRoutes';
 const AdminIndexPage = React.lazy(() => import('./admin/index'));
 import EnvContext from './context/EnvironmentContext';
 import UserContext from './context/UserContext';
+import LastRequestContext, { TLastRequest } from './context/LastRequestContext';
 import { ThemeContextProvider } from './context/ThemeContext';
 import { TUserDetails } from './types/baseTypes';
 import { jwtParser } from './utils/jwtParser';
@@ -30,6 +31,10 @@ import AccessDenied from './pages/AccessDenied';
 function App(): React.ReactElement {
     const env = useContext(EnvContext);
     const [userDetails, setUserDetails] = useState<TUserDetails | null>(jwtParser());
+    const [lastRequest, setLastRequest] = useState<TLastRequest>(null);
+    const recordRequest = useCallback((info: { method: string; url: string }) => {
+        setLastRequest({ ...info, pathname: window.location.pathname });
+    }, []);
     console.log(`Setting fhirUrl to ${env.fhirUrl}`);
 
     // Changed from App to Root
@@ -87,7 +92,9 @@ function App(): React.ReactElement {
     return (
         <ThemeContextProvider>
             <UserContext.Provider value={{ userDetails, setUserDetails }}>
-                <RouterProvider router={router} />
+                <LastRequestContext.Provider value={{ lastRequest, recordRequest }}>
+                    <RouterProvider router={router} />
+                </LastRequestContext.Provider>
             </UserContext.Provider>
         </ThemeContextProvider>
     );

@@ -32,7 +32,7 @@ services:
       # b.well App sign-in (bwellapp is enabled in REACT_APP_AUTH_PROVIDERS above) -
       # set REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS to a real client key for your dev environment
       REACT_APP_AUTH_BWELLAPP_BASE_URL: 'https://api.dev.icanbwell.com'
-      REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS: 'Default=<client-key>'
+      REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS: 'Dev=eyJyIjoiY2Zoa2h3ODZvNHdoNWFiOW9kaHgiLCJlbnYiOiJkZXYiLCJraWQiOiJid2VsbF9kZW1vLWRldiJ9'
       REACT_APP_AUTH_BWELLAPP_CUSTOM_USERNAME: 'cognito:username'
       REACT_APP_AUTH_BWELLAPP_CUSTOM_GROUP: 'cognito:groups'
       REACT_APP_AUTH_BWELLAPP_CUSTOM_SCOPE: 'custom:scope'

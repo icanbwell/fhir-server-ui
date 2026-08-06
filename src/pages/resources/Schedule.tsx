@@ -7,7 +7,7 @@ Schedule
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Typography } from '@mui/material';
 import { TSchedule } from '../../types/resources/Schedule';
 

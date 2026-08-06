@@ -8,7 +8,7 @@ Invoice
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TInvoice } from '../../types/resources/Invoice';
 
 // Import all the partial resource

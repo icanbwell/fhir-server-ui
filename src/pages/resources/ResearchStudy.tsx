@@ -12,7 +12,7 @@ ResearchStudy
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TResearchStudy } from '../../types/resources/ResearchStudy';
 
 // Import all the partial resource

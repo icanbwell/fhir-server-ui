@@ -7,7 +7,7 @@ Task
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TTask } from '../../types/resources/Task';
 
 // Import all the partial resource

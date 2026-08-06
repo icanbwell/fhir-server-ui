@@ -1,6 +1,6 @@
 // HomePage.js
 import { useContext, useEffect, useState, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import {
     Table,
     TableBody,

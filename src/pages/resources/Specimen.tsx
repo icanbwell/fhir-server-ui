@@ -7,7 +7,7 @@ Specimen
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSpecimen } from '../../types/resources/Specimen';
 
 // Import all the partial resource

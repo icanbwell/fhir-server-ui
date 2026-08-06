@@ -9,7 +9,7 @@ ActivityDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TActivityDefinition } from '../../types/resources/ActivityDefinition';
 
 // Import all the partial resource

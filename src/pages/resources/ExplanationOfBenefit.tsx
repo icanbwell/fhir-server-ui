@@ -9,7 +9,7 @@ ExplanationOfBenefit
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TExplanationOfBenefit } from '../../types/resources/ExplanationOfBenefit';
 
 // Import all the partial resource

@@ -7,7 +7,7 @@ TestReport
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TTestReport } from '../../types/resources/TestReport';
 
 // Import all the partial resource

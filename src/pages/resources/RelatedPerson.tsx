@@ -9,7 +9,7 @@ RelatedPerson
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TRelatedPerson } from '../../types/resources/RelatedPerson';
 
 // Import all the partial resource

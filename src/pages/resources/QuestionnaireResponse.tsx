@@ -9,7 +9,7 @@ QuestionnaireResponse
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TQuestionnaireResponse } from '../../types/resources/QuestionnaireResponse';
 
 // Import all the partial resource

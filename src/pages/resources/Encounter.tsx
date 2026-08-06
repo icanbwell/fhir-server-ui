@@ -8,7 +8,7 @@ Encounter
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TEncounter } from '../../types/resources/Encounter';
 
 // Import all the partial resource

@@ -7,7 +7,7 @@ PackagedProductDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TPackagedProductDefinition } from '../../types/resources/PackagedProductDefinition';
 
 // Import all the partial resource

@@ -8,7 +8,7 @@ EnrollmentRequest
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TEnrollmentRequest } from '../../types/resources/EnrollmentRequest';
 
 // Import all the partial resource

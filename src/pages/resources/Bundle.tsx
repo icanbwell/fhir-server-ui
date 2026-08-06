@@ -7,7 +7,7 @@ Bundle
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TBundle } from '../../types/resources/Bundle';
 
 // Import all the partial resource

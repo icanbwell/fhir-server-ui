@@ -8,7 +8,7 @@ StructureMap
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TStructureMap } from '../../types/resources/StructureMap';
 
 // Import all the partial resource

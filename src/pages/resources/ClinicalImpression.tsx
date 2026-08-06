@@ -13,7 +13,7 @@ ClinicalImpression
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TClinicalImpression } from '../../types/resources/ClinicalImpression';
 
 // Import all the partial resource

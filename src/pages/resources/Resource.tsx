@@ -6,7 +6,7 @@ Resource
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TResource } from '../../types/resources/Resource';
 
 // Import all the partial resource

@@ -11,7 +11,7 @@ ImagingStudy
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TImagingStudy } from '../../types/resources/ImagingStudy';
 
 // Import all the partial resource

@@ -8,7 +8,7 @@ RequestGroup
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TRequestGroup } from '../../types/resources/RequestGroup';
 
 // Import all the partial resource

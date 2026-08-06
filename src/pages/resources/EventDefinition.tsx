@@ -8,7 +8,7 @@ EventDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TEventDefinition } from '../../types/resources/EventDefinition';
 
 // Import all the partial resource

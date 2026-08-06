@@ -9,7 +9,7 @@ Parameters
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TParameters } from '../../types/resources/Parameters';
 
 // Import all the partial resource

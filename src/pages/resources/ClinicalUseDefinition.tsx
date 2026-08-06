@@ -8,7 +8,7 @@ ClinicalUseDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TClinicalUseDefinition } from '../../types/resources/ClinicalUseDefinition';
 
 // Import all the partial resource

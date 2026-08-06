@@ -11,7 +11,7 @@ import UserContext from '../../context/UserContext';
 import AdminApi from '../../api/adminApi';
 import EnvContext from '../../context/EnvironmentContext';
 import PreJson from '../../components/PreJson';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Outcomes from '../../partials/outcomes';
 
 

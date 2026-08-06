@@ -8,7 +8,7 @@ NutritionOrder
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TNutritionOrder } from '../../types/resources/NutritionOrder';
 
 // Import all the partial resource

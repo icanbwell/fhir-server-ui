@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import EnvContext from '../context/EnvironmentContext';
 import AdminApi from '../api/adminApi';
 import UserContext from '../context/UserContext';

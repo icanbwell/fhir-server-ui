@@ -9,7 +9,7 @@ ImmunizationEvaluation
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TImmunizationEvaluation } from '../../types/resources/ImmunizationEvaluation';
 
 // Import all the partial resource

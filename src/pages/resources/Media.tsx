@@ -8,7 +8,7 @@ Media
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMedia } from '../../types/resources/Media';
 
 // Import all the partial resource

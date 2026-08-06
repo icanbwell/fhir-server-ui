@@ -8,7 +8,7 @@ Coverage
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TCoverage } from '../../types/resources/Coverage';
 
 // Import all the partial resource

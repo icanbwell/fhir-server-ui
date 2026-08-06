@@ -9,7 +9,7 @@ StructureDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TStructureDefinition } from '../../types/resources/StructureDefinition';
 
 // Import all the partial resource

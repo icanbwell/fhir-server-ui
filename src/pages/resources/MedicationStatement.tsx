@@ -28,7 +28,7 @@ MedicationStatement
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMedicationStatement } from '../../types/resources/MedicationStatement';
 
 // Import all the partial resource

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { List, ListItem, Divider, Box, Typography, Button, Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 

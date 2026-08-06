@@ -8,7 +8,7 @@ SearchParameter
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSearchParameter } from '../../types/resources/SearchParameter';
 
 // Import all the partial resource

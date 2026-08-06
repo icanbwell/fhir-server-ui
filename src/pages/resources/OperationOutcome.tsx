@@ -8,7 +8,7 @@ OperationOutcome
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TOperationOutcome } from '../../types/resources/OperationOutcome';
 
 // Import all the partial resource

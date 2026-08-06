@@ -9,7 +9,7 @@ ConceptMap
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TConceptMap } from '../../types/resources/ConceptMap';
 
 // Import all the partial resource

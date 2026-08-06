@@ -9,7 +9,7 @@ CommunicationRequest
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TCommunicationRequest } from '../../types/resources/CommunicationRequest';
 
 // Import all the partial resource

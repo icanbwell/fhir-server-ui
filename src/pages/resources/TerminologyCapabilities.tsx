@@ -9,7 +9,7 @@ TerminologyCapabilities
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TTerminologyCapabilities } from '../../types/resources/TerminologyCapabilities';
 
 // Import all the partial resource

@@ -58,7 +58,7 @@ const IdentityProviderSelection = () => {
                         <Button
                             key={provider}
                             variant="contained"
-                            color={provider.toLowerCase() === 'okta' ? 'primary' : 'secondary'}
+                            color="primary"
                             sx={{ mb: 2, width: '100%' }}
                             onClick={() => handleProviderSelection(provider)}
                         >

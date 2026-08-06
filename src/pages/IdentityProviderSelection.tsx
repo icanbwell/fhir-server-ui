@@ -6,9 +6,15 @@ import Footer from '../components/Footer';
 import EnvContext from '../context/EnvironmentContext';
 import { setLocalData } from '../utils/localData.utils';
 
-const PROVIDER_LABELS: Record<string, string> = {
+const PROVIDER_LABELS: Record<string, string> = Object.assign(Object.create(null), {
     bwellapp: 'b.well App',
-};
+    clientcredentials: 'Client Credentials',
+});
+
+const PROVIDER_ROUTES: Record<string, string> = Object.assign(Object.create(null), {
+    bwellapp: '/bwell-login',
+    clientcredentials: '/client-credentials-login',
+});
 
 const IdentityProviderSelection = () => {
     const env = useContext(EnvContext);
@@ -19,8 +25,9 @@ const IdentityProviderSelection = () => {
     console.log('Referring URL:', referringUrl);
 
     const handleProviderSelection = (provider: string) => {
-        if (provider.toLowerCase() === 'bwellapp') {
-            navigate('/bwell-login', { state: { resourceUrl: referringUrl } });
+        const customRoute = PROVIDER_ROUTES[provider.toLowerCase()];
+        if (customRoute) {
+            navigate(customRoute, { state: { resourceUrl: referringUrl } });
             return;
         }
         setLocalData('identityProvider', provider);

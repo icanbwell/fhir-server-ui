@@ -205,7 +205,7 @@ const ClientCredentialsLogin = () => {
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="secondary"
+                                color="primary"
                                 sx={{ width: '100%', mb: 2 }}
                                 disabled={isProcessing}
                             >

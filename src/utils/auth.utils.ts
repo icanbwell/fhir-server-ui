@@ -13,6 +13,18 @@ export const removeAuthData = (): void => {
 export const logout = async (setUserDetails?: (_userDetails: any) => void): Promise<void> => {
     try {
         const identityProvider = getLocalData('identityProvider');
+
+        if (identityProvider === 'bwellapp') {
+            // b.well App auth is a direct credentials POST with no OIDC end-session
+            // endpoint - just clear local state instead of building a logout URL.
+            removeAuthData();
+            if (setUserDetails) {
+                setUserDetails(null);
+            }
+            window.location.replace(window.location.origin);
+            return;
+        }
+
         if (identityProvider) {
             const authService: IAuthService = AuthServiceFactory.getAuthService();
             // Construct full logout URL

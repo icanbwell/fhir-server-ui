@@ -9,6 +9,8 @@ import {
     MenuItem,
     Link,
     SelectChangeEvent,
+    FormControl,
+    InputLabel,
 } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -138,19 +140,22 @@ const BwellAppLogin = () => {
                     </Typography>
                 ) : (
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, width: '100%' }}>
-                        {clientKeys.length > 1 && (
-                            <Select
-                                fullWidth
-                                value={selectedClientName}
-                                onChange={handleClientChange}
-                                sx={{ mb: 2 }}
-                            >
-                                {clientKeys.map((client) => (
-                                    <MenuItem key={client.name} value={client.name}>
-                                        {client.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                        {clientKeys.length > 0 && (
+                            <FormControl fullWidth sx={{ mb: 2 }}>
+                                <InputLabel id="bwell-tenant-label">Tenant</InputLabel>
+                                <Select
+                                    labelId="bwell-tenant-label"
+                                    label="Tenant"
+                                    value={selectedClientName}
+                                    onChange={handleClientChange}
+                                >
+                                    {clientKeys.map((client) => (
+                                        <MenuItem key={client.name} value={client.name}>
+                                            {client.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         )}
                         <TextField
                             fullWidth
@@ -178,7 +183,7 @@ const BwellAppLogin = () => {
                         <Button
                             type="submit"
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             sx={{ width: '100%', mb: 2 }}
                             disabled={isProcessing}
                         >

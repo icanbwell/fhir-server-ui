@@ -48,7 +48,7 @@ const APIConsolePage = () => {
     // route params so it starts pre-filled correctly.
     const [urlSuffix, setUrlSuffix] = useState<string>(
         isFromRedirect && routeResourceType && routeId && routeOperation
-            ? `/4_0_0/${routeResourceType}/${routeId}/${routeOperation}`
+            ? `/4_0_0/${routeResourceType}/${routeId}/${routeOperation}?smartMerge=true`
             : searchParams.get('urlSuffix') || ''
     );
 
@@ -293,6 +293,7 @@ const APIConsolePage = () => {
                             size="small"
                             label="Request Path"
                             placeholder="Full path, e.g. /4_0_0/Patient/123 or /version"
+                            helperText="Sent literally — include query params here, e.g. /4_0_0/Patient/123/$merge?smartMerge=false"
                             value={urlSuffix}
                             onChange={(e) => setUrlSuffix(e.target.value)}
                             sx={{ flex: 1, minWidth: 250 }}

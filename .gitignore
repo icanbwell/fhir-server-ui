@@ -135,3 +135,9 @@ out
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# superpowers subagent-driven-development scratch workspace
+.superpowers/
+
+# Playwright MCP manual verification artifacts
+.playwright-mcp/

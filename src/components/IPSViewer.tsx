@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import {
     Typography,
     Box,
-    CircularProgress,
     Alert,
     Card,
     CardContent,
@@ -25,6 +24,8 @@ import './IPSNarrative.css'; // Import the CSS file for styling the IPS narrativ
 import PreJson from './PreJson';
 import { getMandatorySectionContent } from '../constants/ipsConstants';
 import { appendFormatJson } from '../utils/url.utils';
+import { useStreamProgress } from '../hooks/useStreamProgress';
+import StreamProgressIndicator from './StreamProgressIndicator';
 
 interface IPSViewerProps {
     relativeUrl: string;
@@ -73,6 +74,8 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
     const [sectionData, setSectionData] = useState<SectionData[]>([]);
     const [collapsedResourceTypes, setCollapsedResourceTypes] = useState<Set<string>>(new Set());
     const [bundleResourcesCollapsed, setBundleResourcesCollapsed] = useState<boolean>(true);
+    const [isIncomplete, setIsIncomplete] = useState<boolean>(false);
+    const { progress, start, onProgress, finish } = useStreamProgress();
     const { isDarkMode } = useTheme();
 
     const { fhirUrl } = useContext(EnvironmentContext);
@@ -229,11 +232,14 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
         const fetchBundle = async () => {
             setIsLoading(true);
             setErrorMessage(null);
+            setIsIncomplete(false);
+            start();
 
             try {
-                const response = await baseApi.getData({ urlString: relativeUrl });
+                const response = await baseApi.getData({ urlString: relativeUrl }, { onProgress });
                 const bundleData: Bundle = response.json;
                 setRawResponse(bundleData);
+                setIsIncomplete(response.incomplete);
 
                 // Extract the HTML content from the first Composition resource
                 const compositionEntry = bundleData.entry?.find(
@@ -305,16 +311,17 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                 setErrorMessage('Failed to load the International Patient Summary');
             } finally {
                 setIsLoading(false);
+                finish();
             }
         };
 
         fetchBundle();
-    }, [relativeUrl, baseApi]);
+    }, [relativeUrl, baseApi, start, onProgress, finish]);
 
     if (isLoading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-                <CircularProgress />
+            <Box sx={{ my: 4 }}>
+                <StreamProgressIndicator progress={progress} />
             </Box>
         );
     }
@@ -330,6 +337,11 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
 
     return (
         <Box sx={{ width: '100%', mb: 4 }}>
+            {isIncomplete && (
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                    Connection interrupted — showing partial results.
+                </Alert>
+            )}
             <Box
                 sx={{
                     display: 'flex',

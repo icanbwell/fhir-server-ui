@@ -1,7 +1,6 @@
 import { getStartAndEndDate } from '../utils/auditEventDateFilter';
 import BaseApi from './baseApi';
 import { HttpMethod } from '../context/LastRequestContext';
-import { sendStreamingRequest, StreamingFetchResult } from '../utils/streamingFetch';
 
 interface GetResourceParams {
     id: string;
@@ -37,13 +36,16 @@ class FhirApi extends BaseApi {
         return await this.getData({urlString});
     }
 
-    async getBundleAsync({
-        resourceType,
-        id,
-        queryString,
-        queryParameters,
-        operation,
-    }: GetBundleAsyncParams): Promise<{ status: number; json: any }> {
+    async getBundleAsync(
+        {
+            resourceType,
+            id,
+            queryString,
+            queryParameters,
+            operation,
+        }: GetBundleAsyncParams,
+        options?: { onChunk?: (chunk: Uint8Array) => void }
+    ): Promise<{ status: number | undefined; json: any; incomplete: boolean }> {
         const url = this.getUrl({
             resourceType,
             id,
@@ -51,7 +53,7 @@ class FhirApi extends BaseApi {
             queryParameters,
             operation,
         });
-        return await this.getData({urlString: url.toString()});
+        return await this.getData({urlString: url.toString()}, options);
     }
 
     addMissingRequiredParams({
@@ -134,53 +136,50 @@ class FhirApi extends BaseApi {
         onChunk?: (text: string) => void;
         onHeaders?: (status: number, headers: Record<string, string>) => void;
         signal?: AbortSignal;
-    }): Promise<StreamingFetchResult> {
-        let path = urlPath;
-        if (path.startsWith(window.location.origin)) {
-            path = path.slice(window.location.origin.length);
-        }
-        const url = new URL(path, this.getBaseUrl());
-
-        // The session's bearer token must never leave the configured FHIR server. A
-        // scheme-relative path (e.g. "//evil.com/collect") resolves to a different origin via
-        // new URL(), so compare the resolved origin against the base URL's origin and refuse
-        // before any fetch happens. This is the single chokepoint every URL mode goes through
-        // (guided builder and free-form path alike), so the invariant can't be re-broken in the UI.
-        if (url.origin !== new URL(this.getBaseUrl()).origin) {
-            return {
-                status: undefined,
-                json: { error: 'Request path must stay on the configured FHIR server' },
-                headers: {},
-                rawText: '',
-            };
-        }
-
-        this.onRequest?.({ method, url: url.pathname + url.search });
-
-        const requestHeaders = this.buildHeaders({
-            'Content-Type': 'application/fhir+json',
-            ...headers,
-        });
-
-        const result = await sendStreamingRequest({
-            url: url.toString(),
+    }): Promise<{
+        status: number | undefined;
+        json: any;
+        headers: Record<string, string>;
+        rawText: string;
+        incomplete?: boolean;
+    }> {
+        // APIConsolePage's onChunk expects decoded text, but streamRequest hands back raw
+        // Uint8Array chunks (so binary downloads elsewhere aren't forced through a decoder). Keep
+        // one TextDecoder alive across the whole request — decoding each chunk independently would
+        // corrupt any multi-byte UTF-8 character split across a chunk boundary.
+        const decoder = new TextDecoder();
+        const result = await this.streamRequest({
             method,
+            urlString: urlPath,
             data,
-            headers: requestHeaders,
+            headers,
             signal,
-            onChunk,
-            onHeaders: (status, respHeaders) => {
-                // Fire handleUnauthorized as soon as the status is known — before the
-                // abortable body-read loop begins — matching this method's original
-                // (pre-extraction) ordering. Calling it after sendStreamingRequest resolves
-                // instead would let an abort during body-read of a 401 response skip this
-                // call entirely, since the AbortError propagates out before we'd get here.
-                void this.handleUnauthorized(status);
-                onHeaders?.(status, respHeaders);
-            },
+            onHeaders,
+            onChunk: onChunk ? (chunk) => onChunk(decoder.decode(chunk, { stream: true })) : undefined,
         });
 
-        return result;
+        let json: any;
+        try {
+            // On a total fetch-level failure (network error, CORS block, DNS failure — not an
+            // abort), streamRequest() returns an empty `text` but sets `errorMessage`. Surface
+            // that as `{ error: ... }` so the API Console shows the real failure reason instead
+            // of a blank response, matching this method's pre-refactor behavior.
+            json = result.text
+                ? JSON.parse(result.text)
+                : result.errorMessage
+                    ? { error: result.errorMessage }
+                    : undefined;
+        } catch {
+            json = undefined;
+        }
+
+        return {
+            status: result.status,
+            json,
+            headers: result.headers,
+            rawText: result.text,
+            incomplete: result.incomplete,
+        };
     }
 }
 

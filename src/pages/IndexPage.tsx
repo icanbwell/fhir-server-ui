@@ -20,6 +20,7 @@ import GridOnIcon from '@mui/icons-material/GridOn'; // New icon for spreadsheet
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
 import APIConsolePage from './APIConsolePage';
+import { createBundleEntryParser } from '../utils/incrementalBundleParser';
 
 /**
  * IndexPage/home/ubuntu/Documents/code/EFS/fhir-server/src/pages/SearchPage.jsx
@@ -54,18 +55,19 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         (new URLSearchParams(queryString || '').get('_format') || '').toLowerCase() === 'json';
 
     function getBox() {
-        if (loading) {
+        if (loading && !resources?.length) {
             return <LinearProgress />;
         }
-        if (status === 401) {
+        if (!loading && status === 401) {
             return <Box>Login Expired</Box>;
         }
-        if (resources && resources.length === 0) {
+        if (!loading && resources && resources.length === 0) {
             return <Box>No Results Found</Box>;
         }
         // If narrative is returned then show it at top level
         return (
             <>
+                {loading && <LinearProgress />}
                 {resources?.length > 1 && (
                     <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                         <Button
@@ -87,7 +89,12 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </Box>
                 )}
                 {/* if we have a single resource*/}
-                {resources && resources.length === 1 && resources[0].text?.div && (
+                {/* Gated on !loading: during incremental streaming, `resources` can transiently
+                    have length 1 (the first entry to finish parsing) before the rest of the
+                    Bundle arrives — without this guard, a resource that happens to carry a
+                    narrative would flash this "Answer" banner as if it were the sole, definitive
+                    result, then have it disappear once the next entry streams in. */}
+                {!loading && resources && resources.length === 1 && resources[0].text?.div && (
                     <Alert severity="success">
                         <AlertTitle>Answer</AlertTitle>
                         <Box
@@ -98,7 +105,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </Alert>
                 )}
                 {/*if we have a list of resources*/}
-                {resources && resources.length === 1 && resources[0].resource?.text?.div && (
+                {!loading && resources && resources.length === 1 && resources[0].resource?.text?.div && (
                     <Alert severity="success">
                         <AlertTitle>Answer</AlertTitle>
                         <Box
@@ -154,6 +161,14 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         if (id) {
             setResourceCardExpanded(true);
         }
+        // Guards every state write below against a request this effect has abandoned — e.g. the
+        // user navigates from one resourceType/query to another before a large, slow search
+        // finishes streaming. Without this, the abandoned request's onChunk callback keeps
+        // calling setResources with stale data (from the OLD resourceType) for as long as its
+        // download continues, and its terminal setLoading(false) can clear the loading spinner
+        // for the NEW, still-in-flight request. The cleanup function below flips this once a
+        // newer effect run supersedes this one.
+        let cancelled = false;
         const callApi = async () => {
             document.title = 'FHIR Server';
             if (operation === '$merge' && !shouldBeJsonFormat) {
@@ -176,12 +191,68 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         setUserDetails,
                         onRequest: recordRequest,
                     });
-                    const { json, status: statusCode } = await fhirApi.getBundleAsync({
-                        resourceType,
-                        id,
-                        queryString,
-                        operation: vid ? `_history/${vid}` : operation,
-                    });
+
+                    let incrementalResults: any[] = [];
+                    let parserFailed = false;
+                    const streamParser = shouldBeJsonFormat
+                        ? undefined
+                        : createBundleEntryParser(
+                              (resource) => {
+                                  // Accumulate without copying per entry — the array is copied once per
+                                  // network chunk (below), not once per resource, so a large Bundle
+                                  // doesn't trigger one React re-render per entry. The end-of-stream full
+                                  // JSON.parse result (below) still overwrites this once the response
+                                  // completes, so a parser miss never leaves the page silently short of
+                                  // data — it just skips the "populate live" effect for whatever wasn't
+                                  // caught incrementally.
+                                  incrementalResults.push(resource);
+                              },
+                              (err) => {
+                                  console.error(
+                                      'Incremental bundle parsing failed, falling back to full parse:',
+                                      err
+                                  );
+                                  parserFailed = true;
+                              }
+                          );
+
+                    const {
+                        json,
+                        status: statusCode,
+                        incomplete,
+                    } = await fhirApi.getBundleAsync(
+                        {
+                            resourceType,
+                            id,
+                            queryString,
+                            operation: vid ? `_history/${vid}` : operation,
+                        },
+                        {
+                            onChunk: streamParser
+                                ? (chunk) => {
+                                      if (!parserFailed) {
+                                          streamParser.write(chunk);
+                                          // Render whatever the parser found in this chunk. Batching per
+                                          // chunk (rather than per entry) keeps re-renders proportional to
+                                          // the number of network chunks received, not the number of
+                                          // resources in the Bundle. Skipped once this effect has been
+                                          // superseded, so an abandoned request can't overwrite a newer
+                                          // search's results while its stream keeps delivering chunks.
+                                          if (!cancelled) {
+                                              setResources([...incrementalResults]);
+                                          }
+                                      }
+                                  }
+                                : undefined,
+                        }
+                    );
+                    streamParser?.finish();
+
+                    if (cancelled) {
+                        // A newer effect run has already taken over — don't let this abandoned
+                        // request's terminal, authoritative result overwrite it.
+                        return;
+                    }
 
                     // set indexStart
                     const queryParams = new URLSearchParams(location.search || '');
@@ -192,11 +263,24 @@ const IndexPage = ({ search }: { search?: boolean }) => {
 
                     // noinspection JSCheckFunctionSignatures
                     setStatus(statusCode);
+                    if (incomplete) {
+                        console.warn(
+                            'Search response was interrupted mid-stream; results may be incomplete until retried.'
+                        );
+                    }
                     if (shouldBeJsonFormat) {
                         setResources(json);
                     } else if (json && json.entry) {
                         setResources(json.entry);
                         setBundle(json);
+                        if (resourceType) {
+                            document.title = resourceType;
+                        }
+                    } else if (incomplete && incrementalResults.length > 0) {
+                        // Connection dropped before the full Bundle could be parsed, but the incremental
+                        // parser already captured some resources from what did arrive — keep those instead
+                        // of wiping the list to empty.
+                        setResources(incrementalResults);
                         if (resourceType) {
                             document.title = resourceType;
                         }
@@ -213,10 +297,15 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             } catch (error) {
                 console.error(error);
             } finally {
-                setLoading(false);
+                if (!cancelled) {
+                    setLoading(false);
+                }
             }
         };
         callApi().catch(console.error);
+        return () => {
+            cancelled = true;
+        };
     }, [
         id,
         queryString,

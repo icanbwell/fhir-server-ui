@@ -140,110 +140,35 @@ class FhirApi extends BaseApi {
         rawText: string;
         incomplete?: boolean;
     }> {
-        let path = urlPath;
-        if (path.startsWith(window.location.origin)) {
-            path = path.slice(window.location.origin.length);
-        }
-        const url = new URL(path, this.getBaseUrl());
-
-        // The session's bearer token must never leave the configured FHIR server. A
-        // scheme-relative path (e.g. "//evil.com/collect") resolves to a different origin via
-        // new URL(), so compare the resolved origin against the base URL's origin and refuse
-        // before any fetch happens. This is the single chokepoint every URL mode goes through
-        // (guided builder and free-form path alike), so the invariant can't be re-broken in the UI.
-        if (url.origin !== new URL(this.getBaseUrl()).origin) {
-            return {
-                status: undefined,
-                json: { error: 'Request path must stay on the configured FHIR server' },
-                headers: {},
-                rawText: '',
-            };
-        }
-
-        this.onRequest?.({ method, url: url.pathname + url.search });
-
-        const requestHeaders = this.buildHeaders({
-            'Content-Type': 'application/fhir+json',
-            ...headers,
+        // APIConsolePage's onChunk expects decoded text, but streamRequest hands back raw
+        // Uint8Array chunks (so binary downloads elsewhere aren't forced through a decoder). Keep
+        // one TextDecoder alive across the whole request — decoding each chunk independently would
+        // corrupt any multi-byte UTF-8 character split across a chunk boundary.
+        const decoder = new TextDecoder();
+        const result = await this.streamRequest({
+            method,
+            urlString: urlPath,
+            data,
+            headers,
+            signal,
+            onHeaders,
+            onChunk: onChunk ? (chunk) => onChunk(decoder.decode(chunk, { stream: true })) : undefined,
         });
-
-        let response: Response;
-        try {
-            response = await fetch(url.toString(), {
-                method,
-                headers: requestHeaders,
-                body: data !== undefined ? JSON.stringify(data) : undefined,
-                signal,
-            });
-        } catch (err: any) {
-            if (err?.name === 'AbortError') {
-                throw err;
-            }
-            return { status: undefined, json: { error: err.message || 'Request failed' }, headers: {}, rawText: '' };
-        }
-
-        const responseHeaders: Record<string, string> = {};
-        response.headers.forEach((value, key) => {
-            responseHeaders[key] = value;
-        });
-
-        // Surface status/headers to the caller as soon as fetch() resolves — i.e. before the
-        // body streaming loop below starts — so the UI can populate them without waiting for
-        // the whole body to arrive.
-        onHeaders?.(response.status, responseHeaders);
-
-        await this.handleUnauthorized(response.status);
-
-        let rawText = '';
-        try {
-            if (response.body) {
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let done = false;
-                while (!done) {
-                    const result = await reader.read();
-                    done = result.done;
-                    if (result.value) {
-                        const chunkText = decoder.decode(result.value, { stream: true });
-                        rawText += chunkText;
-                        onChunk?.(chunkText);
-                    }
-                }
-            } else {
-                rawText = await response.text();
-                onChunk?.(rawText);
-            }
-        } catch (err: any) {
-            if (err?.name === 'AbortError') {
-                throw err;
-            }
-            // A mid-stream connection drop rejects here. The status/headers were already
-            // surfaced via onHeaders and the partial body via onChunk, so resolve with what
-            // arrived instead of throwing — the caller's catch-all would otherwise discard
-            // both in favor of a generic error.
-            let partialJson: any;
-            try {
-                partialJson = rawText ? JSON.parse(rawText) : undefined;
-            } catch {
-                partialJson = undefined;
-            }
-            return {
-                status: response.status,
-                json: partialJson,
-                headers: responseHeaders,
-                rawText,
-                incomplete: true,
-            };
-        }
 
         let json: any;
         try {
-            json = rawText ? JSON.parse(rawText) : undefined;
+            json = result.text ? JSON.parse(result.text) : undefined;
         } catch {
             json = undefined;
         }
 
-        return { status: response.status, json, headers: responseHeaders, rawText };
+        return {
+            status: result.status,
+            json,
+            headers: result.headers,
+            rawText: result.text,
+            incomplete: result.incomplete,
+        };
     }
 }
 

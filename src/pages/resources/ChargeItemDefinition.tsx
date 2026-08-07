@@ -10,7 +10,7 @@ ChargeItemDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TChargeItemDefinition } from '../../types/resources/ChargeItemDefinition';
 
 // Import all the partial resource

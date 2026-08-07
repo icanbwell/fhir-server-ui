@@ -9,7 +9,7 @@ Binary
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TBinary } from '../../types/resources/Binary';
 
 // Import all the partial resource

@@ -9,7 +9,7 @@ MessageDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMessageDefinition } from '../../types/resources/MessageDefinition';
 
 // Import all the partial resource

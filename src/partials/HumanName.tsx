@@ -8,7 +8,7 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TBaseResourceProps } from '../types/baseTypes';
 import { THumanName } from '../types/partials/HumanName';
 

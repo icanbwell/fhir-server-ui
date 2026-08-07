@@ -9,7 +9,7 @@ Appointment
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TAppointment } from '../../types/resources/Appointment';
 
 // Import all the partial resource

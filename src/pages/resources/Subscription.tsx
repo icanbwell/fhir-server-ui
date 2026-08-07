@@ -11,7 +11,7 @@ Subscription
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSubscription } from '../../types/resources/Subscription';
 
 // Import all the partial resource

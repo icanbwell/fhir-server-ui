@@ -9,7 +9,7 @@ BiologicallyDerivedProduct
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TBiologicallyDerivedProduct } from '../../types/resources/BiologicallyDerivedProduct';
 
 // Import all the partial resource

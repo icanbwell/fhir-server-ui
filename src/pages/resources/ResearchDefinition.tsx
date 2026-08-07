@@ -9,7 +9,7 @@ ResearchDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TResearchDefinition } from '../../types/resources/ResearchDefinition';
 
 // Import all the partial resource

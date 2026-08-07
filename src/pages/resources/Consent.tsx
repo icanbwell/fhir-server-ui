@@ -9,7 +9,7 @@ Consent
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TConsent } from '../../types/resources/Consent';
 
 // Import all the partial resource

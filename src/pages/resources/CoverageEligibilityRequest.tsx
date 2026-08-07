@@ -11,7 +11,7 @@ CoverageEligibilityRequest
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TCoverageEligibilityRequest } from '../../types/resources/CoverageEligibilityRequest';
 
 // Import all the partial resource

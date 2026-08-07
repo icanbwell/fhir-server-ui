@@ -12,7 +12,7 @@ MedicinalProductDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMedicinalProductDefinition } from '../../types/resources/MedicinalProductDefinition';
 
 // Import all the partial resource

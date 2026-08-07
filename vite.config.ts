@@ -17,7 +17,7 @@ export default defineConfig({
           if (id.includes('@mui/material') || id.includes('@mui/icons-material') || id.includes('@mui/x-date-pickers')) {
             return 'mui';
           }
-          if (id.includes('/react-dom/') || id.includes('/react/') || id.includes('react-router-dom')) {
+          if (id.includes('/react-dom/') || id.includes('/react/') || id.includes('react-router')) {
             return 'vendor';
           }
           if (id.includes('chart.js') || id.includes('react-chartjs-2')) {

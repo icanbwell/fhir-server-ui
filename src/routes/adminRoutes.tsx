@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Route } from 'react-router-dom';
+import { Route } from 'react-router';
 
 const PersonMatchPage = lazy(() => import('../admin/personMatch'));
 const PatientDataPage = lazy(() => import('../admin/patientData'));

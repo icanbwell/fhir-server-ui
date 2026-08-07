@@ -7,7 +7,7 @@ Flag
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TFlag } from '../../types/resources/Flag';
 
 // Import all the partial resource

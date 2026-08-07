@@ -8,7 +8,7 @@ DeviceMetric
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TDeviceMetric } from '../../types/resources/DeviceMetric';
 
 // Import all the partial resource

@@ -8,7 +8,7 @@ Observation
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TObservation } from '../../types/resources/Observation';
 
 // Import all the partial resource

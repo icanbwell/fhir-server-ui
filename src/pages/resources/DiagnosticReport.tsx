@@ -11,7 +11,7 @@ DiagnosticReport
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TDiagnosticReport } from '../../types/resources/DiagnosticReport';
 
 // Import all the partial resource

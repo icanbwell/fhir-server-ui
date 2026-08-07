@@ -9,7 +9,7 @@ Medication
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMedication } from '../../types/resources/Medication';
 
 // Import all the partial resource

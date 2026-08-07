@@ -7,7 +7,7 @@ import {
     RouterProvider,
     Outlet,
     Navigate,
-} from 'react-router-dom';
+} from 'react-router';
 
 import HomePage from './pages/HomePage';
 import ErrorPage from './pages/ErrorPage';
@@ -24,7 +24,7 @@ import { jwtParser } from './utils/jwtParser';
 import IdentityProviderSelection from './pages/IdentityProviderSelection';
 import BwellAppLogin from './pages/BwellAppLogin';
 import ClientCredentialsLogin from './pages/ClientCredentialsLogin';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import NotFoundPage from './pages/NotFoundPage';
 import AccessDenied from './pages/AccessDenied';
 

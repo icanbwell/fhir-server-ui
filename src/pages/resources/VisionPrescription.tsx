@@ -8,7 +8,7 @@ VisionPrescription
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TVisionPrescription } from '../../types/resources/VisionPrescription';
 
 // Import all the partial resource

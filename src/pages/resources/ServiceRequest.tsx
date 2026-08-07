@@ -8,7 +8,7 @@ ServiceRequest
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TServiceRequest } from '../../types/resources/ServiceRequest';
 
 // Import all the partial resource

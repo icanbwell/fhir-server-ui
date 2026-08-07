@@ -11,7 +11,7 @@ MessageHeader
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMessageHeader } from '../../types/resources/MessageHeader';
 
 // Import all the partial resource

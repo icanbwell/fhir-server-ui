@@ -3,7 +3,7 @@ import { Box, Button, Card, CardContent, CardHeader, Collapse, IconButton, Toolt
 import ResourceItem from './ResourceItem';
 import Json from './Json';
 import { TResource } from '../types/resources/Resource';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Typography from '@mui/material/Typography';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';

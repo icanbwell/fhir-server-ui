@@ -7,7 +7,7 @@ MolecularSequence
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMolecularSequence } from '../../types/resources/MolecularSequence';
 
 // Import all the partial resource

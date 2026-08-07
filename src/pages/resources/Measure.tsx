@@ -7,7 +7,7 @@ Measure
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMeasure } from '../../types/resources/Measure';
 
 // Import all the partial resource

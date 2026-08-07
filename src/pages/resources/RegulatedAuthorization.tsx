@@ -10,7 +10,7 @@ RegulatedAuthorization
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TRegulatedAuthorization } from '../../types/resources/RegulatedAuthorization';
 
 // Import all the partial resource

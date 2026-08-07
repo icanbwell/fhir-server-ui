@@ -8,7 +8,7 @@ DeviceDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TDeviceDefinition } from '../../types/resources/DeviceDefinition';
 
 // Import all the partial resource

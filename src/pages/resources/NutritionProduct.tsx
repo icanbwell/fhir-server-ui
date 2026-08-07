@@ -7,7 +7,7 @@ NutritionProduct
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TNutritionProduct } from '../../types/resources/NutritionProduct';
 
 // Import all the partial resource

@@ -7,7 +7,7 @@ CompartmentDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TCompartmentDefinition } from '../../types/resources/CompartmentDefinition';
 
 // Import all the partial resource

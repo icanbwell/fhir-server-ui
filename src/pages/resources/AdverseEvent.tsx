@@ -10,7 +10,7 @@ AdverseEvent
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TAdverseEvent } from '../../types/resources/AdverseEvent';
 
 // Import all the partial resource

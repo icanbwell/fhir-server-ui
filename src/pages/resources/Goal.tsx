@@ -9,7 +9,7 @@ Goal
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TGoal } from '../../types/resources/Goal';
 
 // Import all the partial resource

@@ -9,7 +9,7 @@ AdministrableProductDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TAdministrableProductDefinition } from '../../types/resources/AdministrableProductDefinition';
 
 // Import all the partial resource

@@ -8,7 +8,7 @@ SubstanceDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSubstanceDefinition } from '../../types/resources/SubstanceDefinition';
 
 // Import all the partial resource

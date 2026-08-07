@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Route } from 'react-router-dom';
+import { Route } from 'react-router';
 
 const AboutPage = lazy(() => import('../pages/AboutPage'));
 const IndexPage = lazy(() => import('../pages/IndexPage'));

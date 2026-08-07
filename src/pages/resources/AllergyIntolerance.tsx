@@ -8,7 +8,7 @@ AllergyIntolerance
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TAllergyIntolerance } from '../../types/resources/AllergyIntolerance';
 
 // Import all the partial resource

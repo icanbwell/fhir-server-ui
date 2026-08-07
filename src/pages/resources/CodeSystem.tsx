@@ -9,7 +9,7 @@ CodeSystem
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TCodeSystem } from '../../types/resources/CodeSystem';
 
 // Import all the partial resource

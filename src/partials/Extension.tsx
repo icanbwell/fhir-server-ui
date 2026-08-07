@@ -41,9 +41,9 @@ const Extension = ({ extension: extensions }: TExtensionProps) => {
               if (extension && extension.extension) {
                 return extension.extension
                   .filter((e) => e)
-                  .map((detailExtension) => {
+                  .map((detailExtension, detailIndex) => {
                     return (
-                      <TableRow key={`${detailExtension.id}`}>
+                      <TableRow key={`${index}.${detailIndex}`}>
                         <TableCell>{extension.id}</TableCell>
                         <TableCell>{extension.url}</TableCell>
                         <TableCell>{detailExtension.url}</TableCell>
@@ -59,7 +59,7 @@ const Extension = ({ extension: extensions }: TExtensionProps) => {
                   });
               } else if (extension) {
                 return (
-                  <TableRow key={`${extension.id}`}>
+                  <TableRow key={index}>
                     <TableCell>{extension.id}</TableCell>
                     <TableCell>{extension.url}</TableCell>
                     <TableCell></TableCell>

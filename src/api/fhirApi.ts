@@ -157,7 +157,15 @@ class FhirApi extends BaseApi {
 
         let json: any;
         try {
-            json = result.text ? JSON.parse(result.text) : undefined;
+            // On a total fetch-level failure (network error, CORS block, DNS failure — not an
+            // abort), streamRequest() returns an empty `text` but sets `errorMessage`. Surface
+            // that as `{ error: ... }` so the API Console shows the real failure reason instead
+            // of a blank response, matching this method's pre-refactor behavior.
+            json = result.text
+                ? JSON.parse(result.text)
+                : result.errorMessage
+                    ? { error: result.errorMessage }
+                    : undefined;
         } catch {
             json = undefined;
         }

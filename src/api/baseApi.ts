@@ -36,6 +36,7 @@ export interface StreamRequestResult {
     bytes: Uint8Array;
     text: string;
     incomplete: boolean;
+    errorMessage?: string;
 }
 
 class BaseApi {
@@ -174,7 +175,20 @@ class BaseApi {
             if (err?.name === 'AbortError') {
                 throw err;
             }
-            return { status: undefined, headers: {}, bytes: new Uint8Array(0), text: '', incomplete: true };
+            // Surface the underlying error message (network failure, CORS block, DNS failure,
+            // etc.) via a dedicated field rather than folding it into `text` — callers like
+            // getData()/request()/downloadFile() parse `text` as the response body and must keep
+            // seeing an empty body on total network failure (matching the old axios-based
+            // behavior). Only FhirApi.sendRequest() reads `errorMessage` today, to restore its
+            // pre-refactor diagnostic behavior for the API Console.
+            return {
+                status: undefined,
+                headers: {},
+                bytes: new Uint8Array(0),
+                text: '',
+                incomplete: true,
+                errorMessage: err?.message || 'Request failed',
+            };
         }
 
         const responseHeaders: Record<string, string> = {};

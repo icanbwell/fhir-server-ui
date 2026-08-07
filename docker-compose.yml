@@ -15,6 +15,8 @@ services:
       # Using the internal dev FHIR server as a stopgap until that's deployed; switch back to
       # https://fhir.dev.icanbwell.com once it trusts the same issuer as fhir-internal does.
       REACT_APP_FHIR_SERVER_URL: ${REACT_APP_FHIR_SERVER_URL:-https://fhir-internal.dev.bwell.zone}
+      # Aperture Token Service (ATS) base URL, used by the /connections screens.
+      REACT_APP_TOKEN_SERVICE_URL: ${REACT_APP_TOKEN_SERVICE_URL:-https://aperture-token-service.dev-ue1.icanbwell.com/api/v1.0}
       REACT_APP_AWS_REGION: 'us-east-1'
       # list of AuthProviders
       REACT_APP_AUTH_PROVIDERS: 'cognito,bwellapp,clientcredentials'

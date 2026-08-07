@@ -42,7 +42,7 @@ class FhirApi extends BaseApi {
         queryString,
         queryParameters,
         operation,
-    }: GetBundleAsyncParams): Promise<{ status: number; json: any }> {
+    }: GetBundleAsyncParams): Promise<{ status: number | undefined; json: any }> {
         const url = this.getUrl({
             resourceType,
             id,

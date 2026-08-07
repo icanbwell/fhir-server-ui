@@ -55,18 +55,19 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         (new URLSearchParams(queryString || '').get('_format') || '').toLowerCase() === 'json';
 
     function getBox() {
-        if (loading) {
+        if (loading && !resources?.length) {
             return <LinearProgress />;
         }
-        if (status === 401) {
+        if (!loading && status === 401) {
             return <Box>Login Expired</Box>;
         }
-        if (resources && resources.length === 0) {
+        if (!loading && resources && resources.length === 0) {
             return <Box>No Results Found</Box>;
         }
         // If narrative is returned then show it at top level
         return (
             <>
+                {loading && <LinearProgress />}
                 {resources?.length > 1 && (
                     <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                         <Button
@@ -184,13 +185,14 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         ? undefined
                         : createBundleEntryParser(
                               (resource) => {
-                                  incrementalResults = [...incrementalResults, resource];
-                                  // Render each resource as it parses. The end-of-stream full JSON.parse
-                                  // result (below) still overwrites this once the response completes, so
-                                  // a parser miss never leaves the page silently short of data — it just
-                                  // skips the "populate live" effect for whatever wasn't caught
-                                  // incrementally.
-                                  setResources(incrementalResults);
+                                  // Accumulate without copying per entry — the array is copied once per
+                                  // network chunk (below), not once per resource, so a large Bundle
+                                  // doesn't trigger one React re-render per entry. The end-of-stream full
+                                  // JSON.parse result (below) still overwrites this once the response
+                                  // completes, so a parser miss never leaves the page silently short of
+                                  // data — it just skips the "populate live" effect for whatever wasn't
+                                  // caught incrementally.
+                                  incrementalResults.push(resource);
                               },
                               (err) => {
                                   console.error(
@@ -217,6 +219,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                                 ? (chunk) => {
                                       if (!parserFailed) {
                                           streamParser.write(chunk);
+                                          // Render whatever the parser found in this chunk. Batching per
+                                          // chunk (rather than per entry) keeps re-renders proportional to
+                                          // the number of network chunks received, not the number of
+                                          // resources in the Bundle.
+                                          setResources([...incrementalResults]);
                                       }
                                   }
                                 : undefined,
@@ -243,6 +250,14 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     } else if (json && json.entry) {
                         setResources(json.entry);
                         setBundle(json);
+                        if (resourceType) {
+                            document.title = resourceType;
+                        }
+                    } else if (incomplete && incrementalResults.length > 0) {
+                        // Connection dropped before the full Bundle could be parsed, but the incremental
+                        // parser already captured some resources from what did arrive — keep those instead
+                        // of wiping the list to empty.
+                        setResources(incrementalResults);
                         if (resourceType) {
                             document.title = resourceType;
                         }

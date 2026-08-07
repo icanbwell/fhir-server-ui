@@ -91,7 +91,7 @@ const CompositionSummaryPage: React.FC = () => {
         return () => {
             document.title = 'FHIR Viewer';
         };
-    }, [relativeUrl, baseApi, id, resourceType]);
+    }, [relativeUrl, baseApi, id, resourceType, start, onProgress, finish]);
 
     return (
         <Box

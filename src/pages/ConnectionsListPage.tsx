@@ -144,14 +144,12 @@ const ConnectionsListPage = () => {
                                 />
                             </Box>
 
-                            {error && (
+                            {error ? (
                                 <Box sx={{ mb: 2 }}>
                                     <Typography color="error">{error}</Typography>
                                     <Button onClick={() => loadConnections()}>Retry</Button>
                                 </Box>
-                            )}
-
-                            {loading && connections.length === 0 ? (
+                            ) : loading && connections.length === 0 ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                                     <CircularProgress />
                                 </Box>

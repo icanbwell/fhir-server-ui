@@ -74,6 +74,8 @@ const CompositionSummaryPage: React.FC = () => {
                 setIsIncomplete(response.incomplete);
                 if (json?.resourceType === 'Composition') {
                     setResource(json);
+                } else if (response.incomplete && !json) {
+                    setErrorMessage('Connection interrupted before any data was received — please retry.');
                 } else {
                     setErrorMessage('The requested resource is not a Composition');
                 }

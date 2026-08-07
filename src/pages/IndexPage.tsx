@@ -78,7 +78,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                 {truncated && (
                     <Alert severity="warning" sx={{ mb: 2 }}>
                         Showing the first {MAX_RESOURCES.toLocaleString()} resources. The full result set is
-                        larger than that — narrow your search (e.g. with <code>_count</code> and
+                        larger than that — narrow your search (e.g. with <code>_count</code> and{' '}
                         <code>_getpagesoffset</code>) to see the rest.
                     </Alert>
                 )}
@@ -203,6 +203,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
 
                     let incrementalResults: any[] = [];
                     let incrementalTruncated = false;
+                    let truncationSurfaced = false;
                     let parserFailed = false;
                     const streamParser = shouldBeJsonFormat
                         ? undefined
@@ -252,8 +253,21 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                                           // resources in the Bundle. Skipped once this effect has been
                                           // superseded, so an abandoned request can't overwrite a newer
                                           // search's results while its stream keeps delivering chunks.
-                                          if (!cancelled) {
+                                          //
+                                          // Also skipped once the cap has already been surfaced once —
+                                          // otherwise every remaining chunk of a huge response would keep
+                                          // re-copying and re-rendering an identical, already-capped
+                                          // MAX_RESOURCES-length array for as long as the download
+                                          // continues, which is exactly the scenario under the most memory
+                                          // pressure. Surfacing the capped array (and flipping the
+                                          // truncation banner on) once, as soon as the cap is hit, is
+                                          // strictly better than waiting for the whole stream to finish.
+                                          if (!cancelled && !truncationSurfaced) {
                                               setResources([...incrementalResults]);
+                                              if (incrementalTruncated) {
+                                                  setTruncated(true);
+                                                  truncationSurfaced = true;
+                                              }
                                           }
                                       }
                                   }
@@ -288,7 +302,12 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         const overflowing = json.entry.length > MAX_RESOURCES;
                         setResources(overflowing ? json.entry.slice(0, MAX_RESOURCES) : json.entry);
                         setTruncated(overflowing);
-                        setBundle(json);
+                        // Drop the (possibly huge) entry array before storing — `bundle` is only ever
+                        // read for `bundle?.id`/`bundle?.link` (see the <Footer> call below). Keeping
+                        // the full, uncapped `entry` array reachable here would retain every one of N
+                        // entry objects (even 40,000+) even though `resources` above already holds the
+                        // correctly-capped copy.
+                        setBundle({ ...json, entry: undefined });
                         if (resourceType) {
                             document.title = resourceType;
                         }

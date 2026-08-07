@@ -1737,7 +1737,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3":
+"@tanstack/react-virtual@npm:^3.14.9":
   version: 3.14.9
   resolution: "@tanstack/react-virtual@npm:3.14.9"
   dependencies:
@@ -3111,7 +3111,7 @@ __metadata:
     "@mui/x-date-pickers": "npm:^9.3.0"
     "@sentry/react": "npm:10.53.1"
     "@streamparser/json": "npm:^0.0.23"
-    "@tanstack/react-virtual": "npm:^3"
+    "@tanstack/react-virtual": "npm:^3.14.9"
     "@types/file-saver": "npm:^2.0.7"
     "@types/node": "npm:^25.9.1"
     "@types/react": "npm:^19.2.15"

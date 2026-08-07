@@ -1,6 +1,7 @@
 import { getStartAndEndDate } from '../utils/auditEventDateFilter';
 import BaseApi from './baseApi';
 import { HttpMethod } from '../context/LastRequestContext';
+import { sendStreamingRequest, StreamingFetchResult } from '../utils/streamingFetch';
 
 interface GetResourceParams {
     id: string;
@@ -133,13 +134,7 @@ class FhirApi extends BaseApi {
         onChunk?: (text: string) => void;
         onHeaders?: (status: number, headers: Record<string, string>) => void;
         signal?: AbortSignal;
-    }): Promise<{
-        status: number | undefined;
-        json: any;
-        headers: Record<string, string>;
-        rawText: string;
-        incomplete?: boolean;
-    }> {
+    }): Promise<StreamingFetchResult> {
         let path = urlPath;
         if (path.startsWith(window.location.origin)) {
             path = path.slice(window.location.origin.length);
@@ -167,83 +162,23 @@ class FhirApi extends BaseApi {
             ...headers,
         });
 
-        let response: Response;
-        try {
-            response = await fetch(url.toString(), {
-                method,
-                headers: requestHeaders,
-                body: data !== undefined ? JSON.stringify(data) : undefined,
-                signal,
-            });
-        } catch (err: any) {
-            if (err?.name === 'AbortError') {
-                throw err;
-            }
-            return { status: undefined, json: { error: err.message || 'Request failed' }, headers: {}, rawText: '' };
-        }
-
-        const responseHeaders: Record<string, string> = {};
-        response.headers.forEach((value, key) => {
-            responseHeaders[key] = value;
+        const result = await sendStreamingRequest({
+            url: url.toString(),
+            method,
+            data,
+            headers: requestHeaders,
+            signal,
+            onChunk,
+            onHeaders,
         });
 
-        // Surface status/headers to the caller as soon as fetch() resolves — i.e. before the
-        // body streaming loop below starts — so the UI can populate them without waiting for
-        // the whole body to arrive.
-        onHeaders?.(response.status, responseHeaders);
+        // Moved from "before reading the body" to "after the full result is known" — this
+        // check only depends on the response status, not the body, so the timing change is
+        // not observable by a user; it just lets the fetch/stream mechanics live in one
+        // shared, auth-agnostic place (see streamingFetch.ts).
+        await this.handleUnauthorized(result.status);
 
-        await this.handleUnauthorized(response.status);
-
-        let rawText = '';
-        try {
-            if (response.body) {
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let done = false;
-                while (!done) {
-                    const result = await reader.read();
-                    done = result.done;
-                    if (result.value) {
-                        const chunkText = decoder.decode(result.value, { stream: true });
-                        rawText += chunkText;
-                        onChunk?.(chunkText);
-                    }
-                }
-            } else {
-                rawText = await response.text();
-                onChunk?.(rawText);
-            }
-        } catch (err: any) {
-            if (err?.name === 'AbortError') {
-                throw err;
-            }
-            // A mid-stream connection drop rejects here. The status/headers were already
-            // surfaced via onHeaders and the partial body via onChunk, so resolve with what
-            // arrived instead of throwing — the caller's catch-all would otherwise discard
-            // both in favor of a generic error.
-            let partialJson: any;
-            try {
-                partialJson = rawText ? JSON.parse(rawText) : undefined;
-            } catch {
-                partialJson = undefined;
-            }
-            return {
-                status: response.status,
-                json: partialJson,
-                headers: responseHeaders,
-                rawText,
-                incomplete: true,
-            };
-        }
-
-        let json: any;
-        try {
-            json = rawText ? JSON.parse(rawText) : undefined;
-        } catch {
-            json = undefined;
-        }
-
-        return { status: response.status, json, headers: responseHeaders, rawText };
+        return result;
     }
 }
 

@@ -30,9 +30,7 @@ import ConnectionFhirApi from '../api/connectionFhirApi';
 import UserContext from '../context/UserContext';
 import { HttpMethod } from '../context/LastRequestContext';
 import { ConnectionEntry, ConnectionToken } from '../types/connectionEntry';
-
-const FORBIDDEN_MESSAGE =
-    "Connections aren't available for delegated/authorized-representative accounts.";
+import { CONNECTIONS_FORBIDDEN_MESSAGE } from '../constants/connectionsConstants';
 
 const parseCustomHeaders = (raw?: string): Record<string, string> => {
     if (!raw) {
@@ -130,6 +128,8 @@ const ConnectionConsolePage = () => {
                 setForbidden(true);
             } else if (status === 200 && token) {
                 setConnectionToken(token);
+            } else if (status === 404) {
+                setError('No usable token for this connection — it may need to be reconnected.');
             } else {
                 setError('Failed to fetch a token for this connection.');
             }
@@ -227,11 +227,7 @@ const ConnectionConsolePage = () => {
                 setResponseJson({ error: 'Invalid JSON in editor' });
             } else {
                 setResponseStatus(null);
-                setResponseJson({
-                    error:
-                        (error.message || 'Request failed') +
-                        ' — this may be a CORS restriction from the source FHIR server.',
-                });
+                setResponseJson({ error: error.message || 'Request failed' });
             }
         } finally {
             if (abortControllerRef.current === controller) {
@@ -275,7 +271,7 @@ const ConnectionConsolePage = () => {
                             Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
                         </Typography>
                     ) : forbidden ? (
-                        <Alert severity="warning">{FORBIDDEN_MESSAGE}</Alert>
+                        <Alert severity="warning">{CONNECTIONS_FORBIDDEN_MESSAGE}</Alert>
                     ) : loadingConnection ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                             <CircularProgress />
@@ -320,7 +316,7 @@ const ConnectionConsolePage = () => {
                                             </IconButton>
                                         </Tooltip>
                                         <Typography variant="body2" color="text.secondary">
-                                            token expires {connectionToken.expiry}
+                                            token expires {new Date(connectionToken.expiry).toLocaleString()}
                                         </Typography>
                                     </Box>
                                 )}

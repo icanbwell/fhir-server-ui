@@ -73,11 +73,16 @@ trust boundary — `EXTERNAL_JWKS` — as this app's own FHIR server calls):
 
 ### Consequence: `restrict_delegated_user_rest` (HTTP 403)
 
-Both endpoints reject a delegated/authorized-representative user's token with 403 before
-touching the database. `BaseApi.handleUnauthorized` only acts on 401 (session-invalid →
-logout), so a 403 passes through untouched to `TokenServiceApi`'s caller as
-`{status: 403, json: {...}}` — both new pages must show an explicit "not available for
-delegated accounts" message on 403, rather than a generic error or a silent failure.
+Only `GET /get-member-connection-token/{service_slug}/` enforces
+`restrict_delegated_user_rest`, rejecting a delegated/authorized-representative user's
+token with 403 before touching the database. `GET /get-member-connections` uses the
+less restrictive `get_current_user` and does not reject delegated users. `BaseApi.
+handleUnauthorized` only acts on 401 (session-invalid → logout), so a 403 passes through
+untouched to `TokenServiceApi`'s caller as `{status: 403, json: {...}}` — the console
+page must show an explicit "not available for delegated accounts" message on 403 from
+the token-fetch endpoint, rather than a generic error or a silent failure. The list
+page's equivalent 403 handling for `GET /get-member-connections` is defensive code for a
+case that endpoint doesn't actually produce, not dead-wrong code.
 
 ### Remaining open question: CORS
 

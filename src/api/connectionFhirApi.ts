@@ -55,6 +55,19 @@ class ConnectionFhirApi {
                 rawText: '',
             };
         }
+        // Guards against a user-typed absolute URL or scheme-relative path (e.g. "//evil.com/x")
+        // resolving off this connection's own FHIR server via `new URL(urlPath, this.baseUrl)`
+        // above — which would otherwise send this connection's real OAuth token to an arbitrary
+        // host. Safe to construct `new URL(this.baseUrl)` here: it already succeeded as a base
+        // for the URL constructed above, so it can't throw.
+        if (url.origin !== new URL(this.baseUrl).origin) {
+            return {
+                status: undefined,
+                json: { error: "Request must stay on this connection's FHIR server" },
+                headers: {},
+                rawText: '',
+            };
+        }
 
         // Same case-insensitive-merge approach as BaseApi.buildHeaders: keyed by lower-cased
         // name so "Content-Type" and "content-type" can't both survive into the Headers the
@@ -81,7 +94,7 @@ class ConnectionFhirApi {
             Array.from(merged.values(), ({ name, value }) => [name, value] as [string, string])
         );
 
-        return sendStreamingRequest({
+        const result = await sendStreamingRequest({
             url: url.toString(),
             method,
             data,
@@ -90,6 +103,17 @@ class ConnectionFhirApi {
             onChunk,
             onHeaders,
         });
+
+        if (result.status === undefined) {
+            return {
+                ...result,
+                json: {
+                    error: `${result.json?.error || 'Request failed'} — this may be a CORS restriction from the source FHIR server.`,
+                },
+            };
+        }
+
+        return result;
     }
 }
 

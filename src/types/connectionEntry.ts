@@ -15,4 +15,5 @@ export interface ConnectionToken {
     patient_id: string;
     expiry: string;
     custom_fhir_api_headers?: string;
+    status?: string;
 }

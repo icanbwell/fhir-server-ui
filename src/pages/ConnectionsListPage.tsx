@@ -22,6 +22,7 @@ import TokenServiceApi from '../api/tokenServiceApi';
 import UserContext from '../context/UserContext';
 import { getLocalData } from '../utils/localData.utils';
 import { ConnectionEntry } from '../types/connectionEntry';
+import { CONNECTIONS_FORBIDDEN_MESSAGE } from '../constants/connectionsConstants';
 
 const ConnectionsListPage = () => {
     const { setUserDetails } = useContext(UserContext);
@@ -113,10 +114,7 @@ const ConnectionsListPage = () => {
                             Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
                         </Typography>
                     ) : forbidden ? (
-                        <Alert severity="warning">
-                            Connections are not available for delegated/authorized-representative
-                            accounts.
-                        </Alert>
+                        <Alert severity="warning">{CONNECTIONS_FORBIDDEN_MESSAGE}</Alert>
                     ) : (
                         <>
                             <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>

@@ -37,9 +37,9 @@ const Address = ({ address: addresses, name, resourceType }: TAddressProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {addresses.map((address: TAddress) => {
+            {addresses.map((address: TAddress, index: number) => {
               return address ? (
-                <TableRow key={`${address.id}`}>
+                <TableRow key={index}>
                   <TableCell>{address.id}</TableCell>
                   <TableCell>{address.use}</TableCell>
                   <TableCell>{address.type}</TableCell>

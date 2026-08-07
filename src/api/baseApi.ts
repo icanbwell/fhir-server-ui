@@ -270,9 +270,10 @@ class BaseApi {
                 if (!result.value) {
                     continue;
                 }
-                chunks.push(result.value);
                 receivedBytes += result.value.length;
-                if (responseMode === 'text') {
+                if (responseMode === 'binary') {
+                    chunks.push(result.value);
+                } else {
                     text += decoder.decode(result.value, { stream: true });
                 }
                 onChunk?.(result.value);

@@ -8,7 +8,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
-import ResourceCard from '../components/ResourceCard';
+import ResourceList from '../components/ResourceList';
 import FhirApi from '../api/fhirApi';
 import SearchContainer from '../components/SearchContainer';
 import PreJson from '../components/PreJson';
@@ -21,6 +21,12 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
 import APIConsolePage from './APIConsolePage';
 import { createBundleEntryParser } from '../utils/incrementalBundleParser';
+
+// Hard ceiling on how many resources IndexPage will hold in state / render for a single
+// page load. Without this, an unbounded Bundle (e.g. a Person $summary/$everything with
+// tens of thousands of entries) grows the resources array and the DOM without limit and
+// can exhaust the tab's memory. Adjust if real payloads need a different ceiling.
+const MAX_RESOURCES = 2000;
 
 /**
  * IndexPage/home/ubuntu/Documents/code/EFS/fhir-server/src/pages/SearchPage.jsx
@@ -35,6 +41,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
     const [status, setStatus] = useState<number | undefined>();
     const [loading, setLoading] = useState(false);
     const [indexStart, setIndexStart] = useState(0);
+    const [truncated, setTruncated] = useState(false);
 
     const { id, resourceType = '', operation, vid } = useParams();
 
@@ -68,6 +75,13 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         return (
             <>
                 {loading && <LinearProgress />}
+                {truncated && (
+                    <Alert severity="warning" sx={{ mb: 2 }}>
+                        Showing the first {MAX_RESOURCES.toLocaleString()} resources. The full result set is
+                        larger than that — narrow your search (e.g. with <code>_count</code> and{' '}
+                        <code>_getpagesoffset</code>) to see the rest.
+                    </Alert>
+                )}
                 {resources?.length > 1 && (
                     <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                         <Button
@@ -136,23 +150,17 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </Link>
                 </Tooltip>
 
-                {resources?.map((fullResource: any, index: number) => {
-                    const resource = fullResource.resource || fullResource;
-                    const error = resource.resourceType === 'OperationOutcome';
-                    return (
-                        <ResourceCard
-                            key={index}
-                            index={indexStart + index}
-                            resource={resource}
-                            expanded={resourceCardExpanded}
-                            expandAll={expandAll}
-                            collapseAll={collapseAll}
-                            setExpandAll={setExpandAll}
-                            setCollapseAll={setCollapseAll}
-                            error={error}
-                        />
-                    );
-                })}
+                {resources && resources.length > 0 && (
+                    <ResourceList
+                        resources={resources}
+                        indexStart={indexStart}
+                        resourceCardExpanded={resourceCardExpanded}
+                        expandAll={expandAll}
+                        collapseAll={collapseAll}
+                        setExpandAll={setExpandAll}
+                        setCollapseAll={setCollapseAll}
+                    />
+                )}
             </>
         );
     }
@@ -180,6 +188,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             }
             try {
                 setLoading(true);
+                setTruncated(false);
                 if (fhirUrl) {
                     const identityProvider = getLocalData('identityProvider');
                     if (!identityProvider) {
@@ -193,6 +202,8 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     });
 
                     let incrementalResults: any[] = [];
+                    let incrementalTruncated = false;
+                    let truncationSurfaced = false;
                     let parserFailed = false;
                     const streamParser = shouldBeJsonFormat
                         ? undefined
@@ -205,7 +216,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                                   // completes, so a parser miss never leaves the page silently short of
                                   // data — it just skips the "populate live" effect for whatever wasn't
                                   // caught incrementally.
-                                  incrementalResults.push(resource);
+                                  if (incrementalResults.length < MAX_RESOURCES) {
+                                      incrementalResults.push(resource);
+                                  } else {
+                                      incrementalTruncated = true;
+                                  }
                               },
                               (err) => {
                                   console.error(
@@ -215,6 +230,29 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                                   parserFailed = true;
                               }
                           );
+
+                    // Render whatever the incremental parser has found so far. Batching per chunk
+                    // (rather than per entry) keeps re-renders proportional to the number of network
+                    // chunks received, not the number of resources in the Bundle. A no-op once this
+                    // effect has been superseded, so an abandoned request can't overwrite a newer
+                    // search's results while its stream keeps delivering chunks.
+                    //
+                    // Also a no-op once the cap has already been surfaced once — otherwise every
+                    // remaining chunk of a huge response would keep re-copying and re-rendering an
+                    // identical, already-capped MAX_RESOURCES-length array for as long as the download
+                    // continues, which is exactly the scenario under the most memory pressure.
+                    // Surfacing the capped array (and flipping the truncation banner on) once, as soon
+                    // as the cap is hit, is strictly better than waiting for the whole stream to finish.
+                    const surfaceIncrementalResults = () => {
+                        if (cancelled || truncationSurfaced) {
+                            return;
+                        }
+                        setResources([...incrementalResults]);
+                        if (incrementalTruncated) {
+                            setTruncated(true);
+                            truncationSurfaced = true;
+                        }
+                    };
 
                     const {
                         json,
@@ -230,18 +268,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         {
                             onChunk: streamParser
                                 ? (chunk) => {
-                                      if (!parserFailed) {
-                                          streamParser.write(chunk);
-                                          // Render whatever the parser found in this chunk. Batching per
-                                          // chunk (rather than per entry) keeps re-renders proportional to
-                                          // the number of network chunks received, not the number of
-                                          // resources in the Bundle. Skipped once this effect has been
-                                          // superseded, so an abandoned request can't overwrite a newer
-                                          // search's results while its stream keeps delivering chunks.
-                                          if (!cancelled) {
-                                              setResources([...incrementalResults]);
-                                          }
+                                      if (parserFailed) {
+                                          return;
                                       }
+                                      streamParser.write(chunk);
+                                      surfaceIncrementalResults();
                                   }
                                 : undefined,
                         }
@@ -271,8 +302,15 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     if (shouldBeJsonFormat) {
                         setResources(json);
                     } else if (json && json.entry) {
-                        setResources(json.entry);
-                        setBundle(json);
+                        const overflowing = json.entry.length > MAX_RESOURCES;
+                        setResources(overflowing ? json.entry.slice(0, MAX_RESOURCES) : json.entry);
+                        setTruncated(overflowing);
+                        // Drop the (possibly huge) entry array before storing — `bundle` is only ever
+                        // read for `bundle?.id`/`bundle?.link` (see the <Footer> call below). Keeping
+                        // the full, uncapped `entry` array reachable here would retain every one of N
+                        // entry objects (even 40,000+) even though `resources` above already holds the
+                        // correctly-capped copy.
+                        setBundle({ ...json, entry: undefined });
                         if (resourceType) {
                             document.title = resourceType;
                         }
@@ -281,6 +319,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         // parser already captured some resources from what did arrive — keep those instead
                         // of wiping the list to empty.
                         setResources(incrementalResults);
+                        setTruncated(incrementalTruncated);
                         if (resourceType) {
                             document.title = resourceType;
                         }

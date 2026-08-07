@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   Accordion,
   AccordionSummary,
@@ -64,9 +64,9 @@ const Attachment = ({ attachment, name }: TAttachmentProps) => {
         items.length > 0 &&
         items[0] &&
         items.map((item: TAttachment, index: Number) => (
-          <>
+          <React.Fragment key={`${index}`}>
             {name && <Typography><b>{name}:</b></Typography>}
-            <Accordion key={`${index}`}>
+            <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls={`panel${index}-content`}
@@ -80,7 +80,7 @@ const Attachment = ({ attachment, name }: TAttachmentProps) => {
                 </Box>
               </AccordionDetails>
             </Accordion>
-          </>
+          </React.Fragment>
         ))}
     </>
   );

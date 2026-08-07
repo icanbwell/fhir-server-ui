@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     Box, Paper,
     Table,
@@ -59,16 +60,15 @@ function HumanName({ humanName, resourceType }: THumanNameProps) {
                     <TableCell>
                       {name.given &&
                         name.given.map((given: String, index2: Number) => (
-                          <>
+                          <React.Fragment key={`${index2}`}>
                             <Link
-                              key={`${index2}`}
                               to={`/4_0_0/${resourceType}?given=${given}`}
                               title={`Search for ${given}`}
                             >
                               {given}
                             </Link>
                             &nbsp;
-                          </>
+                          </React.Fragment>
                         ))}
                     </TableCell>
                     <TableCell>{name.text}</TableCell>

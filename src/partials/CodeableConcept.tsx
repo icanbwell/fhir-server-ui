@@ -75,7 +75,7 @@ function CodeableConcept({
             </TableHead>
             <TableBody>
               {codeableConcepts.flatMap((codeableConcept: TCodeableConcept, index: Number) => (
-                <>
+                <React.Fragment key={`concept-${index}`}>
                   {codeableConcept.coding &&
                     codeableConcept.coding.map((coding: TCoding, index2: Number) => (
                       <TableRow key={`${index}.${index2}`}>
@@ -124,14 +124,14 @@ function CodeableConcept({
                       </TableRow>
                     ))}
                   {codeableConcept.text && (
-                    <TableRow>
+                    <TableRow key={`${index}.text`}>
                       <TableCell></TableCell>
                       <TableCell>{codeableConcept.text}</TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   )}
-                </>
+                </React.Fragment>
               ))}
             </TableBody>
           </Table>

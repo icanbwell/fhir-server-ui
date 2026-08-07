@@ -151,7 +151,7 @@ const ResourceCard = ({
                     </Box>
                 }
             ></CardHeader>
-            <Collapse in={open}>
+            <Collapse in={open} mountOnEnter unmountOnExit>
                 <CardContent>
                     <ResourceItem resourceType={resource.resourceType} resource={resource} />
                     <Box sx={{ borderBottom: '1px solid #ccc', my: 2 }} />

@@ -43,7 +43,14 @@ class ConnectionFhirApi {
     }): Promise<StreamingFetchResult> {
         let url: URL;
         try {
-            url = new URL(urlPath, this.baseUrl);
+            // `new URL(path, base)` treats a leading-slash `path` as path-absolute, replacing the
+            // entire path component of `base` instead of appending to it — so a base URL with its
+            // own path segment (the norm for real third-party FHIR servers, e.g. `/fhir/r4`) would
+            // otherwise silently lose that prefix. Normalizing both sides to the relative-append
+            // form keeps the base URL's path intact.
+            const normalizedBase = this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`;
+            const normalizedPath = urlPath.startsWith('/') ? urlPath.slice(1) : urlPath;
+            url = new URL(normalizedPath, normalizedBase);
         } catch {
             return { status: undefined, json: { error: 'Invalid request path' }, headers: {}, rawText: '' };
         }

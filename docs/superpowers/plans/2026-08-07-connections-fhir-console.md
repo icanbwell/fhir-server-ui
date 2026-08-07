@@ -37,12 +37,17 @@ existing `BaseApi`).
   `recordRequest`.** Doing so would make `Header.tsx`'s "Open in API Console" button
   offer to replay a third-party FHIR server's request against this app's own FHIR server.
   Simply never wiring it up is the entire fix — no conditional logic needed.
-- **New env var `REACT_APP_TOKEN_SERVICE_URL`.** Confirmed hosts: staging
+- **New env var `REACT_APP_TOKEN_SERVICE_URL`.** Confirmed hosts: dev
+  `https://aperture-token-service.dev-ue1.icanbwell.com/api/v1.0` (from
+  `aperture_token_service/.helm/dev-ue1.values.yaml`'s ingress host config + the
+  `/api/v1.0` prefix in `aperture_token_service/main.py`), staging
   `https://aperture-token-service.staging-ue1.icanbwell.com/api/v1.0`, prod
-  `https://aperture-token-service-pipelines.prod.bwell.zone/api/v1.0`. No confirmed `dev`
-  host — leave unset in `docker-compose.yml`'s dev service with a comment, and both new
-  pages must show a clear config-error message (not crash) when it's unset, mirroring
-  `BwellAppLogin.tsx`'s `configError` pattern.
+  `https://aperture-token-service-pipelines.prod.bwell.zone/api/v1.0`. Both new pages must
+  still show a clear config-error message (not crash) if this env var is ever unset,
+  mirroring `BwellAppLogin.tsx`'s `configError` pattern.
+- **This feature only works with b.well App (`bwellapp`) logins.** `ConnectionsListPage`
+  must show an informational banner (not a hard block) when
+  `getLocalData('identityProvider') !== 'bwellapp'`.
 - **Trailing slash is required** on the token-fetch URL:
   `/all-tokens/{serviceSlug}/?member_id=...` — ATS 302-redirects a request missing it, and
   `Authorization` doesn't survive that redirect.
@@ -391,10 +396,8 @@ In `docker-compose.yml`, find the line `REACT_APP_FHIR_SERVER_URL: ...` (in the 
 service's `environment:` block) and add immediately after it:
 
 ```yaml
-      # Aperture Token Service (ATS) base URL, used by the /connections screens. No
-      # confirmed dev host yet — leave unset here; ConnectionsListPage/ConnectionConsolePage
-      # show a config-error message instead of crashing when this is unset.
-      # REACT_APP_TOKEN_SERVICE_URL: ''
+      # Aperture Token Service (ATS) base URL, used by the /connections screens.
+      REACT_APP_TOKEN_SERVICE_URL: ${REACT_APP_TOKEN_SERVICE_URL:-https://aperture-token-service.dev-ue1.icanbwell.com/api/v1.0}
 ```
 
 - [ ] **Step 4: Verify — compiles**
@@ -553,7 +556,8 @@ git commit -m "Add ConnectionFhirApi for calling a Token Service connection's ow
   `REACT_APP_TOKEN_SERVICE_URL` — read directly via `import.meta.env`, matching how
   `BwellAppLogin.tsx` reads its own config vars, since this isn't part of the shared
   `EnvContext` shape), `UserContext` (for `setUserDetails`, needed by `TokenServiceApi`'s
-  inherited `handleUnauthorized`).
+  inherited `handleUnauthorized`), `getLocalData` (existing,
+  `src/utils/localData.utils.ts`, to check `identityProvider`).
 - Produces: route `/connections`. Task 5 (`ConnectionConsolePage`) is what a row
   navigates to; it depends on this task's navigation `state` shape:
   `{ connection: ConnectionEntry }`.
@@ -566,6 +570,7 @@ Create `src/pages/ConnectionsListPage.tsx`:
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+    Alert,
     Box,
     Button,
     Chip,
@@ -584,6 +589,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TokenServiceApi from '../api/tokenServiceApi';
 import UserContext from '../context/UserContext';
+import { getLocalData } from '../utils/localData.utils';
 import { ConnectionEntry } from '../types/connectionEntry';
 
 const ConnectionsListPage = () => {
@@ -591,6 +597,7 @@ const ConnectionsListPage = () => {
     const navigate = useNavigate();
 
     const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
+    const isBwellAppLogin = getLocalData('identityProvider') === 'bwellapp';
 
     const [connections, setConnections] = useState<ConnectionEntry[]>([]);
     const [nextCursor, setNextCursor] = useState<string | null>(null);
@@ -658,6 +665,12 @@ const ConnectionsListPage = () => {
                     <Typography variant="h5" sx={{ mb: 2 }}>
                         Connections
                     </Typography>
+
+                    {!isBwellAppLogin && (
+                        <Alert severity="info" sx={{ mb: 2 }}>
+                            Connections only work when signed in with b.well App login.
+                        </Alert>
+                    )}
 
                     {!tokenServiceUrl ? (
                         <Typography color="error">
@@ -761,8 +774,10 @@ Expected: 0 errors, 6 warnings (unchanged baseline).
 Run `yarn dev`, log in, navigate to `/connections`:
 - With `REACT_APP_TOKEN_SERVICE_URL` unset: confirms the config-error message shows
   instead of a crash.
-- With it set to the staging ATS host: confirms the list loads, category filter and
-  search narrow it, and "Load more" appears/works if `next_cursor` is present.
+- Logged in via Cognito/Okta (not b.well App): confirms the "only works with b.well App
+  login" banner shows.
+- Logged in via b.well App: confirms the banner is absent, and the list loads, category
+  filter and search narrow it, and "Load more" appears/works if `next_cursor` is present.
 
 - [ ] **Step 5: Commit**
 

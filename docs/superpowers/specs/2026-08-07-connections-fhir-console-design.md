@@ -58,24 +58,86 @@ every task below.
    request fails with no HTTP status (fetch cannot distinguish CORS failures from other
    network errors). If CORS blocks most real connections in practice, this design's
    no-backend-proxy approach would need to be revisited as a separate follow-up.
-2. **Auth model for calling ATS.** The reference doc's own caveat: it's unconfirmed
-   whether ATS's `/tokens` and `/all-tokens/{slug}` endpoints accept an end-user (member)
-   b.well JWT, as opposed to only the service client-credentials tokens the pipeline
-   itself uses. *Working assumption:* they do accept the member JWT, per the doc's stated
-   assumption — this is why `TokenServiceApi` (below) reuses `BaseApi`'s existing
-   session-token header logic unchanged rather than adding new auth.
-3. **ATS base URL for the `dev` environment.** The reference doc only lists confirmed
-   `staging` and `prod` hosts. *Working assumption:* left unset in dev's `docker-compose.yml`
-   with a clear config-error message (mirroring `BwellAppLogin`'s `configError` pattern)
-   rather than a guessed URL.
-4. **Should this be gated to a specific identity provider?** ATS connections are
-   member-scoped, so a client-credentials/service login (`cognitocc`, `descopecc`) has no
-   member identity behind it and `/tokens` would presumably return nothing meaningful (or
-   401) for it. *Working assumption:* don't hard-gate by provider — let any logged-in user
-   reach `/connections`, and let ATS's own response (empty list, or a 401 that triggers
-   the existing `handleUnauthorized` logout flow) communicate that, rather than
-   hardcoding provider-name logic that would need updating every time a provider is
-   added.
+2. ~~Auth model for calling ATS~~ **Resolved — and it invalidates this design's core
+   premise.** Confirmed by reading `aperture_token_service` directly (not guessing):
+   `GET /tokens` and `GET /all-tokens/{service_slug}/` are both guarded by
+   `Depends(get_service_user)` (`routers/token.py:174-179,307-316`), which validates only
+   against `COGNITO_JWKS_ISSUER`/`DESCOPE_JWKS_ISSUER`/`OKTA_JWKS_ISSUER` — a set of
+   issuers that is **disjoint from `EXTERNAL_JWKS`** (the member-login issuers) in every
+   environment's Helm values (dev, staging, prod, client-sandbox). A member's own b.well
+   JWT will 401 on both routes, full stop — this isn't a scope/claim nuance, it's a
+   completely different, non-overlapping set of trusted signers. The reference doc's own
+   "auth model caveat" assumption is simply wrong for these two routes.
+
+   There **are** member-authenticated equivalents (`get_current_user`/
+   `restrict_delegated_user_rest`, which validate against `EXTERNAL_JWKS` — the same
+   trust boundary as this app's own FHIR server), but they don't return what step 3 of the
+   flow needs:
+   - `GET /get-member-connections` (REST, `routers/token.py:570-573`) and the equivalent
+     GraphQL `Query.get_member_connections` — list connections, but only
+     `{value (service_slug), display, expired, category, status, is_direct,
+     number_of_resources}`. No `member_id`, `patient_id`, `fhir_url`, or token.
+   - `GET /get-member-token/{service_slug}/` (REST, `routers/token.py:538-543`) — returns
+     only `{"hasValidToken": true|false}`, a boolean existence check, not the token value.
+   - The GraphQL `DataSource`/`Connection` types (`token/graphql/types.py:144-179`) are
+     metadata only (name, category, sync status, consent policy URL) — no token or FHIR
+     URL field exists anywhere in the member-facing surface.
+
+   **There is currently no member-authenticated API in this ATS service that returns the
+   raw connection token + FHIR base URL a browser would need to call a connection's FHIR
+   server directly.** That capability exists only behind service (client-credentials)
+   auth, which a browser SPA cannot hold without exposing a secret usable to pull anyone's
+   connection tokens. This is a genuine architecture gap, not a detail to route around
+   client-side — see "Architecture Options" below.
+
+## Architecture Options (blocking — needs a decision before implementation)
+
+Given Open Question 2's finding, step 3 of the original three-step flow (browser calls
+the connection's FHIR server directly, using a token fetched client-side) is not
+achievable against ATS's current API surface. Three ways forward:
+
+**A. Add a backend proxy.** Something server-side (new endpoint on an existing b.well
+backend, or a small new service) holds ATS service credentials, does the
+service-authenticated `/tokens` + `/all-tokens/{slug}` calls on the member's behalf
+(scoped by their `client_fhir_person_id`/`bwell_fhir_person_id`, which the existing
+member-facing endpoints already prove is derivable from their JWT), and either (A1) hands
+the raw connection token + URL back to the browser (same shape this design already
+assumed, just fetched through a proxy instead of directly) or (A2) proxies the actual FHIR
+request too, so the browser never holds a third-party OAuth token at all. **This is new
+backend work outside `fhir-server-ui`** (a pure static SPA today, confirmed — no server
+directory, `Dockerfile` just serves the built static assets) — a separate project, not a
+task addable to this plan.
+
+**B. Extend ATS's member-facing surface.** Ask the ATS team to extend
+`/get-member-token/{service_slug}/` (already `restrict_delegated_user_rest`-guarded, so
+delegated users are already excluded) to return the full `{token, url, fhir_version,
+patient_id, expiry}` payload instead of just `hasValidToken`. Smaller, more targeted
+change than A, but it's a change to a service `fhir-server-ui` doesn't own — needs
+buy-in/prioritization from whoever owns `aperture_token_service`.
+
+**C. Descope to what member endpoints already support.** Ship a read-only "My
+Connections" screen — list connections and their status/validity via
+`/get-member-connections` + `/get-member-token/{slug}/`'s boolean — without the "run a
+FHIR request against it" capability. This is buildable today with zero new backend work,
+but doesn't deliver the original ask (exploring a connection's actual FHIR data).
+
+This design's remaining sections (routing, `TokenServiceApi`, `ConnectionFhirApi`, the two
+pages) describe the flow **as if** a member-authenticated token+URL endpoint exists,
+because that's the shape needed regardless of which of A/B is chosen — only
+`TokenServiceApi`'s auth/endpoint details change once a direction is picked. Do not build
+against `/tokens`/`/all-tokens/{slug}` directly from this SPA using the session JWT; it
+will 401 for every real user.
+3. ~~ATS base URL for the `dev` environment~~ **Resolved:**
+   `https://aperture-token-service.dev-ue1.icanbwell.com/api/v1.0` (from
+   `aperture_token_service/.helm/dev-ue1.values.yaml`'s ingress host config, combined with
+   the `/api/v1.0` route prefix set in `aperture_token_service/main.py`). Both new pages
+   still show a clear config-error message (mirroring `BwellAppLogin`'s `configError`
+   pattern) if this env var is ever unset, rather than crashing.
+4. ~~Should this be gated to a specific identity provider?~~ **Resolved:** this only works
+   with b.well App (`bwellapp`) logins. Don't hard-block other providers from reaching
+   `/connections` (ATS's own response — empty list or a 401 — still communicates failure
+   for them), but show a clear informational banner when `identityProvider !== 'bwellapp'`
+   so a user signed in another way isn't left guessing why the list is empty or erroring.
 
 ## Approaches Considered
 
@@ -222,7 +284,11 @@ token is stale (the fix is the console's "Refresh Token" button, not an app-wide
 
 ### `ConnectionsListPage` (`/connections`)
 
-Same `Header`/`Footer` chrome as other pages. On mount, calls
+Same `Header`/`Footer` chrome as other pages. If `getLocalData('identityProvider') !==
+'bwellapp'`, renders an informational banner ("Connections only work when signed in with
+b.well App login") above everything else — not a hard block, since ATS's own response is
+the real source of truth, but set expectations before a user wonders why the list is
+empty. On mount, calls
 `tokenServiceApi.listConnections({ limit: 50 })`. Renders: a category filter (`<Select>`,
 options derived from the categories present in the loaded page, "All" default), a
 client-side text search over `display_name`/`service_slug`, and a list of rows (display

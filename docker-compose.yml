@@ -1,9 +1,20 @@
 services:
   app:
     build: .
+    # .env is gitignored — Compose auto-loads it (if present) to resolve the ${VAR:-default}
+    # references below, and env_file passes through anything else it defines (e.g. Sentry
+    # vars) that isn't already listed in `environment:`. The ${VAR:-default} syntax means we
+    # still work with no .env file at all, or one that simply doesn't set that particular key.
+    env_file:
+      - path: .env
+        required: false
     environment:
       REACT_APP_VERSION: 'local'
-      REACT_APP_FHIR_SERVER_URL: 'http://localhost:3000'
+      # fhir.dev.icanbwell.com (the intended public dev FHIR server) doesn't yet trust the
+      # Cognito pool b.well App login issues tokens from - see bwell-fhir-server PR #162.
+      # Using the internal dev FHIR server as a stopgap until that's deployed; switch back to
+      # https://fhir.dev.icanbwell.com once it trusts the same issuer as fhir-internal does.
+      REACT_APP_FHIR_SERVER_URL: ${REACT_APP_FHIR_SERVER_URL:-https://fhir-internal.dev.bwell.zone}
       REACT_APP_AWS_REGION: 'us-east-1'
       # list of AuthProviders
       REACT_APP_AUTH_PROVIDERS: 'cognito,bwellapp,clientcredentials'

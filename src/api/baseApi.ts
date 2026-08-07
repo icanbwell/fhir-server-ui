@@ -256,24 +256,27 @@ class BaseApi {
         return finalize(false);
     }
 
-    async getData({ urlString, params }: GetDataParams): Promise<any> {
-        if (urlString.includes(window.location.origin)) {
-            urlString = urlString.replace(window.location.origin, '');
+    async getData(
+        { urlString, params }: GetDataParams,
+        options?: {
+            onChunk?: (chunk: Uint8Array) => void;
+            onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
         }
-        const url = new URL(urlString, this.getBaseUrl());
-        if (params && Object.keys(params).length > 0) {
-            url.search = new URLSearchParams(params).toString();
-        }
-
-        this.onRequest?.({ method: 'GET', url: url.pathname + url.search });
-
+    ): Promise<{ status: number | undefined; json: any; incomplete: boolean }> {
+        const { status, text, incomplete } = await this.streamRequest({
+            method: 'GET',
+            urlString,
+            params,
+            onChunk: options?.onChunk,
+            onProgress: options?.onProgress,
+        });
+        let json: any;
         try {
-            const response = await this.axiosInstance.get(url.toString());
-            return { status: response.status, json: response.data };
-        } catch (err: any) {
-            await this.handleUnauthorized(err.response?.status);
-            return { status: err.response?.status, json: err.response?.data };
+            json = text ? JSON.parse(text) : undefined;
+        } catch {
+            json = undefined;
         }
+        return { status, json, incomplete };
     }
 
     async request({ urlString, params, method, data }: RequestParams): Promise<any> {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Collapse, IconButton, Tooltip } from '@mui/material';
 import ResourceItem from './ResourceItem';
 import Json from './Json';
@@ -91,7 +91,21 @@ const ResourceCard = ({
     setExpandAll,
     setCollapseAll,
 }: TResourceCardProps) => {
-    const [open, setOpen] = useState(false);
+    // Determine this card's initial open state synchronously at mount via a lazy useState
+    // initializer (runs exactly once, before any effect can race it) rather than defaulting to
+    // `false` and correcting it in an effect afterward. This is what actually fixes cards
+    // mounting/remounting (as they scroll in and out of the ResourceList virtualizer's window)
+    // while expandAll is already true — there's no post-mount effect ordering for a second
+    // effect to win.
+    const [open, setOpen] = useState(() => {
+        if (collapseAll) {
+            return false;
+        }
+        if (expandAll) {
+            return true;
+        }
+        return expanded;
+    });
 
     const handleOpen = () => {
         setOpen(!open);
@@ -99,25 +113,47 @@ const ResourceCard = ({
         setCollapseAll(false);
     };
 
-    // A single effect computing `open` from all three inputs in one pass, with clear
-    // precedence (collapseAll wins, then expandAll, then the initial `expanded` prop).
-    // This runs on every mount as well as on dependency changes — with virtualized lists
-    // (ResourceList), cards mount/unmount as they scroll in and out of view, so a card that
-    // remounts while `expandAll` is still true must come back open. Splitting this into two
-    // separate effects (one keyed on [expandAll, collapseAll], one keyed on [expanded]) let
-    // the second effect's `setOpen(expanded)` unconditionally clobber the first effect's
-    // `setOpen(true)` on every fresh mount, since both effects always run on mount regardless
-    // of their dependency arrays — collapsing this into one effect with one setOpen call
-    // removes that race entirely.
+    // These only react to a flag turning ON, never to it turning back off. `handleOpen` (above)
+    // "consumes" expandAll/collapseAll by resetting them to false whenever the user manually
+    // toggles a single card — that reset is a global prop change shared by every mounted card,
+    // so if this effect also resynced state on the falling edge (e.g. an `else` branch calling
+    // setOpen(expanded)), it would silently re-collapse every other already-open card the moment
+    // any one card was manually closed (and the mirror bug after Collapse All). Keeping each
+    // effect a no-op on the falling edge preserves each card's independent `open` state once
+    // it's been manually toggled, matching the pre-virtualization behavior.
+    useEffect(() => {
+        if (expandAll) {
+            setOpen(true);
+        }
+    }, [expandAll]);
+
     useEffect(() => {
         if (collapseAll) {
             setOpen(false);
-        } else if (expandAll) {
-            setOpen(true);
-        } else {
+        }
+    }, [collapseAll]);
+
+    // Reacts to the `expanded` prop (IndexPage's `resourceCardExpanded`) changing on an
+    // already-mounted card — e.g. navigating from a list view to a single-id view without a full
+    // remount. Tracks the previous value in a ref (seeded once, at construction, to the
+    // mount-time `expanded` value — matching what the useState initializer above already
+    // accounted for) rather than a one-shot "have I run yet" boolean flag. A boolean flag
+    // flipped inside the effect body would be corrupted by React 18 StrictMode's
+    // development-only double-invocation of effects on mount (effect runs, cleanup runs (a
+    // no-op here), effect runs again with the same ref value already mutated) — the flag would
+    // read "not first" on that second, still-mount-related invocation, incorrectly forcing
+    // setOpen(expanded) and undoing whatever the expandAll effect above had just set (verified
+    // via a debug trace: on StrictMode's second invocation, `isFirst` was already `false`).
+    // Comparing against the actual previous value instead is idempotent — re-invoking with the
+    // same `expanded` value is always a no-op no matter how many times it happens, and only a
+    // genuine change updates `open`.
+    const prevExpandedRef = useRef(expanded);
+    useEffect(() => {
+        if (prevExpandedRef.current !== expanded) {
+            prevExpandedRef.current = expanded;
             setOpen(expanded);
         }
-    }, [expandAll, collapseAll, expanded]);
+    }, [expanded]);
 
     // List of resource types that should show FileDownload
     const spreadSheetResourceTypes = ['Patient', 'Person', 'Practitioner'];

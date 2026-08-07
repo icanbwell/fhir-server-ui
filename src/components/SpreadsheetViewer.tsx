@@ -4,7 +4,6 @@ import { read, utils, type WorkBook } from 'xlsx';
 import {
     Typography,
     Box,
-    CircularProgress,
     Alert,
     Tabs,
     Tab,
@@ -14,6 +13,8 @@ import {
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
+import { useStreamProgress } from '../hooks/useStreamProgress';
+import StreamProgressIndicator from './StreamProgressIndicator';
 import {
     ModuleRegistry,
     ColumnAutoSizeModule,
@@ -78,6 +79,8 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
 
+    const { progress, start, onProgress, finish } = useStreamProgress();
+
     const baseApi = React.useMemo(
         () => new BaseApi({ fhirUrl, setUserDetails }),
         [fhirUrl, setUserDetails]
@@ -116,8 +119,9 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
             try {
                 setIsLoading(true);
                 setErrorMessage(null);
+                start();
 
-                const response = await baseApi.downloadFile(downloadUri.toString());
+                const response = await baseApi.downloadFile(downloadUri.toString(), { onProgress });
 
                 if (response.status !== 200) {
                     throw new Error(`HTTP ${response.status}: Failed to fetch spreadsheet`);
@@ -200,14 +204,16 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
 
                 setSheets(parsedSheets);
                 setIsLoading(false);
+                finish();
             } catch (error) {
                 setErrorMessage(`Failed to load spreadsheet: ${(error as Error).message}`);
                 setIsLoading(false);
+                finish();
             }
         };
 
         fetchSpreadsheetData().then((r) => r);
-    }, [relativeUrl, hideEmptyColumns, downloadUri, format, baseApi]);
+    }, [relativeUrl, hideEmptyColumns, downloadUri, format, baseApi, start, onProgress, finish]);
 
     const defaultColDef = useMemo(
         () => ({
@@ -263,7 +269,7 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
             <Box
                 sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}
             >
-                <CircularProgress />
+                <StreamProgressIndicator progress={progress} />
                 <Typography variant="body2" sx={{ mt: 2 }}>
                     Loading spreadsheet...
                 </Typography>

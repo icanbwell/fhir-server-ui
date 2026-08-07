@@ -22,6 +22,12 @@ import { getLocalData } from '../utils/localData.utils';
 import APIConsolePage from './APIConsolePage';
 import { createBundleEntryParser } from '../utils/incrementalBundleParser';
 
+// Hard ceiling on how many resources IndexPage will hold in state / render for a single
+// page load. Without this, an unbounded Bundle (e.g. a Person $summary/$everything with
+// tens of thousands of entries) grows the resources array and the DOM without limit and
+// can exhaust the tab's memory. Adjust if real payloads need a different ceiling.
+const MAX_RESOURCES = 2000;
+
 /**
  * IndexPage/home/ubuntu/Documents/code/EFS/fhir-server/src/pages/SearchPage.jsx
  * Note: Any route parameters are available via useParams()
@@ -35,6 +41,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
     const [status, setStatus] = useState<number | undefined>();
     const [loading, setLoading] = useState(false);
     const [indexStart, setIndexStart] = useState(0);
+    const [truncated, setTruncated] = useState(false);
 
     const { id, resourceType = '', operation, vid } = useParams();
 
@@ -68,6 +75,13 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         return (
             <>
                 {loading && <LinearProgress />}
+                {truncated && (
+                    <Alert severity="warning" sx={{ mb: 2 }}>
+                        Showing the first {MAX_RESOURCES.toLocaleString()} resources. The full result set is
+                        larger than that — narrow your search (e.g. with <code>_count</code> and
+                        <code>_getpagesoffset</code>) to see the rest.
+                    </Alert>
+                )}
                 {resources?.length > 1 && (
                     <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                         <Button
@@ -180,6 +194,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             }
             try {
                 setLoading(true);
+                setTruncated(false);
                 if (fhirUrl) {
                     const identityProvider = getLocalData('identityProvider');
                     if (!identityProvider) {
@@ -193,6 +208,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     });
 
                     let incrementalResults: any[] = [];
+                    let incrementalTruncated = false;
                     let parserFailed = false;
                     const streamParser = shouldBeJsonFormat
                         ? undefined
@@ -205,7 +221,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                                   // completes, so a parser miss never leaves the page silently short of
                                   // data — it just skips the "populate live" effect for whatever wasn't
                                   // caught incrementally.
-                                  incrementalResults.push(resource);
+                                  if (incrementalResults.length < MAX_RESOURCES) {
+                                      incrementalResults.push(resource);
+                                  } else {
+                                      incrementalTruncated = true;
+                                  }
                               },
                               (err) => {
                                   console.error(
@@ -271,7 +291,9 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     if (shouldBeJsonFormat) {
                         setResources(json);
                     } else if (json && json.entry) {
-                        setResources(json.entry);
+                        const overflowing = json.entry.length > MAX_RESOURCES;
+                        setResources(overflowing ? json.entry.slice(0, MAX_RESOURCES) : json.entry);
+                        setTruncated(overflowing);
                         setBundle(json);
                         if (resourceType) {
                             document.title = resourceType;
@@ -281,6 +303,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         // parser already captured some resources from what did arrive — keep those instead
                         // of wiping the list to empty.
                         setResources(incrementalResults);
+                        setTruncated(incrementalTruncated);
                         if (resourceType) {
                             document.title = resourceType;
                         }

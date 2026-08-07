@@ -279,30 +279,28 @@ class BaseApi {
         return { status, json, incomplete };
     }
 
-    async request({ urlString, params, method, data }: RequestParams): Promise<any> {
-        // Unlike getData, this doesn't normalize urlString to a relative pathname+search (it
-        // may still carry an origin) and it ignores `params` (which axios appends to the query
-        // string below) — so the captured url can diverge from what's actually requested. No
-        // reachable caller passes onRequest today (see FhirApi.mergeResource), so this is a
-        // known gap for whoever gives this method its first real caller, not a live bug.
-        this.onRequest?.({ method, url: urlString });
-
-        try {
-            const response = await this.axiosInstance.request({
-                baseURL: this.getBaseUrl(),
-                url: urlString,
-                method,
-                params,
-                data,
-                headers: {
-                    'Content-Type': 'application/fhir+json'
-                }
-            });
-            return { status: response.status, json: response.data };
-        } catch (err: any) {
-            await this.handleUnauthorized(err.response?.status);
-            return { status: err.response?.status, json: err.response?.data };
+    async request(
+        { urlString, params, method, data }: RequestParams,
+        options?: {
+            onChunk?: (chunk: Uint8Array) => void;
+            onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
         }
+    ): Promise<{ status: number | undefined; json: any; incomplete: boolean }> {
+        const { status, text, incomplete } = await this.streamRequest({
+            method,
+            urlString,
+            params,
+            data,
+            onChunk: options?.onChunk,
+            onProgress: options?.onProgress,
+        });
+        let json: any;
+        try {
+            json = text ? JSON.parse(text) : undefined;
+        } catch {
+            json = undefined;
+        }
+        return { status, json, incomplete };
     }
 
     async downloadFile(url: string): Promise<any> {

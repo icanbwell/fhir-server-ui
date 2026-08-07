@@ -99,18 +99,25 @@ const ResourceCard = ({
         setCollapseAll(false);
     };
 
+    // A single effect computing `open` from all three inputs in one pass, with clear
+    // precedence (collapseAll wins, then expandAll, then the initial `expanded` prop).
+    // This runs on every mount as well as on dependency changes — with virtualized lists
+    // (ResourceList), cards mount/unmount as they scroll in and out of view, so a card that
+    // remounts while `expandAll` is still true must come back open. Splitting this into two
+    // separate effects (one keyed on [expandAll, collapseAll], one keyed on [expanded]) let
+    // the second effect's `setOpen(expanded)` unconditionally clobber the first effect's
+    // `setOpen(true)` on every fresh mount, since both effects always run on mount regardless
+    // of their dependency arrays — collapsing this into one effect with one setOpen call
+    // removes that race entirely.
     useEffect(() => {
-        if (expandAll) {
-            setOpen(true);
-        }
         if (collapseAll) {
             setOpen(false);
+        } else if (expandAll) {
+            setOpen(true);
+        } else {
+            setOpen(expanded);
         }
-    }, [expandAll, collapseAll]);
-
-    useEffect(() => {
-        setOpen(expanded);
-    }, [expanded]);
+    }, [expandAll, collapseAll, expanded]);
 
     // List of resource types that should show FileDownload
     const spreadSheetResourceTypes = ['Patient', 'Person', 'Practitioner'];

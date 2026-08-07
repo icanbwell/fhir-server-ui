@@ -15,11 +15,20 @@ type TResourceCardProps = {
     index: number;
     resource: TResource;
     expanded: boolean;
-    expandAll: boolean;
-    collapseAll: boolean;
-    setExpandAll: React.Dispatch<React.SetStateAction<boolean>>;
-    setCollapseAll: React.Dispatch<React.SetStateAction<boolean>>;
     error?: boolean;
+    // Uncontrolled mode: ResourceCard owns its own open/closed state, seeded from `expanded`
+    // and reacting to `expandAll`/`collapseAll`. Used by non-virtualized callers (e.g.
+    // src/admin/manageExport.tsx) where each card is a stable, persistent component instance.
+    expandAll?: boolean;
+    collapseAll?: boolean;
+    setExpandAll?: React.Dispatch<React.SetStateAction<boolean>>;
+    setCollapseAll?: React.Dispatch<React.SetStateAction<boolean>>;
+    // Controlled mode: the caller (src/components/ResourceList.tsx) owns open/closed state
+    // itself, lifted up so it survives this component being unmounted and remounted as its row
+    // scrolls out of and back into the virtualizer's rendered window. When both `open` and
+    // `onToggle` are provided, they take priority over the uncontrolled state/props above.
+    open?: boolean;
+    onToggle?: () => void;
 };
 
 type TGetIPSLinkProps = {
@@ -86,18 +95,23 @@ const ResourceCard = ({
     resource,
     expanded,
     error,
-    expandAll,
-    collapseAll,
+    expandAll = false,
+    collapseAll = false,
     setExpandAll,
     setCollapseAll,
+    open: controlledOpen,
+    onToggle,
 }: TResourceCardProps) => {
+    // Controlled mode (ResourceList): the caller owns open/closed state and this component just
+    // renders whatever it's told, so state naturally survives this component being unmounted and
+    // remounted as its row scrolls out of and back into the virtualizer's window — there's simply
+    // no local state here to lose.
+    const isControlled = controlledOpen !== undefined && onToggle !== undefined;
+
     // Determine this card's initial open state synchronously at mount via a lazy useState
     // initializer (runs exactly once, before any effect can race it) rather than defaulting to
-    // `false` and correcting it in an effect afterward. This is what actually fixes cards
-    // mounting/remounting (as they scroll in and out of the ResourceList virtualizer's window)
-    // while expandAll is already true — there's no post-mount effect ordering for a second
-    // effect to win.
-    const [open, setOpen] = useState(() => {
+    // `false` and correcting it in an effect afterward. Only relevant in uncontrolled mode.
+    const [localOpen, setLocalOpen] = useState(() => {
         if (collapseAll) {
             return false;
         }
@@ -107,10 +121,16 @@ const ResourceCard = ({
         return expanded;
     });
 
+    const open = isControlled ? controlledOpen : localOpen;
+
     const handleOpen = () => {
-        setOpen(!open);
-        setExpandAll(false);
-        setCollapseAll(false);
+        if (isControlled) {
+            onToggle();
+        } else {
+            setLocalOpen(!localOpen);
+        }
+        setExpandAll?.(false);
+        setCollapseAll?.(false);
     };
 
     // These only react to a flag turning ON, never to it turning back off. `handleOpen` (above)
@@ -121,17 +141,20 @@ const ResourceCard = ({
     // any one card was manually closed (and the mirror bug after Collapse All). Keeping each
     // effect a no-op on the falling edge preserves each card's independent `open` state once
     // it's been manually toggled, matching the pre-virtualization behavior.
+    //
+    // Skipped entirely in controlled mode — ResourceList applies expandAll/collapseAll to its own
+    // lifted state directly, rather than relying on each card's local effects.
     useEffect(() => {
-        if (expandAll) {
-            setOpen(true);
+        if (!isControlled && expandAll) {
+            setLocalOpen(true);
         }
-    }, [expandAll]);
+    }, [expandAll, isControlled]);
 
     useEffect(() => {
-        if (collapseAll) {
-            setOpen(false);
+        if (!isControlled && collapseAll) {
+            setLocalOpen(false);
         }
-    }, [collapseAll]);
+    }, [collapseAll, isControlled]);
 
     // Reacts to the `expanded` prop (IndexPage's `resourceCardExpanded`) changing on an
     // already-mounted card — e.g. navigating from a list view to a single-id view without a full
@@ -146,14 +169,16 @@ const ResourceCard = ({
     // via a debug trace: on StrictMode's second invocation, `isFirst` was already `false`).
     // Comparing against the actual previous value instead is idempotent — re-invoking with the
     // same `expanded` value is always a no-op no matter how many times it happens, and only a
-    // genuine change updates `open`.
+    // genuine change updates `open`. Skipped in controlled mode for the same reason as above.
     const prevExpandedRef = useRef(expanded);
     useEffect(() => {
         if (prevExpandedRef.current !== expanded) {
             prevExpandedRef.current = expanded;
-            setOpen(expanded);
+            if (!isControlled) {
+                setLocalOpen(expanded);
+            }
         }
-    }, [expanded]);
+    }, [expanded, isControlled]);
 
     // List of resource types that should show FileDownload
     const spreadSheetResourceTypes = ['Patient', 'Person', 'Practitioner'];

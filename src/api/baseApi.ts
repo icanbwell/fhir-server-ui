@@ -303,22 +303,21 @@ class BaseApi {
         return { status, json, incomplete };
     }
 
-    async downloadFile(url: string): Promise<any> {
-        try {
-            const response = await this.axiosInstance.get(url, {
-                responseType: 'blob',
-            });
-            return {
-                status: response.status,
-                data: response.data,
-                headers: response.headers
-            };
-        } catch (err: any) {
-            if (err.response?.status === 401 && this.setUserDetails) {
-                await logout(this.setUserDetails);
-            }
-            throw err;
+    async downloadFile(
+        url: string,
+        options?: { onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void }
+    ): Promise<{ status: number; data: Blob; headers: Record<string, string> }> {
+        const { status, bytes, headers } = await this.streamRequest({
+            method: 'GET',
+            urlString: url,
+            responseMode: 'binary',
+            onProgress: options?.onProgress,
+        });
+        if (!status || status < 200 || status >= 300) {
+            throw Object.assign(new Error(`Request failed with status ${status}`), { status });
         }
+        const contentType = headers['content-type'] || 'application/octet-stream';
+        return { status, data: new Blob([new Uint8Array(bytes)], { type: contentType }), headers };
     }
 
     requestInterceptor(req: InternalAxiosRequestConfig<any>): InternalAxiosRequestConfig<any> {

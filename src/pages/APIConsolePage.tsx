@@ -293,7 +293,6 @@ const APIConsolePage = () => {
                             size="small"
                             label="Request Path"
                             placeholder="Full path, e.g. /4_0_0/Patient/123 or /version"
-                            helperText="Sent literally — include query params here, e.g. /4_0_0/Patient/123/$merge?smartMerge=false"
                             value={urlSuffix}
                             onChange={(e) => setUrlSuffix(e.target.value)}
                             sx={{ flex: 1, minWidth: 250 }}

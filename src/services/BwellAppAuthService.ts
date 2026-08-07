@@ -4,7 +4,7 @@ export async function login(
     email: string,
     password: string,
     clientKey: string
-): Promise<{ accessToken: string; refreshToken: string }> {
+): Promise<string> {
     const baseUrl = import.meta.env.REACT_APP_AUTH_BWELLAPP_BASE_URL;
     if (!baseUrl) {
         throw new Error('REACT_APP_AUTH_BWELLAPP_BASE_URL is not defined');
@@ -16,18 +16,12 @@ export async function login(
         { headers: { clientkey: clientKey } }
     );
 
-    const accessToken = response.data?.accessToken?.jwtToken;
-    if (!accessToken) {
+    const jwtToken = response.data?.accessToken?.jwtToken;
+    if (!jwtToken) {
         throw new Error('b.well identity API did not return an access token');
     }
-    // The FHIR token exchange (see TokenExchangeService) needs the refresh token, not this
-    // access token - the gateway's JWT-based exchange path rejects this access token type.
-    const refreshToken = response.data?.refreshToken?.token;
-    if (!refreshToken) {
-        throw new Error('b.well identity API did not return a refresh token');
-    }
 
-    return { accessToken, refreshToken };
+    return jwtToken;
 }
 
 export function parseClientKeys(

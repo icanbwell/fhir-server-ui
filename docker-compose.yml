@@ -10,7 +10,11 @@ services:
         required: false
     environment:
       REACT_APP_VERSION: 'local'
-      REACT_APP_FHIR_SERVER_URL: ${REACT_APP_FHIR_SERVER_URL:-https://fhir.dev.icanbwell.com}
+      # fhir.dev.icanbwell.com (the intended public dev FHIR server) doesn't yet trust the
+      # Cognito pool b.well App login issues tokens from - see bwell-fhir-server PR #162.
+      # Using the internal dev FHIR server as a stopgap until that's deployed; switch back to
+      # https://fhir.dev.icanbwell.com once it trusts the same issuer as fhir-internal does.
+      REACT_APP_FHIR_SERVER_URL: ${REACT_APP_FHIR_SERVER_URL:-https://fhir-internal.dev.bwell.zone}
       REACT_APP_AWS_REGION: 'us-east-1'
       # list of AuthProviders
       REACT_APP_AUTH_PROVIDERS: 'cognito,bwellapp,clientcredentials'
@@ -38,10 +42,6 @@ services:
       # REACT_APP_AUTH_OKTA_REMOVE_SCOPE_PREFIX: ''
       # b.well App sign-in (bwellapp is enabled in REACT_APP_AUTH_PROVIDERS above) -
       # set REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS to a real client key for your dev environment
-      # REACT_APP_TOKEN_EXCHANGE_GRAPHQL_URL exchanges the b.well identity gateway's login
-      # response (an intermediate credential) for the access token the FHIR server accepts -
-      # see mcp-fhir-agent's TokenExchangeManager for the server-side counterpart.
-      REACT_APP_TOKEN_EXCHANGE_GRAPHQL_URL: ${REACT_APP_TOKEN_EXCHANGE_GRAPHQL_URL:-https://api.dev.icanbwell.com/v1/graphql}
       REACT_APP_AUTH_BWELLAPP_BASE_URL: 'https://api.dev.icanbwell.com'
       REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS: 'Dev=eyJyIjoiY2Zoa2h3ODZvNHdoNWFiOW9kaHgiLCJlbnYiOiJkZXYiLCJraWQiOiJid2VsbF9kZW1vLWRldiJ9'
       REACT_APP_AUTH_BWELLAPP_CUSTOM_USERNAME: 'cognito:username'

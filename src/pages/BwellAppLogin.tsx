@@ -19,7 +19,6 @@ import { getLocalData, setLocalData } from '../utils/localData.utils';
 import { jwtParser } from '../utils/jwtParser';
 import { removeAuthData } from '../utils/auth.utils';
 import { login, parseClientKeys } from '../services/BwellAppAuthService';
-import { exchangeToken } from '../services/TokenExchangeService';
 
 const CLIENT_KEYS_MISSING_MESSAGE =
     'No b.well App client keys are configured (REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS).';
@@ -82,27 +81,7 @@ const BwellAppLogin = () => {
         setError(null);
 
         try {
-            const { accessToken, refreshToken } = await login(email, password, selectedClient.key);
-
-            // The b.well identity gateway's login access token is an intermediate credential,
-            // not one the FHIR server accepts directly - it must be exchanged (using the same
-            // client key, plus the login refresh token) for the access token the FHIR server
-            // actually trusts. See TokenExchangeService for why both the access and refresh
-            // tokens are required together for this exchange to succeed.
-            let jwtToken: string;
-            try {
-                jwtToken = await exchangeToken(accessToken, refreshToken, selectedClient.key);
-            } catch (exchangeError: any) {
-                console.error('b.well App token exchange failed', exchangeError);
-                const reason = exchangeError?.message;
-                setError(
-                    reason
-                        ? `Signed in, but could not obtain a FHIR server access token: ${reason}`
-                        : 'Signed in, but could not obtain a FHIR server access token. Please contact support.'
-                );
-                return;
-            }
-
+            const jwtToken = await login(email, password, selectedClient.key);
             removeAuthData();
             setLocalData('jwt', jwtToken);
             setLocalData('identityProvider', 'bwellapp');

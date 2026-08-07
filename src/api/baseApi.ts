@@ -210,6 +210,14 @@ class BaseApi {
                 bytes.set(chunk, offset);
                 offset += chunk.length;
             }
+            // Flush any dangling partial multi-byte UTF-8 sequence buffered internally by the
+            // decoder from the last `{ stream: true }` call — without this, a chunk boundary that
+            // splits a multi-byte character at the very end of the body silently drops it from
+            // `text`. Calling decode() with no arguments (equivalent to `{ stream: false }`) is
+            // safe to call even when nothing is buffered (returns '').
+            if (responseMode === 'text') {
+                text += decoder.decode();
+            }
             return { status: response.status, headers: responseHeaders, bytes, text, incomplete };
         };
 

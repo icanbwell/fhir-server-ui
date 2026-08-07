@@ -169,14 +169,16 @@ class FhirApi extends BaseApi {
             headers: requestHeaders,
             signal,
             onChunk,
-            onHeaders,
+            onHeaders: (status, respHeaders) => {
+                // Fire handleUnauthorized as soon as the status is known — before the
+                // abortable body-read loop begins — matching this method's original
+                // (pre-extraction) ordering. Calling it after sendStreamingRequest resolves
+                // instead would let an abort during body-read of a 401 response skip this
+                // call entirely, since the AbortError propagates out before we'd get here.
+                void this.handleUnauthorized(status);
+                onHeaders?.(status, respHeaders);
+            },
         });
-
-        // Moved from "before reading the body" to "after the full result is known" — this
-        // check only depends on the response status, not the body, so the timing change is
-        // not observable by a user; it just lets the fetch/stream mechanics live in one
-        // shared, auth-agnostic place (see streamingFetch.ts).
-        await this.handleUnauthorized(result.status);
 
         return result;
     }

@@ -1,6 +1,4 @@
 import React from 'react';
-import axios, { AxiosInstance } from 'axios';
-import { InternalAxiosRequestConfig } from 'axios';
 import { getLocalData } from '../utils/localData.utils';
 import { TUserDetails } from '../types/baseTypes';
 import AuthUrlProvider from '../utils/authUrlProvider';
@@ -45,7 +43,6 @@ class BaseApi {
     private readonly setUserDetails:
         | React.Dispatch<React.SetStateAction<TUserDetails | null>>
         | undefined;
-    private readonly axiosInstance: AxiosInstance;
     protected readonly onRequest?: (info: TRequestInfo) => void;
 
     constructor({
@@ -60,10 +57,6 @@ class BaseApi {
         this.fhirUrl = fhirUrl;
         this.setUserDetails = setUserDetails;
         this.onRequest = onRequest;
-
-        // Create a dedicated axios instance for this BaseApi instance
-        this.axiosInstance = axios.create();
-        this.axiosInstance.interceptors.request.use(this.requestInterceptor.bind(this));
     }
 
     protected getBaseUrl(): string {
@@ -320,13 +313,6 @@ class BaseApi {
         return { status, data: new Blob([bytes as Uint8Array<ArrayBuffer>], { type: contentType }), headers };
     }
 
-    requestInterceptor(req: InternalAxiosRequestConfig<any>): InternalAxiosRequestConfig<any> {
-        const headers = this.buildHeaders();
-        Object.entries(headers).forEach(([key, value]) => {
-            req.headers[key] = value;
-        });
-        return req;
-    }
 }
 
 export default BaseApi;

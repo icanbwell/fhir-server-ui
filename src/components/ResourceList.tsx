@@ -61,17 +61,32 @@ const ResourceList = ({
         }
     }, [collapseAll]);
 
-    // Reacts to the `resourceCardExpanded` prop (IndexPage's single-id auto-expand flag)
-    // flipping on an already-mounted ResourceList — e.g. client-side navigation from a list view
-    // to a single-id view re-uses this same component instance rather than remounting it, so the
-    // lazy initializer above (which only runs once) wouldn't otherwise pick up the change.
-    // Mirrors ResourceCard's own `prevExpandedRef` effect, applied list-wide instead of per-card.
+    // Reacts to the `resourceCardExpanded` prop (IndexPage's single-id auto-expand flag) in two
+    // ways: (1) it flipping on an already-mounted ResourceList — e.g. client-side navigation from
+    // a list view to a single-id view re-uses this same component instance rather than
+    // remounting it, so the lazy initializer above (which only runs once) wouldn't otherwise pick
+    // up the change — resets the open set entirely, matching handleToggle-independent full-list
+    // semantics; and (2) more resources streaming in while it's already `true` — e.g. a
+    // `$summary` Bundle that arrives over multiple chunks — which only opens the newly-arrived
+    // indices rather than resetting the whole set, so it doesn't clobber any row the user already
+    // manually collapsed (the same class of bug already fixed once for ResourceCard's own
+    // expandAll/collapseAll effects).
     const prevResourceCardExpandedRef = useRef(resourceCardExpanded);
+    const seenResourceCountRef = useRef(resources.length);
     useEffect(() => {
         if (prevResourceCardExpandedRef.current !== resourceCardExpanded) {
             prevResourceCardExpandedRef.current = resourceCardExpanded;
             setOpenIndices(resourceCardExpanded ? new Set(resources.map((_, i) => i)) : new Set());
+        } else if (resourceCardExpanded && resources.length > seenResourceCountRef.current) {
+            setOpenIndices((prev) => {
+                const next = new Set(prev);
+                for (let i = seenResourceCountRef.current; i < resources.length; i++) {
+                    next.add(i);
+                }
+                return next;
+            });
         }
+        seenResourceCountRef.current = resources.length;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resourceCardExpanded, resources.length]);
 

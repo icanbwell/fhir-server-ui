@@ -231,6 +231,29 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                               }
                           );
 
+                    // Render whatever the incremental parser has found so far. Batching per chunk
+                    // (rather than per entry) keeps re-renders proportional to the number of network
+                    // chunks received, not the number of resources in the Bundle. A no-op once this
+                    // effect has been superseded, so an abandoned request can't overwrite a newer
+                    // search's results while its stream keeps delivering chunks.
+                    //
+                    // Also a no-op once the cap has already been surfaced once — otherwise every
+                    // remaining chunk of a huge response would keep re-copying and re-rendering an
+                    // identical, already-capped MAX_RESOURCES-length array for as long as the download
+                    // continues, which is exactly the scenario under the most memory pressure.
+                    // Surfacing the capped array (and flipping the truncation banner on) once, as soon
+                    // as the cap is hit, is strictly better than waiting for the whole stream to finish.
+                    const surfaceIncrementalResults = () => {
+                        if (cancelled || truncationSurfaced) {
+                            return;
+                        }
+                        setResources([...incrementalResults]);
+                        if (incrementalTruncated) {
+                            setTruncated(true);
+                            truncationSurfaced = true;
+                        }
+                    };
+
                     const {
                         json,
                         status: statusCode,
@@ -245,31 +268,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         {
                             onChunk: streamParser
                                 ? (chunk) => {
-                                      if (!parserFailed) {
-                                          streamParser.write(chunk);
-                                          // Render whatever the parser found in this chunk. Batching per
-                                          // chunk (rather than per entry) keeps re-renders proportional to
-                                          // the number of network chunks received, not the number of
-                                          // resources in the Bundle. Skipped once this effect has been
-                                          // superseded, so an abandoned request can't overwrite a newer
-                                          // search's results while its stream keeps delivering chunks.
-                                          //
-                                          // Also skipped once the cap has already been surfaced once —
-                                          // otherwise every remaining chunk of a huge response would keep
-                                          // re-copying and re-rendering an identical, already-capped
-                                          // MAX_RESOURCES-length array for as long as the download
-                                          // continues, which is exactly the scenario under the most memory
-                                          // pressure. Surfacing the capped array (and flipping the
-                                          // truncation banner on) once, as soon as the cap is hit, is
-                                          // strictly better than waiting for the whole stream to finish.
-                                          if (!cancelled && !truncationSurfaced) {
-                                              setResources([...incrementalResults]);
-                                              if (incrementalTruncated) {
-                                                  setTruncated(true);
-                                                  truncationSurfaced = true;
-                                              }
-                                          }
+                                      if (parserFailed) {
+                                          return;
                                       }
+                                      streamParser.write(chunk);
+                                      surfaceIncrementalResults();
                                   }
                                 : undefined,
                         }

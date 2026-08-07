@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { Alert, Box, CircularProgress } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CompositionSummary from '../components/CompositionSummary';
@@ -11,6 +11,8 @@ import LastRequestContext from '../context/LastRequestContext';
 import BaseApi from '../api/baseApi';
 import { TComposition } from '../types/resources/Composition';
 import { appendFormatJson } from '../utils/url.utils';
+import { useStreamProgress } from '../hooks/useStreamProgress';
+import StreamProgressIndicator from '../components/StreamProgressIndicator';
 
 const CompositionSummaryPage: React.FC = () => {
     const { resourceType, id, operation } = useParams<{
@@ -23,6 +25,9 @@ const CompositionSummaryPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [resource, setResource] = useState<TComposition | null>(null);
     const [rawResponse, setRawResponse] = useState<Object | null>(null);
+    const [isIncomplete, setIsIncomplete] = useState<boolean>(false);
+
+    const { progress, start, onProgress, finish } = useStreamProgress();
 
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
@@ -60,10 +65,13 @@ const CompositionSummaryPage: React.FC = () => {
         const fetchResource = async () => {
             setIsLoading(true);
             setErrorMessage(null);
+            setIsIncomplete(false);
+            start();
             try {
-                const response = await baseApi.getData({ urlString: relativeUrl });
+                const response = await baseApi.getData({ urlString: relativeUrl }, { onProgress });
                 const json = response.json;
                 setRawResponse(json);
+                setIsIncomplete(response.incomplete);
                 if (json?.resourceType === 'Composition') {
                     setResource(json);
                 } else {
@@ -74,6 +82,7 @@ const CompositionSummaryPage: React.FC = () => {
                 setErrorMessage('Failed to load the Composition resource');
             } finally {
                 setIsLoading(false);
+                finish();
             }
         };
 
@@ -99,9 +108,14 @@ const CompositionSummaryPage: React.FC = () => {
             <Header />
             <Box sx={{ flex: 1, width: '100%', padding: '20px', boxSizing: 'border-box' }}>
                 {isLoading && (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-                        <CircularProgress />
+                    <Box sx={{ my: 4 }}>
+                        <StreamProgressIndicator progress={progress} />
                     </Box>
+                )}
+                {!isLoading && isIncomplete && (
+                    <Alert severity="warning" sx={{ mb: 2 }}>
+                        Connection interrupted — showing partial results.
+                    </Alert>
                 )}
                 {!isLoading && errorMessage && (
                     <>

@@ -12,10 +12,12 @@ const IPSViewerPage = lazy(() => import('../pages/IPSViewerPage'));
 const CompositionSummaryPage = lazy(() => import('../pages/CompositionSummaryPage'));
 const APIConsolePage = lazy(() => import('../pages/APIConsolePage'));
 const ConnectionsListPage = lazy(() => import('../pages/ConnectionsListPage'));
+const ConnectionConsolePage = lazy(() => import('../pages/ConnectionConsolePage'));
 
 export default [
     <Route key="apiConsole" path="/api-console" element={<APIConsolePage />} />,
     <Route key="connections" path="/connections" element={<ConnectionsListPage />} />,
+    <Route key="connectionConsole" path="/connections/:serviceSlug/console" element={<ConnectionConsolePage />} />,
     <Route key="about" path="/about" element={<AboutPage />} />,
     <Route key="patientTimeline" path="/patientTimeline" element={<PatientTimeline />} />,
     <Route key="ObservationGraph" path="/observationGraph" element={<ObservationGraph />} />,

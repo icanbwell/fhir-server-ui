@@ -317,7 +317,7 @@ class BaseApi {
             throw Object.assign(new Error(`Request failed with status ${status}`), { status });
         }
         const contentType = headers['content-type'] || 'application/octet-stream';
-        return { status, data: new Blob([new Uint8Array(bytes)], { type: contentType }), headers };
+        return { status, data: new Blob([bytes as Uint8Array<ArrayBuffer>], { type: contentType }), headers };
     }
 
     requestInterceptor(req: InternalAxiosRequestConfig<any>): InternalAxiosRequestConfig<any> {

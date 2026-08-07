@@ -8,7 +8,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
-import ResourceCard from '../components/ResourceCard';
+import ResourceList from '../components/ResourceList';
 import FhirApi from '../api/fhirApi';
 import SearchContainer from '../components/SearchContainer';
 import PreJson from '../components/PreJson';
@@ -150,23 +150,17 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </Link>
                 </Tooltip>
 
-                {resources?.map((fullResource: any, index: number) => {
-                    const resource = fullResource.resource || fullResource;
-                    const error = resource.resourceType === 'OperationOutcome';
-                    return (
-                        <ResourceCard
-                            key={index}
-                            index={indexStart + index}
-                            resource={resource}
-                            expanded={resourceCardExpanded}
-                            expandAll={expandAll}
-                            collapseAll={collapseAll}
-                            setExpandAll={setExpandAll}
-                            setCollapseAll={setCollapseAll}
-                            error={error}
-                        />
-                    );
-                })}
+                {resources && resources.length > 0 && (
+                    <ResourceList
+                        resources={resources}
+                        indexStart={indexStart}
+                        resourceCardExpanded={resourceCardExpanded}
+                        expandAll={expandAll}
+                        collapseAll={collapseAll}
+                        setExpandAll={setExpandAll}
+                        setCollapseAll={setCollapseAll}
+                    />
+                )}
             </>
         );
     }

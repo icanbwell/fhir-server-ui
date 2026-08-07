@@ -19,6 +19,27 @@ interface RequestParams {
     data?: any;
 }
 
+export interface StreamRequestParams {
+    method: HttpMethod;
+    urlString: string;
+    params?: Record<string, string>;
+    data?: any;
+    headers?: Record<string, string>;
+    signal?: AbortSignal;
+    responseMode?: 'text' | 'binary';
+    onHeaders?: (status: number, headers: Record<string, string>) => void;
+    onChunk?: (chunk: Uint8Array) => void;
+    onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
+}
+
+export interface StreamRequestResult {
+    status: number | undefined;
+    headers: Record<string, string>;
+    bytes: Uint8Array;
+    text: string;
+    incomplete: boolean;
+}
+
 class BaseApi {
     private readonly fhirUrl: string | undefined;
     private readonly setUserDetails:
@@ -103,6 +124,128 @@ class BaseApi {
 
     async getVersion(): Promise<string> {
         return (await this.getData({ urlString: '/version' })).json?.version;
+    }
+
+    async streamRequest({
+        method,
+        urlString,
+        params,
+        data,
+        headers,
+        signal,
+        responseMode = 'text',
+        onHeaders,
+        onChunk,
+        onProgress,
+    }: StreamRequestParams): Promise<StreamRequestResult> {
+        let path = urlString;
+        if (path.startsWith(window.location.origin)) {
+            path = path.slice(window.location.origin.length);
+        }
+        const url = new URL(path, this.getBaseUrl());
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+        }
+
+        // The session's bearer token must never leave the configured base URL. A scheme-relative
+        // or absolute path can resolve to a different origin via `new URL()`, so refuse before any
+        // fetch happens rather than trusting every caller to have validated its own input. This
+        // check used to live only in FhirApi.sendRequest (the one caller that took a free-form path
+        // from user input); moving it here means every BaseApi-derived call gets the guarantee.
+        if (url.origin !== new URL(this.getBaseUrl()).origin) {
+            return {
+                status: undefined,
+                headers: {},
+                bytes: new Uint8Array(0),
+                text: JSON.stringify({ error: 'Request path must stay on the configured FHIR server' }),
+                incomplete: false,
+            };
+        }
+
+        this.onRequest?.({ method, url: url.pathname + url.search });
+
+        const requestHeaders = this.buildHeaders({
+            'Content-Type': 'application/fhir+json',
+            ...headers,
+        });
+
+        let response: Response;
+        try {
+            response = await fetch(url.toString(), {
+                method,
+                headers: requestHeaders,
+                body: data !== undefined && data !== null ? JSON.stringify(data) : undefined,
+                signal,
+            });
+        } catch (err: any) {
+            if (err?.name === 'AbortError') {
+                throw err;
+            }
+            return { status: undefined, headers: {}, bytes: new Uint8Array(0), text: '', incomplete: true };
+        }
+
+        const responseHeaders: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+            responseHeaders[key] = value;
+        });
+
+        // Surface status/headers as soon as fetch() resolves — before the body streaming loop
+        // below starts — so callers can populate UI without waiting for the whole body.
+        onHeaders?.(response.status, responseHeaders);
+        await this.handleUnauthorized(response.status);
+
+        const totalBytes = responseHeaders['content-length']
+            ? parseInt(responseHeaders['content-length'], 10)
+            : undefined;
+
+        const receivedChunks: Uint8Array[] = [];
+        let receivedBytes = 0;
+        const decoder = new TextDecoder();
+        let text = '';
+
+        const finalize = (incomplete: boolean): StreamRequestResult => {
+            const bytes = new Uint8Array(receivedBytes);
+            let offset = 0;
+            for (const chunk of receivedChunks) {
+                bytes.set(chunk, offset);
+                offset += chunk.length;
+            }
+            return { status: response.status, headers: responseHeaders, bytes, text, incomplete };
+        };
+
+        try {
+            if (response.body) {
+                const reader = response.body.getReader();
+                let done = false;
+                while (!done) {
+                    const result = await reader.read();
+                    done = result.done;
+                    if (result.value) {
+                        receivedChunks.push(result.value);
+                        receivedBytes += result.value.length;
+                        if (responseMode === 'text') {
+                            text += decoder.decode(result.value, { stream: true });
+                        }
+                        onChunk?.(result.value);
+                        onProgress?.(receivedBytes, totalBytes);
+                    }
+                }
+            } else if (responseMode === 'text') {
+                text = await response.text();
+                onChunk?.(new TextEncoder().encode(text));
+                onProgress?.(text.length, totalBytes);
+            }
+        } catch (err: any) {
+            if (err?.name === 'AbortError') {
+                throw err;
+            }
+            // A mid-stream drop rejects here. Headers were already surfaced via onHeaders and
+            // whatever bytes arrived via onChunk, so resolve with the partial data instead of
+            // throwing — callers decide how to degrade rather than losing everything.
+            return finalize(true);
+        }
+
+        return finalize(false);
     }
 
     async getData({ urlString, params }: GetDataParams): Promise<any> {

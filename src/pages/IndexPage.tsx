@@ -15,6 +15,7 @@ import PreJson from '../components/PreJson';
 import EnvironmentContext from '../context/EnvironmentContext';
 import { TBundle } from '../types/resources/Bundle';
 import UserContext from '../context/UserContext';
+import LastRequestContext from '../context/LastRequestContext';
 import GridOnIcon from '@mui/icons-material/GridOn'; // New icon for spreadsheet
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
@@ -27,6 +28,7 @@ import APIConsolePage from './APIConsolePage';
 const IndexPage = ({ search }: { search?: boolean }) => {
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
+    const { recordRequest } = useContext(LastRequestContext);
     const [resources, setResources] = useState<any>();
     const [bundle, setBundle] = useState<TBundle | undefined>();
     const [status, setStatus] = useState<number | undefined>();
@@ -172,6 +174,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     const fhirApi = new FhirApi({
                         fhirUrl,
                         setUserDetails,
+                        onRequest: recordRequest,
                     });
                     const { json, status: statusCode } = await fhirApi.getBundleAsync({
                         resourceType,
@@ -223,6 +226,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         vid,
         fhirUrl,
         setUserDetails,
+        recordRequest,
         location.search,
         shouldBeJsonFormat,
     ]);

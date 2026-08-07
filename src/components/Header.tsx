@@ -1,22 +1,39 @@
 import React, { useContext, useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Button, Popover } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Button, Popover, Tooltip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { Link } from 'react-router';
+import TerminalIcon from '@mui/icons-material/Terminal';
+import { Link, useLocation } from 'react-router';
 import BwellIcon from '../dist/images/bwell.png';
 import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
+import LastRequestContext from '../context/LastRequestContext';
 import { useTheme } from '../context/ThemeContext';
 import { logout } from '../utils/auth.utils';
 
 const Header = () => {
     const env = useContext(EnvContext);
     const { userDetails, setUserDetails } = useContext(UserContext);
+    const { lastRequest } = useContext(LastRequestContext);
     const { isDarkMode, toggleDarkMode } = useTheme();
+    const location = useLocation();
     const [anchorEl, setAnchorEl] = useState(null);
+
+    const canOpenInConsole = Boolean(lastRequest && lastRequest.pathname === location.pathname);
+
+    const handleOpenInConsole = () => {
+        if (!lastRequest || !canOpenInConsole) {
+            return;
+        }
+        const params = new URLSearchParams({ urlSuffix: lastRequest.url });
+        if (lastRequest.method !== 'GET') {
+            params.set('method', lastRequest.method);
+        }
+        window.open(`/api-console?${params.toString()}`, '_blank', 'noopener,noreferrer');
+    };
 
     const handlePopoverOpen = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -47,6 +64,26 @@ const Header = () => {
                         </Typography>
                     </Button>
                     <div style={{ flexGrow: 1 }} />
+                    <Tooltip
+                        title={
+                            canOpenInConsole
+                                ? 'Open in API Console'
+                                : 'No FHIR request captured on this page yet'
+                        }
+                    >
+                        <span>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open in api console"
+                                id="btnOpenInApiConsole"
+                                onClick={handleOpenInConsole}
+                                disabled={!canOpenInConsole}
+                                sx={{ ml: 1 }}
+                            >
+                                <TerminalIcon />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
                     <IconButton
                         color="inherit"
                         aria-label="toggle dark mode"

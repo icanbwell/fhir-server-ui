@@ -247,7 +247,12 @@ const SectionGroup = ({ sections }: { sections?: TCompositionSection[] }) => {
         }
         flushLeafRun(`leaves-${index}`);
         blocks.push(
-            <Accordion key={`group-${index}`} disableGutters sx={{ ml: 2, mb: 1 }}>
+            <Accordion
+                key={`group-${index}`}
+                disableGutters
+                sx={{ ml: 2, mb: 1 }}
+                slotProps={{ transition: { mountOnEnter: true, unmountOnExit: true } }}
+            >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography variant="subtitle2">{section.title || 'Section'}</Typography>
                 </AccordionSummary>
@@ -413,7 +418,11 @@ const CompositionSummary = ({ resource, rawJsonHref }: TCompositionSummaryProps)
                     codingLabel && codingLabel.trim().toLowerCase() !== title.trim().toLowerCase();
                 const linkCount = section.entry?.length || 0;
                 return (
-                    <Accordion key={section.id ? String(section.id) : index} sx={{ mb: 2 }}>
+                    <Accordion
+                        key={section.id ? String(section.id) : index}
+                        sx={{ mb: 2 }}
+                        slotProps={{ transition: { mountOnEnter: true, unmountOnExit: true } }}
+                    >
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Box
                                 sx={{

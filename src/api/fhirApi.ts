@@ -1,5 +1,6 @@
 import { getStartAndEndDate } from '../utils/auditEventDateFilter';
 import BaseApi from './baseApi';
+import { HttpMethod } from '../context/LastRequestContext';
 
 interface GetResourceParams {
     id: string;
@@ -125,7 +126,7 @@ class FhirApi extends BaseApi {
         onHeaders,
         signal,
     }: {
-        method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+        method: HttpMethod;
         urlPath: string;
         data?: object;
         headers?: Record<string, string>;
@@ -158,6 +159,8 @@ class FhirApi extends BaseApi {
                 rawText: '',
             };
         }
+
+        this.onRequest?.({ method, url: url.pathname + url.search });
 
         const requestHeaders = this.buildHeaders({
             'Content-Type': 'application/fhir+json',

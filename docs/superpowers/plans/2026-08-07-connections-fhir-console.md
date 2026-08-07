@@ -21,6 +21,12 @@ existing `BaseApi`).
 
 ## Global Constraints
 
+- **Depends on a not-yet-deployed `aperture_token_service` endpoint.**
+  `GET /get-member-connection-token/{service_slug}/` doesn't exist yet — its own
+  spec/plan are in `aperture_token_service`'s `docs/superpowers/` on branch
+  `feature/member-connection-token-endpoint`. Task 2 below builds against that endpoint's
+  documented contract; it must be deployed (at least to `dev`) before Task 2's manual
+  verification step can pass.
 - **No automated test framework exists in this repo** (no jest/vitest/playwright/cucumber
   in `package.json`, no `*.test.*` files). Every task below replaces the "write a failing
   test" TDD cycle with: make the change, run `yarn lint` and `yarn tsc --noEmit` (must
@@ -33,6 +39,11 @@ existing `BaseApi`).
   own FHIR server means that connection's token is stale — it must not log the user out of
   this app. Only `TokenServiceApi` (talking to ATS itself, using the session token) uses
   the inherited `handleUnauthorized`.
+- **A 403 from ATS is not a 401.** `restrict_delegated_user_rest` (the guard on both ATS
+  endpoints this app calls) rejects delegated/authorized-representative users with 403,
+  which `BaseApi.handleUnauthorized` does *not* act on (it only logs out on 401) — both
+  new pages must check for `status === 403` themselves and show an explicit "not
+  available for delegated accounts" message, not a generic error.
 - **`ConnectionFhirApi`/`ConnectionConsolePage` must never call `LastRequestContext`'s
   `recordRequest`.** Doing so would make `Header.tsx`'s "Open in API Console" button
   offer to replay a third-party FHIR server's request against this app's own FHIR server.
@@ -49,8 +60,9 @@ existing `BaseApi`).
   must show an informational banner (not a hard block) when
   `getLocalData('identityProvider') !== 'bwellapp'`.
 - **Trailing slash is required** on the token-fetch URL:
-  `/all-tokens/{serviceSlug}/?member_id=...` — ATS 302-redirects a request missing it, and
-  `Authorization` doesn't survive that redirect.
+  `/get-member-connection-token/{serviceSlug}/` — FastAPI's default `redirect_slashes`
+  behavior 307-redirects a request missing it, and a redirect can drop the
+  `Authorization` header depending on the HTTP client.
 
 ---
 
@@ -63,7 +75,7 @@ existing `BaseApi`).
 **Interfaces:**
 - Consumes: nothing new.
 - Produces: `sendStreamingRequest(params): Promise<StreamingFetchResult>` and the
-  `StreamingFetchResult` type, both exported from `src/utils/streamingFetch.ts`. Task 4
+  `StreamingFetchResult` type, both exported from `src/utils/streamingFetch.ts`. Task 3
   (`ConnectionFhirApi`) imports both. `FhirApi.sendRequest`'s own exported signature and
   return shape are unchanged — this task is a pure internal refactor of that method.
 
@@ -285,7 +297,7 @@ git commit -m "Extract shared streaming-fetch utility from FhirApi.sendRequest"
 
 ---
 
-### Task 2: Add `ConnectionEntry` types and `TokenServiceApi`
+### Task 2: Add `ConnectionEntry`/`ConnectionToken` types and `TokenServiceApi`
 
 **Files:**
 - Create: `src/types/connectionEntry.ts`
@@ -294,11 +306,14 @@ git commit -m "Extract shared streaming-fetch utility from FhirApi.sendRequest"
 
 **Interfaces:**
 - Consumes: `BaseApi` (`src/api/baseApi.ts`), unchanged.
-- Produces: `ConnectionEntry`, `ListConnectionsResponse`, `ConnectionToken` types from
+- Produces: `ConnectionEntry`, `ConnectionToken` types from
   `src/types/connectionEntry.ts`; `TokenServiceApi` class from `src/api/tokenServiceApi.ts`
-  with `listConnections(params?): Promise<ListConnectionsResponse>` and
-  `getConnectionToken({serviceSlug, memberId}): Promise<ConnectionToken>`. Tasks 5 and 6
-  (the two new pages) consume both.
+  with `listConnections(): Promise<{status: number | undefined; connections: ConnectionEntry[]}>`
+  and `getConnectionToken({serviceSlug}): Promise<{status: number | undefined;
+  connectionToken: ConnectionToken | null}>`. Both methods return `status` alongside the
+  data (rather than throwing or silently degrading) so callers can distinguish a 403
+  (delegated-user, see Global Constraints) from a genuine empty result. Tasks 4 and 5 (the
+  two new pages) consume both.
 
 - [ ] **Step 1: Add the types**
 
@@ -306,25 +321,13 @@ Create `src/types/connectionEntry.ts`:
 
 ```ts
 export interface ConnectionEntry {
-    bwell_fhir_person_id: string;
-    client_fhir_person_id: string;
-    member_id: string;
-    patient_id: string;
-    display_name: string;
     service_slug: string;
+    display_name: string;
     category: string;
     status: string;
-    fhir_url: string;
-    fhir_version: string;
-    expiry: string;
-    unique_identifier: string;
-    scope: string;
-    custom_fhir_api_headers?: string;
-}
-
-export interface ListConnectionsResponse {
-    data: ConnectionEntry[];
-    next_cursor: string | null;
+    expired: boolean;
+    is_direct: boolean;
+    number_of_resources: number;
 }
 
 export interface ConnectionToken {
@@ -333,8 +336,13 @@ export interface ConnectionToken {
     fhir_version: string;
     patient_id: string;
     expiry: string;
+    custom_fhir_api_headers?: string;
 }
 ```
+
+`ConnectionEntry` has no `member_id`, `patient_id`, `fhir_url`, or token — ATS's
+`GET /get-member-connections` (below) doesn't return any of those; they only become
+available once a specific connection's token is fetched via `ConnectionToken`.
 
 - [ ] **Step 2: Add `TokenServiceApi`**
 
@@ -342,53 +350,60 @@ Create `src/api/tokenServiceApi.ts`:
 
 ```ts
 import BaseApi from './baseApi';
-import { ConnectionToken, ListConnectionsResponse } from '../types/connectionEntry';
+import { ConnectionEntry, ConnectionToken } from '../types/connectionEntry';
 
-interface ListConnectionsParams {
-    category?: string;
-    serviceSlug?: string;
-    cursor?: string;
-    limit?: number;
+interface RawConnectionEntry {
+    value: string;
+    display: string;
+    category: string;
+    status: string;
+    expired: boolean;
+    is_direct: boolean;
+    number_of_resources: number;
 }
 
 class TokenServiceApi extends BaseApi {
-    async listConnections(params: ListConnectionsParams = {}): Promise<ListConnectionsResponse> {
-        const queryParams: Record<string, string> = {
-            limit: String(params.limit ?? 50),
+    async listConnections(): Promise<{
+        status: number | undefined;
+        connections: ConnectionEntry[];
+    }> {
+        const { status, json } = await this.getData({ urlString: '/get-member-connections' });
+        const rawConnections: RawConnectionEntry[] = Array.isArray(json) ? json : [];
+        return {
+            status,
+            connections: rawConnections.map((raw) => ({
+                service_slug: raw.value,
+                display_name: raw.display,
+                category: raw.category,
+                status: raw.status,
+                expired: raw.expired,
+                is_direct: raw.is_direct,
+                number_of_resources: raw.number_of_resources,
+            })),
         };
-        if (params.category) {
-            queryParams.category = params.category;
-        }
-        if (params.serviceSlug) {
-            queryParams.service_slug = params.serviceSlug;
-        }
-        if (params.cursor) {
-            queryParams.cursor = params.cursor;
-        }
-
-        const { json } = await this.getData({ urlString: '/tokens', params: queryParams });
-        return json ?? { data: [], next_cursor: null };
     }
 
-    async getConnectionToken({
-        serviceSlug,
-        memberId,
-    }: {
-        serviceSlug: string;
-        memberId: string;
-    }): Promise<ConnectionToken> {
-        // Trailing slash before the query string is required: ATS 302-redirects a request
-        // missing it, and the Authorization header does not survive that redirect.
-        const { json } = await this.getData({
-            urlString: `/all-tokens/${encodeURIComponent(serviceSlug)}/`,
-            params: { member_id: memberId },
+    async getConnectionToken({ serviceSlug }: { serviceSlug: string }): Promise<{
+        status: number | undefined;
+        connectionToken: ConnectionToken | null;
+    }> {
+        // Trailing slash before the path ends is required: this endpoint 307-redirects a
+        // request missing it (FastAPI's default redirect_slashes behavior), and a redirect
+        // can drop the Authorization header depending on the HTTP client.
+        const { status, json } = await this.getData({
+            urlString: `/get-member-connection-token/${encodeURIComponent(serviceSlug)}/`,
         });
-        return json;
+        return { status, connectionToken: status === 200 ? json : null };
     }
 }
 
 export default TokenServiceApi;
 ```
+
+(Both methods return `status` alongside the parsed data so callers can show the
+403-delegated-user message from the Global Constraints section above, rather than
+throwing away the status the way a plain `Promise<ConnectionEntry[]>`/
+`Promise<ConnectionToken>` return would.)
 
 - [ ] **Step 3: Wire the new env var into `docker-compose.yml`**
 
@@ -409,7 +424,7 @@ Expected: 0 errors, 6 warnings (unchanged baseline).
 
 ```bash
 git add src/types/connectionEntry.ts src/api/tokenServiceApi.ts docker-compose.yml
-git commit -m "Add ConnectionEntry types and TokenServiceApi client"
+git commit -m "Add ConnectionEntry/ConnectionToken types and TokenServiceApi client"
 ```
 
 ---
@@ -426,7 +441,7 @@ git commit -m "Add ConnectionEntry types and TokenServiceApi client"
   `{baseUrl: string, token: string, customHeaders?: Record<string, string>}`, exposing
   `sendRequest(params): Promise<StreamingFetchResult>` with the same param shape
   `FhirApi.sendRequest` uses (`method`, `urlPath`, `data?`, `headers?`, `onChunk?`,
-  `onHeaders?`, `signal?`). Task 6 (`ConnectionConsolePage`) consumes this directly.
+  `onHeaders?`, `signal?`). Task 5 (`ConnectionConsolePage`) consumes this directly.
 
 - [ ] **Step 1: Create the class**
 
@@ -552,11 +567,8 @@ git commit -m "Add ConnectionFhirApi for calling a Token Service connection's ow
 - Modify: `src/routes/fhirRoutes.tsx`
 
 **Interfaces:**
-- Consumes: `TokenServiceApi` (Task 2), `EnvironmentContext` (for
-  `REACT_APP_TOKEN_SERVICE_URL` — read directly via `import.meta.env`, matching how
-  `BwellAppLogin.tsx` reads its own config vars, since this isn't part of the shared
-  `EnvContext` shape), `UserContext` (for `setUserDetails`, needed by `TokenServiceApi`'s
-  inherited `handleUnauthorized`), `getLocalData` (existing,
+- Consumes: `TokenServiceApi` (Task 2), `UserContext` (for `setUserDetails`, needed by
+  `TokenServiceApi`'s inherited `handleUnauthorized`), `getLocalData` (existing,
   `src/utils/localData.utils.ts`, to check `identityProvider`).
 - Produces: route `/connections`. Task 5 (`ConnectionConsolePage`) is what a row
   navigates to; it depends on this task's navigation `state` shape:
@@ -600,23 +612,29 @@ const ConnectionsListPage = () => {
     const isBwellAppLogin = getLocalData('identityProvider') === 'bwellapp';
 
     const [connections, setConnections] = useState<ConnectionEntry[]>([]);
-    const [nextCursor, setNextCursor] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [forbidden, setForbidden] = useState<boolean>(false);
     const [category, setCategory] = useState<string>('All');
     const [search, setSearch] = useState<string>('');
 
-    const loadConnections = async (cursor?: string) => {
+    const loadConnections = async () => {
         if (!tokenServiceUrl) {
             return;
         }
         setLoading(true);
         setError(null);
+        setForbidden(false);
         try {
             const api = new TokenServiceApi({ fhirUrl: tokenServiceUrl, setUserDetails });
-            const response = await api.listConnections({ cursor });
-            setConnections((prev) => (cursor ? [...prev, ...response.data] : response.data));
-            setNextCursor(response.next_cursor);
+            const { status, connections: loaded } = await api.listConnections();
+            if (status === 403) {
+                setForbidden(true);
+            } else if (status === 200) {
+                setConnections(loaded);
+            } else {
+                setError('Failed to load connections.');
+            }
         } catch {
             setError('Failed to load connections.');
         } finally {
@@ -651,10 +669,9 @@ const ConnectionsListPage = () => {
     }, [connections, category, search]);
 
     const handleSelect = (connection: ConnectionEntry) => {
-        navigate(
-            `/connections/${encodeURIComponent(connection.service_slug)}/console?member_id=${encodeURIComponent(connection.member_id)}`,
-            { state: { connection } }
-        );
+        navigate(`/connections/${encodeURIComponent(connection.service_slug)}/console`, {
+            state: { connection },
+        });
     };
 
     return (
@@ -676,6 +693,11 @@ const ConnectionsListPage = () => {
                         <Typography color="error">
                             Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
                         </Typography>
+                    ) : forbidden ? (
+                        <Alert severity="warning">
+                            Connections aren't available for delegated/authorized-representative
+                            accounts.
+                        </Alert>
                     ) : (
                         <>
                             <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
@@ -720,23 +742,22 @@ const ConnectionsListPage = () => {
                                 <List>
                                     {filtered.map((connection) => (
                                         <ListItemButton
-                                            key={connection.unique_identifier}
+                                            key={connection.service_slug}
                                             onClick={() => handleSelect(connection)}
                                             sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, mb: 1 }}
                                         >
                                             <ListItemText
                                                 primary={connection.display_name}
-                                                secondary={`${connection.service_slug} · ${connection.fhir_version} · expires ${connection.expiry}`}
+                                                secondary={connection.service_slug}
                                             />
                                             <Chip label={connection.category} size="small" sx={{ mr: 1 }} />
-                                            <Chip label={connection.status} size="small" variant="outlined" />
+                                            <Chip label={connection.status} size="small" variant="outlined" sx={{ mr: 1 }} />
+                                            {connection.expired && (
+                                                <Chip label="Expired" size="small" color="warning" />
+                                            )}
                                         </ListItemButton>
                                     ))}
                                 </List>
-                            )}
-
-                            {nextCursor && !loading && (
-                                <Button onClick={() => loadConnections(nextCursor)}>Load more</Button>
                             )}
                         </>
                     )}
@@ -749,6 +770,11 @@ const ConnectionsListPage = () => {
 
 export default ConnectionsListPage;
 ```
+
+(`BaseApi.getData` never throws — it catches internally and returns `{status, json}` even
+on a non-2xx response — so `listConnections`'s returned `status` is the reliable signal
+here, and `loadConnections`'s `catch` block only guards against something unrelated
+throwing, e.g. a bug in the mapping code above it.)
 
 - [ ] **Step 2: Add the route**
 
@@ -776,8 +802,12 @@ Run `yarn dev`, log in, navigate to `/connections`:
   instead of a crash.
 - Logged in via Cognito/Okta (not b.well App): confirms the "only works with b.well App
   login" banner shows.
-- Logged in via b.well App: confirms the banner is absent, and the list loads, category
-  filter and search narrow it, and "Load more" appears/works if `next_cursor` is present.
+- Logged in via b.well App: confirms the banner is absent, the list loads (requires
+  `aperture_token_service`'s `feature/member-connection-token-endpoint` work deployed to
+  the environment under test — `/get-member-connections` itself already exists today,
+  though, so the list should load even before the new single-connection endpoint ships),
+  category filter and search narrow it, and an expired connection shows its "Expired"
+  chip.
 
 - [ ] **Step 5: Commit**
 
@@ -808,8 +838,9 @@ Create `src/pages/ConnectionConsolePage.tsx`:
 
 ```tsx
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import {
+    Alert,
     Box,
     Button,
     Chip,
@@ -839,6 +870,9 @@ import UserContext from '../context/UserContext';
 import { HttpMethod } from '../context/LastRequestContext';
 import { ConnectionEntry, ConnectionToken } from '../types/connectionEntry';
 
+const FORBIDDEN_MESSAGE =
+    "Connections aren't available for delegated/authorized-representative accounts.";
+
 const parseCustomHeaders = (raw?: string): Record<string, string> => {
     if (!raw) {
         return {};
@@ -853,9 +887,7 @@ const parseCustomHeaders = (raw?: string): Record<string, string> => {
 const ConnectionConsolePage = () => {
     const { setUserDetails } = useContext(UserContext);
     const { serviceSlug } = useParams();
-    const [searchParams] = useSearchParams();
     const location = useLocation();
-    const memberId = searchParams.get('member_id') || '';
 
     const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
 
@@ -866,6 +898,7 @@ const ConnectionConsolePage = () => {
     const [loadingConnection, setLoadingConnection] = useState<boolean>(false);
     const [loadingToken, setLoadingToken] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [forbidden, setForbidden] = useState<boolean>(false);
 
     const [method, setMethod] = useState<HttpMethod>('GET');
     const [urlSuffix, setUrlSuffix] = useState<string>('');
@@ -884,13 +917,14 @@ const ConnectionConsolePage = () => {
     const abortControllerRef = useRef<AbortController | null>(null);
 
     const connectionMandatedHeaders = useMemo(
-        () => parseCustomHeaders(connection?.custom_fhir_api_headers),
-        [connection]
+        () => parseCustomHeaders(connectionToken?.custom_fhir_api_headers),
+        [connectionToken]
     );
 
     // Resolve connection metadata: prefer the fast path from a ConnectionsListPage click
-    // (already in router state), fall back to re-fetching by slug for a bookmarked/
-    // refreshed URL that never went through the list page.
+    // (already in router state), fall back to re-fetching the full list for a bookmarked/
+    // refreshed URL that never went through the list page. /get-member-connections has no
+    // per-slug filter, so this fetches everything and finds the match client-side.
     useEffect(() => {
         if (connection || !tokenServiceUrl || !serviceSlug) {
             return;
@@ -900,9 +934,14 @@ const ConnectionConsolePage = () => {
             setError(null);
             try {
                 const api = new TokenServiceApi({ fhirUrl: tokenServiceUrl, setUserDetails });
-                const response = await api.listConnections({ serviceSlug });
-                if (response.data[0]) {
-                    setConnection(response.data[0]);
+                const { status, connections } = await api.listConnections();
+                if (status === 403) {
+                    setForbidden(true);
+                    return;
+                }
+                const match = connections.find((c) => c.service_slug === serviceSlug);
+                if (match) {
+                    setConnection(match);
                 } else {
                     setError(`No connection found for service slug "${serviceSlug}".`);
                 }
@@ -917,21 +956,28 @@ const ConnectionConsolePage = () => {
     }, [connection, tokenServiceUrl, serviceSlug]);
 
     const fetchToken = useCallback(async () => {
-        if (!tokenServiceUrl || !serviceSlug || !memberId) {
+        if (!tokenServiceUrl || !serviceSlug) {
             return;
         }
         setLoadingToken(true);
         setError(null);
+        setForbidden(false);
         try {
             const api = new TokenServiceApi({ fhirUrl: tokenServiceUrl, setUserDetails });
-            const token = await api.getConnectionToken({ serviceSlug, memberId });
-            setConnectionToken(token);
+            const { status, connectionToken: token } = await api.getConnectionToken({ serviceSlug });
+            if (status === 403) {
+                setForbidden(true);
+            } else if (status === 200 && token) {
+                setConnectionToken(token);
+            } else {
+                setError('Failed to fetch a token for this connection.');
+            }
         } catch {
             setError('Failed to fetch a token for this connection.');
         } finally {
             setLoadingToken(false);
         }
-    }, [tokenServiceUrl, serviceSlug, memberId, setUserDetails]);
+    }, [tokenServiceUrl, serviceSlug, setUserDetails]);
 
     useEffect(() => {
         fetchToken();
@@ -1065,6 +1111,8 @@ const ConnectionConsolePage = () => {
                         <Typography color="error">
                             Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
                         </Typography>
+                    ) : forbidden ? (
+                        <Alert severity="warning">{FORBIDDEN_MESSAGE}</Alert>
                     ) : loadingConnection ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                             <CircularProgress />
@@ -1079,7 +1127,10 @@ const ConnectionConsolePage = () => {
                                     <Typography variant="h6">{connection.display_name}</Typography>
                                     <Chip label={connection.category} size="small" />
                                     <Chip label={connection.status} size="small" variant="outlined" />
-                                    <Chip label={connection.fhir_version} size="small" variant="outlined" />
+                                    {connection.expired && <Chip label="Expired" size="small" color="warning" />}
+                                    {connectionToken && (
+                                        <Chip label={connectionToken.fhir_version} size="small" variant="outlined" />
+                                    )}
                                     <Box sx={{ flexGrow: 1 }} />
                                     <Button
                                         size="small"
@@ -1316,18 +1367,20 @@ Expected: 0 errors, 6 warnings (unchanged baseline).
 
 - [ ] **Step 4: Verify — manual**
 
-Run `yarn dev`, log in, go to `/connections`, click a connection:
-- Confirms the info bar shows display name/category/status/FHIR version, and a token is
-  fetched (patient_id + expiry appear).
+Requires `aperture_token_service`'s `feature/member-connection-token-endpoint` deployed
+to the environment under test (see Global Constraints). Run `yarn dev`, log in, go to
+`/connections`, click a connection:
+- Confirms the info bar shows display name/category/status, and a token is fetched
+  (FHIR version chip, patient_id, and expiry appear once loaded).
 - Click "Refresh Token" — confirms it re-fetches without navigating away.
 - Type a request path and Send — confirms a request goes to the connection's own FHIR
-  server (check the Network tab: request URL host should be the connection's `fhir_url`,
-  not this app's own `REACT_APP_FHIR_SERVER_URL`) using `Authorization: Bearer
-  <connection token>` (not the local session's token).
+  server (check the Network tab: request URL host should be the connection's `url`, not
+  this app's own `REACT_APP_FHIR_SERVER_URL`) using `Authorization: Bearer <connection
+  token>` (not the local session's token).
 - If the connection has `custom_fhir_api_headers`, confirm they appear as read-only rows
   under "From this connection (always sent)" and are present on the outgoing request.
 - Copy the current URL, open it in a new tab (no router `state` this time) — confirms the
-  list-by-slug fallback resolves the connection and the page still works.
+  list-based fallback resolves the connection and the page still works.
 - Confirm `Header.tsx`'s "Open in API Console" button stays disabled/inactive while on
   this page (it must not offer to replay a connection request against this app's own FHIR
   server).
@@ -1402,18 +1455,22 @@ git commit -m "Add Connections nav entry point to Header"
 
 ## Final manual pass
 
-After all tasks, run through this once more in one sitting:
+After all tasks, and after `aperture_token_service`'s
+`feature/member-connection-token-endpoint` has been deployed to the environment under
+test, run through this once more in one sitting:
 
 - [ ] `/api-console` and `Header.tsx`'s existing "Open in API Console" button behave
       exactly as before Task 1's refactor (streaming, abort, 401-logout all unchanged).
-- [ ] `/connections` lists real ATS connections (staging), filter/search/"Load more" all
-      work.
+- [ ] `/connections` lists real ATS connections (staging), filter/search work, expired
+      connections show their chip.
 - [ ] Selecting a connection opens its console with a live token; "Refresh Token" works.
 - [ ] A real request against at least one connection's FHIR server succeeds end-to-end —
-      confirms or refutes the CORS open question from the design doc in practice.
+      the CORS question from the design doc, in practice.
 - [ ] A connection with `custom_fhir_api_headers` sends them automatically and shows them
       as read-only.
 - [ ] A bookmarked/refreshed console URL (no router `state`) still resolves correctly.
-- [ ] An ATS 401 logs the user out, same as any other API call in this app.
+- [ ] An ATS 401 logs the user out, same as any other API call in this app; a 403
+      (delegated-user login, if available to test with) shows the "not available"
+      message on both pages instead.
 - [ ] `yarn lint` and `yarn tsc --noEmit` both clean across the whole branch (0 errors, 6
       pre-existing warnings).

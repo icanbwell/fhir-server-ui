@@ -30,7 +30,7 @@ import {
 import { themeBalham } from 'ag-grid-community';
 import FileDownload from './FileDownload';
 import type { ColDef, ColGroupDef, ICellRendererParams } from 'ag-grid-community';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import { useTheme } from '../context/ThemeContext';
 
 ModuleRegistry.registerModules([

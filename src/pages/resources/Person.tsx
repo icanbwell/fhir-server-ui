@@ -8,7 +8,7 @@ Person
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Typography } from '@mui/material';
 import { TPerson } from '../../types/resources/Person';
 

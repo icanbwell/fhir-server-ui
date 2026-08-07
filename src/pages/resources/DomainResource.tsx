@@ -6,7 +6,7 @@ DomainResource
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TDomainResource } from '../../types/resources/DomainResource';
 
 // Import all the partial resource

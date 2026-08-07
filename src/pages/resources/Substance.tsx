@@ -7,7 +7,7 @@ Substance
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSubstance } from '../../types/resources/Substance';
 
 // Import all the partial resource

@@ -7,7 +7,7 @@ Ingredient
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TIngredient } from '../../types/resources/Ingredient';
 
 // Import all the partial resource

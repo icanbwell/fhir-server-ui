@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { Accordion, Box, Button, LinearProgress } from '@mui/material';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router';
 import AdminApi from '../api/adminApi';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';

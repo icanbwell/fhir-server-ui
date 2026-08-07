@@ -9,7 +9,7 @@ GraphDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TGraphDefinition } from '../../types/resources/GraphDefinition';
 
 // Import all the partial resource

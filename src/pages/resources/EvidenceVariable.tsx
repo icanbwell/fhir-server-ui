@@ -8,7 +8,7 @@ EvidenceVariable
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TEvidenceVariable } from '../../types/resources/EvidenceVariable';
 
 // Import all the partial resource

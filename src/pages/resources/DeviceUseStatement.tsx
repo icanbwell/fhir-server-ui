@@ -8,7 +8,7 @@ DeviceUseStatement
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TDeviceUseStatement } from '../../types/resources/DeviceUseStatement';
 
 // Import all the partial resource

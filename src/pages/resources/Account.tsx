@@ -8,7 +8,7 @@ Account
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TAccount } from '../../types/resources/Account';
 
 // Import all the partial resource

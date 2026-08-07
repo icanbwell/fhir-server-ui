@@ -9,7 +9,7 @@ EpisodeOfCare
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TEpisodeOfCare } from '../../types/resources/EpisodeOfCare';
 
 // Import all the partial resource

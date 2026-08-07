@@ -8,7 +8,7 @@ Linkage
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TLinkage } from '../../types/resources/Linkage';
 
 // Import all the partial resource

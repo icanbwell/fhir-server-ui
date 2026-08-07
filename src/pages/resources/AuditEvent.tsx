@@ -9,7 +9,7 @@ AuditEvent
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TAuditEvent } from '../../types/resources/AuditEvent';
 
 // Import all the partial resource

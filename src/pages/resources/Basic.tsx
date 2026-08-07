@@ -9,7 +9,7 @@ Basic
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TBasic } from '../../types/resources/Basic';
 
 // Import all the partial resource

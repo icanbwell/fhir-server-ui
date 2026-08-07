@@ -8,7 +8,7 @@ RiskAssessment
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TRiskAssessment } from '../../types/resources/RiskAssessment';
 
 // Import all the partial resource

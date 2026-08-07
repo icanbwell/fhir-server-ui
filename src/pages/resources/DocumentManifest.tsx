@@ -8,7 +8,7 @@ DocumentManifest
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TDocumentManifest } from '../../types/resources/DocumentManifest';
 
 // Import all the partial resource

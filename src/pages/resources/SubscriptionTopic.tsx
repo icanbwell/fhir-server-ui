@@ -8,7 +8,7 @@ SubscriptionTopic
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSubscriptionTopic } from '../../types/resources/SubscriptionTopic';
 
 // Import all the partial resource

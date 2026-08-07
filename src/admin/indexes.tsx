@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import EnvContext from '../context/EnvironmentContext';
 import AdminApi from '../api/adminApi';
 import { Box, LinearProgress, Typography } from '@mui/material';

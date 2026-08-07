@@ -10,7 +10,7 @@ ImplementationGuide
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TImplementationGuide } from '../../types/resources/ImplementationGuide';
 
 // Import all the partial resource

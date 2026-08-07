@@ -11,7 +11,7 @@ PlanDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TPlanDefinition } from '../../types/resources/PlanDefinition';
 
 // Import all the partial resource

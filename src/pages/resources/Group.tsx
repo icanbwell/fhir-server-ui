@@ -10,7 +10,7 @@ Group
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TGroup } from '../../types/resources/Group';
 
 // Import all the partial resource

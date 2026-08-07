@@ -10,7 +10,7 @@ ValueSet
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TValueSet } from '../../types/resources/ValueSet';
 
 // Import all the partial resource

@@ -1,6 +1,6 @@
 // filepath: /Users/imranqureshi/git/fhir-server.ui/src/pages/IPSViewerPage.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Box } from '@mui/material';
 import IPSViewer from '../components/IPSViewer';
 import Header from '../components/Header';

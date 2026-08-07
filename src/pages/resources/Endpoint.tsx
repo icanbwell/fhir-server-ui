@@ -9,7 +9,7 @@ Endpoint
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TEndpoint } from '../../types/resources/Endpoint';
 
 // Import all the partial resource

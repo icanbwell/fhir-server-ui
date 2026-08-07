@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography';
 import { TBaseResourceProps } from '../types/baseTypes';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 type TResourceLinkProps = TBaseResourceProps & {

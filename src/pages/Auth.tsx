@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { getLocalData, setLocalData } from '../utils/localData.utils';
 import UserContext from '../context/UserContext';
 import { jwtParser } from '../utils/jwtParser';

@@ -8,7 +8,7 @@ SupplyRequest
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSupplyRequest } from '../../types/resources/SupplyRequest';
 
 // Import all the partial resource

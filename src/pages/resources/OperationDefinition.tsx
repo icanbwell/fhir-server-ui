@@ -8,7 +8,7 @@ OperationDefinition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TOperationDefinition } from '../../types/resources/OperationDefinition';
 
 // Import all the partial resource

@@ -8,7 +8,7 @@ PaymentNotice
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TPaymentNotice } from '../../types/resources/PaymentNotice';
 
 // Import all the partial resource

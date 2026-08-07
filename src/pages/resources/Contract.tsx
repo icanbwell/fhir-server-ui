@@ -8,7 +8,7 @@ Contract
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TContract } from '../../types/resources/Contract';
 
 // Import all the partial resource

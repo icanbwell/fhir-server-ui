@@ -8,7 +8,7 @@ Condition
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TCondition } from '../../types/resources/Condition';
 
 // Import all the partial resource

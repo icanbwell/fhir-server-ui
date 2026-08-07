@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Alert, Box, CircularProgress } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';

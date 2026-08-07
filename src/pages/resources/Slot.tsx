@@ -7,7 +7,7 @@ Slot
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TSlot } from '../../types/resources/Slot';
 
 // Import all the partial resource

@@ -9,7 +9,7 @@ MeasureReport
 */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TMeasureReport } from '../../types/resources/MeasureReport';
 
 // Import all the partial resource

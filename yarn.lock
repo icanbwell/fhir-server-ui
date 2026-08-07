@@ -1749,6 +1749,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@streamparser/json@npm:^0.0.23":
+  version: 0.0.23
+  resolution: "@streamparser/json@npm:0.0.23"
+  checksum: 10c0/88d9b61559ccc52cdea71a0cdafa0a3872e4924357429dab5122f357ee47a5878cd330ff26f66968d0772dcae3c38cb5c6d4da11d51ad51489c9f0a70306fbe7
+  languageName: node
+  linkType: hard
+
 "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0":
   version: 8.0.0
   resolution: "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0"
@@ -3224,6 +3231,7 @@ __metadata:
     "@mui/material": "npm:^9.0.1"
     "@mui/x-date-pickers": "npm:^9.3.0"
     "@sentry/react": "npm:10.53.1"
+    "@streamparser/json": "npm:^0.0.23"
     "@types/file-saver": "npm:^2.0.7"
     "@types/node": "npm:^25.9.1"
     "@types/react": "npm:^19.2.15"

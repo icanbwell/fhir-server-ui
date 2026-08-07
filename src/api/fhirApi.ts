@@ -36,13 +36,16 @@ class FhirApi extends BaseApi {
         return await this.getData({urlString});
     }
 
-    async getBundleAsync({
-        resourceType,
-        id,
-        queryString,
-        queryParameters,
-        operation,
-    }: GetBundleAsyncParams): Promise<{ status: number | undefined; json: any }> {
+    async getBundleAsync(
+        {
+            resourceType,
+            id,
+            queryString,
+            queryParameters,
+            operation,
+        }: GetBundleAsyncParams,
+        options?: { onChunk?: (chunk: Uint8Array) => void }
+    ): Promise<{ status: number | undefined; json: any; incomplete: boolean }> {
         const url = this.getUrl({
             resourceType,
             id,
@@ -50,7 +53,7 @@ class FhirApi extends BaseApi {
             queryParameters,
             operation,
         });
-        return await this.getData({urlString: url.toString()});
+        return await this.getData({urlString: url.toString()}, options);
     }
 
     addMissingRequiredParams({

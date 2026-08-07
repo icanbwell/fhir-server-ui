@@ -20,6 +20,7 @@ import GridOnIcon from '@mui/icons-material/GridOn'; // New icon for spreadsheet
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
 import APIConsolePage from './APIConsolePage';
+import { createBundleEntryParser } from '../utils/incrementalBundleParser';
 
 /**
  * IndexPage/home/ubuntu/Documents/code/EFS/fhir-server/src/pages/SearchPage.jsx
@@ -176,12 +177,52 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         setUserDetails,
                         onRequest: recordRequest,
                     });
-                    const { json, status: statusCode } = await fhirApi.getBundleAsync({
-                        resourceType,
-                        id,
-                        queryString,
-                        operation: vid ? `_history/${vid}` : operation,
-                    });
+
+                    let incrementalResults: any[] = [];
+                    let parserFailed = false;
+                    const streamParser = shouldBeJsonFormat
+                        ? undefined
+                        : createBundleEntryParser(
+                              (resource) => {
+                                  incrementalResults = [...incrementalResults, resource];
+                                  // Render each resource as it parses. The end-of-stream full JSON.parse
+                                  // result (below) still overwrites this once the response completes, so
+                                  // a parser miss never leaves the page silently short of data — it just
+                                  // skips the "populate live" effect for whatever wasn't caught
+                                  // incrementally.
+                                  setResources(incrementalResults);
+                              },
+                              (err) => {
+                                  console.error(
+                                      'Incremental bundle parsing failed, falling back to full parse:',
+                                      err
+                                  );
+                                  parserFailed = true;
+                              }
+                          );
+
+                    const {
+                        json,
+                        status: statusCode,
+                        incomplete,
+                    } = await fhirApi.getBundleAsync(
+                        {
+                            resourceType,
+                            id,
+                            queryString,
+                            operation: vid ? `_history/${vid}` : operation,
+                        },
+                        {
+                            onChunk: streamParser
+                                ? (chunk) => {
+                                      if (!parserFailed) {
+                                          streamParser.write(chunk);
+                                      }
+                                  }
+                                : undefined,
+                        }
+                    );
+                    streamParser?.finish();
 
                     // set indexStart
                     const queryParams = new URLSearchParams(location.search || '');
@@ -192,6 +233,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
 
                     // noinspection JSCheckFunctionSignatures
                     setStatus(statusCode);
+                    if (incomplete) {
+                        console.warn(
+                            'Search response was interrupted mid-stream; results may be incomplete until retried.'
+                        );
+                    }
                     if (shouldBeJsonFormat) {
                         setResources(json);
                     } else if (json && json.entry) {

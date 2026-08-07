@@ -33,7 +33,7 @@ export interface StreamRequestParams {
 export interface StreamRequestResult {
     status: number | undefined;
     headers: Record<string, string>;
-    bytes: Uint8Array;
+    chunks: Uint8Array[];
     text: string;
     incomplete: boolean;
     errorMessage?: string;
@@ -150,7 +150,7 @@ class BaseApi {
             return {
                 status: undefined,
                 headers: {},
-                bytes: new Uint8Array(0),
+                chunks: [],
                 text: JSON.stringify({ error: 'Request path must stay on the configured FHIR server' }),
                 incomplete: false,
             };
@@ -184,7 +184,7 @@ class BaseApi {
             return {
                 status: undefined,
                 headers: {},
-                bytes: new Uint8Array(0),
+                chunks: [],
                 text: '',
                 incomplete: true,
                 errorMessage: err?.message || 'Request failed',
@@ -201,7 +201,11 @@ class BaseApi {
         onHeaders?.(response.status, responseHeaders);
         await this.handleUnauthorized(response.status);
 
-        const totalBytes = responseHeaders['content-length']
+        // Content-Length reflects the compressed size when the server sends a Content-Encoding
+        // (gzip/br/deflate), but reader.read() yields decompressed bytes — comparing the two would
+        // make the progress percentage race past 100%. Treat the total as unknown whenever the
+        // response is encoded; the indicator falls back to an indeterminate progress bar.
+        const totalBytes = !responseHeaders['content-encoding'] && responseHeaders['content-length']
             ? parseInt(responseHeaders['content-length'], 10)
             : undefined;
 
@@ -211,12 +215,6 @@ class BaseApi {
         let text = '';
 
         const finalize = (incomplete: boolean): StreamRequestResult => {
-            const bytes = new Uint8Array(receivedBytes);
-            let offset = 0;
-            for (const chunk of receivedChunks) {
-                bytes.set(chunk, offset);
-                offset += chunk.length;
-            }
             // Flush any dangling partial multi-byte UTF-8 sequence buffered internally by the
             // decoder from the last `{ stream: true }` call — without this, a chunk boundary that
             // splits a multi-byte character at the very end of the body silently drops it from
@@ -225,7 +223,7 @@ class BaseApi {
             if (responseMode === 'text') {
                 text += decoder.decode();
             }
-            return { status: response.status, headers: responseHeaders, bytes, text, incomplete };
+            return { status: response.status, headers: responseHeaders, chunks: receivedChunks, text, incomplete };
         };
 
         try {
@@ -314,17 +312,21 @@ class BaseApi {
         url: string,
         options?: { onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void }
     ): Promise<{ status: number; data: Blob; headers: Record<string, string> }> {
-        const { status, bytes, headers } = await this.streamRequest({
+        const { status, chunks, headers, errorMessage } = await this.streamRequest({
             method: 'GET',
             urlString: url,
             responseMode: 'binary',
             onProgress: options?.onProgress,
         });
         if (!status || status < 200 || status >= 300) {
-            throw Object.assign(new Error(`Request failed with status ${status}`), { status });
+            throw Object.assign(new Error(errorMessage || `Request failed with status ${status}`), { status });
         }
         const contentType = headers['content-type'] || 'application/octet-stream';
-        return { status, data: new Blob([bytes as Uint8Array<ArrayBuffer>], { type: contentType }), headers };
+        return {
+            status,
+            data: new Blob(chunks as Uint8Array<ArrayBuffer>[], { type: contentType }),
+            headers,
+        };
     }
 
 }

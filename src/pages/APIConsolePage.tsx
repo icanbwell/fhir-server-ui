@@ -54,6 +54,7 @@ const APIConsolePage = () => {
 
     const [resourceJson, setResourceJson] = useState<string>('');
     const [customHeaders, setCustomHeaders] = useState<KeyValueRow[]>([{ key: '', value: '' }]);
+    const [activeRequestTab, setActiveRequestTab] = useState<'body' | 'headers'>('body');
     const [responseJson, setResponseJson] = useState<object | null>(null);
     const [responseStatus, setResponseStatus] = useState<number | null>(null);
     const [responseHeaders, setResponseHeaders] = useState<Record<string, string>>({});
@@ -308,17 +309,6 @@ const APIConsolePage = () => {
                         </Button>
                     </Box>
 
-                    {/* Custom request headers */}
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                        Request Headers
-                    </Typography>
-                    <KeyValueRows
-                        rows={customHeaders}
-                        onChange={setCustomHeaders}
-                        keyLabel="Header name"
-                        valueLabel="Value"
-                    />
-
                     {/* URL preview */}
                     {requestUrl && (
                         <Typography
@@ -355,12 +345,25 @@ const APIConsolePage = () => {
                                 overflow: 'hidden',
                             }}
                         >
-                            <Typography
-                                variant="subtitle2"
-                                sx={{ p: 1, borderBottom: '1px solid', borderColor: 'divider' }}
+                            <Box
+                                sx={{
+                                    p: 1,
+                                    borderBottom: '1px solid',
+                                    borderColor: 'divider',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
                             >
-                                Request Body
-                            </Typography>
+                                <Typography variant="subtitle2">Request</Typography>
+                                <Tabs
+                                    value={activeRequestTab}
+                                    onChange={(_, val) => setActiveRequestTab(val)}
+                                    sx={{ minHeight: 0, ml: 'auto' }}
+                                >
+                                    <Tab label="Body" value="body" sx={{ minHeight: 0, py: 0.5 }} />
+                                    <Tab label="Headers" value="headers" sx={{ minHeight: 0, py: 0.5 }} />
+                                </Tabs>
+                            </Box>
                             {fetching ? (
                                 <Box
                                     sx={{
@@ -371,6 +374,15 @@ const APIConsolePage = () => {
                                     }}
                                 >
                                     <CircularProgress />
+                                </Box>
+                            ) : activeRequestTab === 'headers' ? (
+                                <Box sx={{ flex: 1, overflow: 'auto', p: 1 }}>
+                                    <KeyValueRows
+                                        rows={customHeaders}
+                                        onChange={setCustomHeaders}
+                                        keyLabel="Header name"
+                                        valueLabel="Value"
+                                    />
                                 </Box>
                             ) : (
                                 <Box sx={{ flex: 1, overflow: 'auto', minHeight: 0 }}>

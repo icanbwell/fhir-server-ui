@@ -89,7 +89,12 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </Box>
                 )}
                 {/* if we have a single resource*/}
-                {resources && resources.length === 1 && resources[0].text?.div && (
+                {/* Gated on !loading: during incremental streaming, `resources` can transiently
+                    have length 1 (the first entry to finish parsing) before the rest of the
+                    Bundle arrives — without this guard, a resource that happens to carry a
+                    narrative would flash this "Answer" banner as if it were the sole, definitive
+                    result, then have it disappear once the next entry streams in. */}
+                {!loading && resources && resources.length === 1 && resources[0].text?.div && (
                     <Alert severity="success">
                         <AlertTitle>Answer</AlertTitle>
                         <Box
@@ -100,7 +105,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                     </Alert>
                 )}
                 {/*if we have a list of resources*/}
-                {resources && resources.length === 1 && resources[0].resource?.text?.div && (
+                {!loading && resources && resources.length === 1 && resources[0].resource?.text?.div && (
                     <Alert severity="success">
                         <AlertTitle>Answer</AlertTitle>
                         <Box
@@ -156,6 +161,14 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         if (id) {
             setResourceCardExpanded(true);
         }
+        // Guards every state write below against a request this effect has abandoned — e.g. the
+        // user navigates from one resourceType/query to another before a large, slow search
+        // finishes streaming. Without this, the abandoned request's onChunk callback keeps
+        // calling setResources with stale data (from the OLD resourceType) for as long as its
+        // download continues, and its terminal setLoading(false) can clear the loading spinner
+        // for the NEW, still-in-flight request. The cleanup function below flips this once a
+        // newer effect run supersedes this one.
+        let cancelled = false;
         const callApi = async () => {
             document.title = 'FHIR Server';
             if (operation === '$merge' && !shouldBeJsonFormat) {
@@ -222,14 +235,24 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                                           // Render whatever the parser found in this chunk. Batching per
                                           // chunk (rather than per entry) keeps re-renders proportional to
                                           // the number of network chunks received, not the number of
-                                          // resources in the Bundle.
-                                          setResources([...incrementalResults]);
+                                          // resources in the Bundle. Skipped once this effect has been
+                                          // superseded, so an abandoned request can't overwrite a newer
+                                          // search's results while its stream keeps delivering chunks.
+                                          if (!cancelled) {
+                                              setResources([...incrementalResults]);
+                                          }
                                       }
                                   }
                                 : undefined,
                         }
                     );
                     streamParser?.finish();
+
+                    if (cancelled) {
+                        // A newer effect run has already taken over — don't let this abandoned
+                        // request's terminal, authoritative result overwrite it.
+                        return;
+                    }
 
                     // set indexStart
                     const queryParams = new URLSearchParams(location.search || '');
@@ -274,10 +297,15 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             } catch (error) {
                 console.error(error);
             } finally {
-                setLoading(false);
+                if (!cancelled) {
+                    setLoading(false);
+                }
             }
         };
         callApi().catch(console.error);
+        return () => {
+            cancelled = true;
+        };
     }, [
         id,
         queryString,

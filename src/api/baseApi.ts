@@ -209,56 +209,85 @@ class BaseApi {
             ? parseInt(responseHeaders['content-length'], 10)
             : undefined;
 
-        const receivedChunks: Uint8Array[] = [];
-        let receivedBytes = 0;
         const decoder = new TextDecoder();
-        let text = '';
+        const { chunks, text: bodyText, incomplete } = await this.readStreamedBody({
+            response,
+            responseMode,
+            decoder,
+            onChunk,
+            onProgress,
+            totalBytes,
+        });
 
-        const finalize = (incomplete: boolean): StreamRequestResult => {
-            // Flush any dangling partial multi-byte UTF-8 sequence buffered internally by the
-            // decoder from the last `{ stream: true }` call — without this, a chunk boundary that
-            // splits a multi-byte character at the very end of the body silently drops it from
-            // `text`. Calling decode() with no arguments (equivalent to `{ stream: false }`) is
-            // safe to call even when nothing is buffered (returns '').
-            if (responseMode === 'text') {
-                text += decoder.decode();
+        // Flush any dangling partial multi-byte UTF-8 sequence buffered internally by the
+        // decoder from the last `{ stream: true }` call — without this, a chunk boundary that
+        // splits a multi-byte character at the very end of the body silently drops it from
+        // `text`. Calling decode() with no arguments (equivalent to `{ stream: false }`) is
+        // safe to call even when nothing is buffered (returns '').
+        const text = responseMode === 'text' ? bodyText + decoder.decode() : bodyText;
+
+        return { status: response.status, headers: responseHeaders, chunks, text, incomplete };
+    }
+
+    // Extracted from streamRequest() to keep control-flow nesting shallow: this owns the
+    // response.body reader loop (and the bodyless-response fallback) as its own scope, and
+    // catches a mid-stream drop internally so it can return whatever partial chunks/text
+    // already arrived — the caller doesn't need its own try/catch around this.
+    private async readStreamedBody({
+        response,
+        responseMode,
+        decoder,
+        onChunk,
+        onProgress,
+        totalBytes,
+    }: {
+        response: Response;
+        responseMode: 'text' | 'binary';
+        decoder: TextDecoder;
+        onChunk?: (chunk: Uint8Array) => void;
+        onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
+        totalBytes: number | undefined;
+    }): Promise<{ chunks: Uint8Array[]; text: string; incomplete: boolean }> {
+        if (!response.body) {
+            if (responseMode !== 'text') {
+                return { chunks: [], text: '', incomplete: false };
             }
-            return { status: response.status, headers: responseHeaders, chunks: receivedChunks, text, incomplete };
-        };
+            const text = await response.text();
+            onChunk?.(new TextEncoder().encode(text));
+            onProgress?.(text.length, totalBytes);
+            return { chunks: [], text, incomplete: false };
+        }
 
+        const reader = response.body.getReader();
+        const chunks: Uint8Array[] = [];
+        let text = '';
+        let receivedBytes = 0;
         try {
-            if (response.body) {
-                const reader = response.body.getReader();
-                let done = false;
-                while (!done) {
-                    const result = await reader.read();
-                    done = result.done;
-                    if (result.value) {
-                        receivedChunks.push(result.value);
-                        receivedBytes += result.value.length;
-                        if (responseMode === 'text') {
-                            text += decoder.decode(result.value, { stream: true });
-                        }
-                        onChunk?.(result.value);
-                        onProgress?.(receivedBytes, totalBytes);
-                    }
+            let done = false;
+            while (!done) {
+                const result = await reader.read();
+                done = result.done;
+                if (!result.value) {
+                    continue;
                 }
-            } else if (responseMode === 'text') {
-                text = await response.text();
-                onChunk?.(new TextEncoder().encode(text));
-                onProgress?.(text.length, totalBytes);
+                chunks.push(result.value);
+                receivedBytes += result.value.length;
+                if (responseMode === 'text') {
+                    text += decoder.decode(result.value, { stream: true });
+                }
+                onChunk?.(result.value);
+                onProgress?.(receivedBytes, totalBytes);
             }
         } catch (err: any) {
             if (err?.name === 'AbortError') {
                 throw err;
             }
             // A mid-stream drop rejects here. Headers were already surfaced via onHeaders and
-            // whatever bytes arrived via onChunk, so resolve with the partial data instead of
-            // throwing — callers decide how to degrade rather than losing everything.
-            return finalize(true);
+            // whatever bytes arrived via onChunk, so return the partial data instead of
+            // throwing — the caller decides how to degrade rather than losing everything.
+            return { chunks, text, incomplete: true };
         }
-
-        return finalize(false);
+        return { chunks, text, incomplete: false };
     }
 
     async getData(
@@ -312,7 +341,7 @@ class BaseApi {
         url: string,
         options?: { onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void }
     ): Promise<{ status: number; data: Blob; headers: Record<string, string> }> {
-        const { status, chunks, headers, errorMessage } = await this.streamRequest({
+        const { status, chunks, headers, errorMessage, incomplete } = await this.streamRequest({
             method: 'GET',
             urlString: url,
             responseMode: 'binary',
@@ -320,6 +349,18 @@ class BaseApi {
         });
         if (!status || status < 200 || status >= 300) {
             throw Object.assign(new Error(errorMessage || `Request failed with status ${status}`), { status });
+        }
+        if (incomplete) {
+            // streamRequest() still reports the original 2xx status captured when fetch()
+            // resolved, before the body finished — a mid-download connection drop would
+            // otherwise look like a normal successful download and hand callers a silently
+            // truncated Blob. Throwing here restores the pre-refactor axios behavior (a dropped
+            // connection rejected the promise), which both FileDownload.tsx and
+            // SpreadsheetViewer.tsx already handle with a visible error in their catch blocks.
+            throw Object.assign(new Error('Connection interrupted before the download finished'), {
+                status,
+                incomplete: true,
+            });
         }
         const contentType = headers['content-type'] || 'application/octet-stream';
         return {

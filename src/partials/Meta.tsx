@@ -137,8 +137,8 @@ function Meta({ meta, resourceType, id, isAdminPage }: TMetaProps) {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {meta.security.map((security) => (
-                                    <TableRow key={`${security.id}`}>
+                                {meta.security.map((security, index) => (
+                                    <TableRow key={index}>
                                         <TableCell>{security.id}</TableCell>
                                         <TableCell>
                                             <Link

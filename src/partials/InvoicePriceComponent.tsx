@@ -26,9 +26,9 @@ const InvoicePriceComponent = ({ name, invoicePriceComponent: priceComponents, r
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {priceComponents.map((priceComponent: TInvoicePriceComponent) => {
+                        {priceComponents.map((priceComponent: TInvoicePriceComponent, index: number) => {
                                 return (
-                                    <TableRow key={`${priceComponent.id}`}>
+                                    <TableRow key={index}>
                                         <TableCell>{priceComponent.id}</TableCell>
                                         <TableCell>{priceComponent.type}</TableCell>
                                         <TableCell>

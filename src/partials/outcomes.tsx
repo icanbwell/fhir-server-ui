@@ -31,7 +31,7 @@ function Outcomes({ outcomes, name }: TOutcomesProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {outcomes.map((outcome: TOutcomes) => {
+                        {outcomes.map((outcome: TOutcomes, index: number) => {
                             if (outcome.url) {
                                 const s3Url = outcome.url;
                                 if (s3Url.substring(0, 5) === 's3://') {
@@ -39,7 +39,7 @@ function Outcomes({ outcomes, name }: TOutcomesProps) {
                                     console.log(s3Path);
                                     const navigateUrl = `https://${AWS_REGION}.console.aws.amazon.com/s3/object/${s3Path}`;
                                     return (
-                                        <TableRow key={`${outcome.type}`}>
+                                        <TableRow key={index}>
                                             <TableCell>{outcome.id}</TableCell>
                                             <TableCell>{outcome.type}</TableCell>
                                             <TableCell>

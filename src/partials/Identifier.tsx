@@ -42,10 +42,10 @@ function Identifier({ identifier: identifiers, resourceType, name, isAdminPage }
           </TableHead>
           <TableBody>
             {identifiers &&
-              identifiers.map((identifier: TIdentifier) => {
+              identifiers.map((identifier: TIdentifier, index: number) => {
                 if (identifier) {
                   return (
-                    <TableRow key={`${identifier.id}`}>
+                    <TableRow key={index}>
                       <TableCell>{identifier.id}</TableCell>
                       <TableCell>
                         <Link
@@ -59,15 +59,15 @@ function Identifier({ identifier: identifiers, resourceType, name, isAdminPage }
                       <TableCell>
                         {identifier.type &&
                           identifier.type.coding &&
-                          identifier.type.coding.map((coding: TCoding) => (
-                            <span key={`${coding.code}`}>{coding.code} &nbsp;</span>
+                          identifier.type.coding.map((coding: TCoding, codingIndex: number) => (
+                            <span key={codingIndex}>{coding.code} &nbsp;</span>
                           ))}
                       </TableCell>
                       <TableCell>
                         {identifier.type &&
                           identifier.type.coding &&
-                          identifier.type.coding.map((coding: TCoding) => (
-                            <span key={`${coding.system}`}>
+                          identifier.type.coding.map((coding: TCoding, codingIndex: number) => (
+                            <span key={codingIndex}>
                               {coding.system} &nbsp;
                             </span>
                           ))}

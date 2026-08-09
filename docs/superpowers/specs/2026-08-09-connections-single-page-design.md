@@ -31,12 +31,20 @@ updates the URL (so the connection stays bookmarkable) without a full page reloa
 
 - Everything already out of scope per the original design (`2026-08-07-connections-fhir-
   console-design.md`'s Non-goals) remains out of scope here: creating new connections,
-  bulk/admin ATS endpoints, a backend proxy, automatic token refresh/polling, wiring into
-  `LastRequestContext`, and editing `APIConsolePage.tsx`.
+  bulk/admin ATS endpoints, a backend proxy, automatic token refresh/polling, and wiring
+  into `LastRequestContext`.
 - No change to the ATS auth model, `TokenServiceApi`, or `ConnectionFhirApi` — this is a
   presentation-layer reorganization of two existing, working pages, not a change to how
   connections or tokens are fetched.
 - No persistence of "recently viewed connections" beyond normal browser history.
+- **Deliberate exception to the original design's non-goal of editing `APIConsolePage.
+  tsx`.** See "Shared `FhirRequestConsole` component," below — its console UI is
+  extracted into a shared component also used by `ConnectionRequestConsole`, the same
+  category of change as the original design's already-accepted `sendStreamingRequest`
+  extraction (pull shared mechanics into one place, preserve observable behavior
+  exactly), one layer higher: UI/state instead of fetch internals. `APIConsolePage.tsx`'s
+  own observable behavior (resizable split pane, redirect-driven auto-fetch, search-param
+  sync, all response/streaming behavior) must remain identical after the extraction.
 
 ## Approaches Considered
 
@@ -102,18 +110,69 @@ unchanged from `ConnectionsListPage`: the "Connections only work when signed in 
 b.well App login" info banner (when `getLocalData('identityProvider') !== 'bwellapp'`),
 and the `CONNECTIONS_FORBIDDEN_MESSAGE` warning on a 403 from `listConnections()`.
 
+### Shared `FhirRequestConsole.tsx` component (new, extracted from `APIConsolePage.tsx`)
+
+`APIConsolePage.tsx`'s controls bar, resizable split pane, request/response tabs,
+streaming state, and `handleSend` are structurally near-identical to the console portion
+of today's `ConnectionConsolePage.tsx` — both build on the same `sendRequest` method
+shape already shared by `FhirApi` and `ConnectionFhirApi` (`{method, urlPath, data,
+headers, onChunk, onHeaders, signal} => Promise<StreamingFetchResult>`). Rather than let
+`ConnectionRequestConsole` duplicate that ~250-line UI a second time, it's extracted into
+`src/components/FhirRequestConsole.tsx`, parameterized by an injected API client and a
+handful of display differences:
+
+```ts
+interface FhirRequestConsoleProps {
+    method: HttpMethod;
+    onMethodChange: (method: HttpMethod) => void;
+    urlSuffix: string;
+    onUrlSuffixChange: (urlSuffix: string) => void;
+    resourceJson: string;
+    onResourceJsonChange: (resourceJson: string) => void;
+    requestPathPlaceholder: string;
+    baseUrlForDisplay?: string;          // prefix in the URL preview line; '' for APIConsolePage
+    sendRequest: (params: SendRequestParams) => Promise<StreamingFetchResult>;
+    sendDisabled?: boolean;              // ORed with the component's own `!requestUrl` check
+    loadingRequestBody?: boolean;        // APIConsolePage's redirect-fetch spinner
+    readOnlyHeaderRows?: KeyValueRow[];  // connection-mandated headers
+    readOnlyHeaderRowsLabel?: string;    // e.g. "From this connection (always sent)"
+}
+```
+
+`method`, `urlSuffix`, and `resourceJson` are controlled (owned by the parent) because
+`APIConsolePage` needs to observe/set them from outside — syncing `method`/`urlSuffix`
+into the URL's search params, and prefilling `resourceJson` from its redirect auto-fetch
+effect. Nothing today needs to observe `customHeaders`, the active tabs, or the response/
+streaming state from outside either page, so those stay fully internal to
+`FhirRequestConsole`, same as `handleSend`, the abort-controller cleanup, and the
+draggable divider (`leftWidthPercent`) — which `ConnectionRequestConsole` gets for free,
+replacing its current fixed 50/50 split with the same resizable one `APIConsolePage`
+already has.
+
+`APIConsolePage.tsx` keeps everything specific to it — `EnvironmentContext`/`fhirUrl`,
+the `isFromRedirect` route-param handling, its own `method`/`urlSuffix`/`resourceJson`
+state plus the search-param-sync effect and redirect auto-fetch effect (passing its
+`fetching` flag through as `loadingRequestBody`) — and renders `Header`, `Footer`, and
+`FhirRequestConsole`, passing `sendRequest={(params) => new FhirApi({ fhirUrl,
+setUserDetails }).sendRequest(params)}`. Its observable behavior does not change.
+
 ### `ConnectionRequestConsole.tsx` (new, extracted from today's `ConnectionConsolePage.tsx`)
 
-Everything from today's `ConnectionConsolePage` below its connection-resolution effect:
-the token-fetch effect and `fetchToken` callback, the info bar (display name, category,
-status/expired chips, patient_id with copy action, token expiry, "Refresh Token"), and
-the full method/path controls + request/response split pane + `handleSend`. Unchanged
-in behavior from today.
+Everything from today's `ConnectionConsolePage` below its connection-resolution effect,
+minus the console UI now covered by `FhirRequestConsole`: the token-fetch effect and
+`fetchToken` callback, the info bar (display name, category, status/expired chips,
+patient_id with copy action, token expiry, "Refresh Token"), and its own local
+`method`/`urlSuffix`/`resourceJson` state (plain `useState`, no search-param sync needed).
+It renders `FhirRequestConsole`, passing `sendRequest={(params) => new ConnectionFhirApi({
+baseUrl: connectionToken.url, token: connectionToken.token, customHeaders:
+connectionMandatedHeaders }).sendRequest(params)}`, `sendDisabled={!connectionToken}`,
+`baseUrlForDisplay={connectionToken?.url}`, and `readOnlyHeaderRows`/
+`readOnlyHeaderRowsLabel` built from `connectionMandatedHeaders` exactly as today.
 
-The only interface change: it takes `connection: ConnectionEntry` as a required prop.
-It no longer reads `serviceSlug` from the route or `location.state` — it has no
-connection-resolution logic at all; the container guarantees it is only ever rendered
-once a `connection` is resolved.
+The only interface change from today's `ConnectionConsolePage`: it takes
+`connection: ConnectionEntry` as a required prop. It no longer reads `serviceSlug` from
+the route or `location.state` — it has no connection-resolution logic at all; the
+container guarantees it is only ever rendered once a `connection` is resolved.
 
 ### `ConnectionConsolePage.tsx` (rewritten: thin container)
 
@@ -153,10 +212,14 @@ above. Changing `key` forces React to fully unmount the previous
 `ConnectionRequestConsole` instance — running its existing cleanup effect, which already
 aborts any in-flight request via `abortControllerRef` — and mount a fresh instance with
 initial state, before that fresh instance's token-fetch effect runs for the new
-connection. This guarantees no window exists where a request could go out under the
+connection. Because `FhirRequestConsole` is rendered as a child inside
+`ConnectionRequestConsole`, its internal state (response body, streaming text, editable
+custom headers) is part of the same unmounted subtree and resets along with it — the
+`key` only needs to sit at the `ConnectionRequestConsole` boundary, not duplicated
+further down. This guarantees no window exists where a request could go out under the
 previous connection's token, or a response from one connection could be misread as
 belonging to another, without hand-writing a "reset all this state" effect that would
-need to be kept in sync with every field `ConnectionRequestConsole` holds.
+need to be kept in sync with every field either component holds.
 
 ### Data flow summary
 
@@ -225,5 +288,14 @@ manual verification only:
   above remains valid unchanged: token refresh, sending requests against a real
   connection FHIR server, connection-mandated custom headers appearing read-only and on
   the outgoing request, an ATS 401 logging the user out, an ATS 403 showing the
-  "not available" message, and `/api-console` / `Header.tsx`'s "Open in API Console"
-  button remaining unaffected.
+  "not available" message, and `Header.tsx`'s "Open in API Console" button remaining
+  unaffected.
+- `/api-console` regression pass after the `FhirRequestConsole` extraction: standalone
+  usage (method/urlSuffix persist in and restore from the URL's search params), redirect
+  usage from a `ResourceCard` (path prefills from route params, body prefills from the
+  auto-fetched resource, the loading spinner shows while fetching), the split pane is
+  still resizable via the draggable divider, and streaming/response behavior is
+  unchanged — this page's observable behavior must be identical before and after the
+  extraction.
+- The connection console's split pane is now resizable (previously fixed 50/50) — confirm
+  this reads as an improvement rather than a regression.

@@ -4,9 +4,11 @@ import { PaginationItem, Box, Typography, Link, Select, MenuItem } from '@mui/ma
 
 import { TBundleLink } from '../types/partials/BundleLink';
 import UserContext from '../context/UserContext';
+import EnvContext from '../context/EnvironmentContext';
 
 function Footer({ links, requestId }: { links?: TBundleLink[]; requestId?: String }) {
     const { userDetails } = useContext(UserContext);
+    const { FHIR_APP_VERSION } = useContext(EnvContext);
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -123,7 +125,8 @@ function Footer({ links, requestId }: { links?: TBundleLink[]; requestId?: Strin
             <Box sx={{ flexGrow: 1, textAlign: 'end' }}>
                 <Typography variant="body2">
                     &copy; Copyright {new Date().getFullYear()} b.well Connected Health
-                    |&nbsp;&nbsp;
+                    {FHIR_APP_VERSION && FHIR_APP_VERSION !== 'null' && <>&nbsp;&middot; v{FHIR_APP_VERSION}</>}
+                    &nbsp;|&nbsp;&nbsp;
                     <Link href="https://docs.google.com/document/d/1afAuyrckHabnCP-uhOqXOQzFUuA4e6yN/edit?usp=sharing&ouid=100180767885483338723&rtpof=true&sd=true">
                         Conditions of Use
                     </Link>

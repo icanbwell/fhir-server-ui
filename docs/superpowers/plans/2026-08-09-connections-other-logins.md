@@ -458,7 +458,11 @@ const ConnectionConsolePage = () => {
     const personId = searchParams.get('personId') ?? undefined;
     const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
     const identityProvider = getLocalData('identityProvider');
-    const canUseOnBehalfOf = identityProvider === 'clientcredentials' || identityProvider === 'okta';
+    // Neither 'clientcredentials' nor any single string is ever actually stored as
+    // identityProvider for a client-credentials login — ClientCredentialsLogin.tsx stores
+    // 'cognitocc' or 'descopecc' depending on which backend the user picks in that flow.
+    const canUseOnBehalfOf =
+        identityProvider === 'cognitocc' || identityProvider === 'descopecc' || identityProvider === 'okta';
 
     const handleSelect = (slug: string | null) => {
         const suffix = personId ? `?personId=${encodeURIComponent(personId)}` : '';
@@ -598,7 +602,12 @@ Add, immediately after the `getCompositionSummaryLink` block above:
                         {resource.resourceType &&
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             uuid &&
-                            (getLocalData('identityProvider') === 'clientcredentials' ||
+                            // 'cognitocc'/'descopecc' are this app's two client-credentials
+                            // logins (ClientCredentialsLogin.tsx) — the string 'clientcredentials'
+                            // itself is never stored as identityProvider, only used as the
+                            // top-level menu option name in REACT_APP_AUTH_PROVIDERS.
+                            (getLocalData('identityProvider') === 'cognitocc' ||
+                                getLocalData('identityProvider') === 'descopecc' ||
                                 getLocalData('identityProvider') === 'okta') &&
                             getTestConnectionsLink({ personId: uuid.toString() })}
 ```

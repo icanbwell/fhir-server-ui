@@ -115,7 +115,10 @@ specific person's connections instead of the logged-in caller's own.
 `summaryResourceTypes = ['Patient', 'Person']` (`ResourceCard.tsx:185`) already gates the
 existing "IPS" link. A new conditional link, "Test Connections," renders alongside it under the
 same `resourceType` check, further gated on `getLocalData('identityProvider')` being
-`'clientcredentials'` or `'okta'` — the only two providers that can ever produce a token ATS's
+`'cognitocc'`, `'descopecc'` (both reached via this app's "Login with Client Credentials" flow,
+`ClientCredentialsLogin.tsx` — the literal string `'clientcredentials'` is never actually stored
+as `identityProvider`, only used as the top-level menu option name in `REACT_APP_AUTH_PROVIDERS`),
+or `'okta'` — the only providers that can ever produce a token ATS's
 `get_service_user` guard accepts (per the auth model research above). For any other identity
 provider (including `bwellapp`), the link simply doesn't render — there's no login for which
 attempting the lookup could ever succeed, so there's nothing useful to show.
@@ -161,7 +164,7 @@ at the screen.
 
 **Safeguard 3 — client-side identity guard, defense in depth.** Before attempting any
 on-behalf-of API call, the page checks `getLocalData('identityProvider')` is
-`'clientcredentials'`/`'okta'`; if not, it renders "This view requires a service-authenticated
+`'cognitocc'`/`'descopecc'`/`'okta'`; if not, it renders "This view requires a service-authenticated
 login" instead of attempting the call. This is a UX improvement, not the actual security
 boundary — a bypassed client-side check (e.g. a crafted URL under a `bwellapp` session) still
 hits ATS's own `get_service_user` guard server-side and gets a 401, not real unauthorized data

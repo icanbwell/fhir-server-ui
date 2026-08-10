@@ -111,6 +111,10 @@ In `src/api/tokenServiceApi.ts`, add both methods to the `TokenServiceApi` class
 after the existing `getConnectionToken` method:
 
 ```ts
+    // Use from a service-authenticated session (clientcredentials/okta) to look up an
+    // arbitrary person's connections by client_fhir_person_id — e.g. staff testing a
+    // specific patient's connections. Use listConnections instead for the logged-in
+    // member's own connections.
     async listConnectionsForPerson({ clientPersonId }: { clientPersonId: string }): Promise<{
         status: number | undefined;
         connections: ConnectionEntry[];
@@ -133,6 +137,9 @@ after the existing `getConnectionToken` method:
         };
     }
 
+    // Use from a service-authenticated session to look up an arbitrary person's
+    // connection token by client_fhir_person_id. Use getConnectionToken instead for the
+    // logged-in member's own connection token.
     async getConnectionTokenForPerson({ serviceSlug, clientPersonId }: {
         serviceSlug: string;
         clientPersonId: string;
@@ -149,12 +156,33 @@ after the existing `getConnectionToken` method:
     }
 ```
 
-- [ ] **Step 2: Run lint/typecheck**
+- [ ] **Step 2: Cross-reference the comments on the existing `listConnections`/`getConnectionToken`**
+
+So the choice between the member-scoped and person-scoped variant is discoverable from either
+side, add a "when to use" comment immediately above each existing method:
+
+```ts
+    // Use for the logged-in member's own connections (a member-authenticated session, e.g.
+    // bwellapp). Use listConnectionsForPerson instead to look up an arbitrary person's
+    // connections from a service-authenticated session.
+    async listConnections(): Promise<{
+```
+
+```ts
+    // Use for the logged-in member's own connection token. Use getConnectionTokenForPerson
+    // instead to look up an arbitrary person's connection token from a service-authenticated
+    // session.
+    async getConnectionToken({ serviceSlug }: { serviceSlug: string }): Promise<{
+```
+
+This is a comment-only change to both existing methods — no behavior change.
+
+- [ ] **Step 3: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings beyond the existing 6-warning baseline.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
 git add src/api/tokenServiceApi.ts

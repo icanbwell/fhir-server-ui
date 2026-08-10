@@ -170,9 +170,30 @@ message instead of a confusing generic network error.
 
 ### Data layer (`src/api/tokenServiceApi.ts`)
 
-Two new methods, parallel to the existing pair:
+Two new methods, parallel to the existing pair. Both existing and new methods gain a "when to
+use" comment so the choice is discoverable from either side, not just documented once here:
 
 ```ts
+// Use for the logged-in member's own connections (a member-authenticated session, e.g.
+// bwellapp). Use listConnectionsForPerson instead to look up an arbitrary person's
+// connections from a service-authenticated session.
+async listConnections(): Promise<{
+    status: number | undefined;
+    connections: ConnectionEntry[];
+}>
+
+// Use for the logged-in member's own connection token. Use getConnectionTokenForPerson
+// instead to look up an arbitrary person's connection token from a service-authenticated
+// session.
+async getConnectionToken({ serviceSlug }: { serviceSlug: string }): Promise<{
+    status: number | undefined;
+    connectionToken: ConnectionToken | null;
+}>
+
+// Use from a service-authenticated session (clientcredentials/okta) to look up an
+// arbitrary person's connections by client_fhir_person_id — e.g. staff testing a
+// specific patient's connections. Use listConnections instead for the logged-in
+// member's own connections.
 async listConnectionsForPerson({ clientPersonId }: { clientPersonId: string }): Promise<{
     status: number | undefined;
     connections: ConnectionEntry[];
@@ -182,6 +203,9 @@ async listConnectionsForPerson({ clientPersonId }: { clientPersonId: string }): 
 // is_direct, number_of_resources} -> ConnectionEntry, per the new backend endpoint's contract
 // (see companion aperture_token_service design), which mirrors /get-member-connections exactly.
 
+// Use from a service-authenticated session to look up an arbitrary person's connection
+// token by client_fhir_person_id. Use getConnectionToken instead for the logged-in
+// member's own connection token.
 async getConnectionTokenForPerson({ serviceSlug, clientPersonId }: {
     serviceSlug: string;
     clientPersonId: string;

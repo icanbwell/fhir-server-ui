@@ -114,6 +114,32 @@ const getTestConnectionsLink = ({ personId }: { personId: string }) => {
     );
 };
 
+const getTestSchedulingLink = ({ personId }: { personId: string }) => {
+    return (
+        <Tooltip title="Test scheduling for this person">
+            <Link
+                to={`/scheduling-console?personId=${encodeURIComponent(personId)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    textDecoration: 'none',
+                    color: 'inherit',
+                }}
+            >
+                <DescriptionIcon color="primary" fontSize="small" />
+                <Typography variant="body2" color="primary">
+                    Test Scheduling
+                </Typography>
+                <OpenInNewIcon color="primary" fontSize="small" />
+            </Link>
+        </Tooltip>
+    );
+};
+
 const ResourceCard = ({
     index,
     resource,
@@ -250,6 +276,10 @@ const ResourceCard = ({
                             // See src/utils/serviceAuth.ts for which identityProvider values qualify.
                             canUseServiceAuth() &&
                             getTestConnectionsLink({ personId: uuid.toString() })}
+                        {resource.resourceType &&
+                            personOnlyResourceTypes.includes(resource.resourceType.toString()) &&
+                            uuid &&
+                            getTestSchedulingLink({ personId: uuid.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
                     </Box>
                 }

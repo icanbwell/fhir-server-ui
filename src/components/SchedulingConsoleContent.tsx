@@ -123,25 +123,26 @@ const SchedulingConsoleContent = ({ personId }: SchedulingConsoleContentProps) =
                         ))}
                     </Tabs>
 
-                    {SCHEDULING_STEPS.map(
-                        (step) =>
-                            step.key === activeStep && (
-                                <Box key={step.key}>
-                                    <FhirRequestConsole
-                                        method={stepState[step.key].method}
-                                        onMethodChange={(method) => updateStep(step.key, { method })}
-                                        urlSuffix={stepState[step.key].urlSuffix}
-                                        onUrlSuffixChange={(urlSuffix) => updateStep(step.key, { urlSuffix })}
-                                        resourceJson={stepState[step.key].resourceJson}
-                                        onResourceJsonChange={(resourceJson) => updateStep(step.key, { resourceJson })}
-                                        requestPathPlaceholder={step.urlPath}
-                                        baseUrlForDisplay={schedulingServiceUrl}
-                                        sendRequest={sendRequest}
-                                        splitPaneHeight="calc(100vh - 380px)"
-                                    />
-                                </Box>
-                            )
-                    )}
+                    {/* Every step's console stays mounted (hidden via display:none rather than
+                        conditionally rendered) so switching tabs doesn't unmount the inactive
+                        step's FhirRequestConsole — that would discard its response state, which
+                        lives in FhirRequestConsole's own local useState, not in stepState here. */}
+                    {SCHEDULING_STEPS.map((step) => (
+                        <Box key={step.key} sx={{ display: step.key === activeStep ? 'block' : 'none' }}>
+                            <FhirRequestConsole
+                                method={stepState[step.key].method}
+                                onMethodChange={(method) => updateStep(step.key, { method })}
+                                urlSuffix={stepState[step.key].urlSuffix}
+                                onUrlSuffixChange={(urlSuffix) => updateStep(step.key, { urlSuffix })}
+                                resourceJson={stepState[step.key].resourceJson}
+                                onResourceJsonChange={(resourceJson) => updateStep(step.key, { resourceJson })}
+                                requestPathPlaceholder={step.urlPath}
+                                baseUrlForDisplay={schedulingServiceUrl}
+                                sendRequest={sendRequest}
+                                splitPaneHeight="calc(100vh - 380px)"
+                            />
+                        </Box>
+                    ))}
                 </>
             )}
         </>

@@ -91,7 +91,7 @@ const APIConsolePage = () => {
                         onResourceJsonChange={setResourceJson}
                         requestPathPlaceholder="Full path, e.g. /4_0_0/Patient/123 or /version"
                         sendRequest={sendRequest}
-                        sendDisabled={fetching}
+                        sendDisabled={fetching || !fhirUrl}
                         loadingRequestBody={fetching}
                     />
                 </Box>

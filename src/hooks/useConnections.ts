@@ -9,6 +9,7 @@ export interface UseConnectionsResult {
     error: string | null;
     forbidden: boolean;
     configMissing: boolean;
+    hasLoaded: boolean;
     reload: () => void;
 }
 
@@ -20,6 +21,10 @@ const useConnections = (): UseConnectionsResult => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [forbidden, setForbidden] = useState<boolean>(false);
+    // Distinct from `loading`: stays false until the first fetch attempt settles, so callers
+    // can tell "haven't fetched yet" (nothing should render as not-found) apart from
+    // "fetched and this genuinely doesn't exist" (loading is false in both cases).
+    const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
     const loadConnections = async () => {
         if (!tokenServiceUrl) {
@@ -42,6 +47,7 @@ const useConnections = (): UseConnectionsResult => {
             setError('Failed to load connections.');
         } finally {
             setLoading(false);
+            setHasLoaded(true);
         }
     };
 
@@ -50,7 +56,15 @@ const useConnections = (): UseConnectionsResult => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tokenServiceUrl]);
 
-    return { connections, loading, error, forbidden, configMissing: !tokenServiceUrl, reload: loadConnections };
+    return {
+        connections,
+        loading,
+        error,
+        forbidden,
+        configMissing: !tokenServiceUrl,
+        hasLoaded,
+        reload: loadConnections,
+    };
 };
 
 export default useConnections;

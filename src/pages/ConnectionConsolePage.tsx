@@ -10,13 +10,13 @@ import useConnections from '../hooks/useConnections';
 const ConnectionConsolePage = () => {
     const { serviceSlug } = useParams();
     const navigate = useNavigate();
-    const { connections, loading, error, forbidden, configMissing, reload } = useConnections();
+    const { connections, loading, error, forbidden, configMissing, hasLoaded, reload } = useConnections();
 
     const connection = useMemo(
         () => connections.find((c) => c.service_slug === serviceSlug) ?? null,
         [connections, serviceSlug]
     );
-    const notFound = !loading && !error && !forbidden && !!serviceSlug && !connection;
+    const notFound = hasLoaded && !error && !forbidden && !!serviceSlug && !connection;
 
     const handleSelect = (slug: string | null) => {
         navigate(slug ? `/connections/${encodeURIComponent(slug)}` : '/connections');

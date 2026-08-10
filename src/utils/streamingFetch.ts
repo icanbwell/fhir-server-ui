@@ -56,10 +56,14 @@ export async function sendStreamingRequest({
     onHeaders?.(response.status, responseHeaders);
 
     let rawText = '';
+    // Declared outside the try block so both the success path below and the mid-stream-drop
+    // catch can flush it — a chunk boundary that splits a multi-byte UTF-8 character can land
+    // right at the point the stream ends or drops, and only a final decode() (with no
+    // arguments) flushes that trailing buffered partial sequence instead of silently dropping it.
+    const decoder = new TextDecoder();
     try {
         if (response.body) {
             const reader = response.body.getReader();
-            const decoder = new TextDecoder();
             let done = false;
             while (!done) {
                 const result = await reader.read();
@@ -82,6 +86,7 @@ export async function sendStreamingRequest({
         // surfaced via onHeaders and the partial body via onChunk, so resolve with what
         // arrived instead of throwing — the caller's catch-all would otherwise discard
         // both in favor of a generic error.
+        rawText += decoder.decode();
         let partialJson: any;
         try {
             partialJson = rawText ? JSON.parse(rawText) : undefined;
@@ -96,6 +101,8 @@ export async function sendStreamingRequest({
             incomplete: true,
         };
     }
+
+    rawText += decoder.decode();
 
     let json: any;
     try {

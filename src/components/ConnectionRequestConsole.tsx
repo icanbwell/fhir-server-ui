@@ -110,14 +110,6 @@ const ConnectionRequestConsole = ({ connection }: ConnectionRequestConsoleProps)
         ([key, value]) => ({ key, value })
     );
 
-    if (!tokenServiceUrl) {
-        return (
-            <Typography color="error">
-                Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
-            </Typography>
-        );
-    }
-
     if (forbidden) {
         return <Alert severity="warning">{CONNECTIONS_FORBIDDEN_MESSAGE}</Alert>;
     }

@@ -12,8 +12,6 @@ interface ConnectionPickerProps {
     onSelect: (slug: string | null) => void;
 }
 
-// MUI's Autocomplete requires options to already be sorted by the groupBy key for
-// grouping to render correctly — it does not sort them itself.
 const filterOptions = createFilterOptions<ConnectionEntry>({
     stringify: (option) => `${option.display_name} ${option.service_slug}`,
 });
@@ -21,6 +19,8 @@ const filterOptions = createFilterOptions<ConnectionEntry>({
 const ConnectionPicker = ({ connections, loading, forbidden, selectedSlug, onSelect }: ConnectionPickerProps) => {
     const isBwellAppLogin = getLocalData('identityProvider') === 'bwellapp';
 
+    // MUI's Autocomplete requires options to already be sorted by the groupBy key for
+    // grouping to render correctly — it does not sort them itself.
     const sortedConnections = useMemo(
         () =>
             [...connections].sort(
@@ -48,6 +48,8 @@ const ConnectionPicker = ({ connections, loading, forbidden, selectedSlug, onSel
 
             {forbidden ? (
                 <Alert severity="warning">{CONNECTIONS_FORBIDDEN_MESSAGE}</Alert>
+            ) : !loading && connections.length === 0 ? (
+                <Typography color="text.secondary">No connections found.</Typography>
             ) : (
                 <Autocomplete
                     options={sortedConnections}

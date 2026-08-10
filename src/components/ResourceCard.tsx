@@ -10,6 +10,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EditIcon from '@mui/icons-material/Edit';
 import { IdentifierSystem } from '../utils/identifierSystem';
+import { getLocalData } from '../utils/localData.utils';
 
 type TResourceCardProps = {
     index: number;
@@ -85,6 +86,29 @@ const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) => {
                     Composition View
                 </Typography>
                 <OpenInNewIcon color="primary" fontSize="small" />
+            </Link>
+        </Tooltip>
+    );
+};
+
+const getTestConnectionsLink = ({ personId }: { personId: string }) => {
+    return (
+        <Tooltip title="Test this person's FHIR connections">
+            <Link
+                to={`/connections?personId=${encodeURIComponent(personId)}`}
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    textDecoration: 'none',
+                    color: 'inherit',
+                }}
+            >
+                <DescriptionIcon color="primary" fontSize="small" />
+                <Typography variant="body2" color="primary">
+                    Test Connections
+                </Typography>
             </Link>
         </Tooltip>
     );
@@ -215,6 +239,17 @@ const ResourceCard = ({
                         {resource.resourceType &&
                             compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}
+                        {resource.resourceType &&
+                            summaryResourceTypes.includes(resource.resourceType.toString()) &&
+                            uuid &&
+                            // 'cognitocc'/'descopecc' are this app's two client-credentials
+                            // logins (ClientCredentialsLogin.tsx) — the string 'clientcredentials'
+                            // itself is never stored as identityProvider, only used as the
+                            // top-level menu option name in REACT_APP_AUTH_PROVIDERS.
+                            (getLocalData('identityProvider') === 'cognitocc' ||
+                                getLocalData('identityProvider') === 'descopecc' ||
+                                getLocalData('identityProvider') === 'okta') &&
+                            getTestConnectionsLink({ personId: uuid.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
                     </Box>
                 }

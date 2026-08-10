@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
     Alert,
@@ -18,54 +18,19 @@ import {
 } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import TokenServiceApi from '../api/tokenServiceApi';
-import UserContext from '../context/UserContext';
+import useConnections from '../hooks/useConnections';
 import { getLocalData } from '../utils/localData.utils';
 import { ConnectionEntry } from '../types/connectionEntry';
 import { CONNECTIONS_FORBIDDEN_MESSAGE } from '../constants/connectionsConstants';
 
 const ConnectionsListPage = () => {
-    const { setUserDetails } = useContext(UserContext);
     const navigate = useNavigate();
+    const { connections, loading, error, forbidden, configMissing, reload } = useConnections();
 
-    const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
     const isBwellAppLogin = getLocalData('identityProvider') === 'bwellapp';
 
-    const [connections, setConnections] = useState<ConnectionEntry[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [forbidden, setForbidden] = useState<boolean>(false);
     const [category, setCategory] = useState<string>('All');
     const [search, setSearch] = useState<string>('');
-
-    const loadConnections = async () => {
-        if (!tokenServiceUrl) {
-            return;
-        }
-        setLoading(true);
-        setError(null);
-        setForbidden(false);
-        try {
-            const api = new TokenServiceApi({ fhirUrl: tokenServiceUrl, setUserDetails });
-            const { status, connections: loaded } = await api.listConnections();
-            if (status === 403) {
-                setForbidden(true);
-            } else if (status === 200) {
-                setConnections(loaded);
-            } else {
-                setError('Failed to load connections.');
-            }
-        } catch {
-            setError('Failed to load connections.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        loadConnections();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tokenServiceUrl]);
 
     const categories = useMemo(() => {
         const unique = new Set(connections.map((c) => c.category));
@@ -109,7 +74,7 @@ const ConnectionsListPage = () => {
                         </Alert>
                     )}
 
-                    {!tokenServiceUrl ? (
+                    {configMissing ? (
                         <Typography color="error">
                             Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
                         </Typography>
@@ -145,7 +110,7 @@ const ConnectionsListPage = () => {
                             {error ? (
                                 <Box sx={{ mb: 2 }}>
                                     <Typography color="error">{error}</Typography>
-                                    <Button onClick={() => loadConnections()}>Retry</Button>
+                                    <Button onClick={() => reload()}>Retry</Button>
                                 </Box>
                             ) : loading && connections.length === 0 ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>

@@ -76,14 +76,18 @@ PR #1143 — see the companion backend design,
 
 ## Identifier assumption
 
-The Patient/Person resource being viewed in fhir-server-ui carries a FHIR `id` that is
-**assumed to be `client_fhir_person_id`** for the purposes of this design (not `bwell_fhir_person_id`
-— a materially different identifier ATS also supports). This assumption is unverified against
-the actual FHIR data model and is the single biggest correctness risk in this design: if wrong,
-lookups will silently return zero connections (a "looks like it works but never finds anything"
-failure, not a loud error). Flagged here and in the testing plan; the implementation plan should
-allocate a real verification step (checking a live Patient/Person resource against a live
-connection's stored `client_fhir_person_id`) as gate zero, before dependent code is written.
+The Patient/Person resource being viewed in fhir-server-ui carries a `uuid` — computed the same
+way `ResourceCard.tsx` already computes it elsewhere on the card (the `code` of the `meta.tag`
+entry whose `system` is `https://www.icanbwell.com/uuid`, i.e. `IdentifierSystem.uuid`, falling
+back to the resource's raw FHIR `id` only when that tag is absent: `tagUUID ?? resource.id`) —
+that is **assumed to be `client_fhir_person_id`** for the purposes of this design (not
+`bwell_fhir_person_id` — a materially different identifier ATS also supports). This assumption is
+unverified against the actual FHIR data model and is the single biggest correctness risk in this
+design: if wrong, lookups will silently return zero connections (a "looks like it works but never
+finds anything" failure, not a loud error). Flagged here and in the testing plan; the
+implementation plan should allocate a real verification step (checking a live Patient/Person
+resource's `tagUUID ?? resource.id` value against a live connection's stored
+`client_fhir_person_id`) as gate zero, before dependent code is written.
 
 ## Goal
 
@@ -101,9 +105,9 @@ specific person's connections instead of the logged-in caller's own.
 - **No change to the existing "my own connections" flow's endpoints, guards, or behavior.**
   `TokenServiceApi.listConnections()`/`getConnectionToken()` and the member-authenticated ATS
   endpoints they call are untouched.
-- **No automatic detection of whether a resource's `id` is actually a valid
-  `client_fhir_person_id`.** If the identifier assumption above is wrong, this ships a feature
-  that silently returns empty results for everyone — see "Identifier assumption."
+- **No automatic detection of whether a resource's `uuid` (`tagUUID ?? resource.id`) is
+  actually a valid `client_fhir_person_id`.** If the identifier assumption above is wrong, this
+  ships a feature that silently returns empty results for everyone — see "Identifier assumption."
 - **No Okta staging/prod enablement or `OKTA_EXPECTED_CIDS` change in this design's own
   implementation plan.** These are infra/Helm changes tracked as external dependencies (like the
   aperture_token_service endpoint itself), not code this plan produces.
@@ -112,20 +116,28 @@ specific person's connections instead of the logged-in caller's own.
 
 ### Frontend entry point (`src/components/ResourceCard.tsx`)
 
-`summaryResourceTypes = ['Patient', 'Person']` (`ResourceCard.tsx:185`) already gates the
-existing "IPS" link. A new conditional link, "Test Connections," renders alongside it under the
-same `resourceType` check, further gated on `getLocalData('identityProvider')` being
-`'cognitocc'`, `'descopecc'` (both reached via this app's "Login with Client Credentials" flow,
+`summaryResourceTypes = ['Patient', 'Person']` (`ResourceCard.tsx`) already gates the existing
+"IPS" link, and is left unchanged. A new conditional link, "Test Connections," renders alongside
+it but under its own, narrower gate: a separate `personOnlyResourceTypes = ['Person']` array — not
+`summaryResourceTypes` — because a `Patient` resource's `uuid` is a different resource's `uuid`
+than the corresponding `Person`'s, and ATS's connection documents are keyed on the Person-level
+identifier, not the Patient-level one. Showing the link on Patient cards would produce a
+guaranteed-empty result every time.
+
+The link is further gated on `canUseServiceAuth()` (`src/utils/serviceAuth.ts`, shared with
+`ConnectionConsolePage.tsx`'s on-behalf-of guard), which checks `getLocalData('identityProvider')`
+is `'cognitocc'`, `'descopecc'` (both reached via this app's "Login with Client Credentials" flow,
 `ClientCredentialsLogin.tsx` — the literal string `'clientcredentials'` is never actually stored
 as `identityProvider`, only used as the top-level menu option name in `REACT_APP_AUTH_PROVIDERS`),
-or `'okta'` — the only providers that can ever produce a token ATS's
-`get_service_user` guard accepts (per the auth model research above). For any other identity
-provider (including `bwellapp`), the link simply doesn't render — there's no login for which
-attempting the lookup could ever succeed, so there's nothing useful to show.
+or `'okta'` — the only providers that can ever produce a token ATS's `get_service_user` guard
+accepts (per the auth model research above). For any other identity provider (including
+`bwellapp`), the link simply doesn't render — there's no login for which attempting the lookup
+could ever succeed, so there's nothing useful to show.
 
-Clicking it navigates to `/connections?personId=${resource.id}` — no `serviceSlug`, since the
-point is to browse *that person's* connections from scratch, not jump into one specific
-connection.
+Clicking it navigates to `/connections?personId=${uuid}` — where `uuid` is the same
+`tagUUID ?? resource.id` value described in "Identifier assumption" above, not the raw FHIR
+`id` — and no `serviceSlug`, since the point is to browse *that person's* connections from
+scratch, not jump into one specific connection.
 
 ### Mode switch on `ConnectionConsolePage.tsx`
 
@@ -248,9 +260,9 @@ No automated test framework in this repo — manual verification only, plus `yar
 `yarn tsc --noEmit`:
 
 - **Gate zero, before any other testing:** verify the identifier assumption — confirm a live
-  Patient or Person resource's FHIR `id` actually matches the `client_fhir_person_id` stored on
-  at least one real ATS connection document for that same person. If it doesn't, stop and revisit
-  "Identifier assumption" before continuing.
+  Patient or Person resource's `uuid` (`tagUUID ?? resource.id`) actually matches the
+  `client_fhir_person_id` stored on at least one real ATS connection document for that same
+  person. If it doesn't, stop and revisit "Identifier assumption" before continuing.
 - The "Test Connections" link appears on Patient/Person cards only when logged in via
   `clientcredentials`/`okta`, and is absent for `bwellapp`/`cognito` sessions.
 - Clicking it navigates to `/connections?personId=<id>` and the mode-indicator banner renders
@@ -266,3 +278,26 @@ No automated test framework in this repo — manual verification only, plus `yar
 - A `bwellapp`/`cognito` session that somehow reaches `/connections?personId=<id>` directly (e.g.
   a shared URL) sees Safeguard 3's message, not a confusing error or, worse, a silent fallback to
   showing the caller's own connections instead of the intended person's.
+
+## Known gap at merge time
+
+The "Gate zero" verification described above — confirming that a real Patient/Person resource's
+`uuid` (`tagUUID ?? resource.id`) actually matches the `client_fhir_person_id` stored on a real
+ATS connection document for that same person — was **not performed** before this feature merged.
+
+This is not an oversight: the companion `aperture_token_service` PR #1152, which adds the
+person-parameterized endpoints (`listConnectionsForPerson`/`getConnectionTokenForPerson` call),
+is not deployed to any environment yet. There is no live backend to verify the identifier
+assumption against, so the verification step could not be completed as originally planned, and
+the team decided to ship the frontend code now rather than block on a deployment outside this
+repo's control.
+
+**This must be verified against real data before this feature is considered production-ready.**
+Once the companion backend is deployed to at least one environment, compare a real Person
+resource's `meta.tag` uuid (the `tagUUID ?? resource.id` value, same as computed in
+`ResourceCard.tsx`) against a real ATS connection document's `client_fhir_person_id` for that same
+person. If they match, the feature works as designed. If they don't, the fix is scoped narrowly —
+to `ResourceCard.tsx`'s `getTestConnectionsLink` call site (which value is passed as `personId`)
+and `ConnectionConsolePage.tsx`'s handling of the `personId` parameter (how that value is used to
+query the backend) — not a deeper architectural change, since the rest of the design (mode switch,
+safeguards, API shape) is independent of which specific identifier field turns out to be correct.

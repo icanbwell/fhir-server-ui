@@ -8,7 +8,6 @@ export interface UseConnectionsResult {
     loading: boolean;
     error: string | null;
     forbidden: boolean;
-    configMissing: boolean;
     hasLoaded: boolean;
     reload: () => void;
 }
@@ -21,6 +20,9 @@ const useConnections = (personId?: string): UseConnectionsResult => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [forbidden, setForbidden] = useState<boolean>(false);
+    // Tracked separately from `loading` so callers can tell "haven't fetched yet" apart from
+    // "fetched, and this genuinely doesn't exist" (e.g. an empty connections list is only
+    // meaningful once hasLoaded is true).
     const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
     const loadConnections = async () => {
@@ -60,7 +62,6 @@ const useConnections = (personId?: string): UseConnectionsResult => {
         loading,
         error,
         forbidden,
-        configMissing: !tokenServiceUrl,
         hasLoaded,
         reload: loadConnections,
     };

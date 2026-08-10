@@ -3,21 +3,17 @@ import { Box, Typography } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ConnectionConsoleContent from '../components/ConnectionConsoleContent';
-import { getLocalData } from '../utils/localData.utils';
+import { canUseServiceAuth } from '../utils/serviceAuth';
 
 const ConnectionConsolePage = () => {
     const { serviceSlug } = useParams();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const personId = searchParams.get('personId') ?? undefined;
+    const personId = searchParams.get('personId') || undefined;
     const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
-    const identityProvider = getLocalData('identityProvider');
-    // Neither 'clientcredentials' nor any single string is ever actually stored as
-    // identityProvider for a client-credentials login — ClientCredentialsLogin.tsx stores
-    // 'cognitocc' or 'descopecc' depending on which backend the user picks in that flow.
-    const canUseOnBehalfOf =
-        identityProvider === 'cognitocc' || identityProvider === 'descopecc' || identityProvider === 'okta';
+    // See src/utils/serviceAuth.ts for which identityProvider values qualify.
+    const canUseOnBehalfOf = canUseServiceAuth();
 
     const handleSelect = (slug: string | null) => {
         const suffix = personId ? `?personId=${encodeURIComponent(personId)}` : '';
@@ -36,6 +32,17 @@ const ConnectionConsolePage = () => {
                     ) : personId && !canUseOnBehalfOf ? (
                         <Typography color="error">
                             This view requires a service-authenticated login.
+                        </Typography>
+                    ) : !personId && canUseOnBehalfOf ? (
+                        // cognitocc/descopecc/okta sessions can never pass ATS's
+                        // get_current_user guard used by the self-mode ("my own connections")
+                        // endpoints — attempting it would 401 and trigger a full app logout via
+                        // handleUnauthorized. These sessions are only meant to use the
+                        // on-behalf-of (personId-present) flow, reached via the "Test
+                        // Connections" link on a Patient/Person card.
+                        <Typography color="error">
+                            This login can&apos;t browse your own connections here — use the Test
+                            Connections link on a specific Patient/Person page instead.
                         </Typography>
                     ) : (
                         <ConnectionConsoleContent

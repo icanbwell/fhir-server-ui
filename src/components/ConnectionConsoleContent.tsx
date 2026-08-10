@@ -10,7 +10,11 @@ interface ConnectionConsoleContentProps {
     onSelect: (slug: string | null) => void;
 }
 
-const ConnectionConsoleContent = ({ serviceSlug, personId, onSelect }: ConnectionConsoleContentProps) => {
+const ConnectionConsoleContent = ({
+    serviceSlug,
+    personId,
+    onSelect,
+}: ConnectionConsoleContentProps) => {
     const { connections, loading, error, forbidden, hasLoaded, reload } = useConnections(personId);
 
     const connection = useMemo(
@@ -50,7 +54,11 @@ const ConnectionConsoleContent = ({ serviceSlug, personId, onSelect }: Connectio
             )}
 
             {connection && (
-                <ConnectionRequestConsole connection={connection} personId={personId} key={connection.service_slug} />
+                <ConnectionRequestConsole
+                    connection={connection}
+                    personId={personId}
+                    key={connection.service_slug}
+                />
             )}
         </>
     );

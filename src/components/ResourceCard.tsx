@@ -10,7 +10,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EditIcon from '@mui/icons-material/Edit';
 import { IdentifierSystem } from '../utils/identifierSystem';
-import { getLocalData } from '../utils/localData.utils';
+import { canUseServiceAuth } from '../utils/serviceAuth';
 
 type TResourceCardProps = {
     index: number;
@@ -208,6 +208,11 @@ const ResourceCard = ({
     const spreadSheetResourceTypes = ['Patient', 'Person', 'Practitioner'];
     const summaryResourceTypes = ['Patient', 'Person'];
     const compositionSummaryResourceTypes = ['Composition'];
+    // ATS connections are keyed on a Person-level identifier, not a Patient-level one — a
+    // Patient resource's uuid is a different resource's uuid than the corresponding Person's.
+    // Kept separate from summaryResourceTypes (which intentionally still covers both, for the
+    // IPS link) so the two gates can be adjusted independently.
+    const personOnlyResourceTypes = ['Person'];
 
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
@@ -240,15 +245,10 @@ const ResourceCard = ({
                             compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}
                         {resource.resourceType &&
-                            summaryResourceTypes.includes(resource.resourceType.toString()) &&
+                            personOnlyResourceTypes.includes(resource.resourceType.toString()) &&
                             uuid &&
-                            // 'cognitocc'/'descopecc' are this app's two client-credentials
-                            // logins (ClientCredentialsLogin.tsx) — the string 'clientcredentials'
-                            // itself is never stored as identityProvider, only used as the
-                            // top-level menu option name in REACT_APP_AUTH_PROVIDERS.
-                            (getLocalData('identityProvider') === 'cognitocc' ||
-                                getLocalData('identityProvider') === 'descopecc' ||
-                                getLocalData('identityProvider') === 'okta') &&
+                            // See src/utils/serviceAuth.ts for which identityProvider values qualify.
+                            canUseServiceAuth() &&
                             getTestConnectionsLink({ personId: uuid.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
                     </Box>

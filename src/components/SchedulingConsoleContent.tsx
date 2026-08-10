@@ -15,13 +15,19 @@ interface SchedulingConsoleContentProps {
     personId: string;
 }
 
-type StepState = { method: HttpMethod; resourceJson: string };
+type StepState = { method: HttpMethod; urlSuffix: string; resourceJson: string };
 
 const buildInitialStepState = (destinationSlug: string, personId: string): Record<SchedulingStepKey, StepState> => {
     const destination = SCHEDULING_DESTINATIONS.find((d) => d.slug === destinationSlug) ?? SCHEDULING_DESTINATIONS[0];
+    // SCHEDULING_DESTINATIONS is a file deployers are expected to edit and could be emptied —
+    // fall back to an empty step state (rendered as no steps, same as the `destination: null`
+    // case handled below) rather than dereferencing `destination` below and throwing.
+    if (!destination) {
+        return {} as Record<SchedulingStepKey, StepState>;
+    }
     const entries = SCHEDULING_STEPS.map((step) => {
         const seeded = buildSchedulingRequestTemplate(step.key, destination, personId);
-        return [step.key, { method: step.method as HttpMethod, resourceJson: seeded }] as const;
+        return [step.key, { method: step.method, urlSuffix: step.urlPath, resourceJson: seeded }] as const;
     });
     return Object.fromEntries(entries) as Record<SchedulingStepKey, StepState>;
 };
@@ -41,6 +47,11 @@ const SchedulingConsoleContent = ({ personId }: SchedulingConsoleContentProps) =
         [destinationSlug]
     );
 
+    // SCHEDULING_DESTINATIONS could be emptied out (see buildInitialStepState's guard above),
+    // in which case stepState has no entries — skip rendering the step tabs/console rather
+    // than indexing into an empty Record below.
+    const hasStepState = Object.keys(stepState).length > 0;
+
     const handleDestinationChange = (slug: string) => {
         setDestinationSlug(slug);
         // Re-seeds every step's template for the new destination. Any step whose body was
@@ -50,7 +61,14 @@ const SchedulingConsoleContent = ({ personId }: SchedulingConsoleContentProps) =
     };
 
     const updateStep = (key: SchedulingStepKey, patch: Partial<StepState>) => {
-        setStepState((prev) => ({ ...prev, [key]: { ...prev[key], ...patch } }));
+        setStepState((prev) => ({
+            ...prev,
+            // key is typed SchedulingStepKey, a closed string-literal union defined in
+            // schedulingRequestTemplates.ts — not attacker-controlled — so this isn't a real
+            // object-injection sink.
+            // eslint-disable-next-line security/detect-object-injection
+            [key]: { ...prev[key], ...patch },
+        }));
     };
 
     const sendRequest = useCallback(
@@ -81,7 +99,7 @@ const SchedulingConsoleContent = ({ personId }: SchedulingConsoleContentProps) =
                     onChange={(e) => handleDestinationChange(e.target.value)}
                 >
                     {SCHEDULING_DESTINATIONS.map((d) => (
-                        <MenuItem key={d.slug} value={d.slug} disabled={!d.organizationReference}>
+                        <MenuItem key={d.slug} value={d.slug}>
                             {d.label}
                             {!d.organizationReference ? ' (not configured for this environment)' : ''}
                         </MenuItem>
@@ -97,32 +115,34 @@ const SchedulingConsoleContent = ({ personId }: SchedulingConsoleContentProps) =
                 </Alert>
             )}
 
-            <Tabs value={activeStep} onChange={(_, val) => setActiveStep(val)} sx={{ mb: 2 }}>
-                {SCHEDULING_STEPS.map((step) => (
-                    <Tab key={step.key} value={step.key} label={step.label} />
-                ))}
-            </Tabs>
+            {hasStepState && (
+                <>
+                    <Tabs value={activeStep} onChange={(_, val) => setActiveStep(val)} sx={{ mb: 2 }}>
+                        {SCHEDULING_STEPS.map((step) => (
+                            <Tab key={step.key} value={step.key} label={step.label} />
+                        ))}
+                    </Tabs>
 
-            {SCHEDULING_STEPS.map(
-                (step) =>
-                    step.key === activeStep && (
-                        <Box key={step.key}>
-                            <FhirRequestConsole
-                                method={stepState[step.key].method}
-                                onMethodChange={(method) => updateStep(step.key, { method })}
-                                urlSuffix={step.urlPath}
-                                onUrlSuffixChange={() => {
-                                    /* fixed per step — not editable */
-                                }}
-                                resourceJson={stepState[step.key].resourceJson}
-                                onResourceJsonChange={(resourceJson) => updateStep(step.key, { resourceJson })}
-                                requestPathPlaceholder={step.urlPath}
-                                baseUrlForDisplay={schedulingServiceUrl}
-                                sendRequest={sendRequest}
-                                splitPaneHeight="calc(100vh - 380px)"
-                            />
-                        </Box>
-                    )
+                    {SCHEDULING_STEPS.map(
+                        (step) =>
+                            step.key === activeStep && (
+                                <Box key={step.key}>
+                                    <FhirRequestConsole
+                                        method={stepState[step.key].method}
+                                        onMethodChange={(method) => updateStep(step.key, { method })}
+                                        urlSuffix={stepState[step.key].urlSuffix}
+                                        onUrlSuffixChange={(urlSuffix) => updateStep(step.key, { urlSuffix })}
+                                        resourceJson={stepState[step.key].resourceJson}
+                                        onResourceJsonChange={(resourceJson) => updateStep(step.key, { resourceJson })}
+                                        requestPathPlaceholder={step.urlPath}
+                                        baseUrlForDisplay={schedulingServiceUrl}
+                                        sendRequest={sendRequest}
+                                        splitPaneHeight="calc(100vh - 380px)"
+                                    />
+                                </Box>
+                            )
+                    )}
+                </>
             )}
         </>
     );

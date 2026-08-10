@@ -5,6 +5,24 @@ import AuthUrlProvider from '../utils/authUrlProvider';
 import { logout } from '../utils/auth.utils';
 import { HttpMethod, TRequestInfo } from '../context/LastRequestContext';
 
+export interface SendRequestParams {
+    method: HttpMethod;
+    urlPath: string;
+    data?: object;
+    headers?: Record<string, string>;
+    onChunk?: (text: string) => void;
+    onHeaders?: (status: number, headers: Record<string, string>) => void;
+    signal?: AbortSignal;
+}
+
+export interface SendRequestResult {
+    status: number | undefined;
+    json: any;
+    headers: Record<string, string>;
+    rawText: string;
+    incomplete?: boolean;
+}
+
 interface GetDataParams {
     urlString: string;
     params?: any;
@@ -297,6 +315,59 @@ class BaseApi {
             return { chunks, text, incomplete: true };
         }
         return { chunks, text, incomplete: false };
+    }
+
+    // Shared by every BaseApi subclass wired up as a FhirRequestConsole `sendRequest` prop
+    // (FhirApi for the API Console, SchedulingApi for the Scheduling Console). Both consoles
+    // need identical behavior — raw JSON in/out, decoded text streamed to onChunk, and a
+    // `{ error }` fallback when the fetch itself failed — so this lives here once instead of
+    // being duplicated per subclass.
+    async sendRequest({
+        method,
+        urlPath,
+        data,
+        headers,
+        onChunk,
+        onHeaders,
+        signal,
+    }: SendRequestParams): Promise<SendRequestResult> {
+        // APIConsolePage's onChunk expects decoded text, but streamRequest hands back raw
+        // Uint8Array chunks (so binary downloads elsewhere aren't forced through a decoder). Keep
+        // one TextDecoder alive across the whole request — decoding each chunk independently would
+        // corrupt any multi-byte UTF-8 character split across a chunk boundary.
+        const decoder = new TextDecoder();
+        const result = await this.streamRequest({
+            method,
+            urlString: urlPath,
+            data,
+            headers,
+            signal,
+            onHeaders,
+            onChunk: onChunk ? (chunk) => onChunk(decoder.decode(chunk, { stream: true })) : undefined,
+        });
+
+        let json: any;
+        try {
+            // On a total fetch-level failure (network error, CORS block, DNS failure — not an
+            // abort), streamRequest() returns an empty `text` but sets `errorMessage`. Surface
+            // that as `{ error: ... }` so the console shows the real failure reason instead
+            // of a blank response, matching this method's pre-refactor behavior.
+            json = result.text
+                ? JSON.parse(result.text)
+                : result.errorMessage
+                    ? { error: result.errorMessage }
+                    : undefined;
+        } catch {
+            json = undefined;
+        }
+
+        return {
+            status: result.status,
+            json,
+            headers: result.headers,
+            rawText: result.text,
+            incomplete: result.incomplete,
+        };
     }
 
     async getData(

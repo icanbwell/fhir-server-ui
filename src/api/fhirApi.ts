@@ -1,6 +1,5 @@
 import { getStartAndEndDate } from '../utils/auditEventDateFilter';
 import BaseApi from './baseApi';
-import { HttpMethod } from '../context/LastRequestContext';
 
 interface GetResourceParams {
     id: string;
@@ -120,67 +119,8 @@ class FhirApi extends BaseApi {
         return await this.request({ urlString, method: 'POST', data: resource });
     }
 
-    async sendRequest({
-        method,
-        urlPath,
-        data,
-        headers,
-        onChunk,
-        onHeaders,
-        signal,
-    }: {
-        method: HttpMethod;
-        urlPath: string;
-        data?: object;
-        headers?: Record<string, string>;
-        onChunk?: (text: string) => void;
-        onHeaders?: (status: number, headers: Record<string, string>) => void;
-        signal?: AbortSignal;
-    }): Promise<{
-        status: number | undefined;
-        json: any;
-        headers: Record<string, string>;
-        rawText: string;
-        incomplete?: boolean;
-    }> {
-        // APIConsolePage's onChunk expects decoded text, but streamRequest hands back raw
-        // Uint8Array chunks (so binary downloads elsewhere aren't forced through a decoder). Keep
-        // one TextDecoder alive across the whole request — decoding each chunk independently would
-        // corrupt any multi-byte UTF-8 character split across a chunk boundary.
-        const decoder = new TextDecoder();
-        const result = await this.streamRequest({
-            method,
-            urlString: urlPath,
-            data,
-            headers,
-            signal,
-            onHeaders,
-            onChunk: onChunk ? (chunk) => onChunk(decoder.decode(chunk, { stream: true })) : undefined,
-        });
-
-        let json: any;
-        try {
-            // On a total fetch-level failure (network error, CORS block, DNS failure — not an
-            // abort), streamRequest() returns an empty `text` but sets `errorMessage`. Surface
-            // that as `{ error: ... }` so the API Console shows the real failure reason instead
-            // of a blank response, matching this method's pre-refactor behavior.
-            json = result.text
-                ? JSON.parse(result.text)
-                : result.errorMessage
-                    ? { error: result.errorMessage }
-                    : undefined;
-        } catch {
-            json = undefined;
-        }
-
-        return {
-            status: result.status,
-            json,
-            headers: result.headers,
-            rawText: result.text,
-            incomplete: result.incomplete,
-        };
-    }
+    // sendRequest() (used by APIConsolePage's FhirRequestConsole) is inherited from BaseApi —
+    // its logic isn't FHIR-specific and is shared with SchedulingApi.
 }
 
 export default FhirApi;

@@ -20,8 +20,8 @@ mode, rather than trying to patch every individual `useState` reset by hand.
 ## Global Constraints
 
 - **Hard backend dependency.** `TokenServiceApi.listConnectionsForPerson`/
-  `getConnectionTokenForPerson` call `GET /get-person-connections/` and
-  `GET /get-person-connection-token/{serviceSlug}/`, specified in
+  `getConnectionTokenForPerson` call `GET /get-client-person-connections/` and
+  `GET /get-client-person-connection-token/{serviceSlug}/`, specified in
   `aperture_token_service/docs/superpowers/plans/2026-08-09-person-connection-endpoints.md`.
   Tasks 1-3 below (API client, hook, component wiring) do not require those endpoints to exist —
   they're pure code changes verified by `yarn lint`/`yarn tsc --noEmit` and code inspection. **Any
@@ -66,11 +66,11 @@ falling back to the resource's own `id` if no such tag exists.
 
 - [ ] **Step 2: Compare it against a real ATS connection document's `client_fhir_person_id`**
 
-Once the companion `aperture_token_service` endpoint (`GET /get-person-connections/`) is deployed
+Once the companion `aperture_token_service` endpoint (`GET /get-client-person-connections/`) is deployed
 to dev, call it with the `uuid` from Step 1 as `client_fhir_person_id`:
 
 ```bash
-curl -G "https://aperture-token-service.dev-ue1.icanbwell.com/api/v1.0/get-person-connections/" \
+curl -G "https://aperture-token-service.dev-ue1.icanbwell.com/api/v1.0/get-client-person-connections/" \
   --data-urlencode "client_fhir_person_id=<uuid from Step 1>" \
   -H "Authorization: Bearer <a real clientcredentials service token>"
 ```
@@ -116,7 +116,7 @@ after the existing `getConnectionToken` method:
         connections: ConnectionEntry[];
     }> {
         const { status, json } = await this.getData({
-            urlString: `/get-person-connections/?client_fhir_person_id=${encodeURIComponent(clientPersonId)}`,
+            urlString: `/get-client-person-connections/?client_fhir_person_id=${encodeURIComponent(clientPersonId)}`,
         });
         const rawConnections: RawConnectionEntry[] = Array.isArray(json) ? json : [];
         return {
@@ -143,7 +143,7 @@ after the existing `getConnectionToken` method:
         // Same trailing-slash-before-query-string requirement as getConnectionToken — see that
         // method's comment.
         const { status, json } = await this.getData({
-            urlString: `/get-person-connection-token/${encodeURIComponent(serviceSlug)}/?client_fhir_person_id=${encodeURIComponent(clientPersonId)}`,
+            urlString: `/get-client-person-connection-token/${encodeURIComponent(serviceSlug)}/?client_fhir_person_id=${encodeURIComponent(clientPersonId)}`,
         });
         return { status, connectionToken: status === 200 ? json : null };
     }
@@ -486,7 +486,7 @@ above collapses back to the pre-existing behavior when it is.
 - Visit `/connections?personId=test-person-1` while logged in via a non-`clientcredentials`/
   `okta` provider (e.g. whatever you're using for the checks above). Confirm "This view requires
   a service-authenticated login." renders and no network call to
-  `/get-person-connections/` is made (check the browser's network inspector) — the guard must
+  `/get-client-person-connections/` is made (check the browser's network inspector) — the guard must
   fire before any API attempt.
 - Log in via `clientcredentials` (see this repo's `ClientCredentialsLogin.tsx` page/flow) and
   revisit the same URL. Confirm the "Testing connections for Person test-person-1 (service

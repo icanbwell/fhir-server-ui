@@ -177,7 +177,7 @@ async listConnectionsForPerson({ clientPersonId }: { clientPersonId: string }): 
     status: number | undefined;
     connections: ConnectionEntry[];
 }>
-// GET /get-person-connections/?client_fhir_person_id={clientPersonId}
+// GET /get-client-person-connections/?client_fhir_person_id={clientPersonId}
 // Same response mapping as listConnections() — {value, display, category, status, expired,
 // is_direct, number_of_resources} -> ConnectionEntry, per the new backend endpoint's contract
 // (see companion aperture_token_service design), which mirrors /get-member-connections exactly.
@@ -189,7 +189,7 @@ async getConnectionTokenForPerson({ serviceSlug, clientPersonId }: {
     status: number | undefined;
     connectionToken: ConnectionToken | null;
 }>
-// GET /get-person-connection-token/{serviceSlug}/?client_fhir_person_id={clientPersonId}
+// GET /get-client-person-connection-token/{serviceSlug}/?client_fhir_person_id={clientPersonId}
 // Same response shape as getConnectionToken() — the new backend endpoint mirrors
 // /get-member-connection-token/{slug}/ exactly.
 ```

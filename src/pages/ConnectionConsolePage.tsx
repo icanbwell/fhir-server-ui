@@ -1,78 +1,64 @@
-import { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
-import { Alert, Box, CircularProgress, Typography } from '@mui/material';
+import { useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { Box, Button, Typography } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ConnectionPicker from '../components/ConnectionPicker';
 import ConnectionRequestConsole from '../components/ConnectionRequestConsole';
-import TokenServiceApi from '../api/tokenServiceApi';
-import UserContext from '../context/UserContext';
-import { ConnectionEntry } from '../types/connectionEntry';
-import { CONNECTIONS_FORBIDDEN_MESSAGE } from '../constants/connectionsConstants';
+import useConnections from '../hooks/useConnections';
 
 const ConnectionConsolePage = () => {
-    const { setUserDetails } = useContext(UserContext);
     const { serviceSlug } = useParams();
-    const location = useLocation();
+    const navigate = useNavigate();
+    const { connections, loading, error, forbidden, configMissing, reload } = useConnections();
 
-    const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
-
-    const [connection, setConnection] = useState<ConnectionEntry | null>(
-        (location.state as { connection?: ConnectionEntry } | null)?.connection || null
+    const connection = useMemo(
+        () => connections.find((c) => c.service_slug === serviceSlug) ?? null,
+        [connections, serviceSlug]
     );
-    const [loadingConnection, setLoadingConnection] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [forbidden, setForbidden] = useState<boolean>(false);
+    const notFound = !loading && !error && !forbidden && !!serviceSlug && !connection;
 
-    useEffect(() => {
-        if (connection || !tokenServiceUrl || !serviceSlug) {
-            return;
-        }
-        const resolveConnection = async () => {
-            setLoadingConnection(true);
-            setError(null);
-            try {
-                const api = new TokenServiceApi({ fhirUrl: tokenServiceUrl, setUserDetails });
-                const { status, connections } = await api.listConnections();
-                if (status === 403) {
-                    setForbidden(true);
-                    return;
-                }
-                const match = connections.find((c) => c.service_slug === serviceSlug);
-                if (match) {
-                    setConnection(match);
-                } else {
-                    setError(`No connection found for service slug "${serviceSlug}".`);
-                }
-            } catch {
-                setError('Failed to load connection details.');
-            } finally {
-                setLoadingConnection(false);
-            }
-        };
-        resolveConnection();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [connection, tokenServiceUrl, serviceSlug]);
+    const handleSelect = (slug: string | null) => {
+        navigate(slug ? `/connections/${encodeURIComponent(slug)}` : '/connections');
+    };
 
     return (
         <div style={{ width: '100%', padding: 0, margin: 0 }}>
             <div style={{ minHeight: '92vh' }}>
                 <Header />
                 <Box sx={{ p: 2 }}>
-                    {!tokenServiceUrl ? (
+                    {configMissing ? (
                         <Typography color="error">
                             Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
                         </Typography>
-                    ) : forbidden ? (
-                        <Alert severity="warning">{CONNECTIONS_FORBIDDEN_MESSAGE}</Alert>
-                    ) : loadingConnection ? (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                            <CircularProgress />
-                        </Box>
-                    ) : error && !connection ? (
-                        <Typography color="error">{error}</Typography>
-                    ) : connection ? (
-                        <ConnectionRequestConsole connection={connection} />
-                    ) : null}
+                    ) : (
+                        <>
+                            <ConnectionPicker
+                                connections={connections}
+                                loading={loading}
+                                forbidden={forbidden}
+                                selectedSlug={serviceSlug}
+                                onSelect={handleSelect}
+                            />
+
+                            {error && (
+                                <Box sx={{ mb: 2 }}>
+                                    <Typography color="error">{error}</Typography>
+                                    <Button onClick={() => reload()}>Retry</Button>
+                                </Box>
+                            )}
+
+                            {notFound && (
+                                <Typography color="error">
+                                    No connection found for service slug &quot;{serviceSlug}&quot;.
+                                </Typography>
+                            )}
+
+                            {connection && (
+                                <ConnectionRequestConsole connection={connection} key={connection.service_slug} />
+                            )}
+                        </>
+                    )}
                 </Box>
             </div>
             <Footer />

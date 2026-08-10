@@ -35,9 +35,10 @@ const parseCustomHeaders = (raw?: string): Record<string, string> => {
 
 interface ConnectionRequestConsoleProps {
     connection: ConnectionEntry;
+    personId?: string;
 }
 
-const ConnectionRequestConsole = ({ connection }: ConnectionRequestConsoleProps) => {
+const ConnectionRequestConsole = ({ connection, personId }: ConnectionRequestConsoleProps) => {
     const { setUserDetails } = useContext(UserContext);
     const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
 
@@ -64,9 +65,12 @@ const ConnectionRequestConsole = ({ connection }: ConnectionRequestConsoleProps)
         setForbidden(false);
         try {
             const api = new TokenServiceApi({ fhirUrl: tokenServiceUrl, setUserDetails });
-            const { status, connectionToken: token } = await api.getConnectionToken({
-                serviceSlug: connection.service_slug,
-            });
+            const { status, connectionToken: token } = personId
+                ? await api.getConnectionTokenForPerson({
+                      serviceSlug: connection.service_slug,
+                      clientPersonId: personId,
+                  })
+                : await api.getConnectionToken({ serviceSlug: connection.service_slug });
             if (status === 403) {
                 setForbidden(true);
             } else if (status === 200 && token) {
@@ -81,7 +85,7 @@ const ConnectionRequestConsole = ({ connection }: ConnectionRequestConsoleProps)
         } finally {
             setLoadingToken(false);
         }
-    }, [tokenServiceUrl, connection.service_slug, setUserDetails]);
+    }, [tokenServiceUrl, connection.service_slug, setUserDetails, personId]);
 
     useEffect(() => {
         fetchToken();

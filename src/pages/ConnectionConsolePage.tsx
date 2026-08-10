@@ -1,25 +1,23 @@
-import { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import { Box, Button, Typography } from '@mui/material';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
+import { Box, Typography } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import ConnectionPicker from '../components/ConnectionPicker';
-import ConnectionRequestConsole from '../components/ConnectionRequestConsole';
-import useConnections from '../hooks/useConnections';
+import ConnectionConsoleContent from '../components/ConnectionConsoleContent';
+import { getLocalData } from '../utils/localData.utils';
 
 const ConnectionConsolePage = () => {
     const { serviceSlug } = useParams();
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { connections, loading, error, forbidden, configMissing, hasLoaded, reload } = useConnections();
 
-    const connection = useMemo(
-        () => connections.find((c) => c.service_slug === serviceSlug) ?? null,
-        [connections, serviceSlug]
-    );
-    const notFound = hasLoaded && !error && !forbidden && !!serviceSlug && !connection;
+    const personId = searchParams.get('personId') ?? undefined;
+    const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
+    const identityProvider = getLocalData('identityProvider');
+    const canUseOnBehalfOf = identityProvider === 'clientcredentials' || identityProvider === 'okta';
 
     const handleSelect = (slug: string | null) => {
-        navigate(slug ? `/connections/${encodeURIComponent(slug)}` : '/connections');
+        const suffix = personId ? `?personId=${encodeURIComponent(personId)}` : '';
+        navigate(slug ? `/connections/${encodeURIComponent(slug)}${suffix}` : `/connections${suffix}`);
     };
 
     return (
@@ -27,37 +25,21 @@ const ConnectionConsolePage = () => {
             <div style={{ minHeight: '92vh' }}>
                 <Header />
                 <Box sx={{ p: 2 }}>
-                    {configMissing ? (
+                    {!tokenServiceUrl ? (
                         <Typography color="error">
                             Token Service is not configured (missing REACT_APP_TOKEN_SERVICE_URL).
                         </Typography>
+                    ) : personId && !canUseOnBehalfOf ? (
+                        <Typography color="error">
+                            This view requires a service-authenticated login.
+                        </Typography>
                     ) : (
-                        <>
-                            <ConnectionPicker
-                                connections={connections}
-                                loading={loading}
-                                forbidden={forbidden}
-                                selectedSlug={serviceSlug}
-                                onSelect={handleSelect}
-                            />
-
-                            {error && (
-                                <Box sx={{ mb: 2 }}>
-                                    <Typography color="error">{error}</Typography>
-                                    <Button onClick={() => reload()}>Retry</Button>
-                                </Box>
-                            )}
-
-                            {notFound && (
-                                <Typography color="error">
-                                    No connection found for service slug &quot;{serviceSlug}&quot;.
-                                </Typography>
-                            )}
-
-                            {connection && (
-                                <ConnectionRequestConsole connection={connection} key={connection.service_slug} />
-                            )}
-                        </>
+                        <ConnectionConsoleContent
+                            key={personId ?? 'self'}
+                            serviceSlug={serviceSlug}
+                            personId={personId}
+                            onSelect={handleSelect}
+                        />
                     )}
                 </Box>
             </div>

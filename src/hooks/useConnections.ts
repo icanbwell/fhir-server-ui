@@ -13,7 +13,7 @@ export interface UseConnectionsResult {
     reload: () => void;
 }
 
-const useConnections = (): UseConnectionsResult => {
+const useConnections = (personId?: string): UseConnectionsResult => {
     const { setUserDetails } = useContext(UserContext);
     const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
 
@@ -21,9 +21,6 @@ const useConnections = (): UseConnectionsResult => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [forbidden, setForbidden] = useState<boolean>(false);
-    // Distinct from `loading`: stays false until the first fetch attempt settles, so callers
-    // can tell "haven't fetched yet" (nothing should render as not-found) apart from
-    // "fetched and this genuinely doesn't exist" (loading is false in both cases).
     const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
     const loadConnections = async () => {
@@ -35,7 +32,9 @@ const useConnections = (): UseConnectionsResult => {
         setForbidden(false);
         try {
             const api = new TokenServiceApi({ fhirUrl: tokenServiceUrl, setUserDetails });
-            const { status, connections: loaded } = await api.listConnections();
+            const { status, connections: loaded } = personId
+                ? await api.listConnectionsForPerson({ clientPersonId: personId })
+                : await api.listConnections();
             if (status === 403) {
                 setForbidden(true);
             } else if (status === 200) {
@@ -54,7 +53,7 @@ const useConnections = (): UseConnectionsResult => {
     useEffect(() => {
         loadConnections();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tokenServiceUrl]);
+    }, [tokenServiceUrl, personId]);
 
     return {
         connections,

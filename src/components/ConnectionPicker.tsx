@@ -10,13 +10,21 @@ interface ConnectionPickerProps {
     forbidden: boolean;
     selectedSlug: string | undefined;
     onSelect: (slug: string | null) => void;
+    hideLoginBanner?: boolean;
 }
 
 const filterOptions = createFilterOptions<ConnectionEntry>({
     stringify: (option) => `${option.display_name} ${option.service_slug}`,
 });
 
-const ConnectionPicker = ({ connections, loading, forbidden, selectedSlug, onSelect }: ConnectionPickerProps) => {
+const ConnectionPicker = ({
+    connections,
+    loading,
+    forbidden,
+    selectedSlug,
+    onSelect,
+    hideLoginBanner = false,
+}: ConnectionPickerProps) => {
     const isBwellAppLogin = getLocalData('identityProvider') === 'bwellapp';
 
     // MUI's Autocomplete requires options to already be sorted by the groupBy key for
@@ -40,7 +48,7 @@ const ConnectionPicker = ({ connections, loading, forbidden, selectedSlug, onSel
                 Connections
             </Typography>
 
-            {!isBwellAppLogin && (
+            {!hideLoginBanner && !isBwellAppLogin && (
                 <Alert severity="info" sx={{ mb: 2 }}>
                     Connections only work when signed in with b.well App login.
                 </Alert>

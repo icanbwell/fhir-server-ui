@@ -19,18 +19,14 @@ import PreJson from './PreJson';
 import KeyValueRows, { KeyValueRow } from './KeyValueRows';
 import { HttpMethod } from '../context/LastRequestContext';
 import { StreamingFetchResult } from '../utils/streamingFetch';
+import { SendRequestParams } from '../api/baseApi';
+
+// Re-exported so existing `import { SendRequestParams } from './FhirRequestConsole'` call sites
+// (APIConsolePage, ConnectionRequestConsole, SchedulingConsoleContent) keep working — the
+// canonical definition now lives in baseApi.ts, where sendRequest() itself lives.
+export type { SendRequestParams };
 
 const MIN_PANEL_WIDTH = 200;
-
-export interface SendRequestParams {
-    method: HttpMethod;
-    urlPath: string;
-    data?: object;
-    headers?: Record<string, string>;
-    onChunk?: (text: string) => void;
-    onHeaders?: (status: number, headers: Record<string, string>) => void;
-    signal?: AbortSignal;
-}
 
 export interface FhirRequestConsoleProps {
     method: HttpMethod;

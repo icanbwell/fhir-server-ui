@@ -4,7 +4,10 @@ import { TUserDetails } from '../types/baseTypes';
 import AuthUrlProvider from '../utils/authUrlProvider';
 import { logout } from '../utils/auth.utils';
 import { HttpMethod, TRequestInfo } from '../context/LastRequestContext';
+import { StreamingFetchResult } from '../utils/streamingFetch';
 
+// The canonical definition — FhirRequestConsole.tsx imports and re-exports this rather than
+// declaring its own copy, since sendRequest() now lives here on BaseApi.
 export interface SendRequestParams {
     method: HttpMethod;
     urlPath: string;
@@ -13,14 +16,6 @@ export interface SendRequestParams {
     onChunk?: (text: string) => void;
     onHeaders?: (status: number, headers: Record<string, string>) => void;
     signal?: AbortSignal;
-}
-
-export interface SendRequestResult {
-    status: number | undefined;
-    json: any;
-    headers: Record<string, string>;
-    rawText: string;
-    incomplete?: boolean;
 }
 
 interface GetDataParams {
@@ -330,7 +325,7 @@ class BaseApi {
         onChunk,
         onHeaders,
         signal,
-    }: SendRequestParams): Promise<SendRequestResult> {
+    }: SendRequestParams): Promise<StreamingFetchResult> {
         // APIConsolePage's onChunk expects decoded text, but streamRequest hands back raw
         // Uint8Array chunks (so binary downloads elsewhere aren't forced through a decoder). Keep
         // one TextDecoder alive across the whole request — decoding each chunk independently would

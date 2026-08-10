@@ -136,7 +136,15 @@ class BaseApi {
         if (path.startsWith(window.location.origin)) {
             path = path.slice(window.location.origin.length);
         }
-        const url = new URL(path, this.getBaseUrl());
+        // `new URL(path, base)` treats a leading-slash `path` as path-absolute, replacing the
+        // entire path component of `base` instead of appending to it — so a base URL with its own
+        // path segment (e.g. the token service's `/api/v1.0`) would otherwise silently lose that
+        // prefix. Normalizing both sides to the relative-append form keeps it intact.
+        const normalizedBase = this.getBaseUrl().endsWith('/')
+            ? this.getBaseUrl()
+            : `${this.getBaseUrl()}/`;
+        const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
+        const url = new URL(normalizedPath, normalizedBase);
         if (params) {
             Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
         }

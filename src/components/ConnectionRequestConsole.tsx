@@ -20,7 +20,10 @@ import UserContext from '../context/UserContext';
 import { HttpMethod } from '../context/LastRequestContext';
 import { StreamingFetchResult } from '../utils/streamingFetch';
 import { ConnectionEntry, ConnectionToken } from '../types/connectionEntry';
-import { CONNECTIONS_FORBIDDEN_MESSAGE } from '../constants/connectionsConstants';
+import {
+    CONNECTIONS_FORBIDDEN_MESSAGE,
+    CONNECTIONS_NOT_AVAILABLE_MESSAGE,
+} from '../constants/connectionsConstants';
 
 const parseCustomHeaders = (raw?: string): Record<string, string> => {
     if (!raw) {
@@ -115,7 +118,13 @@ const ConnectionRequestConsole = ({ connection, personId }: ConnectionRequestCon
     );
 
     if (forbidden) {
-        return <Alert severity="warning">{CONNECTIONS_FORBIDDEN_MESSAGE}</Alert>;
+        // personId set => on-behalf-of mode => a service-authenticated session, for which the
+        // delegated-account-specific wording in CONNECTIONS_FORBIDDEN_MESSAGE doesn't apply.
+        return (
+            <Alert severity="warning">
+                {personId ? CONNECTIONS_NOT_AVAILABLE_MESSAGE : CONNECTIONS_FORBIDDEN_MESSAGE}
+            </Alert>
+        );
     }
 
     return (
@@ -127,7 +136,11 @@ const ConnectionRequestConsole = ({ connection, personId }: ConnectionRequestCon
                     <Chip label={connection.status} size="small" variant="outlined" />
                     {connection.expired && <Chip label="Expired" size="small" color="warning" />}
                     {connectionToken && (
-                        <Chip label={connectionToken.fhir_version} size="small" variant="outlined" />
+                        <Chip
+                            label={connectionToken.fhir_version}
+                            size="small"
+                            variant="outlined"
+                        />
                     )}
                     <Box sx={{ flexGrow: 1 }} />
                     <Button
@@ -147,7 +160,9 @@ const ConnectionRequestConsole = ({ connection, personId }: ConnectionRequestCon
                         <Tooltip title="Copy patient_id">
                             <IconButton
                                 size="small"
-                                onClick={() => navigator.clipboard.writeText(connectionToken.patient_id)}
+                                onClick={() =>
+                                    navigator.clipboard.writeText(connectionToken.patient_id)
+                                }
                             >
                                 <ContentCopyIcon fontSize="inherit" />
                             </IconButton>
@@ -172,7 +187,9 @@ const ConnectionRequestConsole = ({ connection, personId }: ConnectionRequestCon
                 resourceJson={resourceJson}
                 onResourceJsonChange={setResourceJson}
                 requestPathPlaceholder={
-                    connectionToken ? `e.g. /Patient/${connectionToken.patient_id}` : 'e.g. /Patient/123'
+                    connectionToken
+                        ? `e.g. /Patient/${connectionToken.patient_id}`
+                        : 'e.g. /Patient/123'
                 }
                 baseUrlForDisplay={connectionToken?.url}
                 sendRequest={sendRequest}

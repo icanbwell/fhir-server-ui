@@ -1,8 +1,19 @@
 import { useMemo } from 'react';
-import { Alert, Autocomplete, Box, Chip, TextField, Typography, createFilterOptions } from '@mui/material';
+import {
+    Alert,
+    Autocomplete,
+    Box,
+    Chip,
+    TextField,
+    Typography,
+    createFilterOptions,
+} from '@mui/material';
 import { getLocalData } from '../utils/localData.utils';
 import { ConnectionEntry } from '../types/connectionEntry';
-import { CONNECTIONS_FORBIDDEN_MESSAGE } from '../constants/connectionsConstants';
+import {
+    CONNECTIONS_FORBIDDEN_MESSAGE,
+    CONNECTIONS_NOT_AVAILABLE_MESSAGE,
+} from '../constants/connectionsConstants';
 
 interface ConnectionPickerProps {
     connections: ConnectionEntry[];
@@ -11,6 +22,10 @@ interface ConnectionPickerProps {
     selectedSlug: string | undefined;
     onSelect: (slug: string | null) => void;
     hideLoginBanner?: boolean;
+    // Set when personId is present (on-behalf-of mode) — selects the generic forbidden
+    // message instead of the delegated-account-specific one, since a service-authenticated
+    // session can't be a "delegated/authorized-representative account".
+    onBehalfOf?: boolean;
 }
 
 const filterOptions = createFilterOptions<ConnectionEntry>({
@@ -24,6 +39,7 @@ const ConnectionPicker = ({
     selectedSlug,
     onSelect,
     hideLoginBanner = false,
+    onBehalfOf = false,
 }: ConnectionPickerProps) => {
     const isBwellAppLogin = getLocalData('identityProvider') === 'bwellapp';
 
@@ -32,7 +48,9 @@ const ConnectionPicker = ({
     const sortedConnections = useMemo(
         () =>
             [...connections].sort(
-                (a, b) => a.category.localeCompare(b.category) || a.display_name.localeCompare(b.display_name)
+                (a, b) =>
+                    a.category.localeCompare(b.category) ||
+                    a.display_name.localeCompare(b.display_name)
             ),
         [connections]
     );
@@ -55,7 +73,9 @@ const ConnectionPicker = ({
             )}
 
             {forbidden ? (
-                <Alert severity="warning">{CONNECTIONS_FORBIDDEN_MESSAGE}</Alert>
+                <Alert severity="warning">
+                    {onBehalfOf ? CONNECTIONS_NOT_AVAILABLE_MESSAGE : CONNECTIONS_FORBIDDEN_MESSAGE}
+                </Alert>
             ) : !loading && connections.length === 0 ? (
                 <Typography color="text.secondary">No connections found.</Typography>
             ) : (
@@ -65,14 +85,23 @@ const ConnectionPicker = ({
                     value={selectedConnection}
                     groupBy={(option) => option.category}
                     getOptionLabel={(option) => option.display_name}
-                    isOptionEqualToValue={(option, value) => option.service_slug === value.service_slug}
+                    isOptionEqualToValue={(option, value) =>
+                        option.service_slug === value.service_slug
+                    }
                     filterOptions={filterOptions}
                     onChange={(_, value) => onSelect(value ? value.service_slug : null)}
                     renderOption={(props, option) => (
-                        <Box component="li" {...props} key={option.service_slug} sx={{ display: 'flex', gap: 1 }}>
+                        <Box
+                            component="li"
+                            {...props}
+                            key={option.service_slug}
+                            sx={{ display: 'flex', gap: 1 }}
+                        >
                             <Typography sx={{ flex: 1 }}>{option.display_name}</Typography>
                             <Chip label={option.status} size="small" variant="outlined" />
-                            {option.expired && <Chip label="Expired" size="small" color="warning" />}
+                            {option.expired && (
+                                <Chip label="Expired" size="small" color="warning" />
+                            )}
                         </Box>
                     )}
                     renderInput={(params) => (

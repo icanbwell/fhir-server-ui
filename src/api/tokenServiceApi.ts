@@ -11,6 +11,21 @@ interface RawConnectionEntry {
     number_of_resources: number;
 }
 
+// Shared by listConnections and listConnectionsForPerson — both endpoints return the same
+// raw shape, so this is the single place that maps it to ConnectionEntry.
+const mapRawConnections = (json: unknown): ConnectionEntry[] => {
+    const rawConnections: RawConnectionEntry[] = Array.isArray(json) ? json : [];
+    return rawConnections.map((raw) => ({
+        service_slug: raw.value,
+        display_name: raw.display,
+        category: raw.category,
+        status: raw.status,
+        expired: raw.expired,
+        is_direct: raw.is_direct,
+        number_of_resources: raw.number_of_resources,
+    }));
+};
+
 class TokenServiceApi extends BaseApi {
     // Use for the logged-in member's own connections (a member-authenticated session, e.g.
     // bwellapp). Use listConnectionsForPerson instead to look up an arbitrary person's
@@ -20,19 +35,7 @@ class TokenServiceApi extends BaseApi {
         connections: ConnectionEntry[];
     }> {
         const { status, json } = await this.getData({ urlString: '/get-member-connections' });
-        const rawConnections: RawConnectionEntry[] = Array.isArray(json) ? json : [];
-        return {
-            status,
-            connections: rawConnections.map((raw) => ({
-                service_slug: raw.value,
-                display_name: raw.display,
-                category: raw.category,
-                status: raw.status,
-                expired: raw.expired,
-                is_direct: raw.is_direct,
-                number_of_resources: raw.number_of_resources,
-            })),
-        };
+        return { status, connections: mapRawConnections(json) };
     }
 
     // Use for the logged-in member's own connection token. Use getConnectionTokenForPerson
@@ -51,7 +54,7 @@ class TokenServiceApi extends BaseApi {
         return { status, connectionToken: status === 200 ? json : null };
     }
 
-    // Use from a service-authenticated session (cognitocc/descopecc/okta) to look up an
+    // Use from a service-authenticated session (cognitocc/descopecc) to look up an
     // arbitrary person's connections by client_fhir_person_id — e.g. staff testing a
     // specific patient's connections. Use listConnections instead for the logged-in
     // member's own connections.
@@ -62,25 +65,16 @@ class TokenServiceApi extends BaseApi {
         const { status, json } = await this.getData({
             urlString: `/get-client-person-connections/?client_fhir_person_id=${encodeURIComponent(clientPersonId)}`,
         });
-        const rawConnections: RawConnectionEntry[] = Array.isArray(json) ? json : [];
-        return {
-            status,
-            connections: rawConnections.map((raw) => ({
-                service_slug: raw.value,
-                display_name: raw.display,
-                category: raw.category,
-                status: raw.status,
-                expired: raw.expired,
-                is_direct: raw.is_direct,
-                number_of_resources: raw.number_of_resources,
-            })),
-        };
+        return { status, connections: mapRawConnections(json) };
     }
 
     // Use from a service-authenticated session to look up an arbitrary person's
     // connection token by client_fhir_person_id. Use getConnectionToken instead for the
     // logged-in member's own connection token.
-    async getConnectionTokenForPerson({ serviceSlug, clientPersonId }: {
+    async getConnectionTokenForPerson({
+        serviceSlug,
+        clientPersonId,
+    }: {
         serviceSlug: string;
         clientPersonId: string;
     }): Promise<{

@@ -38,6 +38,7 @@ const ConnectionConsoleContent = ({
                 selectedSlug={serviceSlug}
                 onSelect={onSelect}
                 hideLoginBanner={!!personId}
+                onBehalfOf={!!personId}
             />
 
             {error && (

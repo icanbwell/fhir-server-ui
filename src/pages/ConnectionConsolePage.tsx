@@ -17,7 +17,9 @@ const ConnectionConsolePage = () => {
 
     const handleSelect = (slug: string | null) => {
         const suffix = personId ? `?personId=${encodeURIComponent(personId)}` : '';
-        navigate(slug ? `/connections/${encodeURIComponent(slug)}${suffix}` : `/connections${suffix}`);
+        navigate(
+            slug ? `/connections/${encodeURIComponent(slug)}${suffix}` : `/connections${suffix}`
+        );
     };
 
     return (
@@ -34,7 +36,7 @@ const ConnectionConsolePage = () => {
                             This view requires a service-authenticated login.
                         </Typography>
                     ) : !personId && canUseOnBehalfOf ? (
-                        // cognitocc/descopecc/okta sessions can never pass ATS's
+                        // cognitocc/descopecc sessions can never pass ATS's
                         // get_current_user guard used by the self-mode ("my own connections")
                         // endpoints — attempting it would 401 and trigger a full app logout via
                         // handleUnauthorized. These sessions are only meant to use the

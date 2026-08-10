@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Button, Card, CardContent, CardHeader, Collapse, IconButton, Tooltip } from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Collapse,
+    IconButton,
+    Tooltip,
+} from '@mui/material';
 import ResourceItem from './ResourceItem';
 import Json from './Json';
 import { TResource } from '../types/resources/Resource';
@@ -37,16 +46,32 @@ type TGetIPSLinkProps = {
     uuid?: string;
 };
 
-const getIPSLink = ({
-    resource,
-    uuid,
-}: TGetIPSLinkProps) => {
+type TRenderCardLinkProps = {
+    to: string;
+    tooltip: string;
+    label: string;
+    // Adds target="_blank"/rel="noopener noreferrer"/OpenInNewIcon for links that navigate
+    // away from this app, as opposed to in-app routes like the Test Connections link.
+    external?: boolean;
+    onClick?: (e: React.MouseEvent) => void;
+};
+
+// Shared by getIPSLink, getCompositionSummaryLink, and getTestConnectionsLink — all three
+// render the same Tooltip > Link > DescriptionIcon > Typography shape and only vary in
+// destination, label, and whether the link is external.
+const renderCardLink = ({
+    to,
+    tooltip,
+    label,
+    external = false,
+    onClick,
+}: TRenderCardLinkProps) => {
     return (
-        <Tooltip title="View International Patient Summary">
+        <Tooltip title={tooltip}>
             <Link
-                to={`/ips/4_0_0/Patient/${resource.resourceType === 'Person' ? 'person.' : ''}${uuid}/$summary?_includeSummaryCompositionOnly=true`}
-                target="_blank"
-                rel="noopener noreferrer"
+                to={to}
+                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                onClick={onClick}
                 style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -57,62 +82,38 @@ const getIPSLink = ({
             >
                 <DescriptionIcon color="primary" fontSize="small" />
                 <Typography variant="body2" color="primary">
-                    IPS
+                    {label}
                 </Typography>
-                <OpenInNewIcon color="primary" fontSize="small" />
+                {external && <OpenInNewIcon color="primary" fontSize="small" />}
             </Link>
         </Tooltip>
     );
 };
 
-const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) => {
-    return (
-        <Tooltip title="View Composition Summary">
-            <Link
-                to={`/composition-summary/4_0_0/Composition/${uuid}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    textDecoration: 'none',
-                    color: 'inherit',
-                }}
-            >
-                <DescriptionIcon color="primary" fontSize="small" />
-                <Typography variant="body2" color="primary">
-                    Composition View
-                </Typography>
-                <OpenInNewIcon color="primary" fontSize="small" />
-            </Link>
-        </Tooltip>
-    );
-};
+const getIPSLink = ({ resource, uuid }: TGetIPSLinkProps) =>
+    renderCardLink({
+        to: `/ips/4_0_0/Patient/${resource.resourceType === 'Person' ? 'person.' : ''}${uuid}/$summary?_includeSummaryCompositionOnly=true`,
+        tooltip: 'View International Patient Summary',
+        label: 'IPS',
+        external: true,
+    });
 
-const getTestConnectionsLink = ({ personId }: { personId: string }) => {
-    return (
-        <Tooltip title="Test this person's FHIR connections">
-            <Link
-                to={`/connections?personId=${encodeURIComponent(personId)}`}
-                onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    textDecoration: 'none',
-                    color: 'inherit',
-                }}
-            >
-                <DescriptionIcon color="primary" fontSize="small" />
-                <Typography variant="body2" color="primary">
-                    Test Connections
-                </Typography>
-            </Link>
-        </Tooltip>
-    );
-};
+const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) =>
+    renderCardLink({
+        to: `/composition-summary/4_0_0/Composition/${uuid}`,
+        tooltip: 'View Composition Summary',
+        label: 'Composition View',
+        external: true,
+        onClick: (e: React.MouseEvent) => e.stopPropagation(),
+    });
+
+const getTestConnectionsLink = ({ personId }: { personId: string }) =>
+    renderCardLink({
+        to: `/connections?personId=${encodeURIComponent(personId)}`,
+        tooltip: "Test this person's FHIR connections",
+        label: 'Test Connections',
+        onClick: (e: React.MouseEvent) => e.stopPropagation(),
+    });
 
 const ResourceCard = ({
     index,
@@ -242,7 +243,9 @@ const ResourceCard = ({
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getIPSLink({ resource, uuid: uuid?.toString() })}
                         {resource.resourceType &&
-                            compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
+                            compositionSummaryResourceTypes.includes(
+                                resource.resourceType.toString()
+                            ) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}
                         {resource.resourceType &&
                             personOnlyResourceTypes.includes(resource.resourceType.toString()) &&
@@ -263,7 +266,9 @@ const ResourceCard = ({
                     {/* Conditionally render FileDownload based on resource type */}
                     {resource.resourceType &&
                         (spreadSheetResourceTypes.includes(resource.resourceType.toString()) ||
-                            compositionSummaryResourceTypes.includes(resource.resourceType.toString())) && (
+                            compositionSummaryResourceTypes.includes(
+                                resource.resourceType.toString()
+                            )) && (
                             <Box
                                 sx={{
                                     display: 'flex',
@@ -272,7 +277,9 @@ const ResourceCard = ({
                                     mt: 2,
                                 }}
                             >
-                                {spreadSheetResourceTypes.includes(resource.resourceType.toString()) && (
+                                {spreadSheetResourceTypes.includes(
+                                    resource.resourceType.toString()
+                                ) && (
                                     <Box>
                                         <Tooltip title="Open Summary in New Spreadsheet Tab">
                                             {/* The resource type is included twice in the URL to meet API requirements:
@@ -304,8 +311,12 @@ const ResourceCard = ({
                                     resource.resourceType.toString()
                                 ) && <Box>{getIPSLink({ resource, uuid: uuid?.toString() })}</Box>}
 
-                                {compositionSummaryResourceTypes.includes(resource.resourceType.toString()) && (
-                                    <Box>{getCompositionSummaryLink({ uuid: uuid?.toString() })}</Box>
+                                {compositionSummaryResourceTypes.includes(
+                                    resource.resourceType.toString()
+                                ) && (
+                                    <Box>
+                                        {getCompositionSummaryLink({ uuid: uuid?.toString() })}
+                                    </Box>
                                 )}
                             </Box>
                         )}

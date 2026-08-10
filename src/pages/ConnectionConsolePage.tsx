@@ -13,7 +13,11 @@ const ConnectionConsolePage = () => {
     const personId = searchParams.get('personId') ?? undefined;
     const tokenServiceUrl = import.meta.env.REACT_APP_TOKEN_SERVICE_URL;
     const identityProvider = getLocalData('identityProvider');
-    const canUseOnBehalfOf = identityProvider === 'clientcredentials' || identityProvider === 'okta';
+    // Neither 'clientcredentials' nor any single string is ever actually stored as
+    // identityProvider for a client-credentials login — ClientCredentialsLogin.tsx stores
+    // 'cognitocc' or 'descopecc' depending on which backend the user picks in that flow.
+    const canUseOnBehalfOf =
+        identityProvider === 'cognitocc' || identityProvider === 'descopecc' || identityProvider === 'okta';
 
     const handleSelect = (slug: string | null) => {
         const suffix = personId ? `?personId=${encodeURIComponent(personId)}` : '';

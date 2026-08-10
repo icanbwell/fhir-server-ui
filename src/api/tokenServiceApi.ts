@@ -51,7 +51,7 @@ class TokenServiceApi extends BaseApi {
         return { status, connectionToken: status === 200 ? json : null };
     }
 
-    // Use from a service-authenticated session (clientcredentials/okta) to look up an
+    // Use from a service-authenticated session (cognitocc/descopecc/okta) to look up an
     // arbitrary person's connections by client_fhir_person_id — e.g. staff testing a
     // specific patient's connections. Use listConnections instead for the logged-in
     // member's own connections.

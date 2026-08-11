@@ -12,10 +12,12 @@ const IPSViewerPage = lazy(() => import('../pages/IPSViewerPage'));
 const CompositionSummaryPage = lazy(() => import('../pages/CompositionSummaryPage'));
 const APIConsolePage = lazy(() => import('../pages/APIConsolePage'));
 const ConnectionConsolePage = lazy(() => import('../pages/ConnectionConsolePage'));
+const BaileyAIPage = lazy(() => import('../pages/BaileyAIPage'));
 
 export default [
     <Route key="apiConsole" path="/api-console" element={<APIConsolePage />} />,
     <Route key="connections" path="/connections/:serviceSlug?" element={<ConnectionConsolePage />} />,
+    <Route key="bailey" path="/bailey" element={<BaileyAIPage />} />,
     <Route key="about" path="/about" element={<AboutPage />} />,
     <Route key="patientTimeline" path="/patientTimeline" element={<PatientTimeline />} />,
     <Route key="ObservationGraph" path="/observationGraph" element={<ObservationGraph />} />,

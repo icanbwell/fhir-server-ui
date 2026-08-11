@@ -21,6 +21,11 @@ class BaileyApi extends BaseApi {
         // Intentionally does nothing — see class comment above.
     }
 
+    // `text` and `errorMessage` are returned alongside `status` because a non-2xx body is the
+    // only place Bailey explains itself (invalid model id, rejected tool config, a disabled
+    // feature flag), and `errorMessage` carries the fetch-level failure reason (CORS block, DNS,
+    // connection refused) when no response arrived at all. Dropping them would leave the user
+    // with nothing but a bare status code.
     async streamChat({
         model,
         instructions,
@@ -28,9 +33,9 @@ class BaileyApi extends BaseApi {
         tools,
         signal,
         onChunk,
-    }: StreamChatParams): Promise<{ status: number | undefined }> {
+    }: StreamChatParams): Promise<{ status: number | undefined; text: string; errorMessage?: string }> {
         const decoder = new TextDecoder();
-        const { status } = await this.streamRequest({
+        const { status, text, errorMessage } = await this.streamRequest({
             method: 'POST' as HttpMethod,
             urlString: '/bailey/v1/responses',
             data: { model, instructions, input, stream: true, tools },
@@ -41,7 +46,7 @@ class BaileyApi extends BaseApi {
             signal,
             onChunk: (chunk) => onChunk(decoder.decode(chunk, { stream: true })),
         });
-        return { status };
+        return { status, text, errorMessage };
     }
 }
 

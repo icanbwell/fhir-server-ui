@@ -1,4 +1,4 @@
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaileyApi from '../api/baileyApi';
@@ -15,6 +15,28 @@ export interface UseBaileyChatResult {
     retryLast: () => void;
 }
 
+// Bailey's error bodies can be long (validation dumps, stack traces). Show enough to identify
+// the cause in the banner without flooding the screen.
+const MAX_ERROR_DETAIL_LENGTH = 200;
+
+const buildHttpErrorMessage = (
+    httpStatus: number | undefined,
+    responseText: string,
+    errorMessage: string | undefined
+): string => {
+    if (httpStatus === 401 || httpStatus === 403) {
+        return "Bailey isn't reachable with your current login.";
+    }
+    const base = `Bailey request failed (status ${httpStatus ?? 'network error'}).`;
+    const detail = (errorMessage || responseText || '').trim();
+    if (!detail) {
+        return base;
+    }
+    const truncated =
+        detail.length > MAX_ERROR_DETAIL_LENGTH ? `${detail.slice(0, MAX_ERROR_DETAIL_LENGTH)}…` : detail;
+    return `${base} ${truncated}`;
+};
+
 const useBaileyChat = (): UseBaileyChatResult => {
     const { baileyUrl, baileyModel, fhirUrl } = useContext(EnvContext);
     const { setUserDetails } = useContext(UserContext);
@@ -26,12 +48,27 @@ const useBaileyChat = (): UseBaileyChatResult => {
     const abortRef = useRef<AbortController | null>(null);
     const lastUserTextRef = useRef<string>('');
 
-    const applyEvent = useCallback((assistantId: string, event: BaileyStreamEvent) => {
+    // `send`/`retryLast` need the current history to build the request body. Reading it from
+    // inside a `setMessages` updater would make firing the request a side effect of a state
+    // updater — and React StrictMode double-invokes updaters in development, so every send
+    // would POST twice and render two assistant bubbles. Mirroring the latest messages into a
+    // ref lets both callbacks compute the next history and start the turn as plain statements.
+    const messagesRef = useRef<BaileyMessage[]>([]);
+    useEffect(() => {
+        messagesRef.current = messages;
+    }, [messages]);
+
+    // Returns true when the event actually contributed something visible to the assistant
+    // message, so the caller can tell "streamed a real answer" from "parsed nothing at all".
+    const applyEvent = useCallback((assistantId: string, event: BaileyStreamEvent): boolean => {
         if (event.type === 'response.output_text.delta') {
+            if (!event.delta) {
+                return false;
+            }
             setMessages((prev) =>
                 prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + event.delta } : m))
             );
-            return;
+            return true;
         }
         if (event.type === 'response.output_item.done' && (event.item.type === 'mcp_call' || event.item.type === 'function_call')) {
             const toolCall: BaileyToolCall = {
@@ -43,7 +80,9 @@ const useBaileyChat = (): UseBaileyChatResult => {
             setMessages((prev) =>
                 prev.map((m) => (m.id === assistantId ? { ...m, toolCalls: [...(m.toolCalls || []), toolCall] } : m))
             );
+            return true;
         }
+        return false;
     }, []);
 
     const runTurn = useCallback(
@@ -60,9 +99,25 @@ const useBaileyChat = (): UseBaileyChatResult => {
 
             let buffer = '';
             let streamError: string | null = null;
+            let receivedOutput = false;
+
+            const processFrames = (events: BaileyStreamEvent[], done: boolean) => {
+                events.forEach((event) => {
+                    if (event.type === 'error') {
+                        streamError = event.message;
+                        return;
+                    }
+                    if (applyEvent(assistantId, event)) {
+                        receivedOutput = true;
+                    }
+                });
+                if (done) {
+                    setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, streaming: false } : m)));
+                }
+            };
 
             try {
-                const { status: httpStatus } = await api.streamChat({
+                const { status: httpStatus, text: responseText, errorMessage } = await api.streamChat({
                     model: baileyModel,
                     instructions: BAILEY_SYSTEM_INSTRUCTIONS,
                     input: history.map((m) => ({ role: m.role, content: m.content })),
@@ -72,18 +127,18 @@ const useBaileyChat = (): UseBaileyChatResult => {
                         buffer += chunkText;
                         const { events, remainder, done } = parseSseFrames(buffer);
                         buffer = remainder;
-                        events.forEach((event) => {
-                            if (event.type === 'error') {
-                                streamError = event.message;
-                                return;
-                            }
-                            applyEvent(assistantId, event);
-                        });
-                        if (done) {
-                            setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, streaming: false } : m)));
-                        }
+                        processFrames(events, done);
                     },
                 });
+
+                // A stream can end without the blank line that would terminate its last frame —
+                // and that frame may carry the final delta and the `[DONE]` marker. Re-parse the
+                // leftover remainder with an explicit terminator so it isn't silently dropped.
+                if (buffer.trim()) {
+                    const { events, done } = parseSseFrames(`${buffer}\n\n`);
+                    buffer = '';
+                    processFrames(events, done);
+                }
 
                 if (streamError) {
                     setStatus('error');
@@ -92,11 +147,15 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 }
                 if (httpStatus === undefined || httpStatus >= 400) {
                     setStatus('error');
-                    setError(
-                        httpStatus === 401 || httpStatus === 403
-                            ? "Bailey isn't reachable with your current login."
-                            : `Bailey request failed (status ${httpStatus ?? 'network error'}).`
-                    );
+                    setError(buildHttpErrorMessage(httpStatus, responseText, errorMessage));
+                    return;
+                }
+                // HTTP success but nothing parseable ever came out of the stream. Reporting
+                // 'idle' here would show an empty bubble and look like Bailey answered with
+                // silence; a framing variant this parser doesn't understand is far more likely.
+                if (!receivedOutput) {
+                    setStatus('error');
+                    setError('Bailey returned an empty response.');
                     return;
                 }
                 setStatus('idle');
@@ -108,7 +167,18 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 setStatus('error');
                 setError(err?.message || 'Bailey request failed.');
             } finally {
-                setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, streaming: false } : m)));
+                // Drop the assistant placeholder entirely when the turn produced nothing (errored
+                // before the first delta, or was stopped immediately). Keeping an empty-content
+                // assistant message would both render a blank bubble and get replayed in the next
+                // turn's `input` array, which Bailey can reject.
+                setMessages((prev) =>
+                    prev.flatMap((m) => {
+                        if (m.id !== assistantId) {
+                            return [m];
+                        }
+                        return m.content || (m.toolCalls && m.toolCalls.length > 0) ? [{ ...m, streaming: false }] : [];
+                    })
+                );
             }
         },
         [baileyUrl, baileyModel, fhirUrl, setUserDetails, applyEvent]
@@ -121,11 +191,13 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 return;
             }
             lastUserTextRef.current = trimmed;
-            setMessages((prev) => {
-                const next: BaileyMessage[] = [...prev, { id: crypto.randomUUID(), role: 'user', content: trimmed }];
-                runTurn(next);
-                return next;
-            });
+            const next: BaileyMessage[] = [
+                ...messagesRef.current,
+                { id: crypto.randomUUID(), role: 'user', content: trimmed },
+            ];
+            messagesRef.current = next;
+            setMessages(next);
+            runTurn(next);
         },
         [runTurn]
     );
@@ -138,12 +210,16 @@ const useBaileyChat = (): UseBaileyChatResult => {
         if (!lastUserTextRef.current) {
             return;
         }
-        setMessages((prev) => {
-            const last = prev[prev.length - 1];
-            const trimmed = last && last.role === 'assistant' ? prev.slice(0, -1) : prev;
-            runTurn(trimmed);
-            return trimmed;
-        });
+        // Strip a trailing assistant message so the retried turn doesn't resend the failed
+        // attempt's partial output as history. A turn that produced nothing has already removed
+        // its own placeholder (see runTurn's finally), in which case the last message is the
+        // user's and nothing needs stripping.
+        const current = messagesRef.current;
+        const last = current[current.length - 1];
+        const trimmed = last && last.role === 'assistant' ? current.slice(0, -1) : current;
+        messagesRef.current = trimmed;
+        setMessages(trimmed);
+        runTurn(trimmed);
     }, [runTurn]);
 
     return { messages, status, error, send, stop, retryLast };

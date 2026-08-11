@@ -12,8 +12,13 @@ export interface ParsedSseFrames {
 // frames, whose payload may be plain text rather than JSON. `buffer` may end mid-frame (a
 // network chunk boundary rarely lines up with an SSE frame boundary); the incomplete tail is
 // returned as `remainder` for the caller to prepend to the next chunk.
+//
+// CRLF is normalized to LF before splitting: the SSE spec allows CR, LF, or CRLF line
+// endings, and an intermediary proxy can rewrite them. Splitting on '\n\n' alone would find
+// no frame boundary at all in a '\r\n\r\n'-framed stream, so every byte would accumulate in
+// `remainder` forever and the whole response would be lost while still reporting success.
 export function parseSseFrames(buffer: string): ParsedSseFrames {
-    const frames = buffer.split('\n\n');
+    const frames = buffer.replace(/\r\n/g, '\n').split('\n\n');
     const remainder = frames.pop() ?? '';
     const events: BaileyStreamEvent[] = [];
     let done = false;

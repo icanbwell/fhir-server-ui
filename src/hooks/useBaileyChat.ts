@@ -140,7 +140,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
         }
         setMessages((prev) => {
             const last = prev[prev.length - 1];
-            const trimmed = last && last.role === 'assistant' && last.content === '' ? prev.slice(0, -1) : prev;
+            const trimmed = last && last.role === 'assistant' ? prev.slice(0, -1) : prev;
             runTurn(trimmed);
             return trimmed;
         });

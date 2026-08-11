@@ -170,6 +170,15 @@ pre-gating on login provider.
 3. No fhir-server-side change expected: the new `/mcp` endpoint sits behind
    fhir-server's existing passport auth, which the token fhir-server-ui
    already uses against fhir-server today should satisfy.
+4. Verify baileyai's CORS configuration. This is a browser-originated POST
+   carrying an `Authorization` header, so it always triggers a preflight, and
+   `BaseApi.buildHeaders` unconditionally adds several more headers on top.
+   baileyai's `Access-Control-Allow-Origin` must include fhir-server-ui's
+   origin per environment, and its `Access-Control-Allow-Headers` must include
+   every header this app sends: `Authorization`, `Content-Type`, `Accept`,
+   `Cache-Control`, `Pragma`, `Expires`, and `Origin-Service`. If any is
+   missing the browser fails the fetch before a response exists, so the UI can
+   only show a generic network error with no server-side detail.
 
 ## Follow-up (not part of this plan)
 

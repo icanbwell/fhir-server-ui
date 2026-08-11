@@ -756,12 +756,13 @@ Expected: both succeed with no new errors/warnings.
 - [ ] **Step 7: Manual verification**
 
 1. In your local `.env` (gitignored, not part of this commit), set `REACT_APP_BAILEY_URL` to a reachable baileyai environment (e.g. `https://baileyai.dev.bwell.zone`) and `REACT_APP_BAILEY_MODEL` to a valid model id for that environment.
+   - **`REACT_APP_FHIR_SERVER_URL` must be reachable from baileyai's own network/environment, not just from your browser.** It is passed to baileyai as the MCP tool's `server_url`, and baileyai — not the browser — is what connects to it. A `localhost` (or docker-internal) FHIR server will never work against a remotely deployed baileyai, and fails silently: Bailey simply answers without any FHIR data rather than reporting a tool error. For local testing, either point `REACT_APP_BAILEY_URL` at a locally running baileyai too, or point `REACT_APP_FHIR_SERVER_URL` at a deployed fhir-server that baileyai can reach.
 2. Run `yarn dev`, open the app, and log in.
 3. Confirm a new "Bailey AI" icon appears in the header next to the Connections icon; click it and confirm it navigates to `/bailey`.
 4. Type a question about FHIR data on this server (e.g. "How many Patient resources are there?") and send it. Confirm:
    - The assistant message streams in incrementally (not all at once).
    - Markdown formatting (e.g. a bulleted list, if the response includes one) renders correctly, not as raw asterisks.
-   - If Bailey calls the fhir-server MCP tool, a "🔧 …" chip appears on the assistant's message.
+   - **A "🔧 …" tool-call chip (e.g. `🔧 search_…`, whatever the fhir-server MCP tool is named) appears on the assistant's message at least once during testing.** This is a required check, not an optional one: the chip's presence is the only observable proof that baileyai actually forwarded your bearer token to the MCP endpoint at `${fhirUrl}/mcp` and that the endpoint accepted it. Token pass-through is an assumption of this design with no other way to verify it from this repo. If no chip ever appears *and* no error banner appears either, Bailey answered from the model alone without ever querying FHIR data — treat that as a failure and investigate baileyai's token forwarding and MCP reachability (see step 1) before considering this verified. Asking a question that can only be answered from server data (e.g. "How many Patient resources are there?") makes the chip's absence unambiguous.
 5. Click the stop icon mid-response and confirm streaming halts without an error banner.
 6. Temporarily set `REACT_APP_BAILEY_MODEL` to an invalid value, restart the dev server, send another message, and confirm an error banner with a working "Retry" button appears (rather than the app logging you out). Revert the env var afterward.
 7. Log out and confirm the "Bailey AI" icon disappears from the header (same gating as the Connections icon).
@@ -778,3 +779,12 @@ git commit -m "Add Bailey AI chat screen, route, and nav link"
 ## Follow-up (not part of this plan)
 
 Repoint baileyai's static `.mcp.json` "fhir-server" entry / `MCP_FHIR_URL` to the new fhir-server `/mcp` endpoint, so other Bailey surfaces (e.g. skills-service authoring chat) also move off the legacy `mcp-fhir-agent` service. Separate PR, in the `baileyai` repo, independent of this plan. Also verify (in `baileyai`'s deployment config, not this repo): `REQUEST_TOOLS_ENABLED=true` in each environment's Helm values, and that baileyai's `AUTH_PROVIDERS` in each environment trusts the issuer of the token fhir-server-ui's active login provider produces.
+
+### Cross-repo dependency: baileyai CORS configuration
+
+Also in `baileyai`'s deployment config, not this repo: this screen makes a browser-originated `POST` with an `Authorization` header, which always triggers a CORS preflight, and `BaseApi.buildHeaders` unconditionally adds more headers on top. baileyai must allow, per environment:
+
+- `Access-Control-Allow-Origin`: fhir-server-ui's origin.
+- `Access-Control-Allow-Headers`: `Authorization`, `Content-Type`, `Accept`, `Cache-Control`, `Pragma`, `Expires`, `Origin-Service`.
+
+If any of these is missing, the browser fails the fetch before any response exists, so the UI can only show a generic network error with no server-side detail to diagnose from.

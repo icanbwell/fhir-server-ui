@@ -149,7 +149,6 @@ const useBaileyChat = (): UseBaileyChatResult => {
             let buffer = '';
             let streamError: string | null = null;
             let receivedOutput = false;
-            let turnSucceeded = false;
 
             const reportError = (message: string) => {
                 setStatus('error');
@@ -213,7 +212,6 @@ const useBaileyChat = (): UseBaileyChatResult => {
                     reportError('Bailey returned an empty response.');
                     return;
                 }
-                turnSucceeded = true;
                 setStatus('idle');
             } catch (err: any) {
                 if (err?.name === 'AbortError') {
@@ -222,18 +220,18 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 }
                 reportError(err?.message || 'Bailey request failed.');
             } finally {
-                // Drop the assistant placeholder entirely unless the turn actually completed
-                // (errored/aborted turns are dropped even if some trace activity — a tool call,
-                // a progress event — happened before the failure; that activity alone doesn't
-                // mean the turn produced anything worth keeping). Keeping an empty-content
-                // assistant message would both render a blank bubble and get replayed in the next
-                // turn's `input` array, which Bailey can reject.
+                // Drop the assistant placeholder entirely unless it actually accumulated text
+                // (errored/aborted/tool-only turns are dropped even if some trace activity — a
+                // tool call, a progress event — happened first; that activity alone doesn't mean
+                // the turn produced anything worth keeping). Keeping an empty-content assistant
+                // message would both render a blank bubble and get replayed in the next turn's
+                // `input` array, which Bailey can reject.
                 setMessages((prev) =>
                     prev.flatMap((m) => {
                         if (m.id !== assistantId) {
                             return [m];
                         }
-                        return m.content || turnSucceeded ? [{ ...m, streaming: false }] : [];
+                        return m.content ? [{ ...m, streaming: false }] : [];
                     })
                 );
             }

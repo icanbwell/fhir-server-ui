@@ -44,11 +44,15 @@ export function resolveToolCall(name: string, argsJson: string | undefined): Res
 
     if (name === CALL_TOOL_WRAPPER_NAME) {
         const wrappedName = typeof args.name === 'string' ? args.name : undefined;
-        const wrappedArgs = args.arguments;
-        if (wrappedName && typeof wrappedArgs === 'object' && wrappedArgs !== null) {
-            return { name: wrappedName, args: wrappedArgs as Record<string, unknown>, viaCallTool: true };
+        if (!wrappedName) {
+            return fallback;
         }
-        return fallback;
+        const wrappedArgs = args.arguments;
+        return {
+            name: wrappedName,
+            args: typeof wrappedArgs === 'object' && wrappedArgs !== null ? (wrappedArgs as Record<string, unknown>) : null,
+            viaCallTool: true,
+        };
     }
 
     return { name, args, viaCallTool: false };

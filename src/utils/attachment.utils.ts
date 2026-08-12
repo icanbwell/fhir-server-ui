@@ -62,7 +62,8 @@ export async function resolveAttachmentContent(
     if (attachment.data) {
         try {
             return { kind: 'resolved', content: { blob: decodeBase64ToBlob(String(attachment.data), contentType), contentType } };
-        } catch {
+        } catch (error) {
+            console.warn('Failed to decode inline attachment.data as base64', error);
             return { kind: 'unavailable' };
         }
     }
@@ -86,10 +87,12 @@ export async function resolveAttachmentContent(
                 const text = await response.data.text();
                 const json = JSON.parse(text);
                 if (typeof json?.data !== 'string') {
+                    console.warn('Binary response was a FHIR JSON wrapper with no usable data field', json);
                     return { kind: 'unavailable' };
                 }
                 return { kind: 'resolved', content: { blob: decodeBase64ToBlob(json.data, contentType), contentType } };
-            } catch {
+            } catch (error) {
+                console.warn('Failed to decode the FHIR JSON wrapper returned instead of raw Binary content', error);
                 return { kind: 'unavailable' };
             }
         }

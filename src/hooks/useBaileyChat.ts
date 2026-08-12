@@ -3,6 +3,7 @@ import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaileyApi from '../api/baileyApi';
 import { parseSseFrames } from '../utils/baileySse';
+import { resolveToolCall } from '../utils/baileyToolCalls';
 import { BAILEY_MCP_SERVER_LABEL, BAILEY_SYSTEM_INSTRUCTIONS } from '../constants/baileyConstants';
 import { BaileyMessage, BaileyStreamEvent, BaileyToolCall } from '../types/baileyChat';
 
@@ -71,9 +72,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
             return true;
         }
         if (event.type === 'response.output_item.done' && (event.item.type === 'mcp_call' || event.item.type === 'function_call')) {
+            const rawName = event.item.name || 'unknown_tool';
+            const resolved = resolveToolCall(rawName, event.item.arguments);
             const toolCall: BaileyToolCall = {
-                name: event.item.name || 'unknown_tool',
-                arguments: event.item.arguments,
+                name: resolved.name,
+                arguments: resolved.args ? JSON.stringify(resolved.args) : event.item.arguments,
                 output: event.item.output,
                 isError: event.item.is_error,
             };

@@ -100,7 +100,7 @@ const Header = () => {
                             </IconButton>
                         </Tooltip>
                     )}
-                    {userDetails && (
+                    {userDetails && env.baileyEnabled && (
                         <Tooltip title="Bailey AI">
                             <IconButton
                                 color="inherit"

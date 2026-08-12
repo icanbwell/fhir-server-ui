@@ -11,6 +11,12 @@ import DateTime from './DateTime';
 import Decimal from './Decimal';
 import DispenseRequest from './DispenseRequest';
 import Dosage from './Dosage';
+import EncounterParticipant from './EncounterParticipant';
+import EncounterHospitalization from './EncounterHospitalization';
+import EncounterDiagnosis from './EncounterDiagnosis';
+import EncounterLocation from './EncounterLocation';
+import EncounterStatusHistory from './EncounterStatusHistory';
+import EncounterClassHistory from './EncounterClassHistory';
 import Extension from './Extension';
 import HumanName from './HumanName';
 import Identifier from './Identifier';
@@ -50,6 +56,12 @@ export default {
   Decimal,
   DispenseRequest,
   Dosage,
+  EncounterParticipant,
+  EncounterHospitalization,
+  EncounterDiagnosis,
+  EncounterLocation,
+  EncounterStatusHistory,
+  EncounterClassHistory,
   Extension,
   HumanName,
   Identifier,

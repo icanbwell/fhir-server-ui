@@ -9,6 +9,7 @@ Encounter
 
 import React from 'react';
 import { Link } from 'react-router';
+import { Typography } from '@mui/material';
 import { TEncounter } from '../../types/resources/Encounter';
 
 // Import all the partial resource
@@ -93,6 +94,17 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
+                resource.statusHistory &&
+                <Partials.EncounterStatusHistory
+                    statusHistory={resource.statusHistory}
+                    name='Status History'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='status-history'
+                    field=''
+                />
+            }
+            {
                 resource.class_ &&
                 <Partials.Coding
                     coding={resource.class_}
@@ -100,6 +112,17 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='class_'
+                />
+            }
+            {
+                resource.classHistory &&
+                <Partials.EncounterClassHistory
+                    classHistory={resource.classHistory}
+                    name='Class History'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='class-history'
+                    field=''
                 />
             }
             {
@@ -163,6 +186,17 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
+                resource.participant &&
+                <Partials.EncounterParticipant
+                    participant={resource.participant}
+                    name='Participant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='participant'
+                    field=''
+                />
+            }
+            {
                 resource.appointment &&
                 <Partials.Reference
                     reference={resource.appointment}
@@ -214,13 +248,13 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
             }
             {
                 resource.diagnosis &&
-                <Partials.Reference
-                    reference={resource.diagnosis}
+                <Partials.EncounterDiagnosis
+                    diagnosis={resource.diagnosis}
                     name='Diagnosis'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='diagnosis'
-                    field='condition'
+                    field=''
                 />
             }
             {
@@ -234,14 +268,25 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
+                resource.hospitalization &&
+                <Partials.EncounterHospitalization
+                    hospitalization={resource.hospitalization}
+                    name='Hospitalization'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='hospitalization'
+                    field=''
+                />
+            }
+            {
                 resource.location &&
-                <Partials.Reference
-                    reference={resource.location}
+                <Partials.EncounterLocation
+                    location={resource.location}
                     name='Location'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='location'
-                    field='location'
+                    field=''
                 />
             }
             {
@@ -264,6 +309,15 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                     searchParameter='part-of'
                 />
             }
+            <Typography variant="h6" color="text.secondary" sx={{ mt: 1 }}>
+                Related Resources
+            </Typography>
+            <Partials.ReverseReference
+                name="DocumentReference"
+                id={uuid}
+                resourceType={resource.resourceType}
+                reverseReferences={[{'target': 'DocumentReference', 'property': 'encounter'}]}
+            />
         </>
     );
 };

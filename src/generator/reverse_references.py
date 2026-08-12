@@ -1,4 +1,7 @@
 reverse_references = {
+    "Encounter": [
+        {"reverseReferences": [{"target":'DocumentReference', "property":'encounter'}], "name": "DocumentReference"}
+    ],
     "HealthcareService": [
         {"reverseReferences": [{"target":'PractitionerRole', "property":'actor'}], "name": "Practitioner Role"},
         {"reverseReferences": [{"target":'Schedule', "property":'healthcareService'}], "name": "Schedule"}

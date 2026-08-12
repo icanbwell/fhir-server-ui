@@ -44,7 +44,10 @@ class FhirApi extends BaseApi {
             queryParameters,
             operation,
         }: GetBundleAsyncParams,
-        options?: { onChunk?: (chunk: Uint8Array) => void }
+        options?: {
+            onChunk?: (chunk: Uint8Array) => void;
+            onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
+        }
     ): Promise<{ status: number | undefined; json: any; incomplete: boolean }> {
         const url = this.getUrl({
             resourceType,

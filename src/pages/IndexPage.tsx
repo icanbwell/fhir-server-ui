@@ -21,6 +21,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getLocalData } from '../utils/localData.utils';
 import APIConsolePage from './APIConsolePage';
 import { createBundleEntryParser } from '../utils/incrementalBundleParser';
+import { useStreamProgress } from '../hooks/useStreamProgress';
+import StreamProgressIndicator from '../components/StreamProgressIndicator';
 
 // Hard ceiling on how many resources IndexPage will hold in state / render for a single
 // page load. Without this, an unbounded Bundle (e.g. a Person $summary/$everything with
@@ -42,6 +44,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
     const [loading, setLoading] = useState(false);
     const [indexStart, setIndexStart] = useState(0);
     const [truncated, setTruncated] = useState(false);
+    const { progress, start: startProgress, onProgress, finish: finishProgress } = useStreamProgress();
 
     const { id, resourceType = '', operation, vid } = useParams();
 
@@ -63,7 +66,12 @@ const IndexPage = ({ search }: { search?: boolean }) => {
 
     function getBox() {
         if (loading && !resources?.length) {
-            return <LinearProgress />;
+            return (
+                <>
+                    <LinearProgress />
+                    <StreamProgressIndicator progress={progress} />
+                </>
+            );
         }
         if (!loading && status === 401) {
             return <Box>Login Expired</Box>;
@@ -75,6 +83,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         return (
             <>
                 {loading && <LinearProgress />}
+                {loading && <StreamProgressIndicator progress={progress} />}
                 {truncated && (
                     <Alert severity="warning" sx={{ mb: 2 }}>
                         Showing the first {MAX_RESOURCES.toLocaleString()} resources. The full result set is
@@ -189,6 +198,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             try {
                 setLoading(true);
                 setTruncated(false);
+                startProgress();
                 if (fhirUrl) {
                     const identityProvider = getLocalData('identityProvider');
                     if (!identityProvider) {
@@ -275,6 +285,11 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                                       surfaceIncrementalResults();
                                   }
                                 : undefined,
+                            onProgress: (bytesReceived, totalBytes) => {
+                                if (!cancelled) {
+                                    onProgress(bytesReceived, totalBytes);
+                                }
+                            },
                         }
                     );
                     streamParser?.finish();
@@ -338,6 +353,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
             } finally {
                 if (!cancelled) {
                     setLoading(false);
+                    finishProgress();
                 }
             }
         };
@@ -357,6 +373,9 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         recordRequest,
         location.search,
         shouldBeJsonFormat,
+        startProgress,
+        onProgress,
+        finishProgress,
     ]);
 
     if (operation === '$merge' && !shouldBeJsonFormat) {

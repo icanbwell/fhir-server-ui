@@ -14,19 +14,31 @@ export interface ResolvedToolCall {
 // here show the actually-invoked tool instead of the literal 'call_tool' wrapper name.
 const CALL_TOOL_WRAPPER_NAME = 'call_tool';
 
+// The real tool name only becomes available once call_tool's arguments are fully parseable
+// (i.e. by response.output_item.done). Until then — e.g. at tool_start, when arguments are
+// still empty/partial — fall back to this generic label rather than leaking the internal
+// meta-tool name to the UI.
+const UNRESOLVED_CALL_TOOL_LABEL = 'a tool';
+
 export function resolveToolCall(name: string, argsJson: string | undefined): ResolvedToolCall {
+    const fallback: ResolvedToolCall = {
+        name: name === CALL_TOOL_WRAPPER_NAME ? UNRESOLVED_CALL_TOOL_LABEL : name,
+        args: null,
+        viaCallTool: false,
+    };
+
     if (!argsJson) {
-        return { name, args: null, viaCallTool: false };
+        return fallback;
     }
 
     let parsed: unknown;
     try {
         parsed = JSON.parse(argsJson);
     } catch {
-        return { name, args: null, viaCallTool: false };
+        return fallback;
     }
     if (typeof parsed !== 'object' || parsed === null) {
-        return { name, args: null, viaCallTool: false };
+        return fallback;
     }
     const args = parsed as Record<string, unknown>;
 
@@ -36,6 +48,7 @@ export function resolveToolCall(name: string, argsJson: string | undefined): Res
         if (wrappedName && typeof wrappedArgs === 'object' && wrappedArgs !== null) {
             return { name: wrappedName, args: wrappedArgs as Record<string, unknown>, viaCallTool: true };
         }
+        return fallback;
     }
 
     return { name, args, viaCallTool: false };

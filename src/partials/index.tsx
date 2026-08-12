@@ -15,6 +15,12 @@ import DocumentContent from './DocumentContent';
 import DocumentReferenceContextPartial from './DocumentReferenceContext';
 import DocumentReferenceRelatesTo from './DocumentReferenceRelatesTo';
 import Dosage from './Dosage';
+import EncounterParticipant from './EncounterParticipant';
+import EncounterHospitalization from './EncounterHospitalization';
+import EncounterDiagnosis from './EncounterDiagnosis';
+import EncounterLocation from './EncounterLocation';
+import EncounterStatusHistory from './EncounterStatusHistory';
+import EncounterClassHistory from './EncounterClassHistory';
 import Extension from './Extension';
 import HumanName from './HumanName';
 import Identifier from './Identifier';
@@ -58,6 +64,12 @@ export default {
   DocumentReferenceContext: DocumentReferenceContextPartial,
   DocumentReferenceRelatesTo,
   Dosage,
+  EncounterParticipant,
+  EncounterHospitalization,
+  EncounterDiagnosis,
+  EncounterLocation,
+  EncounterStatusHistory,
+  EncounterClassHistory,
   Extension,
   HumanName,
   Identifier,

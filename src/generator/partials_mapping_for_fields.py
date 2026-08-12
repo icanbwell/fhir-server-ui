@@ -105,14 +105,34 @@ partials_mapping = {
         'prop_name': 'reference'
     },
     'EncounterDiagnosis': {
-        'partial': 'Reference',
-        'field': 'condition',
-        'prop_name': 'reference'
+        'partial': 'EncounterDiagnosis',
+        'field': '',
+        'prop_name': 'diagnosis'
     },
     'EncounterLocation': {
-        'partial': 'Reference',
-        'field': 'location',
-        'prop_name': 'reference'
+        'partial': 'EncounterLocation',
+        'field': '',
+        'prop_name': 'location'
+    },
+    'EncounterParticipant': {
+        'partial': 'EncounterParticipant',
+        'field': '',
+        'prop_name': 'participant'
+    },
+    'EncounterHospitalization': {
+        'partial': 'EncounterHospitalization',
+        'field': '',
+        'prop_name': 'hospitalization'
+    },
+    'EncounterStatusHistory': {
+        'partial': 'EncounterStatusHistory',
+        'field': '',
+        'prop_name': 'statusHistory'
+    },
+    'EncounterClassHistory': {
+        'partial': 'EncounterClassHistory',
+        'field': '',
+        'prop_name': 'classHistory'
     },
     'EpisodeOfCareDiagnosis': {
         'partial': 'Reference',

@@ -21,8 +21,8 @@ services:
       REACT_APP_BAILEY_URL: ${REACT_APP_BAILEY_URL}
       REACT_APP_BAILEY_MODEL: ${REACT_APP_BAILEY_MODEL}
       REACT_APP_AWS_REGION: 'us-east-1'
-      # list of AuthProviders
-      REACT_APP_AUTH_PROVIDERS: 'cognito,bwellapp,clientcredentials'
+      # list of AuthProviders - add 'okta' here in .env to enable Okta sign-in locally
+      REACT_APP_AUTH_PROVIDERS: ${REACT_APP_AUTH_PROVIDERS:-cognito,bwellapp,clientcredentials}
       # Each AuthProvider has its own set of environment variables
       REACT_APP_AUTH_COGNITO_CUSTOM_USERNAME: 'cognito:username'
       REACT_APP_AUTH_COGNITO_CUSTOM_GROUP: 'cognito:groups'
@@ -33,18 +33,17 @@ services:
       REACT_APP_AUTH_COGNITO_WELL_KNOWN_URL: 'http://localhost:8080/realms/master/.well-known/openid-configuration'
       REACT_APP_AUTH_COGNITO_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt' # other option is 'id_token'
       REACT_APP_AUTH_COGNITO_TOKEN_FOR_USER_DETAILS: 'jwt'
-      # To configure Okta, uncomment the following lines and set the appropriate values
-      # and add 'okta' to REACT_APP_AUTH_PROVIDERS
-      # 
-      # REACT_APP_AUTH_OKTA_CUSTOM_USERNAME: 'preferred_username'
-      # REACT_APP_AUTH_OKTA_CUSTOM_GROUP: 'groups'
-      # REACT_APP_AUTH_OKTA_CUSTOM_SCOPE: 'custom:scope'
-      # REACT_APP_AUTH_OKTA_CLIENT_ID: ''
-      # REACT_APP_AUTH_OKTA_REDIRECT_URL: 'http://localhost:5051/authcallback'
-      # REACT_APP_AUTH_OKTA_WELL_KNOWN_URL: ''
-      # REACT_APP_AUTH_OKTA_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
-      # REACT_APP_AUTH_OKTA_TOKEN_FOR_USER_DETAILS: 'id_token'
-      # REACT_APP_AUTH_OKTA_REMOVE_SCOPE_PREFIX: ''
+      # Okta sign-in (add 'okta' to REACT_APP_AUTH_PROVIDERS above) - set
+      # REACT_APP_AUTH_OKTA_CLIENT_ID, REACT_APP_AUTH_OKTA_WELL_KNOWN_URL and
+      # REACT_APP_AUTH_OKTA_REMOVE_SCOPE_PREFIX in .env. Okta's redirect URI is always
+      # http://localhost:5051/authcallback (hardcoded in OktaAuthService, not configurable).
+      REACT_APP_AUTH_OKTA_CUSTOM_USERNAME: 'preferred_username'
+      REACT_APP_AUTH_OKTA_CUSTOM_GROUP: 'groups'
+      REACT_APP_AUTH_OKTA_CUSTOM_SCOPE: 'custom:scope'
+      REACT_APP_AUTH_OKTA_CLIENT_ID: ${REACT_APP_AUTH_OKTA_CLIENT_ID}
+      REACT_APP_AUTH_OKTA_WELL_KNOWN_URL: ${REACT_APP_AUTH_OKTA_WELL_KNOWN_URL}
+      REACT_APP_AUTH_OKTA_TOKEN_FOR_USER_DETAILS: 'id_token'
+      REACT_APP_AUTH_OKTA_REMOVE_SCOPE_PREFIX: ${REACT_APP_AUTH_OKTA_REMOVE_SCOPE_PREFIX}
       # b.well App sign-in (bwellapp is enabled in REACT_APP_AUTH_PROVIDERS above) -
       # set REACT_APP_AUTH_BWELLAPP_BASE_URL and REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS in .env
       REACT_APP_AUTH_BWELLAPP_BASE_URL: ${REACT_APP_AUTH_BWELLAPP_BASE_URL}

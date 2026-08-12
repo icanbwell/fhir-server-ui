@@ -1,14 +1,25 @@
-import { FormEvent, useEffect, useRef, useState } from 'react';
-import { Alert, Box, Button, Chip, CircularProgress, IconButton, Paper, TextField, Typography } from '@mui/material';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, Box, Button, CircularProgress, IconButton, Paper, TextField, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
 import Markdown from 'react-markdown';
 import useBaileyChat from '../hooks/useBaileyChat';
+import BaileyTracePanel from './BaileyTracePanel';
+import { traceEventHint } from '../utils/baileyTrace';
 
 const BaileyChatPanel = () => {
-    const { messages, status, error, send, stop, retryLast } = useBaileyChat();
+    const { messages, traceEvents, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
+
+    // Mirrors baileyai-skills-service's ChatTranscript: while streaming, show what Bailey is
+    // doing (e.g. "Calling get_patient...") instead of a bare ellipsis. traceEvents isn't reset
+    // per turn (same as the reference implementation), so this can briefly reflect the previous
+    // turn's last event until the current turn produces its own.
+    const streamingHint = useMemo(
+        () => (status === 'streaming' && traceEvents.length > 0 ? traceEventHint(traceEvents[traceEvents.length - 1]) : undefined),
+        [status, traceEvents]
+    );
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -26,36 +37,48 @@ const BaileyChatPanel = () => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '78vh' }}>
             <Box sx={{ flex: 1, overflowY: 'auto', p: 1 }}>
-                {messages.map((message) => (
-                    <Box
-                        key={message.id}
-                        sx={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', mb: 1 }}
-                    >
-                        <Paper
-                            sx={{
-                                p: 1.5,
-                                maxWidth: '75%',
-                                bgcolor: message.role === 'user' ? 'primary.main' : 'background.paper',
-                                color: message.role === 'user' ? 'primary.contrastText' : 'text.primary',
-                            }}
+                {messages.map((message, index) => {
+                    const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;
+                    const isAwaitingFirstToken = status === 'streaming' && isLastAssistant && message.content === '';
+                    return (
+                        <Box
+                            key={message.id}
+                            sx={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', mb: 1 }}
                         >
-                            {message.role === 'assistant' ? (
-                                <Markdown>{message.content || (message.streaming ? '…' : '')}</Markdown>
-                            ) : (
-                                <Typography sx={{ whiteSpace: 'pre-wrap' }}>{message.content}</Typography>
-                            )}
-                            {message.toolCalls?.map((toolCall, index) => (
-                                <Chip
-                                    key={`${message.id}-tool-${index}`}
-                                    size="small"
-                                    color={toolCall.isError ? 'error' : 'default'}
-                                    label={`🔧 ${toolCall.name}${toolCall.arguments ? `(${toolCall.arguments})` : ''}`}
-                                    sx={{ mt: 1, mr: 0.5 }}
-                                />
-                            ))}
-                        </Paper>
-                    </Box>
-                ))}
+                            <Paper
+                                sx={{
+                                    p: 1.5,
+                                    maxWidth: '75%',
+                                    bgcolor: message.role === 'user' ? 'primary.main' : 'background.paper',
+                                    color: message.role === 'user' ? 'primary.contrastText' : 'text.primary',
+                                }}
+                            >
+                                {message.role === 'assistant' ? (
+                                    isAwaitingFirstToken ? (
+                                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                                            {streamingHint ?? 'Thinking…'}
+                                        </Typography>
+                                    ) : (
+                                        <>
+                                            <Markdown>{message.content}</Markdown>
+                                            {message.streaming && streamingHint && (
+                                                <Typography
+                                                    variant="caption"
+                                                    color="text.secondary"
+                                                    sx={{ display: 'block', mt: 0.5, fontStyle: 'italic' }}
+                                                >
+                                                    {streamingHint}
+                                                </Typography>
+                                            )}
+                                        </>
+                                    )
+                                ) : (
+                                    <Typography sx={{ whiteSpace: 'pre-wrap' }}>{message.content}</Typography>
+                                )}
+                            </Paper>
+                        </Box>
+                    );
+                })}
                 <div ref={bottomRef} />
             </Box>
 
@@ -72,6 +95,8 @@ const BaileyChatPanel = () => {
                     {error}
                 </Alert>
             )}
+
+            <BaileyTracePanel events={traceEvents} onClear={clearTrace} />
 
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                 <TextField

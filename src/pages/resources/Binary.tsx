@@ -63,6 +63,7 @@ const Binary = ({ resource }: { resource: TBinary }): React.ReactElement => {
                     searchParameter='security-context'
                 />
             }
+            <Partials.BinaryContent contentType={resource.contentType} id={uuid} />
         </>
     );
 };

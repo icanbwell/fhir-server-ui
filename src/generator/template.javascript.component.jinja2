@@ -90,6 +90,8 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                     searchParameter='description'
                 />
             }
+        {% elif fhir_entity.cleaned_name == "Binary" and property.javascript_clean_name == "data" %}
+            <Partials.BinaryContent contentType={resource.contentType} id={uuid} />
         {% endif %}
     {% endif %}
     {%  endfor %}

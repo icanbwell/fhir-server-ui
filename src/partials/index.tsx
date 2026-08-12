@@ -1,6 +1,7 @@
 import Address from './Address';
 import Annotation from './Annotation';
 import Attachment from './Attachment';
+import BinaryContent from './BinaryContent';
 import Boolean from './Boolean';
 import Canonical from './Canonical';
 import Code from './Code';
@@ -43,6 +44,7 @@ export default {
   Address,
   Annotation,
   Attachment,
+  BinaryContent,
   Boolean,
   Canonical,
   Code,

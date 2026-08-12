@@ -74,7 +74,7 @@ hand-maintained `Partials` components (following the existing `Attachment.tsx`/
 **Interfaces:**
 - Produces: `resolveAttachmentContent(attachment: TAttachment, baseApi: BaseApi): Promise<ResolveAttachmentResult>` and `extensionForContentType(contentType: string): string` from `src/utils/attachment.utils.ts`. Task 2's `AttachmentPreview` is the only consumer.
 
-- [ ] **Step 1: Add an optional `headers` override to `BaseApi.downloadFile`**
+- [x] **Step 1: Add an optional `headers` override to `BaseApi.downloadFile`**
 
 In `src/api/baseApi.ts`, change the `downloadFile` method to accept and forward a
 `headers` option (backward compatible — existing callers like `FileDownload.tsx` don't
@@ -116,7 +116,7 @@ pass it and are unaffected):
 (Only the signature and the `headers: options?.headers` line passed into `streamRequest`
 are new — the rest of the method body is unchanged from today.)
 
-- [ ] **Step 2: Create `src/utils/attachment.utils.ts`**
+- [x] **Step 2: Create `src/utils/attachment.utils.ts`**
 
 ```typescript
 import BaseApi from '../api/baseApi';
@@ -194,12 +194,12 @@ export function extensionForContentType(contentType: string | undefined): string
 }
 ```
 
-- [ ] **Step 3: Run lint/typecheck**
+- [x] **Step 3: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/api/baseApi.ts src/utils/attachment.utils.ts
@@ -222,7 +222,7 @@ git commit -m "Add attachment content resolver and downloadFile headers override
   from `src/components/AttachmentPreview.tsx`. Task 3's `DocumentViewer` and Task 4/5's
   inline partials all render it per attachment.
 
-- [ ] **Step 1: Add the `rtf.js` dependency**
+- [x] **Step 1: Add the `rtf.js` dependency**
 
 In `package.json`'s `dependencies`, add (alphabetical, matching the existing list):
 
@@ -234,7 +234,7 @@ Run `yarn install` (or whatever this repo's lockfile-update command is — check
 `README.md`'s package-management section; `make update` regenerates `yarn.lock` per the
 constraint in that section) so `yarn.lock` picks up the new dependency.
 
-- [ ] **Step 2: Declare minimal types for `rtf.js`**
+- [x] **Step 2: Declare minimal types for `rtf.js`**
 
 `rtf.js` ships no TypeScript types. Create `src/types/rtf.d.ts`:
 
@@ -251,7 +251,7 @@ declare module 'rtf.js' {
 }
 ```
 
-- [ ] **Step 3: Create `AttachmentPreview.tsx`**
+- [x] **Step 3: Create `AttachmentPreview.tsx`**
 
 ```tsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -456,12 +456,12 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
 export default AttachmentPreview;
 ```
 
-- [ ] **Step 4: Run lint/typecheck**
+- [x] **Step 4: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add package.json yarn.lock src/types/rtf.d.ts src/components/AttachmentPreview.tsx
@@ -486,7 +486,7 @@ git commit -m "Add AttachmentPreview: content-type-aware attachment render/downl
   Task 6's `ResourceCard` link and Task 4/5's inline "View" links both navigate to the
   page, not the component directly.
 
-- [ ] **Step 1: Create `DocumentViewer.tsx`**
+- [x] **Step 1: Create `DocumentViewer.tsx`**
 
 ```tsx
 import React, { useContext, useEffect, useMemo, useState } from 'react';
@@ -591,7 +591,7 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ relativeUrl }) => {
 export default DocumentViewer;
 ```
 
-- [ ] **Step 2: Create `DocumentViewerPage.tsx`**
+- [x] **Step 2: Create `DocumentViewerPage.tsx`**
 
 ```tsx
 import React, { useMemo } from 'react';
@@ -636,7 +636,7 @@ const DocumentViewerPage: React.FC = () => {
 export default DocumentViewerPage;
 ```
 
-- [ ] **Step 3: Add the route**
+- [x] **Step 3: Add the route**
 
 In `src/routes/fhirRoutes.tsx`, add the lazy import next to the other viewer pages:
 
@@ -659,12 +659,12 @@ and add two routes next to the existing `/composition-summary` pair:
     />,
 ```
 
-- [ ] **Step 4: Run lint/typecheck**
+- [x] **Step 4: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings.
 
-- [ ] **Step 5: Manually verify**
+- [x] **Step 5: Manually verify**
 
 Run `yarn dev`, then in a browser visit `/document-viewer/4_0_0/DocumentReference/<a
 real id with content>` directly. Confirm it loads, renders each content entry via
@@ -672,7 +672,7 @@ real id with content>` directly. Confirm it loads, renders each content entry vi
 id>` directly and confirm the same for a bare Binary. Visit a bogus id and confirm the
 error state.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/DocumentViewer.tsx src/pages/DocumentViewerPage.tsx src/routes/fhirRoutes.tsx
@@ -702,7 +702,7 @@ git commit -m "Add DocumentViewer page and /document-viewer route"
   `Partials.DocumentContent` / `Partials.DocumentReferenceContext` /
   `Partials.DocumentReferenceRelatesTo` by name, exactly like every other partial.
 
-- [ ] **Step 1: Create `DocumentContent.tsx` (the inline attachment list — Document Viewer's second entry point)**
+- [x] **Step 1: Create `DocumentContent.tsx` (the inline attachment list — Document Viewer's second entry point)**
 
 ```tsx
 import React from 'react';
@@ -759,7 +759,7 @@ rather than duplicating `AttachmentPreview` inline — the resource detail page 
 renders a large per-field dump, and centralizing the actual content rendering in one
 place keeps this partial small.)
 
-- [ ] **Step 2: Create `DocumentReferenceContext.tsx`**
+- [x] **Step 2: Create `DocumentReferenceContext.tsx`**
 
 ```tsx
 import React from 'react';
@@ -809,7 +809,7 @@ rather than the `Partials` barrel object, avoiding a self-import of `src/partial
 from within its own directory. Task 7's new Encounter partials follow the same
 direct-import approach.)
 
-- [ ] **Step 3: Create `DocumentReferenceRelatesTo.tsx`**
+- [x] **Step 3: Create `DocumentReferenceRelatesTo.tsx`**
 
 ```tsx
 import React from 'react';
@@ -849,7 +849,7 @@ const DocumentReferenceRelatesToPartial = ({ relatesTo, name, resourceType, id }
 export default DocumentReferenceRelatesToPartial;
 ```
 
-- [ ] **Step 4: Register the new partials in `src/partials/index.tsx`**
+- [x] **Step 4: Register the new partials in `src/partials/index.tsx`**
 
 Add imports and entries for `DocumentContent`, `DocumentReferenceContext` (imported as
 `DocumentReferenceContextPartial` to avoid a name clash with the type import elsewhere,
@@ -869,7 +869,7 @@ and in the exported object (alongside the other entries, alphabetically):
   DocumentReferenceRelatesTo,
 ```
 
-- [ ] **Step 5: Update `partials_mapping_for_fields.py`**
+- [x] **Step 5: Update `partials_mapping_for_fields.py`**
 
 In `src/generator/partials_mapping_for_fields.py`, change the existing
 `DocumentReferenceRelatesTo` entry and add two new ones:
@@ -902,7 +902,7 @@ entry), and add:
 passes a `field=` prop for every `partials_mapping` entry, and none of these three new
 components read it.)
 
-- [ ] **Step 6: Add the `description` special case to the jinja template**
+- [x] **Step 6: Add the `description` special case to the jinja template**
 
 In `src/generator/template.javascript.component.jinja2`, add a new `{% elif %}` branch
 right after the existing `Organization`/`name` special case (same indentation level,
@@ -920,7 +920,7 @@ inside the `{% for property in fhir_entity.properties %}` loop):
             }
 ```
 
-- [ ] **Step 7: Regenerate**
+- [x] **Step 7: Regenerate**
 
 ```bash
 make generate_components
@@ -933,12 +933,12 @@ now renders via `Partials.DocumentReferenceRelatesTo` instead of the old bare
 (`git status` should show only `DocumentReference.tsx` modified, plus the new/edited
 generator and partial files staged separately).
 
-- [ ] **Step 8: Run lint/typecheck**
+- [x] **Step 8: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings.
 
-- [ ] **Step 9: Manually verify**
+- [x] **Step 9: Manually verify**
 
 Run `yarn dev`, open a DocumentReference resource with `content`, `context.encounter`,
 `description`, and `relatesTo` populated. Confirm: the content list appears with a
@@ -946,7 +946,7 @@ working "View" link into the Document Viewer; the Encounter link under Context
 navigates to the right Encounter; the description text renders; relatesTo shows both
 the relationship code and the target link.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add src/partials/DocumentContent.tsx src/partials/DocumentReferenceContext.tsx \
@@ -973,7 +973,7 @@ git commit -m "Render DocumentReference content/context/description/relatesTo.co
   ever receives one field's value).
 - Produces: `BinaryContent` default export, registered on `Partials`.
 
-- [ ] **Step 1: Create `BinaryContent.tsx`**
+- [x] **Step 1: Create `BinaryContent.tsx`**
 
 ```tsx
 import React from 'react';
@@ -1015,7 +1015,7 @@ const BinaryContent = ({ contentType, id }: TBinaryContentProps) => {
 export default BinaryContent;
 ```
 
-- [ ] **Step 2: Register in `src/partials/index.tsx`**
+- [x] **Step 2: Register in `src/partials/index.tsx`**
 
 ```tsx
 import BinaryContent from './BinaryContent';
@@ -1027,7 +1027,7 @@ and in the exported object:
   BinaryContent,
 ```
 
-- [ ] **Step 3: Add the jinja special case**
+- [x] **Step 3: Add the jinja special case**
 
 In `src/generator/template.javascript.component.jinja2`, add another `{% elif %}`
 branch next to the `DocumentReference.description` one from Task 4:
@@ -1042,7 +1042,7 @@ page, regardless of whether `data` itself is present — `BinaryContent` only ne
 `contentType` + `id`, and always offers the "View" link, which itself handles the
 missing-content case inside `DocumentViewer`.)
 
-- [ ] **Step 4: Regenerate**
+- [x] **Step 4: Regenerate**
 
 ```bash
 make generate_components
@@ -1051,17 +1051,17 @@ make generate_components
 Confirm via `git diff src/pages/resources/Binary.tsx` that the new `Partials.BinaryContent`
 call appears where `data` used to render nothing, and no other resource page changed.
 
-- [ ] **Step 5: Run lint/typecheck**
+- [x] **Step 5: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings.
 
-- [ ] **Step 6: Manually verify**
+- [x] **Step 6: Manually verify**
 
 Run `yarn dev`, open a Binary resource directly. Confirm the "View" link appears and
 opens the Document Viewer showing that Binary's content.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/partials/BinaryContent.tsx src/partials/index.tsx \
@@ -1080,7 +1080,7 @@ git commit -m "Render Binary content via a View link into the Document Viewer"
 - No new exports — purely additive to the existing component, following the exact
   shape of `getIPSLink`/`getCompositionSummaryLink`.
 
-- [ ] **Step 1: Add `getDocumentViewerLink` and wire it in**
+- [x] **Step 1: Add `getDocumentViewerLink` and wire it in**
 
 In `src/components/ResourceCard.tsx`, add a new helper next to `getCompositionSummaryLink`:
 
@@ -1150,19 +1150,19 @@ already there:
                         )}
 ```
 
-- [ ] **Step 2: Run lint/typecheck**
+- [x] **Step 2: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings.
 
-- [ ] **Step 3: Manually verify**
+- [x] **Step 3: Manually verify**
 
 Run `yarn dev`, browse to a list of `DocumentReference` or `Binary` resources. Confirm
 the "Document Viewer" link appears both in the collapsed card header and in the
 expanded card content, and opens `/document-viewer/4_0_0/...` in a new tab. Confirm it
 does *not* appear for unrelated resource types (e.g. `Patient`).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/components/ResourceCard.tsx
@@ -1190,7 +1190,7 @@ git commit -m "Add Document Viewer link to ResourceCard for DocumentReference/Bi
   (existing).
 - Produces: six new partial default exports, registered on `Partials`.
 
-- [ ] **Step 1: Create `EncounterParticipant.tsx`**
+- [x] **Step 1: Create `EncounterParticipant.tsx`**
 
 ```tsx
 import React from 'react';
@@ -1231,7 +1231,7 @@ const EncounterParticipantPartial = ({ participant, name, resourceType, id }: TE
 export default EncounterParticipantPartial;
 ```
 
-- [ ] **Step 2: Create `EncounterHospitalization.tsx`**
+- [x] **Step 2: Create `EncounterHospitalization.tsx`**
 
 ```tsx
 import React from 'react';
@@ -1285,7 +1285,7 @@ const EncounterHospitalizationPartial = ({ hospitalization, name, resourceType, 
 export default EncounterHospitalizationPartial;
 ```
 
-- [ ] **Step 3: Create `EncounterDiagnosis.tsx`**
+- [x] **Step 3: Create `EncounterDiagnosis.tsx`**
 
 ```tsx
 import React from 'react';
@@ -1327,7 +1327,7 @@ const EncounterDiagnosisPartial = ({ diagnosis, name, resourceType, id }: TEncou
 export default EncounterDiagnosisPartial;
 ```
 
-- [ ] **Step 4: Create `EncounterLocation.tsx`**
+- [x] **Step 4: Create `EncounterLocation.tsx`**
 
 ```tsx
 import React from 'react';
@@ -1373,7 +1373,7 @@ const EncounterLocationPartial = ({ location, name, resourceType, id }: TEncount
 export default EncounterLocationPartial;
 ```
 
-- [ ] **Step 5: Create `EncounterStatusHistory.tsx`**
+- [x] **Step 5: Create `EncounterStatusHistory.tsx`**
 
 ```tsx
 import React from 'react';
@@ -1422,7 +1422,7 @@ const EncounterStatusHistoryPartial = ({ statusHistory, name }: TEncounterStatus
 export default EncounterStatusHistoryPartial;
 ```
 
-- [ ] **Step 6: Create `EncounterClassHistory.tsx`**
+- [x] **Step 6: Create `EncounterClassHistory.tsx`**
 
 ```tsx
 import React from 'react';
@@ -1471,7 +1471,7 @@ const EncounterClassHistoryPartial = ({ classHistory, name }: TEncounterClassHis
 export default EncounterClassHistoryPartial;
 ```
 
-- [ ] **Step 7: Register all six in `src/partials/index.tsx`**
+- [x] **Step 7: Register all six in `src/partials/index.tsx`**
 
 ```tsx
 import EncounterParticipantPartial from './EncounterParticipant';
@@ -1493,7 +1493,7 @@ and in the exported object:
   EncounterClassHistory: EncounterClassHistoryPartial,
 ```
 
-- [ ] **Step 8: Update `partials_mapping_for_fields.py`**
+- [x] **Step 8: Update `partials_mapping_for_fields.py`**
 
 Change the existing `EncounterDiagnosis` and `EncounterLocation` entries, and add four
 new ones:
@@ -1535,7 +1535,7 @@ new ones:
 `{'partial': 'Reference', 'field': 'condition'/'location', 'prop_name': 'reference'}`
 entries — same key, new value.)
 
-- [ ] **Step 9: Add the reverse-reference entry in `reverse_references.py`**
+- [x] **Step 9: Add the reverse-reference entry in `reverse_references.py`**
 
 In `src/generator/reverse_references.py`, add a new top-level key:
 
@@ -1545,7 +1545,7 @@ In `src/generator/reverse_references.py`, add a new top-level key:
     ],
 ```
 
-- [ ] **Step 10: Regenerate**
+- [x] **Step 10: Regenerate**
 
 ```bash
 make generate_components
@@ -1559,12 +1559,12 @@ reverse-search link now appears at the bottom (matching the existing pattern use
 `Patient.tsx`/`Location.tsx`/etc.). Confirm `contained` is still unrendered (out of
 scope per the design) and no other resource page changed.
 
-- [ ] **Step 11: Run lint/typecheck**
+- [x] **Step 11: Run lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings.
 
-- [ ] **Step 12: Manually verify**
+- [x] **Step 12: Manually verify**
 
 Run `yarn dev`, open an Encounter resource with `participant`, `hospitalization`,
 `diagnosis`, `location`, `statusHistory`, `classHistory` populated, and at least one
@@ -1572,7 +1572,7 @@ Run `yarn dev`, open an Encounter resource with `participant`, `hospitalization`
 sections render with the expected sub-fields, and the "DocumentReference" reverse link
 at the bottom opens a search page that actually returns that DocumentReference.
 
-- [ ] **Step 13: Commit**
+- [x] **Step 13: Commit**
 
 ```bash
 git add src/partials/EncounterParticipant.tsx src/partials/EncounterHospitalization.tsx \
@@ -1587,7 +1587,7 @@ git commit -m "Render Encounter participant/hospitalization/diagnosis/location/h
 
 ### Task 8: Full regression pass
 
-- [ ] **Step 1: Full regenerate + diff review**
+- [x] **Step 1: Full regenerate + diff review**
 
 ```bash
 make generate_components
@@ -1597,13 +1597,13 @@ git status
 Confirm the working tree is clean after this (i.e. Tasks 4/5/7's committed generated
 output already matches what a full regen produces — no drift).
 
-- [ ] **Step 2: Full lint/typecheck**
+- [x] **Step 2: Full lint/typecheck**
 
 Run: `yarn lint && yarn tsc --noEmit`
 Expected: 0 errors, no new warnings beyond the pre-existing baseline noted in Global
 Constraints.
 
-- [ ] **Step 3: Manual end-to-end pass**
+- [x] **Step 3: Manual end-to-end pass**
 
 Run `yarn dev` and walk through, on real (dev-environment) data:
 - A DocumentReference with inline base64 `content[].attachment.data` of `text/html` —
@@ -1622,7 +1622,7 @@ Run `yarn dev` and walk through, on real (dev-environment) data:
 - Confirm the `ResourceCard` "Document Viewer" link appears only for `DocumentReference`
   and `Binary`, in both collapsed and expanded card states.
 
-- [ ] **Step 4: Update `docs/superpowers/plans/`**
+- [x] **Step 4: Update `docs/superpowers/plans/`**
 
 Mark all checkboxes in this file complete (already done incrementally per task, confirm
 none were missed).

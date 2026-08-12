@@ -12,8 +12,8 @@ export interface BaileyMcpToolConfig {
 
 export interface BaileyOutputItem {
     // Not narrowed to 'function_call' | 'mcp_call' — response.output_item.added/done can also
-    // carry message/reasoning items, which resolveOutputItem below must recognize and route to
-    // the 'raw' trace fallback rather than mis-parse as a tool call.
+    // carry message/reasoning items, which useBaileyChat's applyEvent must recognize and route
+    // to the 'raw' trace fallback rather than mis-parse as a tool call.
     type: string;
     name?: string;
     arguments?: string;
@@ -24,6 +24,7 @@ export interface BaileyOutputItem {
 
 export type BaileyStreamEvent =
     | { type: 'response.output_text.delta'; delta: string }
+    | { type: 'response.output_text.done' }
     | { type: 'response.output_item.added'; item: BaileyOutputItem }
     | { type: 'response.output_item.done'; item: BaileyOutputItem }
     | { type: 'task.progress'; status: string; message?: string }

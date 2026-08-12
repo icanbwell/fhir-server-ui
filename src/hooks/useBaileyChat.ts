@@ -107,6 +107,15 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 { kind: 'progress', status: event.status, message: event.message, at: Date.now() },
             ]);
             return true;
+        } else if (event.type === 'response.output_text.done') {
+            // Fires on every turn that streams text — it's just the per-item echo of what
+            // response.output_text.delta already accumulated, carrying no new information.
+            // Deliberate deviation from baileyai-skills-service here: its ChatTrace has no
+            // specific case for this either, so it falls into the same 'raw'/"unrecognized"
+            // bucket there too — but that panel is a developer-facing debug tool where wire-level
+            // completeness is the point. This app's details panel is aimed at chat users, so
+            // labeling a routine per-turn event "unrecognized" would be noise, not information.
+            return false;
         } else if (event.type === 'response.completed') {
             // Purely a completion signal — [DONE] already drives turn completion here (see
             // parseSseFrames), so there's nothing worth recording.

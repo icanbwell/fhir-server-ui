@@ -43,7 +43,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         setBlob(null);
         setExternalUrl(null);
 
-        resolveAttachmentContent(attachment, baseApi)
+        resolveAttachmentContent(attachment, baseApi, fhirUrl)
             .then((result) => {
                 if (cancelled) {
                     return;

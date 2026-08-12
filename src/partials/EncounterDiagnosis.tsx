@@ -28,7 +28,7 @@ const EncounterDiagnosisPartial = ({ diagnosis, name, resourceType, id }: TEncou
                         </Typography>
                     )}
                     {entry.use && <CodeableConcept codeableConcept={entry.use} name="Use" resourceType={resourceType} id={id} />}
-                    <Reference reference={entry} field="condition" resourceType={resourceType} id={id} searchParameter="diagnosis" />
+                    <Reference reference={entry} field="condition" name="Condition" resourceType={resourceType} id={id} searchParameter="diagnosis" />
                 </Box>
             ))}
         </Box>

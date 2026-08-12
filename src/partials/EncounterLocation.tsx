@@ -32,7 +32,7 @@ const EncounterLocationPartial = ({ location, name, resourceType, id }: TEncount
                         <CodeableConcept codeableConcept={entry.physicalType} name="Physical Type" resourceType={resourceType} id={id} />
                     )}
                     {entry.period && <Period period={entry.period} name="Period" resourceType={resourceType} id={id} />}
-                    <Reference reference={entry} field="location" resourceType={resourceType} id={id} searchParameter="location" />
+                    <Reference reference={entry} field="location" name="Location" resourceType={resourceType} id={id} searchParameter="location" />
                 </Box>
             ))}
         </Box>

@@ -5,8 +5,6 @@ import { TDocumentReferenceRelatesTo } from '../types/partials/DocumentReference
 
 type TDocumentReferenceRelatesToProps = TBaseResourceProps & {
     relatesTo: TDocumentReferenceRelatesTo | TDocumentReferenceRelatesTo[] | undefined;
-    resourceType?: String;
-    id?: String;
     // Always passed as an empty string by the generated DocumentReference.tsx (via partials_mapping_for_fields.py); unused here.
     field?: string;
 };

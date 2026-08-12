@@ -26,7 +26,7 @@ const EncounterParticipantPartial = ({ participant, name, resourceType, id }: TE
                     {entry.type && <CodeableConcept codeableConcept={entry.type} name="Type" resourceType={resourceType} id={id} />}
                     {entry.period && <Period period={entry.period} name="Period" resourceType={resourceType} id={id} />}
                     {entry.individual && (
-                        <Reference reference={entry} field="individual" resourceType={resourceType} id={id} searchParameter="participant" />
+                        <Reference reference={entry} field="individual" name="Individual" resourceType={resourceType} id={id} searchParameter="participant" />
                     )}
                 </Box>
             ))}

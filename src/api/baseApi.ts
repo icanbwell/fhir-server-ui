@@ -364,6 +364,12 @@ class BaseApi {
             throw Object.assign(new Error(errorMessage || `Request failed with status ${status}`), { status });
         }
         if (incomplete) {
+            // streamRequest() still reports the original 2xx status captured when fetch()
+            // resolved, before the body finished — a mid-download connection drop would
+            // otherwise look like a normal successful download and hand callers a silently
+            // truncated Blob. Throwing here restores the pre-refactor axios behavior (a dropped
+            // connection rejected the promise), which both FileDownload.tsx and
+            // SpreadsheetViewer.tsx already handle with a visible error in their catch blocks.
             throw Object.assign(new Error('Connection interrupted before the download finished'), {
                 status,
                 incomplete: true,

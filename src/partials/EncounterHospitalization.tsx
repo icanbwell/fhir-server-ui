@@ -20,7 +20,7 @@ const EncounterHospitalizationPartial = ({ hospitalization, name, resourceType, 
                 {name}
             </Typography>
             {hospitalization.origin && (
-                <Reference reference={hospitalization} field="origin" resourceType={resourceType} id={id} searchParameter="hospitalization" />
+                <Reference reference={hospitalization} field="origin" name="Origin" resourceType={resourceType} id={id} searchParameter="hospitalization" />
             )}
             {hospitalization.admitSource && (
                 <CodeableConcept codeableConcept={hospitalization.admitSource} name="Admit Source" resourceType={resourceType} id={id} />
@@ -38,7 +38,7 @@ const EncounterHospitalizationPartial = ({ hospitalization, name, resourceType, 
                 <CodeableConcept codeableConcept={hospitalization.specialArrangement} name="Special Arrangement" resourceType={resourceType} id={id} />
             )}
             {hospitalization.destination && (
-                <Reference reference={hospitalization} field="destination" resourceType={resourceType} id={id} searchParameter="hospitalization" />
+                <Reference reference={hospitalization} field="destination" name="Destination" resourceType={resourceType} id={id} searchParameter="hospitalization" />
             )}
             {hospitalization.dischargeDisposition && (
                 <CodeableConcept codeableConcept={hospitalization.dischargeDisposition} name="Discharge Disposition" resourceType={resourceType} id={id} />

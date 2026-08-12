@@ -3,17 +3,18 @@ import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaileyApi from '../api/baileyApi';
 import { parseSseFrames } from '../utils/baileySse';
-import { resolveToolCall } from '../utils/baileyToolCalls';
 import { BAILEY_MCP_SERVER_LABEL, BAILEY_SYSTEM_INSTRUCTIONS } from '../constants/baileyConstants';
-import { BaileyMessage, BaileyStreamEvent, BaileyToolCall } from '../types/baileyChat';
+import { BaileyMessage, BaileyStreamEvent, BaileyTraceEvent } from '../types/baileyChat';
 
 export interface UseBaileyChatResult {
     messages: BaileyMessage[];
+    traceEvents: BaileyTraceEvent[];
     status: 'idle' | 'streaming' | 'error';
     error: string | null;
     send: (text: string) => void;
     stop: () => void;
     retryLast: () => void;
+    clearTrace: () => void;
 }
 
 // Bailey's error bodies can be long (validation dumps, stack traces). Show enough to identify
@@ -43,6 +44,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
     const { setUserDetails } = useContext(UserContext);
 
     const [messages, setMessages] = useState<BaileyMessage[]>([]);
+    const [traceEvents, setTraceEvents] = useState<BaileyTraceEvent[]>([]);
     const [status, setStatus] = useState<'idle' | 'streaming' | 'error'>('idle');
     const [error, setError] = useState<string | null>(null);
 
@@ -60,7 +62,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
     }, [messages]);
 
     // Returns true when the event actually contributed something visible to the assistant
-    // message, so the caller can tell "streamed a real answer" from "parsed nothing at all".
+    // turn (message text or a trace event), so the caller can tell "streamed a real answer"
+    // from "parsed nothing at all". Ported from baileyai-skills-service's
+    // frontend/src/api/chat.ts parseTraceEvent (the other real consumer of this same
+    // endpoint): every non-text event becomes a BaileyTraceEvent tracked separately from the
+    // message, instead of being rendered inline in the transcript.
     const applyEvent = useCallback((assistantId: string, event: BaileyStreamEvent): boolean => {
         if (event.type === 'response.output_text.delta') {
             if (!event.delta) {
@@ -71,21 +77,58 @@ const useBaileyChat = (): UseBaileyChatResult => {
             );
             return true;
         }
-        if (event.type === 'response.output_item.done' && (event.item.type === 'mcp_call' || event.item.type === 'function_call')) {
-            const rawName = event.item.name || 'unknown_tool';
-            const resolved = resolveToolCall(rawName, event.item.arguments);
-            const toolCall: BaileyToolCall = {
-                name: resolved.name,
-                arguments: resolved.args ? JSON.stringify(resolved.args) : event.item.arguments,
-                output: event.item.output,
-                isError: event.item.is_error,
-            };
-            setMessages((prev) =>
-                prev.map((m) => (m.id === assistantId ? { ...m, toolCalls: [...(m.toolCalls || []), toolCall] } : m))
-            );
+
+        if (event.type === 'response.output_item.added' || event.type === 'response.output_item.done') {
+            const item = event.item;
+            // 'function_call' is a plain client-side tool; 'mcp_call' is a hosted/remote MCP
+            // tool call. Both carry name/arguments on the same item. Anything else
+            // (message/reasoning items, etc.) falls through to the raw fallback below.
+            if (item.type === 'function_call' || item.type === 'mcp_call') {
+                const at = Date.now();
+                const name = item.name || 'unknown_tool';
+                const trace: BaileyTraceEvent =
+                    event.type === 'response.output_item.added'
+                        ? { kind: 'tool_start', name, args: item.arguments, at }
+                        : {
+                              kind: 'tool_end',
+                              name,
+                              args: item.arguments,
+                              at,
+                              output: item.output,
+                              isError: item.is_error,
+                              runtimeSeconds: item.runtime_seconds,
+                          };
+                setTraceEvents((prev) => [...prev, trace]);
+                return true;
+            }
+        } else if (event.type === 'task.progress') {
+            setTraceEvents((prev) => [
+                ...prev,
+                { kind: 'progress', status: event.status, message: event.message, at: Date.now() },
+            ]);
             return true;
+        } else if (event.type === 'response.output_text.done') {
+            // Fires on every turn that streams text — it's just the per-item echo of what
+            // response.output_text.delta already accumulated, carrying no new information.
+            // Deliberate deviation from baileyai-skills-service here: its ChatTrace has no
+            // specific case for this either, so it falls into the same 'raw'/"unrecognized"
+            // bucket there too — but that panel is a developer-facing debug tool where wire-level
+            // completeness is the point. This app's details panel is aimed at chat users, so
+            // labeling a routine per-turn event "unrecognized" would be noise, not information.
+            return false;
+        } else if (event.type === 'response.completed') {
+            // Purely a completion signal — [DONE] already drives turn completion here (see
+            // parseSseFrames), so there's nothing worth recording.
+            return false;
         }
-        return false;
+
+        // Every other event still gets recorded — never silently dropped — so the details
+        // panel is a complete record of what happened on the wire.
+        setTraceEvents((prev) => [
+            ...prev,
+            { kind: 'raw', eventType: event.type, raw: JSON.stringify(event), at: Date.now() },
+        ]);
+        return true;
     }, []);
 
     const runTurn = useCallback(
@@ -108,6 +151,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 events.forEach((event) => {
                     if (event.type === 'error') {
                         streamError = event.message;
+                        setTraceEvents((prev) => [...prev, { kind: 'error', message: event.message, at: Date.now() }]);
                         return;
                     }
                     if (applyEvent(assistantId, event)) {
@@ -149,16 +193,20 @@ const useBaileyChat = (): UseBaileyChatResult => {
                     return;
                 }
                 if (httpStatus === undefined || httpStatus >= 400) {
+                    const message = buildHttpErrorMessage(httpStatus, responseText, errorMessage);
                     setStatus('error');
-                    setError(buildHttpErrorMessage(httpStatus, responseText, errorMessage));
+                    setError(message);
+                    setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
                     return;
                 }
                 // HTTP success but nothing parseable ever came out of the stream. Reporting
                 // 'idle' here would show an empty bubble and look like Bailey answered with
                 // silence; a framing variant this parser doesn't understand is far more likely.
                 if (!receivedOutput) {
+                    const message = 'Bailey returned an empty response.';
                     setStatus('error');
-                    setError('Bailey returned an empty response.');
+                    setError(message);
+                    setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
                     return;
                 }
                 setStatus('idle');
@@ -167,8 +215,10 @@ const useBaileyChat = (): UseBaileyChatResult => {
                     setStatus('idle');
                     return;
                 }
+                const message = err?.message || 'Bailey request failed.';
                 setStatus('error');
-                setError(err?.message || 'Bailey request failed.');
+                setError(message);
+                setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
             } finally {
                 // Drop the assistant placeholder entirely when the turn produced nothing (errored
                 // before the first delta, or was stopped immediately). Keeping an empty-content
@@ -179,7 +229,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
                         if (m.id !== assistantId) {
                             return [m];
                         }
-                        return m.content || (m.toolCalls && m.toolCalls.length > 0) ? [{ ...m, streaming: false }] : [];
+                        return m.content || receivedOutput ? [{ ...m, streaming: false }] : [];
                     })
                 );
             }
@@ -225,7 +275,9 @@ const useBaileyChat = (): UseBaileyChatResult => {
         runTurn(trimmed);
     }, [runTurn]);
 
-    return { messages, status, error, send, stop, retryLast };
+    const clearTrace = useCallback(() => setTraceEvents([]), []);
+
+    return { messages, traceEvents, status, error, send, stop, retryLast, clearTrace };
 };
 
 export default useBaileyChat;

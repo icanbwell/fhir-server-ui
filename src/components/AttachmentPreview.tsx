@@ -14,8 +14,17 @@ interface AttachmentPreviewProps {
     attachment: TAttachment;
 }
 
-const isTextLike = (contentType: string) =>
-    contentType === 'text/plain' || contentType === 'application/xml' || contentType === 'text/xml';
+// Content types with a dedicated, non-text renderer below. Anything else falls back to a
+// plain-text render (rather than a dead "preview not available" message) — most FHIR
+// attachment content types (json, xml, plain text, and plenty of undeclared/unknown ones)
+// are text underneath, and even genuinely binary content that lands here at least shows
+// something instead of nothing, with Download always available regardless.
+const hasDedicatedRenderer = (contentType: string) =>
+    contentType === 'text/html' ||
+    contentType === 'application/pdf' ||
+    contentType.startsWith('image/') ||
+    contentType === 'text/rtf' ||
+    contentType === 'application/rtf';
 
 const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => {
     const { fhirUrl } = React.useContext(EnvironmentContext);
@@ -85,9 +94,10 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         return () => URL.revokeObjectURL(url);
     }, [blob, contentType]);
 
-    // Decoded text for html/plain/xml preview.
+    // Decoded text for html preview, and as the fallback render for every content type
+    // without its own dedicated renderer below.
     useEffect(() => {
-        if (!blob || !(contentType === 'text/html' || isTextLike(contentType))) {
+        if (!blob || !(contentType === 'text/html' || !hasDedicatedRenderer(contentType))) {
             setTextContent('');
             return;
         }
@@ -148,13 +158,6 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         if (contentType === 'text/html') {
             return <Box sx={{ '& a': { color: 'primary.main' } }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(textContent) }} />;
         }
-        if (isTextLike(contentType)) {
-            return (
-                <Box component="pre" sx={{ whiteSpace: 'pre-wrap', overflow: 'auto', maxHeight: '80vh' }}>
-                    {textContent}
-                </Box>
-            );
-        }
         if (contentType === 'application/pdf' && objectUrl) {
             return <Box component="iframe" src={objectUrl} sx={{ width: '100%', height: '80vh', border: 'none' }} />;
         }
@@ -164,7 +167,13 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         if (contentType === 'text/rtf' || contentType === 'application/rtf') {
             return rtfError ? <Alert severity="warning">{rtfError}</Alert> : <div ref={rtfContainerRef} />;
         }
-        return <Alert severity="info">Preview not available for {contentType} — use Download to save the file.</Alert>;
+        // Fallback for everything without a dedicated renderer above (json, xml, plain text,
+        // and any undeclared/unknown content type) — show it as text rather than a dead end.
+        return (
+            <Box component="pre" sx={{ whiteSpace: 'pre-wrap', overflow: 'auto', maxHeight: '80vh' }}>
+                {textContent}
+            </Box>
+        );
     };
 
     return (

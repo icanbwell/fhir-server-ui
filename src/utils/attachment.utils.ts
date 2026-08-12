@@ -9,7 +9,10 @@ export interface ResolvedAttachmentContent {
 export type ResolveAttachmentResult =
     | { kind: 'resolved'; content: ResolvedAttachmentContent }
     | { kind: 'external'; externalUrl: string }
-    | { kind: 'unavailable' };
+    // 'malformed': data/url was present but couldn't be decoded (e.g. invalid base64, or a
+    // Binary response with no usable content) — distinct from 'missing' so the UI can tell a
+    // corrupted attachment apart from one that genuinely has nothing to show.
+    | { kind: 'unavailable'; reason: 'malformed' | 'missing' };
 
 // Matches a `Binary/{id}` path segment anywhere in a URL (bare reference, root-relative
 // path, or absolute URL), not just an exact `Binary/123` prefix.
@@ -64,7 +67,7 @@ export async function resolveAttachmentContent(
             return { kind: 'resolved', content: { blob: decodeBase64ToBlob(String(attachment.data), contentType), contentType } };
         } catch (error) {
             console.warn('Failed to decode inline attachment.data as base64', error);
-            return { kind: 'unavailable' };
+            return { kind: 'unavailable', reason: 'malformed' };
         }
     }
 
@@ -88,12 +91,12 @@ export async function resolveAttachmentContent(
                 const json = JSON.parse(text);
                 if (typeof json?.data !== 'string') {
                     console.warn('Binary response was a FHIR JSON wrapper with no usable data field', json);
-                    return { kind: 'unavailable' };
+                    return { kind: 'unavailable', reason: 'malformed' };
                 }
                 return { kind: 'resolved', content: { blob: decodeBase64ToBlob(json.data, contentType), contentType } };
             } catch (error) {
                 console.warn('Failed to decode the FHIR JSON wrapper returned instead of raw Binary content', error);
-                return { kind: 'unavailable' };
+                return { kind: 'unavailable', reason: 'malformed' };
             }
         }
 
@@ -104,7 +107,7 @@ export async function resolveAttachmentContent(
         return { kind: 'external', externalUrl: url };
     }
 
-    return { kind: 'unavailable' };
+    return { kind: 'unavailable', reason: 'missing' };
 }
 
 const CONTENT_TYPE_EXTENSIONS: Record<string, string> = {

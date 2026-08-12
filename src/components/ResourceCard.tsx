@@ -90,32 +90,6 @@ const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) => {
     );
 };
 
-const getDocumentViewerLink = ({ resource, uuid }: TGetIPSLinkProps) => {
-    return (
-        <Tooltip title="View Document Content">
-            <Link
-                to={`/document-viewer/4_0_0/${resource.resourceType}/${uuid}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    textDecoration: 'none',
-                    color: 'inherit',
-                }}
-            >
-                <DescriptionIcon color="primary" fontSize="small" />
-                <Typography variant="body2" color="primary">
-                    Document Viewer
-                </Typography>
-                <OpenInNewIcon color="primary" fontSize="small" />
-            </Link>
-        </Tooltip>
-    );
-};
-
 const ResourceCard = ({
     index,
     resource,
@@ -210,7 +184,6 @@ const ResourceCard = ({
     const spreadSheetResourceTypes = ['Patient', 'Person', 'Practitioner'];
     const summaryResourceTypes = ['Patient', 'Person'];
     const compositionSummaryResourceTypes = ['Composition'];
-    const documentViewerResourceTypes = ['DocumentReference', 'Binary'];
 
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
@@ -242,9 +215,6 @@ const ResourceCard = ({
                         {resource.resourceType &&
                             compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}
-                        {resource.resourceType &&
-                            documentViewerResourceTypes.includes(resource.resourceType.toString()) &&
-                            getDocumentViewerLink({ resource, uuid: uuid?.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
                     </Box>
                 }

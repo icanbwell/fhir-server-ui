@@ -61,6 +61,8 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
                     setBlob(result.content.blob);
                 } else if (result.kind === 'external') {
                     setExternalUrl(result.externalUrl);
+                } else if (result.reason === 'malformed') {
+                    setErrorMessage('This attachment’s content could not be decoded — it may be corrupted.');
                 } else {
                     setErrorMessage('This attachment has no retrievable content.');
                 }

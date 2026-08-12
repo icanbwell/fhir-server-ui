@@ -31,7 +31,7 @@ const DocumentContent = ({ content, name, id }: TDocumentContentProps) => {
                     <Tooltip title="View in Document Viewer">
                         <Link
                             component={RouterLink}
-                            to={`/document-viewer/4_0_0/DocumentReference/${id}`}
+                            to={`/document-viewer/4_0_0/DocumentReference/${id}?content=${index}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}

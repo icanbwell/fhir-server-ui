@@ -258,8 +258,7 @@ const ResourceCard = ({
                     {/* Conditionally render FileDownload based on resource type */}
                     {resource.resourceType &&
                         (spreadSheetResourceTypes.includes(resource.resourceType.toString()) ||
-                            compositionSummaryResourceTypes.includes(resource.resourceType.toString()) ||
-                            documentViewerResourceTypes.includes(resource.resourceType.toString())) && (
+                            compositionSummaryResourceTypes.includes(resource.resourceType.toString())) && (
                             <Box
                                 sx={{
                                     display: 'flex',
@@ -302,10 +301,6 @@ const ResourceCard = ({
 
                                 {compositionSummaryResourceTypes.includes(resource.resourceType.toString()) && (
                                     <Box>{getCompositionSummaryLink({ uuid: uuid?.toString() })}</Box>
-                                )}
-
-                                {documentViewerResourceTypes.includes(resource.resourceType.toString()) && (
-                                    <Box>{getDocumentViewerLink({ resource, uuid: uuid?.toString() })}</Box>
                                 )}
                             </Box>
                         )}

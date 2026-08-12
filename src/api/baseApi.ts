@@ -348,24 +348,22 @@ class BaseApi {
 
     async downloadFile(
         url: string,
-        options?: { onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void }
+        options?: {
+            onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
+            headers?: Record<string, string>;
+        }
     ): Promise<{ status: number; data: Blob; headers: Record<string, string> }> {
         const { status, chunks, headers, errorMessage, incomplete } = await this.streamRequest({
             method: 'GET',
             urlString: url,
             responseMode: 'binary',
             onProgress: options?.onProgress,
+            headers: options?.headers,
         });
         if (!status || status < 200 || status >= 300) {
             throw Object.assign(new Error(errorMessage || `Request failed with status ${status}`), { status });
         }
         if (incomplete) {
-            // streamRequest() still reports the original 2xx status captured when fetch()
-            // resolved, before the body finished — a mid-download connection drop would
-            // otherwise look like a normal successful download and hand callers a silently
-            // truncated Blob. Throwing here restores the pre-refactor axios behavior (a dropped
-            // connection rejected the promise), which both FileDownload.tsx and
-            // SpreadsheetViewer.tsx already handle with a visible error in their catch blocks.
             throw Object.assign(new Error('Connection interrupted before the download finished'), {
                 status,
                 incomplete: true,

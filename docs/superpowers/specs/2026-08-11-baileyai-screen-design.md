@@ -67,8 +67,7 @@ tool inline on every request:
     {
       "type": "mcp",
       "server_url": "<fhirUrl>/mcp",
-      "server_label": "fhir-server",
-      "allowed_tools": ["search_patient", "search_observation", "search_encounter", "fhir_search", "..."]
+      "server_label": "fhir-server"
     }
   ]
 }
@@ -109,7 +108,9 @@ New files, following the existing `pages/` + `components/` + `hooks/` +
   `BaileyChatPanel`.
 - **`components/BaileyChatPanel.tsx`** — MUI-based message list + composer:
   - User/assistant bubbles; assistant content rendered as markdown (new dep
-    `react-markdown`, sanitized via the existing `dompurify` dependency).
+    `react-markdown`; no sanitizer needed since it renders to React elements
+    directly and never uses `dangerouslySetInnerHTML` unless the `rehype-raw`
+    plugin is added, which it isn't here).
   - Streaming/blinking-cursor indicator while a response is in flight.
   - Inline, collapsed-by-default tool-call chips (e.g.
     "🔧 search_patient(family=Smith)") for `mcp_call` output items — enough
@@ -127,8 +128,9 @@ New files, following the existing `pages/` + `components/` + `hooks/` +
 - **`api/baileyApi.ts`** — builds the request body shown above, attaches
   `Authorization: Bearer <token>`, POSTs, returns the stream for the hook to
   parse.
-- **`constants/baileyConstants.ts`** — default system `instructions` string
-  and default `allowed_tools` (read-only FHIR search tools only — no writes).
+- **`constants/baileyConstants.ts`** — default system `instructions` string,
+  which is the only enforcement of read-only tool use (no `allowed_tools`
+  restriction is hard-coded into the MCP tool declaration — see Approach).
 - **`types/baileyChat.ts`** — `BaileyMessage`, `BaileyStreamEvent`
   discriminated union for the SSE frame shapes.
 
@@ -153,10 +155,11 @@ pre-gating on login provider.
 
 ## Testing
 
-- Unit tests for `useBaileyChat`'s SSE-frame reducer (feed canned frame
-  sequences, assert final message state).
-- Unit tests for `baileyApi`'s request-body construction (assert the `tools`/
-  `server_url` shape).
+- Deferred — this repo has no test runner (`package.json` has only
+  `dev`/`build`/`preview`/`lint`), and per user decision no test framework is
+  introduced by this plan. Every task is verified via `yarn lint`/`yarn build`
+  plus a manual walkthrough instead (see plan's Global Constraints and Task 5
+  Step 7).
 - No new E2E/Playwright coverage in scope for this plan; a possible fast
   follow if UI test tooling is added to this screen later.
 

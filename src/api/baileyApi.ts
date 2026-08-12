@@ -46,6 +46,13 @@ class BaileyApi extends BaseApi {
             signal,
             onChunk: (chunk) => onChunk(decoder.decode(chunk, { stream: true })),
         });
+        // Flush any dangling partial multi-byte UTF-8 sequence left buffered by the last
+        // `{ stream: true }` call — without this, a stream that ends mid-character (an abrupt
+        // cutoff) silently drops those trailing bytes. Mirrors baseApi.ts's own flush.
+        const flushed = decoder.decode();
+        if (flushed) {
+            onChunk(flushed);
+        }
         return { status, text, errorMessage };
     }
 }

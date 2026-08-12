@@ -8,9 +8,10 @@ import { TAttachment } from '../types/partials/Attachment';
 
 interface DocumentViewerProps {
     relativeUrl: string;
-    // When set, isolate this one content[] entry instead of stacking all of them — used when
-    // arriving from a specific row's "View" link (e.g. DocumentContent on the DocumentReference
-    // detail page) rather than a resource-level link that has no single entry in mind.
+    // Isolates this one content[] entry instead of stacking all of them. DocumentViewerPage
+    // defaults this to 0 when the URL carries no explicit index, so undefined here only occurs
+    // for a non-numeric trailing path segment (a real FHIR sub-operation) — in which case every
+    // entry is shown, since no single one was requested.
     contentIndex?: number;
 }
 

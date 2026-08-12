@@ -10,6 +10,9 @@ import ContactPoint from './ContactPoint';
 import DateTime from './DateTime';
 import Decimal from './Decimal';
 import DispenseRequest from './DispenseRequest';
+import DocumentContent from './DocumentContent';
+import DocumentReferenceContextPartial from './DocumentReferenceContext';
+import DocumentReferenceRelatesTo from './DocumentReferenceRelatesTo';
 import Dosage from './Dosage';
 import Extension from './Extension';
 import HumanName from './HumanName';
@@ -49,6 +52,9 @@ export default {
   DateTime,
   Decimal,
   DispenseRequest,
+  DocumentContent,
+  DocumentReferenceContext: DocumentReferenceContextPartial,
+  DocumentReferenceRelatesTo,
   Dosage,
   Extension,
   HumanName,

@@ -81,6 +81,15 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                     searchParameter='name'
                 />
             }
+        {% elif fhir_entity.cleaned_name == "DocumentReference" and property.javascript_clean_name == "description" %}
+            {
+                resource.description &&
+                <Partials.NameValue
+                    name='Description'
+                    value={resource.description}
+                    searchParameter='description'
+                />
+            }
         {% endif %}
     {% endif %}
     {%  endfor %}

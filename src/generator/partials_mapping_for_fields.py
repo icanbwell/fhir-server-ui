@@ -84,10 +84,20 @@ partials_mapping = {
         'field': 'link',
         'prop_name': 'reference'
     },
+    'DocumentReferenceContent': {
+        'partial': 'DocumentContent',
+        'field': '',
+        'prop_name': 'content'
+    },
+    'DocumentReferenceContext': {
+        'partial': 'DocumentReferenceContext',
+        'field': '',
+        'prop_name': 'context'
+    },
     'DocumentReferenceRelatesTo': {
-        'partial': 'Reference',
-        'field': 'target',
-        'prop_name': 'reference'
+        'partial': 'DocumentReferenceRelatesTo',
+        'field': '',
+        'prop_name': 'relatesTo'
     },
     'EffectEvidenceSynthesisResultsByExposure': {
         'partial': 'Reference',

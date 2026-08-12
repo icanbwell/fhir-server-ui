@@ -16,6 +16,10 @@ services:
       REACT_APP_FHIR_SERVER_URL: ${REACT_APP_FHIR_SERVER_URL}
       # Aperture Token Service (ATS) base URL, used by the /connections screens.
       REACT_APP_TOKEN_SERVICE_URL: ${REACT_APP_TOKEN_SERVICE_URL}
+      # Set REACT_APP_BAILEY_URL and REACT_APP_BAILEY_MODEL in .env — no defaults here either.
+      # Used by the /bailey chat screen.
+      REACT_APP_BAILEY_URL: ${REACT_APP_BAILEY_URL}
+      REACT_APP_BAILEY_MODEL: ${REACT_APP_BAILEY_MODEL}
       REACT_APP_AWS_REGION: 'us-east-1'
       # list of AuthProviders
       REACT_APP_AUTH_PROVIDERS: 'cognito,bwellapp,clientcredentials'

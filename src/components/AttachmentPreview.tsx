@@ -13,6 +13,27 @@ import { extensionForContentType, resolveAttachmentContent } from '../utils/atta
 // react-pdf/pdf.js is a large dependency — loaded only once a PDF attachment is opened.
 const PdfPreview = lazy(() => import('./PdfPreview'));
 
+// Suspense only covers the *pending* state of PdfPreview's dynamic import — a *rejected*
+// import (stale chunk hash after a deploy, ad-blocker, network blip) throws during render,
+// and with no error boundary elsewhere in the app that would propagate to the router's
+// errorElement, replacing the whole routed page instead of just this one attachment's
+// preview. Keyed by loadId below so a new attachment always gets a fresh (non-tripped)
+// boundary.
+class PdfLoadErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+    state = { hasError: false };
+
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <Alert severity="warning">Failed to render this PDF — use Download instead.</Alert>;
+        }
+        return this.props.children;
+    }
+}
+
 interface AttachmentPreviewProps {
     attachment: TAttachment;
 }
@@ -42,6 +63,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
     const [textContent, setTextContent] = useState<string>('');
     const [objectUrl, setObjectUrl] = useState<string | null>(null);
     const [rtfError, setRtfError] = useState<string | null>(null);
+    const [pdfLoadId, setPdfLoadId] = useState<number>(0);
     const rtfContainerRef = useRef<HTMLDivElement>(null);
 
     const contentType = String(attachment.contentType || 'application/octet-stream')
@@ -56,6 +78,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         setRawErrorContent(null);
         setBlob(null);
         setExternalUrl(null);
+        setPdfLoadId((id) => id + 1);
 
         resolveAttachmentContent(attachment, baseApi, fhirUrl)
             .then((result) => {
@@ -175,9 +198,11 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
             // <iframe> — a nested browsing context, which the deployed CSP's frame-src (or
             // its default-src fallback) doesn't allow for the blob: scheme.
             return (
-                <Suspense fallback={<Typography color="text.secondary">Loading PDF…</Typography>}>
-                    <PdfPreview blob={blob} />
-                </Suspense>
+                <PdfLoadErrorBoundary key={pdfLoadId}>
+                    <Suspense fallback={<Typography color="text.secondary">Loading PDF…</Typography>}>
+                        <PdfPreview blob={blob} />
+                    </Suspense>
+                </PdfLoadErrorBoundary>
             );
         }
         if (contentType.startsWith('image/') && objectUrl) {

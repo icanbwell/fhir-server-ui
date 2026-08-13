@@ -214,7 +214,13 @@ class BaseApi {
         // Surface status/headers as soon as fetch() resolves — before the body streaming loop
         // below starts — so callers can populate UI without waiting for the whole body.
         onHeaders?.(response.status, responseHeaders);
-        await this.handleUnauthorized(response.status);
+        // A 401 from baseUrlOverride's target says nothing about whether the actual FHIR
+        // session is still valid — that origin isn't the session's auth boundary, so treating
+        // its 401 as "the user is logged out" would log the whole app out over a probe the
+        // caller (e.g. the same-origin Binary fetch) is meant to fail silently and fall back on.
+        if (!baseUrlOverride) {
+            await this.handleUnauthorized(response.status);
+        }
 
         // Content-Length reflects the compressed size when the server sends a Content-Encoding
         // (gzip/br/deflate), but reader.read() yields decompressed bytes — comparing the two would

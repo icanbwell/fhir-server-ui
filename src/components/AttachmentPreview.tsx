@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Box, Link, Paper, Tooltip, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -9,6 +9,30 @@ import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
 import { TAttachment } from '../types/partials/Attachment';
 import { extensionForContentType, resolveAttachmentContent } from '../utils/attachment.utils';
+
+// react-pdf/pdf.js is a large dependency — loaded only once a PDF attachment is opened.
+const PdfPreview = lazy(() => import('./PdfPreview'));
+
+// Suspense only covers the *pending* state of PdfPreview's dynamic import — a *rejected*
+// import (stale chunk hash after a deploy, ad-blocker, network blip) throws during render,
+// and with no error boundary elsewhere in the app that would propagate to the router's
+// errorElement, replacing the whole routed page instead of just this one attachment's
+// preview. Keyed by loadId below so a new attachment always gets a fresh (non-tripped)
+// boundary.
+class PdfLoadErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+    state = { hasError: false };
+
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <Alert severity="warning">Failed to render this PDF — use Download instead.</Alert>;
+        }
+        return this.props.children;
+    }
+}
 
 interface AttachmentPreviewProps {
     attachment: TAttachment;
@@ -39,6 +63,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
     const [textContent, setTextContent] = useState<string>('');
     const [objectUrl, setObjectUrl] = useState<string | null>(null);
     const [rtfError, setRtfError] = useState<string | null>(null);
+    const [pdfLoadId, setPdfLoadId] = useState<number>(0);
     const rtfContainerRef = useRef<HTMLDivElement>(null);
 
     const contentType = String(attachment.contentType || 'application/octet-stream')
@@ -53,6 +78,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         setRawErrorContent(null);
         setBlob(null);
         setExternalUrl(null);
+        setPdfLoadId((id) => id + 1);
 
         resolveAttachmentContent(attachment, baseApi, fhirUrl)
             .then((result) => {
@@ -90,10 +116,11 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [attachment.data, attachment.url, attachment.contentType]);
 
-    // Object URL for image/PDF preview — must be revoked on cleanup or attachment change
-    // to avoid leaking memory across repeated views.
+    // Object URL for image preview — must be revoked on cleanup or attachment change to
+    // avoid leaking memory across repeated views. PDFs render directly from the Blob via
+    // react-pdf/pdf.js, which doesn't need one.
     useEffect(() => {
-        if (!blob || !(contentType === 'application/pdf' || contentType.startsWith('image/'))) {
+        if (!blob || !contentType.startsWith('image/')) {
             setObjectUrl(null);
             return;
         }
@@ -166,8 +193,17 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         if (contentType === 'text/html') {
             return <Box sx={{ '& a': { color: 'primary.main' } }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(textContent) }} />;
         }
-        if (contentType === 'application/pdf' && objectUrl) {
-            return <Box component="iframe" src={objectUrl} sx={{ width: '100%', height: '80vh', border: 'none' }} />;
+        if (contentType === 'application/pdf') {
+            // Renders pages to <canvas> via pdf.js rather than embedding the Blob in an
+            // <iframe> — a nested browsing context, which the deployed CSP's frame-src (or
+            // its default-src fallback) doesn't allow for the blob: scheme.
+            return (
+                <PdfLoadErrorBoundary key={pdfLoadId}>
+                    <Suspense fallback={<Typography color="text.secondary">Loading PDF…</Typography>}>
+                        <PdfPreview blob={blob} />
+                    </Suspense>
+                </PdfLoadErrorBoundary>
+            );
         }
         if (contentType.startsWith('image/') && objectUrl) {
             return <Box component="img" src={objectUrl} sx={{ maxWidth: '100%' }} />;

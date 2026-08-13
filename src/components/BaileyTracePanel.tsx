@@ -132,7 +132,13 @@ function RequestDetails({ request }: { request: BaileyLastRequest }) {
     const payloadJson = useMemo(
         () =>
             JSON.stringify(
-                { model: request.model, instructions: request.systemPrompt, input: request.messages },
+                {
+                    model: request.model,
+                    instructions: request.systemPrompt,
+                    input: request.messages,
+                    stream: request.stream,
+                    tools: request.tools,
+                },
                 null,
                 2
             ),
@@ -149,7 +155,7 @@ function RequestDetails({ request }: { request: BaileyLastRequest }) {
             </Typography>
 
             <DetailDisclosure label={`System prompt (${request.systemPrompt.length.toLocaleString()} chars)`} content={request.systemPrompt} copyable />
-            <DetailDisclosure label={`Messages (${request.messages.length})`} content={JSON.stringify(request.messages, null, 2)} />
+            <DetailDisclosure label={`Messages (${request.messages.length})`} content={JSON.stringify(request.messages, null, 2)} copyable />
             {request.response && (
                 <DetailDisclosure
                     label={`Response (${request.response.content.length.toLocaleString()} chars)`}
@@ -167,7 +173,7 @@ const BaileyTracePanel = ({ events, lastRequest, onClear }: BaileyTracePanelProp
     // Surfaced on the collapsed toggle so the user knows there's something worth opening the
     // panel for, without having to open it first to find out.
     const hasFailure = useMemo(() => hasTraceFailure(events), [events]);
-    const rows = useMemo(() => toTraceRows(events, lastRequest?.sentAt), [events, lastRequest]);
+    const rows = useMemo(() => toTraceRows(events), [events]);
     const segments = useMemo(() => toTraceSegments(rows), [rows]);
     const summaryLine = useMemo(() => traceSummaryLine(events), [events]);
     const traceJson = useMemo(() => JSON.stringify(events, null, 2), [events]);

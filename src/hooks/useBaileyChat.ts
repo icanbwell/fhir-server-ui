@@ -5,7 +5,7 @@ import BaileyApi from '../api/baileyApi';
 import { parseSseFrames } from '../utils/baileySse';
 import { extractPseudoToolCalls } from '../utils/baileyPseudoToolCalls';
 import { BAILEY_MCP_SERVER_LABEL, BAILEY_SYSTEM_INSTRUCTIONS } from '../constants/baileyConstants';
-import { BaileyLastRequest, BaileyMessage, BaileyStreamEvent, BaileyTraceEvent } from '../types/baileyChat';
+import { BaileyLastRequest, BaileyMcpToolConfig, BaileyMessage, BaileyStreamEvent, BaileyTraceEvent } from '../types/baileyChat';
 
 export interface UseBaileyChatResult {
     messages: BaileyMessage[];
@@ -53,6 +53,12 @@ const useBaileyChat = (): UseBaileyChatResult => {
 
     const abortRef = useRef<AbortController | null>(null);
     const lastUserTextRef = useRef<string>('');
+
+    // Tracks the sentAt of the turn currently in flight. applyEvent is defined outside runTurn
+    // (a stable useCallback, not recreated per turn) so it can't close over runTurn's per-call
+    // `sentAt` directly — it reads this ref instead to tag each trace event with the turn that
+    // produced it. See BaileyTraceEvent's turnSentAt doc comment.
+    const currentTurnSentAtRef = useRef<number>(0);
 
     // `send`/`retryLast` need the current history to build the request body. Reading it from
     // inside a `setMessages` updater would make firing the request a side effect of a state
@@ -104,9 +110,10 @@ const useBaileyChat = (): UseBaileyChatResult => {
             setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, content: cleanedText } : m)));
             if (newMatches.length > 0) {
                 const at = Date.now();
+                const turnSentAt = currentTurnSentAtRef.current;
                 setTraceEvents((prev) => [
                     ...prev,
-                    ...newMatches.map((match): BaileyTraceEvent => ({ kind: 'pseudo_tool_call', name: match.name, args: match.args, at })),
+                    ...newMatches.map((match): BaileyTraceEvent => ({ kind: 'pseudo_tool_call', name: match.name, args: match.args, at, turnSentAt })),
                 ]);
             }
             return true;
@@ -118,15 +125,17 @@ const useBaileyChat = (): UseBaileyChatResult => {
             // tool call. Both carry name/arguments on the same item.
             if (item.type === 'function_call' || item.type === 'mcp_call') {
                 const at = Date.now();
+                const turnSentAt = currentTurnSentAtRef.current;
                 const name = item.name || 'unknown_tool';
                 const trace: BaileyTraceEvent =
                     event.type === 'response.output_item.added'
-                        ? { kind: 'tool_start', name, args: item.arguments, at }
+                        ? { kind: 'tool_start', name, args: item.arguments, at, turnSentAt }
                         : {
                               kind: 'tool_end',
                               name,
                               args: item.arguments,
                               at,
+                              turnSentAt,
                               output: item.output,
                               isError: item.is_error,
                               runtimeSeconds: item.runtime_seconds,
@@ -141,7 +150,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
         } else if (event.type === 'task.progress') {
             setTraceEvents((prev) => [
                 ...prev,
-                { kind: 'progress', status: event.status, message: event.message, at: Date.now() },
+                { kind: 'progress', status: event.status, message: event.message, at: Date.now(), turnSentAt: currentTurnSentAtRef.current },
             ]);
             return true;
         } else if (event.type === 'response.output_text.done') {
@@ -163,7 +172,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
         // panel is a complete record of what happened on the wire.
         setTraceEvents((prev) => [
             ...prev,
-            { kind: 'raw', eventType: event.type, raw: JSON.stringify(event), at: Date.now() },
+            { kind: 'raw', eventType: event.type, raw: JSON.stringify(event), at: Date.now(), turnSentAt: currentTurnSentAtRef.current },
         ]);
         return true;
     }, []);
@@ -177,10 +186,17 @@ const useBaileyChat = (): UseBaileyChatResult => {
             setMessages((prev) => [...prev, { id: assistantId, role: 'assistant', content: '', streaming: true }]);
 
             const sentAt = Date.now();
+            currentTurnSentAtRef.current = sentAt;
+            const inputMessages = history.map((m) => ({ role: m.role, content: m.content }));
+            const tools: BaileyMcpToolConfig[] = [
+                { type: 'mcp', server_url: `${fhirUrl}/mcp`, server_label: BAILEY_MCP_SERVER_LABEL },
+            ];
             setLastRequest({
                 model: baileyModel,
                 systemPrompt: BAILEY_SYSTEM_INSTRUCTIONS,
-                messages: history.map((m) => ({ role: m.role, content: m.content })),
+                messages: inputMessages,
+                tools,
+                stream: true,
                 sentAt,
                 streamStats: { chunkCount: 0, firstChunkAt: null, lastChunkAt: null },
             });
@@ -196,14 +212,14 @@ const useBaileyChat = (): UseBaileyChatResult => {
             const reportError = (message: string) => {
                 setStatus('error');
                 setError(message);
-                setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
+                setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now(), turnSentAt: sentAt }]);
             };
 
             const processFrames = (events: BaileyStreamEvent[], done: boolean) => {
                 events.forEach((event) => {
                     if (event.type === 'error') {
                         streamError = event.message;
-                        setTraceEvents((prev) => [...prev, { kind: 'error', message: event.message, at: Date.now() }]);
+                        setTraceEvents((prev) => [...prev, { kind: 'error', message: event.message, at: Date.now(), turnSentAt: sentAt }]);
                         return;
                     }
                     if (applyEvent(assistantId, event)) {
@@ -219,8 +235,8 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 const { status: httpStatus, text: responseText, errorMessage } = await api.streamChat({
                     model: baileyModel,
                     instructions: BAILEY_SYSTEM_INSTRUCTIONS,
-                    input: history.map((m) => ({ role: m.role, content: m.content })),
-                    tools: [{ type: 'mcp', server_url: `${fhirUrl}/mcp`, server_label: BAILEY_MCP_SERVER_LABEL }],
+                    input: inputMessages,
+                    tools,
                     signal: controller.signal,
                     onChunk: (chunkText) => {
                         buffer += chunkText;

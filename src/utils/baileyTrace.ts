@@ -128,12 +128,14 @@ export interface TraceRow {
     rawDetail: string | null;
 }
 
-// `sentAt`, when given, is the request's send timestamp — used as the first row's gap baseline
-// so it reads as "time from request sent to first event" instead of always showing +0ms.
-export function toTraceRows(events: BaileyTraceEvent[], sentAt?: number): TraceRow[] {
+export function toTraceRows(events: BaileyTraceEvent[]): TraceRow[] {
     return events.map((event, idx) => {
         const resolved = resolveEventToolCall(event);
-        const prevAt = idx === 0 ? (sentAt ?? event.at) : events[idx - 1].at;
+        // The first row's gap reads as "time from request sent to first event" instead of always
+        // showing +0ms. Uses this event's OWN turnSentAt (not the previous event's `at`, and not
+        // whatever turn is most recent) so it stays correct once a later turn's events are
+        // appended to the same accumulated array — see BaileyTraceEvent's turnSentAt doc comment.
+        const prevAt = idx === 0 ? event.turnSentAt : events[idx - 1].at;
         return {
             key: `${event.at}-${idx}`,
             kind: event.kind,

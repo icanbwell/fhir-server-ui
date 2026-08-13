@@ -9,7 +9,6 @@ interface ImportMetaEnv {
   readonly REACT_APP_AWS_REGION?: string;
   readonly REACT_APP_AUTH_REDIRECT_PATH?: string;
   readonly REACT_APP_AUTH_REDIRECT_STATE?: string;
-  readonly REACT_APP_TOKEN_SERVICE_URL?: string;
   readonly [key: string]: string | undefined;
 }
 

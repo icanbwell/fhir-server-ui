@@ -9,14 +9,16 @@ export interface ResolvedAttachmentContent {
 export type ResolveAttachmentResult =
     | { kind: 'resolved'; content: ResolvedAttachmentContent }
     | { kind: 'external'; externalUrl: string }
-    // 'malformed': data/url was present but couldn't be decoded (e.g. invalid base64, or a
-    // Binary response with no usable content) — distinct from 'missing' so the UI can tell a
-    // corrupted attachment apart from one that genuinely has nothing to show. `detail` carries
-    // the underlying failure (an error message, or a description of the unexpected shape) for
-    // display to technical users rather than being logged and discarded. `rawContent`, when
-    // available, is the actual text we failed to decode (the raw attachment.data string, or the
-    // raw Binary response body) so it can be inspected directly instead of just described.
+    // 'malformed': content was actually retrieved but couldn't be decoded (e.g. invalid
+    // base64, or a Binary response with no usable data field) — a genuine "this attachment is
+    // corrupted" case. `rawContent`, when available, is the actual text we failed to decode
+    // (the raw attachment.data string, or the raw Binary response body) so it can be inspected
+    // directly instead of just described.
     | { kind: 'unavailable'; reason: 'malformed'; detail: string; rawContent?: string }
+    // 'network': the request itself never produced usable content — a network/CORS failure or
+    // a non-2xx HTTP status. Distinct from 'malformed' because nothing was actually retrieved
+    // to be corrupted; the UI should say the fetch failed, not imply the file is bad.
+    | { kind: 'unavailable'; reason: 'network'; detail: string; rawContent?: string }
     | { kind: 'unavailable'; reason: 'missing' };
 
 function errorDetail(error: unknown): string {
@@ -177,7 +179,7 @@ export async function resolveAttachmentContent(
             const status = (error as { status?: number })?.status;
             return {
                 kind: 'unavailable',
-                reason: 'malformed',
+                reason: 'network',
                 detail: `Request to ${binaryUrl} failed: ${errorDetail(error)}${status ? ` (HTTP ${status})` : ''}`,
                 rawContent: (error as { body?: string })?.body,
             };
@@ -199,7 +201,7 @@ export async function resolveAttachmentContent(
                 console.warn('Failed to read the Binary response body', error);
                 return {
                     kind: 'unavailable',
-                    reason: 'malformed',
+                    reason: 'network',
                     detail: `Failed to read the response body returned by Binary/${binaryId}: ${errorDetail(error)}`,
                 };
             }

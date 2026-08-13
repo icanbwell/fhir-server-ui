@@ -127,10 +127,6 @@ function extractBinaryId(url: string, fhirBaseUrl?: string): string | undefined 
     return binaryMatch ? binaryMatch[1] : undefined;
 }
 
-// FHIR content negotiation: requesting the attachment's own contentType (rather than
-// application/fhir+json) makes the server return raw bytes directly, so a Binary's
-// content can flow through the same Blob pipeline as inline base64 data below, with no
-// intermediate base64 decode step.
 export async function resolveAttachmentContent(
     attachment: TAttachment,
     baseApi: BaseApi,
@@ -167,9 +163,14 @@ export async function resolveAttachmentContent(
         try {
             // Always fetch via the relative path — never the absolute URL — so streamRequest's
             // existing same-origin guard keeps enforcing on the actual fetch, regardless of what
-            // this resolution step decided above.
+            // this resolution step decided above. Explicitly request the FHIR JSON Binary
+            // wrapper rather than negotiating on the attachment's own contentType — some
+            // servers/intermediaries don't honor an arbitrary Accept value for content
+            // negotiation and could hand back something unexpected (e.g. an HTML error page)
+            // instead of raw bytes, whereas `application/fhir+json` has one well-defined shape
+            // that the wrapper-decode logic below already handles.
             response = await baseApi.downloadFile(binaryUrl, {
-                headers: { Accept: contentType },
+                headers: { Accept: 'application/fhir+json' },
             });
         } catch (error) {
             console.warn(`Failed to fetch ${binaryUrl}`, error);

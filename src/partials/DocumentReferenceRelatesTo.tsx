@@ -22,7 +22,7 @@ const DocumentReferenceRelatesToPartial = ({ relatesTo, name, resourceType, id }
             {entries.map((entry, index) => (
                 <Box key={index} sx={{ mb: 1 }}>
                     <Typography variant="body2" color="text.secondary">
-                        Relationship: {String(entry.code)}
+                        Relationship: {entry.code}
                     </Typography>
                     <Reference reference={entry} name="Target" field="target" resourceType={resourceType} id={id} searchParameter="relates-to" />
                 </Box>

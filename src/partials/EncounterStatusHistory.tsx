@@ -30,7 +30,7 @@ const EncounterStatusHistoryPartial = ({ statusHistory, name }: TEncounterStatus
                     <TableBody>
                         {entries.map((entry, index) => (
                             <TableRow key={index}>
-                                <TableCell>{String(entry.status)}</TableCell>
+                                <TableCell>{entry.status}</TableCell>
                                 <TableCell>{entry.period?.start}</TableCell>
                                 <TableCell>{entry.period?.end}</TableCell>
                             </TableRow>

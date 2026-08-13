@@ -1,9 +1,7 @@
-import { Box, Link, Paper, Tooltip, Typography } from '@mui/material';
-import DescriptionIcon from '@mui/icons-material/Description';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { Link as RouterLink } from 'react-router';
+import { Box, Paper, Typography } from '@mui/material';
 import { TBaseResourceProps } from '../types/baseTypes';
 import { TDocumentReferenceContent } from '../types/partials/DocumentReferenceContent';
+import DocumentViewerLink from './DocumentViewerLink';
 
 type TDocumentContentProps = TBaseResourceProps & {
     content: TDocumentReferenceContent | TDocumentReferenceContent[] | undefined;
@@ -28,17 +26,7 @@ const DocumentContent = ({ content, name, id }: TDocumentContentProps) => {
                         {entry.attachment?.title ? String(entry.attachment.title) : `Content ${index + 1}`}
                         {entry.attachment?.contentType ? ` (${entry.attachment.contentType})` : ''}
                     </Typography>
-                    <Tooltip title="View in Document Viewer">
-                        <Link
-                            component={RouterLink}
-                            to={`/document-viewer/4_0_0/DocumentReference/${id}/${index}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-                        >
-                            <DescriptionIcon fontSize="small" /> View <OpenInNewIcon fontSize="small" />
-                        </Link>
-                    </Tooltip>
+                    <DocumentViewerLink resourceType="DocumentReference" id={id} contentIndex={index} />
                 </Paper>
             ))}
         </Box>

@@ -109,10 +109,14 @@ export async function resolveAttachmentContent(
         }
 
         const actualContentType = response.headers['content-type'];
-        if (isFhirJsonContentType(actualContentType) && !isFhirJsonContentType(contentType)) {
-            // The server didn't honor content negotiation and returned the FHIR JSON wrapper
-            // instead of raw bytes — decode the base64 `data` field out of it rather than
-            // silently handing JSON to a renderer expecting the declared contentType.
+        if (isFhirJsonContentType(actualContentType)) {
+            // The server may have ignored our Accept header and returned the FHIR JSON Binary
+            // wrapper instead of raw bytes. Detect that by the parsed body's own shape
+            // (resourceType === 'Binary' with a base64 `data` field) rather than by comparing
+            // content-type strings for disjointness — a declared attachment.contentType can
+            // itself legitimately be JSON-flavored (application/json, application/fhir+json),
+            // in which case a content-type-only check could never tell a real JSON attachment
+            // apart from the wrapper.
             // Hoisted above the try so a mid-parse failure (JSON.parse, decodeBase64ToBlob) still
             // leaves the raw response body available to report below — only response.data.text()
             // itself failing leaves this undefined.
@@ -120,6 +124,11 @@ export async function resolveAttachmentContent(
             try {
                 text = await response.data.text();
                 const json = JSON.parse(text);
+                if (json?.resourceType !== 'Binary') {
+                    // Not the wrapper — this JSON-flavored response is the attachment's actual
+                    // content (e.g. a genuinely JSON attachment), so hand it back as-is.
+                    return { kind: 'resolved', content: { blob: new Blob([text], { type: contentType }), contentType } };
+                }
                 if (typeof json?.data !== 'string') {
                     console.warn('Binary response was a FHIR JSON wrapper with no usable data field', json);
                     return {
@@ -131,11 +140,11 @@ export async function resolveAttachmentContent(
                 }
                 return { kind: 'resolved', content: { blob: decodeBase64ToBlob(json.data, contentType), contentType } };
             } catch (error) {
-                console.warn('Failed to decode the FHIR JSON wrapper returned instead of raw Binary content', error);
+                console.warn('Failed to decode the JSON response returned instead of raw Binary content', error);
                 return {
                     kind: 'unavailable',
                     reason: 'malformed',
-                    detail: `Failed to decode the FHIR JSON wrapper returned by Binary/${binaryId}: ${errorDetail(error)}`,
+                    detail: `Failed to parse the JSON response returned by Binary/${binaryId}: ${errorDetail(error)}`,
                     rawContent: text,
                 };
             }

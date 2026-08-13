@@ -72,11 +72,14 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ relativeUrl, contentInd
     }
 
     if (resource.resourceType === 'Binary') {
+        // No title here: the heading below already reads "Binary/{id}" — repeating it as
+        // AttachmentPreview's own subtitle would just duplicate the same text, and using it as
+        // a download filename (which AttachmentPreview falls back to when title is unset) would
+        // put a literal "/" in the suggested filename.
         const attachment: TAttachment = {
             contentType: resource.contentType,
             data: resource.data,
             url: resource.data ? undefined : `Binary/${resource.id}`,
-            title: `Binary/${resource.id}`,
         };
         return (
             <Box>

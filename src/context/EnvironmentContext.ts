@@ -5,7 +5,12 @@ import { isTrue } from '../utils/isTrue';
 let fhirServerVersion = 'null';
 new FhirApi({ fhirUrl: import.meta.env.REACT_APP_FHIR_SERVER_URL, setUserDetails: undefined })
     .getVersion()
-    .then((version: string) => (fhirServerVersion = version));
+    .then((version: string) => (fhirServerVersion = version))
+    // Module-level fire-and-forget call: nothing awaits this promise, so a rejection (e.g. no
+    // FHIR server configured, as in unit tests, or the server being briefly unreachable) would
+    // otherwise surface as an unhandled promise rejection instead of just leaving
+    // fhirServerVersion at its 'null' default.
+    .catch(() => undefined);
 
 // Unset defaults to enabled — this flag is an opt-out kill switch, not an opt-in feature gate,
 // so environments that don't yet know about it keep showing Bailey as before.

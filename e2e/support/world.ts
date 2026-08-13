@@ -35,6 +35,18 @@ export class CustomWorld extends World<WorldParameters> {
         this.context = await this.browser.newContext({ storageState: AUTH_STATE_PATH });
         this.page = await this.context.newPage();
     }
+
+    // Several detail views (Document Viewer, Composition Summary) link out via
+    // target="_blank". Swaps `page` to the tab that opens, so later steps keep working against
+    // wherever the click actually landed - same as a real user following the link.
+    async openLinkInNewTab(linkName: string): Promise<void> {
+        const [newPage] = await Promise.all([
+            this.context.waitForEvent('page'),
+            this.page.getByRole('link', { name: linkName, exact: true }).first().click(),
+        ]);
+        await newPage.waitForLoadState();
+        this.page = newPage;
+    }
 }
 
 setWorldConstructor(CustomWorld);

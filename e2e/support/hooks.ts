@@ -1,8 +1,14 @@
-import { After, AfterAll, Before, BeforeAll, Status } from '@cucumber/cucumber';
+import { After, AfterAll, Before, BeforeAll, setDefaultTimeout, Status } from '@cucumber/cucumber';
 import { chromium } from '@playwright/test';
 import type { Browser } from '@playwright/test';
 import { ensureAuthState } from '../global-setup.ts';
 import type { CustomWorld } from './world.ts';
+
+// Cucumber's own step timeout defaults to 5000ms, well under some of this suite's Playwright
+// waits (e.g. search.steps.ts's 20000ms) - without raising it, Cucumber kills the step before
+// Playwright's own retry window elapses, silently capping the intended wait. Set comfortably
+// above the longest per-step wait anywhere in the suite.
+setDefaultTimeout(30 * 1000);
 
 let browser: Browser;
 

@@ -97,6 +97,7 @@ function SelectableTable({
                   indeterminate={isSomeSelected}
                   checked={isAllSelected}
                   onChange={handleSelectAll}
+                  slotProps={{ input: { 'aria-label': 'Select all rows' } }}
                 />
               </TableCell>
               {columns.map((column: string) => (
@@ -119,6 +120,7 @@ function SelectableTable({
                     <Checkbox
                       checked={selectedRowIds.has(rowId)}
                       onChange={handleSelectRow(rowId)}
+                      slotProps={{ input: { 'aria-label': `Select row ${rowIndex + 1}` } }}
                     />
                   </TableCell>
                   {columns.map((column: string, columnIndex: number) => {

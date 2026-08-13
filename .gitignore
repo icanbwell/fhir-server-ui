@@ -144,3 +144,10 @@ __pycache__/
 
 # Playwright MCP manual verification artifacts
 .playwright-mcp/
+
+# Cucumber/Playwright E2E tests: saved browser storage state contains a real access
+# token, and the HTML report/test-results are generated output - neither belongs in git.
+e2e/.auth/
+e2e-report.html
+playwright-report/
+test-results/

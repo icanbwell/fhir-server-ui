@@ -166,7 +166,7 @@ const ClientCredentialsLogin = () => {
                         ))}
                     </Select>
                     {configError ? (
-                        <Typography color="error" sx={{ mb: 2 }}>
+                        <Typography color="error" role="alert" sx={{ mb: 2 }}>
                             {configError}
                         </Typography>
                     ) : (
@@ -198,7 +198,7 @@ const ClientCredentialsLogin = () => {
                                 sx={{ mb: 2 }}
                             />
                             {error && (
-                                <Typography color="error" sx={{ mb: 2 }}>
+                                <Typography color="error" role="alert" sx={{ mb: 2 }}>
                                     {error}
                                 </Typography>
                             )}

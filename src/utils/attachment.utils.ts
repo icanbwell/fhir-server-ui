@@ -11,8 +11,15 @@ export type ResolveAttachmentResult =
     | { kind: 'external'; externalUrl: string }
     // 'malformed': data/url was present but couldn't be decoded (e.g. invalid base64, or a
     // Binary response with no usable content) — distinct from 'missing' so the UI can tell a
-    // corrupted attachment apart from one that genuinely has nothing to show.
-    | { kind: 'unavailable'; reason: 'malformed' | 'missing' };
+    // corrupted attachment apart from one that genuinely has nothing to show. `detail` carries
+    // the underlying failure (an error message, or a description of the unexpected shape) for
+    // display to technical users rather than being logged and discarded.
+    | { kind: 'unavailable'; reason: 'malformed'; detail: string }
+    | { kind: 'unavailable'; reason: 'missing' };
+
+function errorDetail(error: unknown): string {
+    return error instanceof Error ? error.message : String(error);
+}
 
 // Matches a `Binary/{id}` path segment anywhere in a URL (bare reference, root-relative
 // path, or absolute URL), not just an exact `Binary/123` prefix.
@@ -67,7 +74,7 @@ export async function resolveAttachmentContent(
             return { kind: 'resolved', content: { blob: decodeBase64ToBlob(String(attachment.data), contentType), contentType } };
         } catch (error) {
             console.warn('Failed to decode inline attachment.data as base64', error);
-            return { kind: 'unavailable', reason: 'malformed' };
+            return { kind: 'unavailable', reason: 'malformed', detail: `Invalid base64 in attachment.data: ${errorDetail(error)}` };
         }
     }
 
@@ -91,12 +98,20 @@ export async function resolveAttachmentContent(
                 const json = JSON.parse(text);
                 if (typeof json?.data !== 'string') {
                     console.warn('Binary response was a FHIR JSON wrapper with no usable data field', json);
-                    return { kind: 'unavailable', reason: 'malformed' };
+                    return {
+                        kind: 'unavailable',
+                        reason: 'malformed',
+                        detail: `Binary/${binaryId} returned a FHIR JSON wrapper with no usable "data" field`,
+                    };
                 }
                 return { kind: 'resolved', content: { blob: decodeBase64ToBlob(json.data, contentType), contentType } };
             } catch (error) {
                 console.warn('Failed to decode the FHIR JSON wrapper returned instead of raw Binary content', error);
-                return { kind: 'unavailable', reason: 'malformed' };
+                return {
+                    kind: 'unavailable',
+                    reason: 'malformed',
+                    detail: `Failed to decode the FHIR JSON wrapper returned by Binary/${binaryId}: ${errorDetail(error)}`,
+                };
             }
         }
 

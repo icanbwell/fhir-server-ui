@@ -62,15 +62,18 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
                 } else if (result.kind === 'external') {
                     setExternalUrl(result.externalUrl);
                 } else if (result.reason === 'malformed') {
-                    setErrorMessage('This attachment’s content could not be decoded — it may be corrupted.');
+                    setErrorMessage(`This attachment’s content could not be decoded — it may be corrupted. (${result.detail})`);
                 } else {
                     setErrorMessage('This attachment has no retrievable content.');
                 }
             })
-            .catch(() => {
-                if (!cancelled) {
-                    setErrorMessage('Failed to load the attachment content.');
+            .catch((error: unknown) => {
+                if (cancelled) {
+                    return;
                 }
+                const status = (error as { status?: number })?.status;
+                const message = error instanceof Error ? error.message : String(error);
+                setErrorMessage(`Failed to load the attachment content: ${message}${status ? ` (HTTP ${status})` : ''}`);
             })
             .finally(() => {
                 if (!cancelled) {

@@ -12,8 +12,8 @@ export interface BaileyMcpToolConfig {
 
 export interface BaileyOutputItem {
     // Not narrowed to 'function_call' | 'mcp_call' — response.output_item.added/done can also
-    // carry message/reasoning items, which useBaileyChat's applyEvent must recognize and route
-    // to the 'raw' trace fallback rather than mis-parse as a tool call.
+    // carry message/reasoning items, which useBaileyChat's applyEvent must recognize and ignore
+    // (not mis-parse as a tool call, and not surface as a trace event either).
     type: string;
     name?: string;
     arguments?: string;
@@ -55,7 +55,7 @@ export type BaileyTraceEvent =
       }
     | { kind: 'progress'; status: string; message?: string; at: number }
     | { kind: 'error'; message: string; at: number }
-    // Any SSE event this client doesn't have specific handling for (e.g. a message/reasoning
-    // output item). Kept, not silently dropped, so the details panel is a complete record of
-    // what happened on the wire.
+    // Any SSE event type this client doesn't have specific handling for at all (message/
+    // reasoning output items are explicitly ignored, not routed here — see BaileyOutputItem).
+    // Kept, not silently dropped, so the details panel is a complete record of the rest.
     | { kind: 'raw'; eventType: string; raw: string; at: number };

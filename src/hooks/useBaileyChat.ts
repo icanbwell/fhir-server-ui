@@ -81,8 +81,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
         if (event.type === 'response.output_item.added' || event.type === 'response.output_item.done') {
             const item = event.item;
             // 'function_call' is a plain client-side tool; 'mcp_call' is a hosted/remote MCP
-            // tool call. Both carry name/arguments on the same item. Anything else
-            // (message/reasoning items, etc.) falls through to the raw fallback below.
+            // tool call. Both carry name/arguments on the same item.
             if (item.type === 'function_call' || item.type === 'mcp_call') {
                 const at = Date.now();
                 const name = item.name || 'unknown_tool';
@@ -101,6 +100,10 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 setTraceEvents((prev) => [...prev, trace]);
                 return true;
             }
+            // Anything else (message/reasoning items, etc.) is the assistant's own output
+            // container, already reflected via output_text.delta — recording it here would
+            // flood the trace panel and "Thinking…" hint with a no-op event on every turn.
+            return false;
         } else if (event.type === 'task.progress') {
             setTraceEvents((prev) => [
                 ...prev,
@@ -146,6 +149,12 @@ const useBaileyChat = (): UseBaileyChatResult => {
             let buffer = '';
             let streamError: string | null = null;
             let receivedOutput = false;
+
+            const reportError = (message: string) => {
+                setStatus('error');
+                setError(message);
+                setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
+            };
 
             const processFrames = (events: BaileyStreamEvent[], done: boolean) => {
                 events.forEach((event) => {
@@ -193,20 +202,14 @@ const useBaileyChat = (): UseBaileyChatResult => {
                     return;
                 }
                 if (httpStatus === undefined || httpStatus >= 400) {
-                    const message = buildHttpErrorMessage(httpStatus, responseText, errorMessage);
-                    setStatus('error');
-                    setError(message);
-                    setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
+                    reportError(buildHttpErrorMessage(httpStatus, responseText, errorMessage));
                     return;
                 }
                 // HTTP success but nothing parseable ever came out of the stream. Reporting
                 // 'idle' here would show an empty bubble and look like Bailey answered with
                 // silence; a framing variant this parser doesn't understand is far more likely.
                 if (!receivedOutput) {
-                    const message = 'Bailey returned an empty response.';
-                    setStatus('error');
-                    setError(message);
-                    setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
+                    reportError('Bailey returned an empty response.');
                     return;
                 }
                 setStatus('idle');
@@ -215,21 +218,20 @@ const useBaileyChat = (): UseBaileyChatResult => {
                     setStatus('idle');
                     return;
                 }
-                const message = err?.message || 'Bailey request failed.';
-                setStatus('error');
-                setError(message);
-                setTraceEvents((prev) => [...prev, { kind: 'error', message, at: Date.now() }]);
+                reportError(err?.message || 'Bailey request failed.');
             } finally {
-                // Drop the assistant placeholder entirely when the turn produced nothing (errored
-                // before the first delta, or was stopped immediately). Keeping an empty-content
-                // assistant message would both render a blank bubble and get replayed in the next
-                // turn's `input` array, which Bailey can reject.
+                // Drop the assistant placeholder entirely unless it actually accumulated text
+                // (errored/aborted/tool-only turns are dropped even if some trace activity — a
+                // tool call, a progress event — happened first; that activity alone doesn't mean
+                // the turn produced anything worth keeping). Keeping an empty-content assistant
+                // message would both render a blank bubble and get replayed in the next turn's
+                // `input` array, which Bailey can reject.
                 setMessages((prev) =>
                     prev.flatMap((m) => {
                         if (m.id !== assistantId) {
                             return [m];
                         }
-                        return m.content || receivedOutput ? [{ ...m, streaming: false }] : [];
+                        return m.content ? [{ ...m, streaming: false }] : [];
                     })
                 );
             }

@@ -1,5 +1,5 @@
 import { BaileyTraceEvent } from '../types/baileyChat';
-import { resolveToolCall } from './baileyToolCalls';
+import { resolveToolCall, ResolvedToolCall } from './baileyToolCalls';
 
 // Ported from baileyai-skills-service's frontend/src/components/chat/ChatTrace.tsx and
 // traceFormat.ts (the other real consumer of this same endpoint) so the details panel here
@@ -13,22 +13,26 @@ export const TRACE_KIND_LABEL: Record<BaileyTraceEvent['kind'], string> = {
     raw: 'Raw event',
 };
 
-export function traceEventToolName(event: BaileyTraceEvent): string | null {
+// resolveToolCall re-parses event.args (JSON.parse) on every call — resolve it once per event
+// here and thread the result through, rather than each of the functions below calling it
+// independently.
+function resolveEventToolCall(event: BaileyTraceEvent): ResolvedToolCall | null {
     if (event.kind !== 'tool_start' && event.kind !== 'tool_end') {
         return null;
     }
-    return resolveToolCall(event.name, event.args).name;
+    return resolveToolCall(event.name, event.args);
 }
 
-export function traceEventSummary(event: BaileyTraceEvent): string {
+export function traceEventToolName(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string | null {
+    return resolved?.name ?? null;
+}
+
+export function traceEventSummary(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string {
     switch (event.kind) {
-        case 'tool_start': {
-            const resolved = resolveToolCall(event.name, event.args);
-            return resolved.viaCallTool ? `${resolved.name} (via call_tool)` : resolved.name;
-        }
+        case 'tool_start':
+            return resolved!.viaCallTool ? `${resolved!.name} (via call_tool)` : resolved!.name;
         case 'tool_end': {
-            const resolved = resolveToolCall(event.name, event.args);
-            const name = resolved.viaCallTool ? `${resolved.name} (via call_tool)` : resolved.name;
+            const name = resolved!.viaCallTool ? `${resolved!.name} (via call_tool)` : resolved!.name;
             const duration = event.runtimeSeconds !== undefined ? ` — ${event.runtimeSeconds.toFixed(2)}s` : '';
             return `${name}${duration}${event.isError ? ' — failed' : ''}`;
         }
@@ -41,10 +45,9 @@ export function traceEventSummary(event: BaileyTraceEvent): string {
     }
 }
 
-export function traceEventArgsDetail(event: BaileyTraceEvent): string | null {
+export function traceEventArgsDetail(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string | null {
     if (event.kind === 'tool_start' || event.kind === 'tool_end') {
-        const resolved = resolveToolCall(event.name, event.args);
-        return resolved.args ? JSON.stringify(resolved.args, null, 2) : (event.args ?? null);
+        return resolved!.args ? JSON.stringify(resolved!.args, null, 2) : (event.args ?? null);
     }
     return null;
 }
@@ -88,19 +91,22 @@ export interface TraceRow {
 }
 
 export function toTraceRows(events: BaileyTraceEvent[]): TraceRow[] {
-    return events.map((event, idx) => ({
-        key: `${event.at}-${idx}`,
-        kind: event.kind,
-        toolName: traceEventToolName(event),
-        isToolStart: event.kind === 'tool_start',
-        failed: event.kind === 'tool_end' && event.isError === true,
-        label:
-            event.kind === 'tool_end' && event.isError === true ? 'Tool failed' : TRACE_KIND_LABEL[event.kind],
-        summary: traceEventSummary(event),
-        argsDetail: traceEventArgsDetail(event),
-        outputDetail: traceEventOutputDetail(event),
-        rawDetail: traceEventRawDetail(event),
-    }));
+    return events.map((event, idx) => {
+        const resolved = resolveEventToolCall(event);
+        return {
+            key: `${event.at}-${idx}`,
+            kind: event.kind,
+            toolName: traceEventToolName(event, resolved),
+            isToolStart: event.kind === 'tool_start',
+            failed: event.kind === 'tool_end' && event.isError === true,
+            label:
+                event.kind === 'tool_end' && event.isError === true ? 'Tool failed' : TRACE_KIND_LABEL[event.kind],
+            summary: traceEventSummary(event, resolved),
+            argsDetail: traceEventArgsDetail(event, resolved),
+            outputDetail: traceEventOutputDetail(event),
+            rawDetail: traceEventRawDetail(event),
+        };
+    });
 }
 
 export type TraceSegment = { type: 'group'; toolName: string; rows: TraceRow[] } | { type: 'single'; row: TraceRow };

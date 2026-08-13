@@ -1,5 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+// Mock FhirApi for this test file only. EnvironmentContext.ts's module-level call to
+// new FhirApi(...).getVersion() will use this mock instead of the real FhirApi, preventing
+// the unhandled rejection that occurs when REACT_APP_FHIR_SERVER_URL is undefined in jsdom.
+// vi.mock() is hoisted by Vitest's compiler to the top of the file before any imports,
+// so EnvironmentContext's module-level code will see this mock. This scoping is local to
+// this test file only — no other test files are affected.
+vi.mock('../api/fhirApi', () => ({
+    default: class {
+        getVersion() {
+            return Promise.resolve('4.0.0');
+        }
+    },
+}));
+
 import DocumentViewer from './DocumentViewer';
 import BaseApi from '../api/baseApi';
 

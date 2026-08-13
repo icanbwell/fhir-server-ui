@@ -43,16 +43,16 @@
 }
 
 .dark-mode .ips-narrative-container th {
-  background-color: var(--table-header-bg, #1E2150);
+  background-color: var(--table-header-bg, var(--bwell-dark-mode-paper));
   color: var(--table-header-color, #F7F7FA);
 }
 
 .dark-mode .ips-narrative-container td {
-  border-color: var(--table-border-color, #2A2E63);
+  border-color: var(--table-border-color, var(--bwell-dark-mode-border));
 }
 
 .dark-mode .ips-narrative-container tr:nth-child(even) {
-  background-color: var(--table-stripe-color, #1E2150);
+  background-color: var(--table-stripe-color, var(--bwell-dark-mode-paper));
 }
 
 /* Sections */
@@ -101,7 +101,7 @@
 }
 
 .dark-mode .ips-narrative-container div.section {
-  border-color: var(--section-border-color, #2A2E63);
+  border-color: var(--section-border-color, var(--bwell-dark-mode-border));
 }
 
 /* Narrative spans and emphasis */
@@ -124,7 +124,7 @@
 }
 
 .dark-mode .ips-narrative-container code {
-  background-color: var(--code-bg, #1E2150);
+  background-color: var(--code-bg, var(--bwell-dark-mode-paper));
 }
 
 /* Collapsible sections */

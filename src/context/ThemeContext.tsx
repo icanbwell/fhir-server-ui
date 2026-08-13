@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { alpha, createTheme, lighten, ThemeProvider } from '@mui/material/styles';
+import { alpha, createTheme, darken, lighten, Theme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { getLocalData, setLocalData } from '../utils/localData.utils';
 import { brandColors } from '../theme/brandColors';
@@ -16,6 +16,12 @@ declare module '@mui/material/styles' {
         brand?: typeof brandColors;
     }
 }
+
+// Both MuiTableHead.root and MuiTableCell.head paint the same visual surface
+// (the header row and its cells); derive the shared background once so they
+// can't silently diverge on a future style tweak.
+const getHeaderBackground = (theme: Theme) =>
+    theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.06) : theme.palette.brand.lightGray;
 
 interface ThemeContextType {
     isDarkMode: boolean;
@@ -85,12 +91,15 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                 main: lighten(brandColors.blue, 0.25),
             },
             background: {
-                default: isDarkMode ? '#14162E' : brandColors.lightGray,
-                paper: isDarkMode ? '#1E2150' : brandColors.white,
+                default: isDarkMode ? brandColors.darkModeBackground : brandColors.lightGray,
+                paper: isDarkMode ? brandColors.darkModePaper : brandColors.white,
             },
             text: {
                 primary: isDarkMode ? brandColors.lightGray : brandColors.darkGray,
-                secondary: isDarkMode ? '#A9ACC4' : brandColors.midGray,
+                // midGray (#7F7F7F) alone is ~4.0:1 on white, short of WCAG AA's 4.5:1 for
+                // normal text; darken it slightly so descriptive/secondary text stays AA-safe
+                // without losing the lighter-than-primary hierarchy midGray was chosen for.
+                secondary: isDarkMode ? brandColors.darkModeTextSecondary : darken(brandColors.midGray, 0.15),
             },
             brand: brandColors,
         },
@@ -143,8 +152,7 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
             MuiTableHead: {
                 styleOverrides: {
                     root: ({ theme }) => ({
-                        backgroundColor:
-                            theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.06) : theme.palette.brand.lightGray,
+                        backgroundColor: getHeaderBackground(theme),
                     }),
                 },
             },
@@ -167,8 +175,7 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                         color: theme.palette.text.primary,
                     }),
                     head: ({ theme }) => ({
-                        backgroundColor:
-                            theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.06) : theme.palette.brand.lightGray,
+                        backgroundColor: getHeaderBackground(theme),
                         color: theme.palette.text.primary,
                         fontWeight: 600,
                     }),

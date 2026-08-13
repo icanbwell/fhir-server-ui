@@ -33,6 +33,7 @@ import FileDownload from './FileDownload';
 import type { ColDef, ColGroupDef, ICellRendererParams } from 'ag-grid-community';
 import { useNavigate, useLocation } from 'react-router';
 import { useTheme } from '../context/ThemeContext';
+import { brandColors } from '../theme/brandColors';
 
 ModuleRegistry.registerModules([
     ColumnAutoSizeModule,
@@ -95,14 +96,14 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
     const gridTheme = useMemo(() => {
         if (isDarkMode) {
             return themeBalham.withParams({
-                backgroundColor: '#1E2150',
-                foregroundColor: '#F7F7FA',
-                borderColor: '#2A2E63',
-                accentColor: '#6C60ED',
+                backgroundColor: brandColors.darkModePaper,
+                foregroundColor: brandColors.lightGray,
+                borderColor: brandColors.darkModeBorder,
+                accentColor: brandColors.lilac,
             });
         }
         return themeBalham.withParams({
-            accentColor: '#2E3586',
+            accentColor: brandColors.blue,
         });
     }, [isDarkMode]);
 

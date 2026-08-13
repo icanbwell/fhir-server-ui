@@ -15,4 +15,14 @@ export const brandColors = {
   // states stay visually distinct from the rest of the palette per the brand rule
   // that red is reserved for errors only.
   errorRed: '#D32F2F',
+  // Not defined in the brand guide (light-mode only). Extrapolated dark-mode
+  // surfaces/neutrals kept here as the single source of truth so ThemeContext.tsx,
+  // SpreadsheetViewer.tsx's ag-grid theme, and IPSNarrative.css's dark-mode block
+  // don't each hardcode their own copy.
+  darkModeBackground: '#14162E',
+  darkModePaper: '#1E2150',
+  darkModeBorder: '#2A2E63',
+  darkModeTextSecondary: '#A9ACC4',
+  // Pale green tint of brand `green`, used to highlight "answer"/correct content.
+  highlightGreen: '#EAF7E0',
 } as const;

@@ -12,6 +12,10 @@
   --bwell-mid-gray: #7F7F7F;
   --bwell-light-gray: #F7F7FA;
   --bwell-error-red: #D32F2F;
+  --bwell-dark-mode-background: #14162E;
+  --bwell-dark-mode-paper: #1E2150;
+  --bwell-dark-mode-border: #2A2E63;
+  --bwell-highlight-green: #EAF7E0;
   --font-display: 'Quicksand', 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   --font-body: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -49,7 +53,7 @@ a:not(.MuiButton-root):not(.MuiButtonBase-root):hover {
 /* Format for answer divs */
 .answer {
   color: var(--bwell-dark-blue);
-  background-color: #EAF7E0 !important;
+  background-color: var(--bwell-highlight-green) !important;
 }
 
 .home-row {

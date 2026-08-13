@@ -39,7 +39,7 @@ function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenc
             {isLoading && <CircularProgress size={14} aria-label="Loading count" />}
             {!isLoading && !error && count !== null && (
                 <Typography color="primary" sx={{ textDecoration: 'none' }}>
-                    {atLimit ? '10+' : `(${count})`}
+                    {atLimit ? '(10+)' : `(${count})`}
                 </Typography>
             )}
             <OpenInNewIcon />

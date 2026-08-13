@@ -37,8 +37,11 @@ function isFhirJsonContentType(contentType: string | undefined): boolean {
     return ct.includes('json');
 }
 
-// Requests the FHIR JSON Binary wrapper (`_format=json`) resolved against this page's own
-// origin rather than the configured FHIR server. A cross-origin fetch to the FHIR server needs
+// Requests the FHIR JSON Binary wrapper — both `_format=json` and an explicit
+// `Accept: application/fhir+json` header, since a proxy in this path may honor either one
+// (and without both, a same-origin SPA's history-fallback routing could otherwise hand back
+// its own index.html instead of a 404) — resolved against this page's own origin rather than
+// the configured FHIR server. A cross-origin fetch to the FHIR server needs
 // that server to answer the browser's CORS preflight with the UI's origin allow-listed, which
 // isn't guaranteed — whereas many deployments front the FHIR server with a same-origin reverse
 // proxy for exactly this path, keeping the fetch same-origin and sidestepping CORS entirely.
@@ -55,6 +58,7 @@ async function fetchBinaryViaSameOriginProxy(
     const response = await baseApi.downloadFile(binaryUrl, {
         baseUrlOverride: window.location.origin,
         params: { _format: 'json' },
+        headers: { Accept: 'application/fhir+json' },
     });
     const actualContentType = response.headers['content-type'];
     if (!isFhirJsonContentType(actualContentType)) {

@@ -92,6 +92,9 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
                 } else if (result.reason === 'malformed') {
                     setErrorMessage(`This attachment’s content could not be decoded — it may be corrupted. (${result.detail})`);
                     setRawErrorContent(result.rawContent ?? null);
+                } else if (result.reason === 'network') {
+                    setErrorMessage(`Failed to load this attachment — the request did not complete. (${result.detail})`);
+                    setRawErrorContent(result.rawContent ?? null);
                 } else {
                     setErrorMessage('This attachment has no retrievable content.');
                 }

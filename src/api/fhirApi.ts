@@ -134,6 +134,15 @@ class FhirApi extends BaseApi {
         const url = this.getUrl({ resourceType, queryParameters });
         url.searchParams.set('_elements', 'id');
         url.searchParams.set('_count', String(limit + 1));
+        // An exact `id=<value>` lookup (ReferenceLink's existence check) already narrows to
+        // at most one resource — addMissingRequiredParams' AuditEvent rolling-7-day date
+        // window (meant for list/search defaults) would AND onto it and hide an AuditEvent
+        // older than 7 days behind a false "not found". ReverseReferenceLink's list-count
+        // queries never carry an `id=` param, so they keep the injected window — it has to
+        // match their click-through list's own date-bounded results.
+        if (queryParameters?.some((param) => param.startsWith('id='))) {
+            url.searchParams.delete('date');
+        }
         const { status, json } = await this.getData({ urlString: url.toString(), signal });
         if (!status || status < 200 || status >= 300) {
             return null;

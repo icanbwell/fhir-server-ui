@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import { Typography, Link, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { TBaseResourceProps } from '../types/baseTypes';
 import { TExtension } from '../types/partials/Extension';
 import { IdentifierSystem } from '../utils/identifierSystem';
 import { TReference } from '../types/partials/Reference';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import ReferenceLink from './ReferenceLink';
 
 type TReferenceProps = TBaseResourceProps & {
     reference: any;
@@ -34,24 +34,11 @@ function Reference({ reference: references = [], name, field }: TReferenceProps)
             <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
             {uuidReferences.map((reference: TReference, index: Number) =>
                 reference ? (
-                    <Link
-                        href={`/4_0_0/${reference.reference}`}
+                    <ReferenceLink
                         key={`${index}`}
-                        rel="noopener noreferrer"
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                            textDecoration: 'none',
-                            '&:hover': {
-                                textDecoration: 'underline',
-                            },
-                        }}
-                    >
-                        <Typography>{reference.display || reference.reference}</Typography>
-
-                        <OpenInNewIcon />
-                    </Link>
+                        reference={String(reference.reference)}
+                        display={reference.display ? String(reference.display) : undefined}
+                    />
                 ) : null
             )}
         </Box>

@@ -88,12 +88,39 @@ export function traceEventHint(event: BaileyTraceEvent): string {
     }
 }
 
+export function formatTraceTime(at: number): string {
+    const d = new Date(at);
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    const ss = String(d.getSeconds()).padStart(2, '0');
+    const ms = String(d.getMilliseconds()).padStart(3, '0');
+    return `${hh}:${mm}:${ss}.${ms}`;
+}
+
+export function formatTraceGap(ms: number): string {
+    if (ms <= 0) {
+        return '+0ms';
+    }
+    if (ms < 1000) {
+        return `+${Math.round(ms)}ms`;
+    }
+    const totalSeconds = ms / 1000;
+    if (totalSeconds < 60) {
+        return `+${totalSeconds.toFixed(1)}s`;
+    }
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.round(totalSeconds % 60);
+    return `+${minutes}m${String(seconds).padStart(2, '0')}s`;
+}
+
 export interface TraceRow {
     key: string;
     kind: BaileyTraceEvent['kind'];
     toolName: string | null;
     isToolStart: boolean;
     failed: boolean;
+    time: string;
+    gapMs: number;
     label: string;
     summary: string;
     argsDetail: string | null;
@@ -101,15 +128,20 @@ export interface TraceRow {
     rawDetail: string | null;
 }
 
-export function toTraceRows(events: BaileyTraceEvent[]): TraceRow[] {
+// `sentAt`, when given, is the request's send timestamp — used as the first row's gap baseline
+// so it reads as "time from request sent to first event" instead of always showing +0ms.
+export function toTraceRows(events: BaileyTraceEvent[], sentAt?: number): TraceRow[] {
     return events.map((event, idx) => {
         const resolved = resolveEventToolCall(event);
+        const prevAt = idx === 0 ? (sentAt ?? event.at) : events[idx - 1].at;
         return {
             key: `${event.at}-${idx}`,
             kind: event.kind,
             toolName: traceEventToolName(event, resolved),
             isToolStart: event.kind === 'tool_start',
             failed: event.kind === 'tool_end' && event.isError === true,
+            time: formatTraceTime(event.at),
+            gapMs: event.at - prevAt,
             label:
                 event.kind === 'tool_end' && event.isError === true ? 'Tool failed' : TRACE_KIND_LABEL[event.kind],
             summary: traceEventSummary(event, resolved),
@@ -118,6 +150,25 @@ export function toTraceRows(events: BaileyTraceEvent[]): TraceRow[] {
             rawDetail: traceEventRawDetail(event),
         };
     });
+}
+
+// A short one-line digest ("3 tool calls, 1 failed · 2 stream errors") shown next to the
+// collapsed "Show details" toggle, so there's a hint of what's inside before opening it.
+export function traceSummaryLine(events: BaileyTraceEvent[]): string {
+    const toolEnds = events.filter((e) => e.kind === 'tool_end');
+    const failedTools = toolEnds.filter((e) => e.kind === 'tool_end' && e.isError);
+    const errors = events.filter((e) => e.kind === 'error');
+    const parts: string[] = [];
+    if (toolEnds.length > 0) {
+        parts.push(
+            `${toolEnds.length} tool call${toolEnds.length === 1 ? '' : 's'}` +
+                (failedTools.length > 0 ? `, ${failedTools.length} failed` : '')
+        );
+    }
+    if (errors.length > 0) {
+        parts.push(`${errors.length} stream error${errors.length === 1 ? '' : 's'}`);
+    }
+    return parts.join(' · ');
 }
 
 export type TraceSegment = { type: 'group'; toolName: string; rows: TraceRow[] } | { type: 'single'; row: TraceRow };

@@ -38,6 +38,25 @@ export interface BaileyMessage {
     streaming?: boolean;
 }
 
+export interface BaileyStreamStats {
+    chunkCount: number;
+    firstChunkAt: number | null;
+    lastChunkAt: number | null;
+}
+
+// Mirrors baileyai-skills-service's frontend/src/components/chat/useChatStream.ts LastRequest —
+// captures what was actually sent/received on the most recent turn so the trace panel's request
+// details view has something to show developers debugging a turn, independent of the trimmed-down
+// chat-user-facing trace events.
+export interface BaileyLastRequest {
+    model: string;
+    systemPrompt: string;
+    messages: BaileyChatInputMessage[];
+    sentAt: number;
+    streamStats: BaileyStreamStats;
+    response?: { content: string };
+}
+
 // Mirrors baileyai-skills-service's frontend/src/api/chat.ts TraceEvent — every SSE event that
 // isn't assistant text becomes one of these, tracked separately from BaileyMessage (not attached
 // to a specific message) so the chat UI can render tool calls in a details panel instead of

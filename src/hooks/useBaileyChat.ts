@@ -5,11 +5,12 @@ import BaileyApi from '../api/baileyApi';
 import { parseSseFrames } from '../utils/baileySse';
 import { extractPseudoToolCalls } from '../utils/baileyPseudoToolCalls';
 import { BAILEY_MCP_SERVER_LABEL, BAILEY_SYSTEM_INSTRUCTIONS } from '../constants/baileyConstants';
-import { BaileyMessage, BaileyStreamEvent, BaileyTraceEvent } from '../types/baileyChat';
+import { BaileyLastRequest, BaileyMessage, BaileyStreamEvent, BaileyTraceEvent } from '../types/baileyChat';
 
 export interface UseBaileyChatResult {
     messages: BaileyMessage[];
     traceEvents: BaileyTraceEvent[];
+    lastRequest: BaileyLastRequest | null;
     status: 'idle' | 'streaming' | 'error';
     error: string | null;
     send: (text: string) => void;
@@ -46,6 +47,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
 
     const [messages, setMessages] = useState<BaileyMessage[]>([]);
     const [traceEvents, setTraceEvents] = useState<BaileyTraceEvent[]>([]);
+    const [lastRequest, setLastRequest] = useState<BaileyLastRequest | null>(null);
     const [status, setStatus] = useState<'idle' | 'streaming' | 'error'>('idle');
     const [error, setError] = useState<string | null>(null);
 
@@ -70,6 +72,12 @@ const useBaileyChat = (): UseBaileyChatResult => {
     // assistantId is done being written to.
     const pseudoToolStateRef = useRef<Map<string, { raw: string; emittedCount: number }>>(new Map());
 
+    // Tracks each assistant message's latest cleaned content by id, so runTurn can populate
+    // lastRequest's `response` once the turn finishes without depending on messagesRef (which
+    // only syncs on the next render via the effect above, too late for use inside the same
+    // synchronous try block). Cleared in runTurn's finally alongside pseudoToolStateRef.
+    const finalContentRef = useRef<Map<string, string>>(new Map());
+
     // Returns true when the event actually contributed something visible to the assistant
     // turn (message text or a trace event), so the caller can tell "streamed a real answer"
     // from "parsed nothing at all". Ported from baileyai-skills-service's
@@ -92,6 +100,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
             state.emittedCount = matches.length;
             pseudoToolStateRef.current.set(assistantId, state);
 
+            finalContentRef.current.set(assistantId, cleanedText);
             setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, content: cleanedText } : m)));
             if (newMatches.length > 0) {
                 const at = Date.now();
@@ -167,6 +176,15 @@ const useBaileyChat = (): UseBaileyChatResult => {
             const assistantId = crypto.randomUUID();
             setMessages((prev) => [...prev, { id: assistantId, role: 'assistant', content: '', streaming: true }]);
 
+            const sentAt = Date.now();
+            setLastRequest({
+                model: baileyModel,
+                systemPrompt: BAILEY_SYSTEM_INSTRUCTIONS,
+                messages: history.map((m) => ({ role: m.role, content: m.content })),
+                sentAt,
+                streamStats: { chunkCount: 0, firstChunkAt: null, lastChunkAt: null },
+            });
+
             const api = new BaileyApi({ fhirUrl: baileyUrl, setUserDetails });
             const controller = new AbortController();
             abortRef.current = controller;
@@ -209,6 +227,20 @@ const useBaileyChat = (): UseBaileyChatResult => {
                         const { events, remainder, done } = parseSseFrames(buffer);
                         buffer = remainder;
                         processFrames(events, done);
+
+                        const chunkAt = Date.now();
+                        setLastRequest((prev) =>
+                            prev && prev.sentAt === sentAt
+                                ? {
+                                      ...prev,
+                                      streamStats: {
+                                          chunkCount: prev.streamStats.chunkCount + 1,
+                                          firstChunkAt: prev.streamStats.firstChunkAt ?? chunkAt,
+                                          lastChunkAt: chunkAt,
+                                      },
+                                  }
+                                : prev
+                        );
                     },
                 });
 
@@ -238,6 +270,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
                     return;
                 }
                 setStatus('idle');
+                setLastRequest((prev) =>
+                    prev && prev.sentAt === sentAt
+                        ? { ...prev, response: { content: finalContentRef.current.get(assistantId) ?? '' } }
+                        : prev
+                );
             } catch (err: any) {
                 if (err?.name === 'AbortError') {
                     setStatus('idle');
@@ -245,9 +282,10 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 }
                 reportError(err?.message || 'Bailey request failed.');
             } finally {
-                // This assistantId won't receive any more deltas — drop its entry so the map
-                // doesn't grow for the lifetime of the session.
+                // This assistantId won't receive any more deltas — drop its entries so these maps
+                // don't grow for the lifetime of the session.
                 pseudoToolStateRef.current.delete(assistantId);
+                finalContentRef.current.delete(assistantId);
                 // Drop the assistant placeholder entirely unless it actually accumulated text
                 // (errored/aborted/tool-only turns are dropped even if some trace activity — a
                 // tool call, a progress event — happened first; that activity alone doesn't mean
@@ -307,7 +345,7 @@ const useBaileyChat = (): UseBaileyChatResult => {
 
     const clearTrace = useCallback(() => setTraceEvents([]), []);
 
-    return { messages, traceEvents, status, error, send, stop, retryLast, clearTrace };
+    return { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace };
 };
 
 export default useBaileyChat;

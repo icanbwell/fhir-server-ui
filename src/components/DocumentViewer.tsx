@@ -60,14 +60,16 @@ const extractAttachments = (resource: FhirResource, config: TAttachmentFieldConf
     if (!raw) {
         return [];
     }
-    switch (config.shape) {
-        case 'wrapped-array':
-            return (raw as Array<{ attachment: TAttachment }>).map((entry) => entry.attachment);
-        case 'bare-array':
-            return raw as TAttachment[];
-        case 'single':
-            return [raw as TAttachment];
+    if (config.shape === 'single') {
+        return [raw as TAttachment];
     }
+    // Defensive: 0..* fields (photo, presentedForm) are occasionally sent by non-conformant
+    // servers as a single object instead of an array. Normalize either shape to an array so
+    // the render below (which always maps over an array) never throws.
+    const list = Array.isArray(raw) ? raw : [raw];
+    return config.shape === 'wrapped-array'
+        ? (list as Array<{ attachment: TAttachment }>).map((entry) => entry.attachment)
+        : (list as TAttachment[]);
 };
 
 const DocumentViewer: React.FC<DocumentViewerProps> = ({ relativeUrl, contentIndex }) => {
@@ -150,7 +152,7 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ relativeUrl, contentInd
         <Box>
             <Typography variant="h5" sx={{ mb: 2 }}>
                 {`${resource.resourceType}/${resource.id}`}
-                {isolated ? ` — content ${contentIndex! + 1} of ${attachments.length}` : ''}
+                {isolated && attachments.length > 1 ? ` — content ${contentIndex! + 1} of ${attachments.length}` : ''}
             </Typography>
             {attachments.length === 0 && (
                 <Alert severity="warning">This {resource.resourceType} has no attachment entries.</Alert>

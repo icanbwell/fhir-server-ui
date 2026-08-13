@@ -1,4 +1,5 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import Attachment from './Attachment';
@@ -10,35 +11,45 @@ const renderAttachment = (props: React.ComponentProps<typeof Attachment>) =>
         </MemoryRouter>
     );
 
+// The Document Viewer link lives inside a collapsed MUI Accordion. MUI's Collapse applies
+// visibility: hidden to collapsed content, which removes it from the accessibility tree — so
+// asserting via screen.getByRole only proves the link is actually reachable by a user once the
+// accordion's summary (labeled "Content: <contentType>") has been expanded.
+const expandAccordion = async () => {
+    await userEvent.click(screen.getByText(/^Content:/));
+};
+
 describe('Attachment', () => {
-    it('renders a "View in Document Viewer" link for a supported resource type', () => {
-        const { container } = renderAttachment({
+    it('renders a "View in Document Viewer" link for a supported resource type', async () => {
+        renderAttachment({
             attachment: { contentType: 'application/pdf', title: 'Report' },
             name: 'Presented Form',
             resourceType: 'DiagnosticReport',
             id: 'dr-1',
         });
+        await expandAccordion();
 
-        const link = container.querySelector('a[href="/document-viewer/4_0_0/DiagnosticReport/dr-1"]');
+        const link = screen.getByRole('link', { name: /view/i });
         expect(link).toBeInTheDocument();
-        expect(link).toHaveAttribute('aria-label', 'View in Document Viewer');
+        expect(link).toHaveAttribute('href', '/document-viewer/4_0_0/DiagnosticReport/dr-1');
     });
 
-    it('omits the content index when there is only one attachment entry', () => {
-        const { container } = renderAttachment({
+    it('omits the content index when there is only one attachment entry', async () => {
+        renderAttachment({
             attachment: { contentType: 'image/png', title: 'Photo' },
             name: 'Photo',
             resourceType: 'Patient',
             id: 'pat-1',
         });
+        await expandAccordion();
 
-        const link = container.querySelector('a[href="/document-viewer/4_0_0/Patient/pat-1"]');
+        const link = screen.getByRole('link', { name: /view/i });
         expect(link).toBeInTheDocument();
-        expect(link).toHaveAttribute('aria-label', 'View in Document Viewer');
+        expect(link).toHaveAttribute('href', '/document-viewer/4_0_0/Patient/pat-1');
     });
 
-    it('includes a per-entry content index when there are multiple attachment entries', () => {
-        const { container } = renderAttachment({
+    it('includes a per-entry content index when there are multiple attachment entries', async () => {
+        renderAttachment({
             attachment: [
                 { contentType: 'image/png', title: 'Photo 1' },
                 { contentType: 'image/png', title: 'Photo 2' },
@@ -47,24 +58,25 @@ describe('Attachment', () => {
             resourceType: 'Practitioner',
             id: 'prac-1',
         });
+        const summaries = screen.getAllByText(/^Content:/);
+        await userEvent.click(summaries[0]);
+        await userEvent.click(summaries[1]);
 
-        const link0 = container.querySelector('a[href="/document-viewer/4_0_0/Practitioner/prac-1/0"]');
-        const link1 = container.querySelector('a[href="/document-viewer/4_0_0/Practitioner/prac-1/1"]');
-        expect(link0).toBeInTheDocument();
-        expect(link1).toBeInTheDocument();
-        expect(link0).toHaveAttribute('aria-label', 'View in Document Viewer');
-        expect(link1).toHaveAttribute('aria-label', 'View in Document Viewer');
+        const links = screen.getAllByRole('link', { name: /view/i });
+        expect(links).toHaveLength(2);
+        expect(links[0]).toHaveAttribute('href', '/document-viewer/4_0_0/Practitioner/prac-1/0');
+        expect(links[1]).toHaveAttribute('href', '/document-viewer/4_0_0/Practitioner/prac-1/1');
     });
 
-    it('renders no Document Viewer link for a resource type outside the supported list', () => {
-        const { container } = renderAttachment({
+    it('renders no Document Viewer link for a resource type outside the supported list', async () => {
+        renderAttachment({
             attachment: { contentType: 'text/plain' },
             name: 'Note',
             resourceType: 'Observation',
             id: 'obs-1',
         });
+        await expandAccordion();
 
-        const links = container.querySelectorAll('a[aria-label="View in Document Viewer"]');
-        expect(links).toHaveLength(0);
+        expect(screen.queryByRole('link', { name: /view/i })).not.toBeInTheDocument();
     });
 });

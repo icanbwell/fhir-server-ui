@@ -15,7 +15,9 @@ import DocumentViewerLink, { TDocumentViewerResourceType } from './DocumentViewe
 // also viewable via the Document Viewer. DocumentReference.content and Binary go through their
 // own dedicated partial/route instead (see DocumentContent.tsx), so they're deliberately not
 // listed here — this partial never receives those two.
-const DOCUMENT_VIEWER_RESOURCE_TYPES: ReadonlyArray<TDocumentViewerResourceType> = [
+const DOCUMENT_VIEWER_RESOURCE_TYPES: ReadonlyArray<
+    Exclude<TDocumentViewerResourceType, 'Binary' | 'DocumentReference'>
+> = [
     'DiagnosticReport',
     'Media',
     'Patient',
@@ -37,13 +39,14 @@ const Attachment = ({ attachment, name, resourceType, id }: TAttachmentProps) =>
     return Array.isArray(attachment) ? attachment : [attachment];
   }, [attachment]);
 
-  const documentViewerResourceType = DOCUMENT_VIEWER_RESOURCE_TYPES.find(
-    (supported) => supported === (resourceType as TDocumentViewerResourceType)
-  ) as TDocumentViewerResourceType | undefined;
-
   if (!attachment) {
     return <></>;
   }
+
+  const documentViewerResourceType = DOCUMENT_VIEWER_RESOURCE_TYPES.find(
+    (supported) => supported === String(resourceType)
+  ) as TDocumentViewerResourceType | undefined;
+
   const isTextContentType = (contentType: String|undefined) => {
     if (!contentType) {
       return false;

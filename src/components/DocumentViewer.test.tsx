@@ -92,6 +92,35 @@ describe('DocumentViewer', () => {
         expect(screen.getByText('Recording')).toBeInTheDocument();
     });
 
+    it('renders a bare-array field sent by a non-conformant server as a single object, not an array', async () => {
+        vi.spyOn(BaseApi.prototype, 'getData').mockResolvedValue({
+            status: 200,
+            incomplete: false,
+            json: {
+                resourceType: 'Patient',
+                id: 'pat-1',
+                photo: { contentType: 'image/png', data: 'aGVsbG8=', title: 'Solo photo' },
+            },
+        });
+
+        render(<DocumentViewer relativeUrl="/4_0_0/Patient/pat-1" />);
+
+        expect(await screen.findByText('Solo photo')).toBeInTheDocument();
+    });
+
+    it('omits the "content N of M" suffix for a single-attachment field at the real route default (contentIndex=0)', async () => {
+        vi.spyOn(BaseApi.prototype, 'getData').mockResolvedValue({
+            status: 200,
+            incomplete: false,
+            json: { resourceType: 'Media', id: 'media-1', content: textAttachment('Recording') },
+        });
+
+        render(<DocumentViewer relativeUrl="/4_0_0/Media/media-1" contentIndex={0} />);
+
+        expect(await screen.findByText('Media/media-1')).toBeInTheDocument();
+        expect(screen.getByText('Media/media-1')).not.toHaveTextContent(/content 1 of 1/);
+    });
+
     it('shows an error for a resource type the Document Viewer does not support', async () => {
         vi.spyOn(BaseApi.prototype, 'getData').mockResolvedValue({
             status: 200,

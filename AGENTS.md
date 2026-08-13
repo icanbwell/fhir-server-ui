@@ -717,3 +717,22 @@ Open the Karate summary report:
 
 ```bash
 open build/karate-reports/karate-summary.html
+```
+
+---
+
+## Commit Messages & PR Titles
+
+Every commit message, and the PR title, must begin with a Jira issue key (e.g. `PHR-1234`) — or one of the allowed exceptions: `Bump`, `Merge`, `Revert`, `Reapply`, `build(deps): bump`. This is enforced by `.github/workflows/check-commit-message.yml` (`gsactions/commit-message-checker`) on every PR push and on push to `main`/`releases/*`; an unprefixed commit or PR title fails the "Check Commit Message" CI check and blocks merge.
+
+PRs in this repo are typically squash-merged, so the commit landing on `main` is `<PR title> (#N)` — the **PR title** needs the ticket key, not just the individual commits.
+
+Jira project for this repo: **PHR** (`https://icanbwell.atlassian.net`).
+
+If a commit or PR was already pushed without the prefix, fix it after the fact:
+
+```bash
+git commit --amend   # or rebase -i for multiple commits; add the "PHR-1234 " prefix
+git push --force-with-lease origin <branch>
+gh pr edit <PR#> --title "PHR-1234 <original title>"
+```

@@ -240,6 +240,13 @@ const CONTENT_TYPE_EXTENSIONS: Record<string, string> = {
     'image/jpeg': 'jpg',
     'image/gif': 'gif',
     'application/json': 'json',
+    'video/mp4': 'mp4',
+    'video/webm': 'webm',
+    'video/quicktime': 'mov',
+    'audio/mpeg': 'mp3',
+    'audio/mp4': 'm4a',
+    'audio/wav': 'wav',
+    'audio/webm': 'weba',
 };
 
 export function extensionForContentType(contentType: string | undefined): string {

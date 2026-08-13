@@ -124,8 +124,12 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
 
     // Object URL for image/video/audio preview — must be revoked on cleanup or attachment
     // change to avoid leaking memory across repeated views. PDFs render directly from the
-    // Blob via react-pdf/pdf.js, which doesn't need one.
+    // Blob via react-pdf/pdf.js, which doesn't need one. Also clears any previous "can't
+    // play this" state (matching the inline setRtfError(null) convention in the RTF effect
+    // below) so a media error from a prior attachment doesn't linger after switching to a
+    // playable one.
     useEffect(() => {
+        setMediaError(null);
         const needsObjectUrl =
             contentType.startsWith('image/') || contentType.startsWith('video/') || contentType.startsWith('audio/');
         if (!blob || !needsObjectUrl) {
@@ -135,12 +139,6 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         const url = URL.createObjectURL(blob);
         setObjectUrl(url);
         return () => URL.revokeObjectURL(url);
-    }, [blob, contentType]);
-
-    // Clears any previous "can't play this" state when a new attachment loads, so a media
-    // error from a prior attachment doesn't linger after switching to a playable one.
-    useEffect(() => {
-        setMediaError(null);
     }, [blob, contentType]);
 
     // Decoded text for html preview, and as the fallback render for every content type
@@ -200,6 +198,22 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         saveAs(blob, filename);
     };
 
+    // Shared shape for the video/* and audio/* branches below — same objectUrl/mediaError
+    // handling either way, differing only in tag, layout, and the format name in the
+    // fallback message.
+    const renderMediaElement = (tag: 'video' | 'audio', sx: object, formatLabel: string) =>
+        mediaError ? (
+            <Alert severity="warning">{mediaError}</Alert>
+        ) : (
+            <Box
+                component={tag}
+                controls
+                src={objectUrl ?? undefined}
+                sx={sx}
+                onError={() => setMediaError(`This browser cannot play this ${formatLabel} format — use Download instead.`)}
+            />
+        );
+
     const renderPreview = () => {
         if (!blob) {
             return null;
@@ -223,30 +237,10 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
             return <Box component="img" src={objectUrl} sx={{ maxWidth: '100%' }} />;
         }
         if (contentType.startsWith('video/') && objectUrl) {
-            return mediaError ? (
-                <Alert severity="warning">{mediaError}</Alert>
-            ) : (
-                <Box
-                    component="video"
-                    controls
-                    src={objectUrl}
-                    sx={{ maxWidth: '100%' }}
-                    onError={() => setMediaError('This browser cannot play this video format — use Download instead.')}
-                />
-            );
+            return renderMediaElement('video', { maxWidth: '100%' }, 'video');
         }
         if (contentType.startsWith('audio/') && objectUrl) {
-            return mediaError ? (
-                <Alert severity="warning">{mediaError}</Alert>
-            ) : (
-                <Box
-                    component="audio"
-                    controls
-                    src={objectUrl}
-                    sx={{ width: '100%' }}
-                    onError={() => setMediaError('This browser cannot play this audio format — use Download instead.')}
-                />
-            );
+            return renderMediaElement('audio', { width: '100%' }, 'audio');
         }
         if (contentType === 'text/rtf' || contentType === 'application/rtf') {
             return rtfError ? <Alert severity="warning">{rtfError}</Alert> : <div ref={rtfContainerRef} />;

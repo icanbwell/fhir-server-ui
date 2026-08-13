@@ -14,6 +14,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import SendIcon from '@mui/icons-material/Send';
 import PreJson from './PreJson';
 import KeyValueRows, { KeyValueRow } from './KeyValueRows';
@@ -65,6 +66,7 @@ const FhirRequestConsole = ({
     readOnlyHeaderRows,
     readOnlyHeaderRowsLabel,
 }: FhirRequestConsoleProps) => {
+    const theme = useTheme();
     const [customHeaders, setCustomHeaders] = useState<KeyValueRow[]>([{ key: '', value: '' }]);
     const [activeRequestTab, setActiveRequestTab] = useState<'body' | 'headers'>('body');
     const [responseJson, setResponseJson] = useState<object | null>(null);
@@ -208,11 +210,12 @@ const FhirRequestConsole = ({
 
     const getMethodColor = (m: HttpMethod): string => {
         switch (m) {
-            case 'GET': return '#4caf50';
-            case 'POST': return '#ff9800';
-            case 'PUT': return '#2196f3';
-            case 'PATCH': return '#9c27b0';
-            case 'DELETE': return '#f44336';
+            case 'GET': return theme.palette.primary.main;
+            case 'POST': return theme.palette.success.main;
+            case 'PUT': return theme.palette.warning.main;
+            case 'PATCH': return theme.palette.secondary.main;
+            // DELETE is destructive, so red is an appropriate use per the brand guide's error/destructive exception.
+            case 'DELETE': return theme.palette.error.main;
         }
     };
 

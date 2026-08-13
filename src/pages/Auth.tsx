@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router';
 import { getLocalData, setLocalData } from '../utils/localData.utils';
 import UserContext from '../context/UserContext';
@@ -146,7 +147,7 @@ const Auth = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return <>{error ? <div style={{ color: 'red' }}>{error}</div> : <>Authenticating...</>}</>;
+    return <>{error ? <Typography color="error.main">{error}</Typography> : <>Authenticating...</>}</>;
 };
 
 export default Auth;

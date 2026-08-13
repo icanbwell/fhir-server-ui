@@ -1345,10 +1345,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/roboto@npm:^5.2.10":
+"@fontsource/open-sans@npm:^5.3.0":
   version: 5.3.0
-  resolution: "@fontsource/roboto@npm:5.3.0"
-  checksum: 10c0/68420d2c669ba05f0ea466343151c6d2efff85b05cedbf0f990c58635d86035cae5e7c4904db9abc7b9fd21c5ad179788243ec9dff0c30dfab90679ae2d226f9
+  resolution: "@fontsource/open-sans@npm:5.3.0"
+  checksum: 10c0/c52a583617187cb731d2606b7f22337168db055df7600f79ad42a37d44764065ff1fe060069467c43a086296f43a6ffc0328dd2c8031c459bfb60d253f2522d6
+  languageName: node
+  linkType: hard
+
+"@fontsource/quicksand@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource/quicksand@npm:5.3.0"
+  checksum: 10c0/54811eca33e5c7a1d945edffcf5fc9f74a822e2e38c703bd70a26af7f885bfdf6e139457a67133fa661fdf3e1fb41b0afa06ab53e0fa206fb4279f9f6ced7e06
   languageName: node
   linkType: hard
 
@@ -4386,7 +4393,8 @@ __metadata:
     "@cucumber/cucumber": "npm:^13.2.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
-    "@fontsource/roboto": "npm:^5.2.10"
+    "@fontsource/open-sans": "npm:^5.3.0"
+    "@fontsource/quicksand": "npm:^5.3.0"
     "@mui/icons-material": "npm:^9.0.1"
     "@mui/material": "npm:^9.0.1"
     "@mui/x-date-pickers": "npm:^9.3.0"

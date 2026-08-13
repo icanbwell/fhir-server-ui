@@ -8,6 +8,7 @@ import { HttpMethod, TRequestInfo } from '../context/LastRequestContext';
 interface GetDataParams {
     urlString: string;
     params?: any;
+    signal?: AbortSignal;
 }
 
 interface RequestParams {
@@ -313,7 +314,7 @@ class BaseApi {
     }
 
     async getData(
-        { urlString, params }: GetDataParams,
+        { urlString, params, signal }: GetDataParams,
         options?: {
             onChunk?: (chunk: Uint8Array) => void;
             onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
@@ -323,6 +324,7 @@ class BaseApi {
             method: 'GET',
             urlString,
             params,
+            signal,
             onChunk: options?.onChunk,
             onProgress: options?.onProgress,
         });

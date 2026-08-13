@@ -1,7 +1,27 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { alpha, createTheme, darken, lighten, Theme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { getLocalData, setLocalData } from '../utils/localData.utils';
+import { brandColors } from '../theme/brandColors';
+
+// b.well Brand Style Guide, section 3.1: Quicksand for display/headings, Open Sans for everything else.
+const openSansStack = '"Open Sans", "Helvetica Neue", Arial, sans-serif';
+const quicksandStack = '"Quicksand", "Open Sans", "Helvetica Neue", Arial, sans-serif';
+
+declare module '@mui/material/styles' {
+    interface Palette {
+        brand: typeof brandColors;
+    }
+    interface PaletteOptions {
+        brand?: typeof brandColors;
+    }
+}
+
+// Both MuiTableHead.root and MuiTableCell.head paint the same visual surface
+// (the header row and its cells); derive the shared background once so they
+// can't silently diverge on a future style tweak.
+const getHeaderBackground = (theme: Theme) =>
+    theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.06) : theme.palette.brand.lightGray;
 
 interface ThemeContextType {
     isDarkMode: boolean;
@@ -50,155 +70,191 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
             primary: {
-                main: '#1976d2',
+                main: brandColors.blue,
+                dark: brandColors.darkBlue,
             },
             secondary: {
-                main: '#dc004e',
+                main: brandColors.lilac,
+            },
+            success: {
+                main: brandColors.green,
+            },
+            warning: {
+                main: brandColors.orange,
+            },
+            error: {
+                main: brandColors.errorRed,
+            },
+            // Not a distinct brand color; the guide has no "info" swatch, so this is a
+            // lightened tint of brand Blue to stay in-family rather than MUI's stock blue.
+            info: {
+                main: lighten(brandColors.blue, 0.25),
             },
             background: {
-                default: isDarkMode ? '#121212' : '#fafafa',
-                paper: isDarkMode ? '#1e1e1e' : '#ffffff',
+                default: isDarkMode ? brandColors.darkModeBackground : brandColors.lightGray,
+                paper: isDarkMode ? brandColors.darkModePaper : brandColors.white,
             },
+            text: {
+                primary: isDarkMode ? brandColors.lightGray : brandColors.darkGray,
+                // midGray (#7F7F7F) alone is ~4.0:1 on white, short of WCAG AA's 4.5:1 for
+                // normal text; darken it slightly so descriptive/secondary text stays AA-safe
+                // without losing the lighter-than-primary hierarchy midGray was chosen for.
+                secondary: isDarkMode ? brandColors.darkModeTextSecondary : darken(brandColors.midGray, 0.15),
+            },
+            brand: brandColors,
+        },
+        typography: {
+            fontFamily: openSansStack,
+            fontWeightLight: 300,
+            fontWeightRegular: 400,
+            fontWeightMedium: 600,
+            fontWeightBold: 700,
+            h1: { fontFamily: quicksandStack, fontWeight: 700 },
+            h2: { fontFamily: quicksandStack, fontWeight: 700 },
+            h3: { fontFamily: quicksandStack, fontWeight: 700 },
+            h4: { fontFamily: quicksandStack, fontWeight: 600 },
+            h5: { fontFamily: quicksandStack, fontWeight: 600 },
+            h6: { fontFamily: quicksandStack, fontWeight: 600 },
+            subtitle1: { fontFamily: quicksandStack, fontWeight: 400 },
+            subtitle2: { fontFamily: quicksandStack, fontWeight: 400 },
+            button: { fontWeight: 600, textTransform: 'none' },
         },
         components: {
             // Customize components for better dark mode support
             MuiAppBar: {
                 styleOverrides: {
-                    root: {
-                        backgroundColor: isDarkMode ? '#1e1e1e' : '#1976d2',
-                    },
+                    root: ({ theme }) => ({
+                        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.primary.main,
+                    }),
                 },
             },
             MuiCard: {
                 styleOverrides: {
-                    root: {
-                        backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-                    },
+                    root: ({ theme }) => ({
+                        backgroundColor: theme.palette.background.paper,
+                    }),
                 },
             },
             MuiPaper: {
                 styleOverrides: {
-                    root: {
-                        backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-                    },
+                    root: ({ theme }) => ({
+                        backgroundColor: theme.palette.background.paper,
+                    }),
                 },
             },
             MuiTableContainer: {
                 styleOverrides: {
-                    root: {
-                        backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-                    },
+                    root: ({ theme }) => ({
+                        backgroundColor: theme.palette.background.paper,
+                    }),
                 },
             },
             MuiTableHead: {
                 styleOverrides: {
-                    root: {
-                        backgroundColor: isDarkMode ? '#2d2d2d' : '#f5f5f5',
-                    },
+                    root: ({ theme }) => ({
+                        backgroundColor: getHeaderBackground(theme),
+                    }),
                 },
             },
             MuiTableRow: {
                 styleOverrides: {
-                    root: {
+                    root: ({ theme }) => ({
                         '&:nth-of-type(odd)': {
-                            backgroundColor: isDarkMode ? '#1a1a1a' : '#f9f9f9',
-                        },
-                        '&:nth-of-type(even)': {
-                            backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
+                            backgroundColor: alpha(theme.palette.text.primary, 0.03),
                         },
                         '&:hover': {
-                            backgroundColor: isDarkMode ? '#2d2d2d' : '#f0f0f0',
+                            backgroundColor: alpha(theme.palette.text.primary, 0.06),
                         },
-                    },
+                    }),
                 },
             },
             MuiTableCell: {
                 styleOverrides: {
-                    root: {
-                        borderBottom: isDarkMode ? '1px solid #333' : '1px solid #e0e0e0',
-                        color: isDarkMode ? '#ffffff' : '#000000',
-                    },
-                    head: {
-                        backgroundColor: isDarkMode ? '#2d2d2d' : '#f5f5f5',
-                        color: isDarkMode ? '#ffffff' : '#000000',
+                    root: ({ theme }) => ({
+                        borderBottom: `1px solid ${theme.palette.divider}`,
+                        color: theme.palette.text.primary,
+                    }),
+                    head: ({ theme }) => ({
+                        backgroundColor: getHeaderBackground(theme),
+                        color: theme.palette.text.primary,
                         fontWeight: 600,
-                    },
+                    }),
                 },
             },
             MuiTextField: {
                 styleOverrides: {
-                    root: {
+                    root: ({ theme }) => ({
                         '& .MuiOutlinedInput-root': {
-                            backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
+                            backgroundColor: theme.palette.background.paper,
                             '& fieldset': {
-                                borderColor: isDarkMode ? '#444' : '#e0e0e0',
+                                borderColor: theme.palette.divider,
                             },
                             '&:hover fieldset': {
-                                borderColor: isDarkMode ? '#666' : '#b0b0b0',
+                                borderColor: theme.palette.text.secondary,
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#1976d2',
+                                borderColor: theme.palette.primary.main,
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: isDarkMode ? '#ffffff' : '#000000',
+                            color: theme.palette.text.primary,
                         },
                         '& .MuiOutlinedInput-input': {
-                            color: isDarkMode ? '#ffffff' : '#000000',
+                            color: theme.palette.text.primary,
                         },
-                    },
+                    }),
                 },
             },
             MuiFormControl: {
                 styleOverrides: {
-                    root: {
+                    root: ({ theme }) => ({
                         '& .MuiOutlinedInput-root': {
-                            backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
+                            backgroundColor: theme.palette.background.paper,
                             '& fieldset': {
-                                borderColor: isDarkMode ? '#444' : '#e0e0e0',
+                                borderColor: theme.palette.divider,
                             },
                             '&:hover fieldset': {
-                                borderColor: isDarkMode ? '#666' : '#b0b0b0',
+                                borderColor: theme.palette.text.secondary,
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#1976d2',
+                                borderColor: theme.palette.primary.main,
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: isDarkMode ? '#ffffff' : '#000000',
+                            color: theme.palette.text.primary,
                         },
                         '& .MuiOutlinedInput-input': {
-                            color: isDarkMode ? '#ffffff' : '#000000',
+                            color: theme.palette.text.primary,
                         },
-                    },
+                    }),
                 },
             },
             MuiButton: {
                 styleOverrides: {
-                    root: {
+                    root: ({ theme }) => ({
                         '&.MuiButton-outlined': {
-                            borderColor: isDarkMode ? '#444' : '#e0e0e0',
-                            color: isDarkMode ? '#ffffff' : '#1976d2',
+                            borderColor: theme.palette.divider,
+                            color: theme.palette.primary.main,
                             '&:hover': {
-                                borderColor: isDarkMode ? '#666' : '#b0b0b0',
-                                backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.04)' : 'rgba(25, 118, 210, 0.04)',
+                                borderColor: theme.palette.text.secondary,
+                                backgroundColor: alpha(theme.palette.primary.main, 0.04),
                             },
                         },
-                    },
+                    }),
                 },
             },
             MuiLink: {
                 styleOverrides: {
-                    root: {
-                        color: '#1976d2',
+                    root: ({ theme }) => ({
+                        color: theme.palette.primary.main,
                         textDecoration: 'underline',
                         '&:visited': {
-                            color: '#1976d2',
+                            color: theme.palette.primary.main,
                         },
                         '&:hover': {
-                            color: '#1565c0',
+                            color: theme.palette.primary.dark,
                         },
-                    },
+                    }),
                 },
             },
         },

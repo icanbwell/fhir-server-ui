@@ -83,7 +83,7 @@ const InvalidateCache: React.FC = () => {
                 <div style={{ padding: '0 10px' }}>
                     <Box sx={{ mt: 1, mb: 2 }}>
                     <Typography variant="h5">Invalidate Resource Cache</Typography>
-                    <Typography style={{ color: '#494949' }}>
+                    <Typography color="text.secondary">
                         Remove cached data for a specific resource to force fresh data retrieval
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>

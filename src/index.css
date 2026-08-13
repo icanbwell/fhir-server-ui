@@ -1,10 +1,30 @@
+/* b.well Brand Style Guide (May 2023), section 2.1 Color Palette / 3.1 Typography.
+   Mirrors src/theme/brandColors.ts for the handful of plain-CSS files (not MUI sx)
+   that can't import a TS module. Keep the two in sync if brand colors change. */
+:root {
+  --bwell-blue: #2E3586;
+  --bwell-dark-blue: #191D4D;
+  --bwell-green: #6CC63F;
+  --bwell-lilac: #6C60ED;
+  --bwell-orange: #F56345;
+  --bwell-yellow: #FFE249;
+  --bwell-dark-gray: #494949;
+  --bwell-mid-gray: #7F7F7F;
+  --bwell-light-gray: #F7F7FA;
+  --bwell-error-red: #D32F2F;
+  --font-display: 'Quicksand', 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
 }
 
 code {
@@ -14,22 +34,22 @@ code {
 
 /* Global link styles - exclude MUI Button links */
 a:not(.MuiButton-root):not(.MuiButtonBase-root) {
-  color: #1976d2;
+  color: var(--bwell-blue);
   text-decoration: underline;
 }
 
 a:not(.MuiButton-root):not(.MuiButtonBase-root):visited {
-  color: #1976d2;
+  color: var(--bwell-blue);
 }
 
 a:not(.MuiButton-root):not(.MuiButtonBase-root):hover {
-  color: #1565c0;
+  color: var(--bwell-dark-blue);
 }
 
 /* Format for answer divs */
 .answer {
-  color: rgb(30, 70, 32);
-  background-color: #edf7ed !important;
+  color: var(--bwell-dark-blue);
+  background-color: #EAF7E0 !important;
 }
 
 .home-row {

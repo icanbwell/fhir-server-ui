@@ -88,7 +88,7 @@ const PatientDataPage: React.FC = () => {
                 <div style={{ padding: '0 10px' }}>
                     <Box sx={{ mt: 1, mb: 2 }}>
                     <Typography variant="h5">Show Patient Data Graph</Typography>
-                    <Typography style={{ color: '#494949' }}>
+                    <Typography color="text.secondary">
                         Shows the graph of patient data (same as $everything endpoint)
                     </Typography>
                     <form onSubmit={handlePatientDataSubmit}>
@@ -133,7 +133,7 @@ const PatientDataPage: React.FC = () => {
                 <hr />
                 <Box sx={{ mt: 1, mb: 2 }}>
                     <Typography variant="h5">Delete Patient Data Graph</Typography>
-                    <Typography style={{ color: '#494949' }}>
+                    <Typography color="text.secondary">
                         Deletes the graph of patient data (CONFIRM YOU ARE DOING THIS FOR THE
                         CORRECT PATIENT)
                     </Typography>
@@ -178,7 +178,7 @@ const PatientDataPage: React.FC = () => {
                 <hr />
                 <Box sx={{ mt: 1, mb: 2 }}>
                     <Typography variant="h5">Show Person Data Graph</Typography>
-                    <Typography style={{ color: '#494949' }}>
+                    <Typography color="text.secondary">
                         Shows the graph of person data (same as $everything endpoint)
                     </Typography>
                     <form onSubmit={handlePersonDataSubmit}>
@@ -222,7 +222,7 @@ const PatientDataPage: React.FC = () => {
                 <hr />
                 <Box sx={{ mt: 1, mb: 2 }}>
                     <Typography variant="h5">Delete Person Data Graph</Typography>
-                    <Typography style={{ color: '#494949' }}>
+                    <Typography color="text.secondary">
                         Deletes the graph of person data (CONFIRM YOU ARE DOING THIS FOR THE CORRECT
                         PERSON)
                     </Typography>

@@ -90,16 +90,20 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
         return [...sheets].sort((a, b) => a.name.localeCompare(b.name));
     }, [sheets]);
 
-    // Select the appropriate ag-grid theme based on dark mode
+    // Select the appropriate ag-grid theme based on dark mode, tinted with b.well brand colors
+    // (ag-grid has its own theming system, separate from the MUI theme in ThemeContext.tsx).
     const gridTheme = useMemo(() => {
         if (isDarkMode) {
             return themeBalham.withParams({
-                backgroundColor: '#1e1e1e',
-                foregroundColor: '#ffffff',
-                borderColor: '#444444',
+                backgroundColor: '#1E2150',
+                foregroundColor: '#F7F7FA',
+                borderColor: '#2A2E63',
+                accentColor: '#6C60ED',
             });
         }
-        return themeBalham;
+        return themeBalham.withParams({
+            accentColor: '#2E3586',
+        });
     }, [isDarkMode]);
 
     const downloadUri = useMemo(() => {

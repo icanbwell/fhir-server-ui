@@ -46,8 +46,8 @@ const chartData = {
     {
       label: 'DAST-10 Scores',
       data: observations.map((obs) => obs.value),
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
+      backgroundColor: 'rgba(46, 53, 134, 0.2)',
+      borderColor: '#2E3586',
       borderWidth: 2,
     },
   ],

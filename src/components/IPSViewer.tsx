@@ -12,6 +12,7 @@ import {
     Divider,
     Tooltip,
 } from '@mui/material';
+import { alpha, useTheme as useMuiTheme } from '@mui/material/styles';
 import DOMPurify from 'dompurify';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -77,6 +78,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
     const [isIncomplete, setIsIncomplete] = useState<boolean>(false);
     const { progress, start, onProgress, finish } = useStreamProgress();
     const { isDarkMode } = useTheme();
+    const theme = useMuiTheme();
 
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
@@ -370,8 +372,8 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                     sx={{
                         p: 3,
                         mb: 4,
-                        backgroundColor: isDarkMode ? '#282c34' : '#f5f5f5',
-                        color: isDarkMode ? '#ffffff' : 'inherit',
+                        backgroundColor: isDarkMode ? theme.palette.background.paper : theme.palette.brand.lightGray,
+                        color: theme.palette.text.primary,
                     }}
                     className={isDarkMode ? 'dark-mode' : ''}
                 >
@@ -379,24 +381,24 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                         className="ips-narrative-container"
                         sx={{
                             '& a': {
-                                color: isDarkMode ? '#90caf9' : '#1976d2',
+                                color: isDarkMode ? theme.palette.brand.lilac : theme.palette.primary.main,
                             },
-                            '--table-header-bg': isDarkMode ? '#3a3a3a' : '#f0f0f0',
-                            '--table-header-color': isDarkMode ? '#f0f0f0' : '#333',
-                            '--table-border-color': isDarkMode ? '#555' : '#ddd',
-                            '--table-stripe-color': isDarkMode ? '#2c2c2c' : '#f9f9f9',
-                            '--text-color': isDarkMode ? '#e0e0e0' : 'inherit',
-                            '--heading-color': isDarkMode ? '#e0e0e0' : '#333',
-                            '--link-color': isDarkMode ? '#90caf9' : '#0066cc',
-                            '--section-border-color': isDarkMode ? '#444' : '#eaeaea',
-                            '--highlight-bg': isDarkMode ? '#665500' : '#fff3cd',
-                            '--code-bg': isDarkMode ? '#1f2937' : '#f6f8fa',
+                            '--table-header-bg': isDarkMode ? alpha(theme.palette.common.white, 0.06) : theme.palette.brand.lightGray,
+                            '--table-header-color': theme.palette.text.primary,
+                            '--table-border-color': theme.palette.divider,
+                            '--table-stripe-color': alpha(theme.palette.text.primary, 0.03),
+                            '--text-color': theme.palette.text.primary,
+                            '--heading-color': theme.palette.text.primary,
+                            '--link-color': isDarkMode ? theme.palette.brand.lilac : theme.palette.primary.main,
+                            '--section-border-color': theme.palette.divider,
+                            '--highlight-bg': alpha(theme.palette.brand.yellow, isDarkMode ? 0.25 : 0.35),
+                            '--code-bg': alpha(theme.palette.text.primary, 0.04),
                             '& .ips-section': {
-                                backgroundColor: isDarkMode ? '#333333' : '#f8f9fa',
+                                backgroundColor: alpha(theme.palette.text.primary, 0.04),
                                 padding: '0px 16px 5px',
                                 marginBottom: '16px',
                                 borderRadius: '4px',
-                                border: isDarkMode ? '1px solid #444' : '1px solid #c7c7c7ff',
+                                border: `1px solid ${theme.palette.divider}`,
                             },
                             '& .ips-collapse-icon': {
                                 transition: 'transform 0.2s ease',
@@ -479,7 +481,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                             alignItems: 'center',
                             cursor: 'pointer',
                             '&:hover': {
-                                backgroundColor: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
+                                backgroundColor: theme.palette.action.hover,
                             },
                             p: 1,
                             borderRadius: 1,
@@ -511,7 +513,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                                 alignItems: 'center',
                                 cursor: 'pointer',
                                 '&:hover': {
-                                    backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+                                    backgroundColor: theme.palette.action.hover,
                                 },
                                 p: 1,
                                 borderRadius: 1,

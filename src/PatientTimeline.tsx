@@ -40,11 +40,11 @@ const renderTimelineElements = (patientEvents: any) => {
   return patientEvents.map((patientEvent: any, index: number) => (
     <VerticalTimelineElement
       className="vertical-timeline-element--work"
-      contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-      contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+      contentStyle={{ background: '#2E3586', color: '#fff' }}
+      contentArrowStyle={{ borderRight: '7px solid #2E3586' }}
       key={index}
       date={patientEvent.date}
-      iconStyle={{ background: '#007bff', color: '#fff' }} // Customize the icon color if needed
+      iconStyle={{ background: '#2E3586', color: '#fff' }}
       icon={getIcon(patientEvent)}
     >
       <h3 className="vertical-timeline-element-title">

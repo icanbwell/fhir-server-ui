@@ -98,7 +98,7 @@ const PersonMatchPage: React.FC = () => {
                 <div style={{ padding: '0 10px' }}>
                     <Box sx={{ mt: 1, mb: 2 }}>
                     <Typography variant="h5">Run 1:1 Matching Test</Typography>
-                    <Typography style={{ color: '#494949' }}>
+                    <Typography color="text.secondary">
                         Calls <b>Person Matching Service</b> to give a diagnostic report on trying to match
                         these two records
                     </Typography>
@@ -211,7 +211,9 @@ const PersonMatchPage: React.FC = () => {
                                                     fontFamily: 'monospace',
                                                     fontSize: '13px',
                                                     padding: '8px',
-                                                    border: '1px solid #ccc',
+                                                    // No brand neutral sits close to this weight (light-gray is too pale to
+                                                    // read as a border); matches MUI's own default outlined-input border.
+                                                    border: '1px solid rgba(0, 0, 0, 0.23)',
                                                     borderRadius: '4px',
                                                     resize: 'vertical',
                                                 }}

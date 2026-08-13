@@ -2,11 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { init, browserSessionIntegration } from '@sentry/react';
 import './index.css';
-// Get material fonts: https://mui.com/material-ui/getting-started/installation/#font-installation
-import '@fontsource/roboto/latin-300.css';
-import '@fontsource/roboto/latin-400.css';
-import '@fontsource/roboto/latin-500.css';
-import '@fontsource/roboto/latin-700.css';
+// b.well brand fonts (Brand Style Guide section 3.1): Quicksand for headings/display, Open Sans for body.
+import '@fontsource/quicksand/latin-400.css';
+import '@fontsource/quicksand/latin-600.css';
+import '@fontsource/quicksand/latin-700.css';
+import '@fontsource/open-sans/latin-300.css';
+import '@fontsource/open-sans/latin-400.css';
+import '@fontsource/open-sans/latin-600.css';
+import '@fontsource/open-sans/latin-700.css';
 
 import App from './App';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

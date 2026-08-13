@@ -211,7 +211,7 @@ const ResourceCard = ({
             <Collapse in={open} mountOnEnter unmountOnExit>
                 <CardContent>
                     <ResourceItem resourceType={resource.resourceType} resource={resource} />
-                    <Box sx={{ borderBottom: '1px solid #ccc', my: 2 }} />
+                    <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', my: 2 }} />
                     {/* Render JSON component */}
                     <Json resource={resource} error={error} />
                     {/* Conditionally render FileDownload based on resource type */}

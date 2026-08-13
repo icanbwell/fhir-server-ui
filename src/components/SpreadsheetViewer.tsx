@@ -33,6 +33,7 @@ import FileDownload from './FileDownload';
 import type { ColDef, ColGroupDef, ICellRendererParams } from 'ag-grid-community';
 import { useNavigate, useLocation } from 'react-router';
 import { useTheme } from '../context/ThemeContext';
+import { brandColors } from '../theme/brandColors';
 
 ModuleRegistry.registerModules([
     ColumnAutoSizeModule,
@@ -90,16 +91,20 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
         return [...sheets].sort((a, b) => a.name.localeCompare(b.name));
     }, [sheets]);
 
-    // Select the appropriate ag-grid theme based on dark mode
+    // Select the appropriate ag-grid theme based on dark mode, tinted with b.well brand colors
+    // (ag-grid has its own theming system, separate from the MUI theme in ThemeContext.tsx).
     const gridTheme = useMemo(() => {
         if (isDarkMode) {
             return themeBalham.withParams({
-                backgroundColor: '#1e1e1e',
-                foregroundColor: '#ffffff',
-                borderColor: '#444444',
+                backgroundColor: brandColors.darkModePaper,
+                foregroundColor: brandColors.lightGray,
+                borderColor: brandColors.darkModeBorder,
+                accentColor: brandColors.lilac,
             });
         }
-        return themeBalham;
+        return themeBalham.withParams({
+            accentColor: brandColors.blue,
+        });
     }, [isDarkMode]);
 
     const downloadUri = useMemo(() => {

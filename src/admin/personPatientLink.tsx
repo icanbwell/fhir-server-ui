@@ -178,7 +178,7 @@ const PersonPatientLinkPage: React.FC = () => {
             <div style={{ minHeight: '92vh', padding: '0 10px' }}>
                 <Box sx={{ mt: 1, mb: 2 }}>
                 <Typography variant="h5">Show Link Graph from b.well Person</Typography>
-                <Typography style={{ color: '#494949' }}>
+                <Typography color="text.secondary">
                     See linked Person and Patient resources from a b.well Person (recursive)
                 </Typography>
                 <form onSubmit={handleShowLinkGraph}>
@@ -226,7 +226,7 @@ const PersonPatientLinkPage: React.FC = () => {
             <hr />
             <Box sx={{ mt: 1, mb: 2 }}>
                 <Typography variant="h5">Create Person to Person Link</Typography>
-                <Typography style={{ color: '#494949' }}>
+                <Typography color="text.secondary">
                     Add a link from one Person resource to another Person resource
                 </Typography>
                 <form onSubmit={handleCreatePersonToPersonLink}>
@@ -286,7 +286,7 @@ const PersonPatientLinkPage: React.FC = () => {
             <hr />
             <Box sx={{ mt: 1, mb: 2 }}>
                 <Typography variant="h5">Remove Person to Person Link</Typography>
-                <Typography style={{ color: '#494949' }}>
+                <Typography color="text.secondary">
                     Remove a link from one Person resource to another Person resource
                 </Typography>
                 <form onSubmit={handleRemovePersonToPersonLink}>
@@ -346,7 +346,7 @@ const PersonPatientLinkPage: React.FC = () => {
             <hr />
             <Box sx={{ mt: 1, mb: 2 }}>
                 <Typography variant="h5">Create Person to Patient Link</Typography>
-                <Typography style={{ color: '#494949' }}>
+                <Typography color="text.secondary">
                     Create a link from one Person resource to a Patient resource. Leave External
                     Person blank to create a new Person resource with same meta tags as the Patient
                     resource
@@ -408,7 +408,7 @@ const PersonPatientLinkPage: React.FC = () => {
             <hr />
             <Box sx={{ mt: 1, mb: 2 }}>
                 <Typography variant="h5">Remove Person to Patient Link</Typography>
-                <Typography style={{ color: '#494949' }}>
+                <Typography color="text.secondary">
                     Remove a link from Person resource to Patient resource
                 </Typography>
                 <form onSubmit={handleRemovePersonToPatientLink}>
@@ -468,7 +468,7 @@ const PersonPatientLinkPage: React.FC = () => {
             <hr />
             <Box sx={{ mt: 1, mb: 2 }}>
                 <Typography variant="h5">Update Patient Reference</Typography>
-                <Typography style={{ color: '#494949' }}>
+                <Typography color="text.secondary">
                     Update main patient reference in patient related resources
                 </Typography>
                 <form onSubmit={handleUpdatePatientReference}>
@@ -526,7 +526,7 @@ const PersonPatientLinkPage: React.FC = () => {
             <hr />
             <Box sx={{ mt: 1, mb: 2 }}>
                 <Typography variant="h5">Delete b.well Person</Typography>
-                <Typography style={{ color: '#494949' }}>
+                <Typography color="text.secondary">
                     Delete a Person record (And remove links from other Person records)
                 </Typography>
                 <form onSubmit={handleDeletePerson}>

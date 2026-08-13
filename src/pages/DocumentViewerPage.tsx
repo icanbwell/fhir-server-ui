@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { Box } from '@mui/material';
 import Header from '../components/Header';
@@ -35,6 +35,16 @@ const DocumentViewerPage: React.FC = () => {
         }
         return url;
     }, [resourceType, id, operation, contentIndex]);
+
+    useEffect(() => {
+        if (!resourceType) {
+            return;
+        }
+        document.title = id ? `${resourceType}/${id} Document` : resourceType;
+        return () => {
+            document.title = 'FHIR Viewer';
+        };
+    }, [resourceType, id]);
 
     return (
         <Box sx={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

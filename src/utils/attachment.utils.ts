@@ -88,12 +88,25 @@ export async function resolveAttachmentContent(
     const url = attachment.url ? String(attachment.url) : undefined;
     const binaryId = url ? extractBinaryId(url, fhirBaseUrl) : undefined;
     if (binaryId) {
-        // Always fetch via the relative path — never the absolute URL — so streamRequest's
-        // existing same-origin guard keeps enforcing on the actual fetch, regardless of what
-        // this resolution step decided above.
-        const response = await baseApi.downloadFile(`/4_0_0/Binary/${binaryId}`, {
-            headers: { Accept: contentType },
-        });
+        const binaryUrl = `/4_0_0/Binary/${binaryId}`;
+        let response;
+        try {
+            // Always fetch via the relative path — never the absolute URL — so streamRequest's
+            // existing same-origin guard keeps enforcing on the actual fetch, regardless of what
+            // this resolution step decided above.
+            response = await baseApi.downloadFile(binaryUrl, {
+                headers: { Accept: contentType },
+            });
+        } catch (error) {
+            console.warn(`Failed to fetch ${binaryUrl}`, error);
+            const status = (error as { status?: number })?.status;
+            return {
+                kind: 'unavailable',
+                reason: 'malformed',
+                detail: `Request to ${binaryUrl} failed: ${errorDetail(error)}${status ? ` (HTTP ${status})` : ''}`,
+                rawContent: (error as { body?: string })?.body,
+            };
+        }
 
         const actualContentType = response.headers['content-type'];
         if (isFhirJsonContentType(actualContentType) && !isFhirJsonContentType(contentType)) {

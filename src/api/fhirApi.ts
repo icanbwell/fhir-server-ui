@@ -26,6 +26,7 @@ interface GetUrlParams {
 interface GetResourceCountParams {
     resourceType: string;
     queryParameters?: string[];
+    signal?: AbortSignal;
 }
 
 interface PostResourceParams {
@@ -123,11 +124,12 @@ class FhirApi extends BaseApi {
         return url;
     }
 
-    async getResourceCount({ resourceType, queryParameters }: GetResourceCountParams): Promise<number | null> {
+    async getResourceCount({ resourceType, queryParameters, signal }: GetResourceCountParams): Promise<number | null> {
         const url = this.getUrl({ resourceType, queryParameters });
         url.searchParams.set('_summary', 'count');
         url.searchParams.set('_total', 'accurate');
-        const { status, json } = await this.getData({ urlString: url.toString() });
+        url.searchParams.delete('_count');
+        const { status, json } = await this.getData({ urlString: url.toString(), signal });
         if (status && status >= 200 && status < 300 && typeof json?.total === 'number') {
             return json.total;
         }

@@ -26,20 +26,25 @@ export function useResourceCount({
             return;
         }
         let cancelled = false;
+        const controller = new AbortController();
         const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
         setIsLoading(true);
         setError(null);
         fhirApi
-            .getResourceCount({ resourceType, queryParameters })
+            .getResourceCount({ resourceType, queryParameters, signal: controller.signal })
             .then((result) => {
                 if (!cancelled) {
                     setCount(result);
                 }
             })
             .catch((err: unknown) => {
-                if (!cancelled) {
-                    setError(err instanceof Error ? err.message : 'Failed to load count');
+                if (cancelled) {
+                    return;
                 }
+                if (err instanceof Error && err.name === 'AbortError') {
+                    return;
+                }
+                setError(err instanceof Error ? err.message : 'Failed to load count');
             })
             .finally(() => {
                 if (!cancelled) {
@@ -48,6 +53,7 @@ export function useResourceCount({
             });
         return () => {
             cancelled = true;
+            controller.abort();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fhirUrl, setUserDetails, resourceType, serializedParams]);

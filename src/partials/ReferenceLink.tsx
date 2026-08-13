@@ -31,12 +31,12 @@ function ReferenceLink({ reference, display }: TReferenceLinkProps) {
             }}
         >
             <Typography>{display || reference}</Typography>
-            {isLoading && <CircularProgress size={14} />}
+            {isLoading && <CircularProgress size={14} aria-label="Loading count" />}
             {!isLoading && !error && count !== null && (
                 count > 0 ? (
-                    <CheckCircleIcon color="success" fontSize="small" />
+                    <CheckCircleIcon color="success" fontSize="small" titleAccess="Resource exists" />
                 ) : (
-                    <CancelIcon color="error" fontSize="small" />
+                    <CancelIcon color="error" fontSize="small" titleAccess="Resource not found" />
                 )
             )}
             <OpenInNewIcon />

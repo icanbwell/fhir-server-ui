@@ -11,9 +11,12 @@ type TReferenceLinkProps = {
 
 function ReferenceLink({ reference, display }: TReferenceLinkProps) {
     const [resourceType, id] = reference.split('/');
+    // `id=<value>` (not the FHIR-standard `_id`) is this server's documented filter for
+    // searching by resource id — see fhir-server's cheatsheet.md, "By ids or list of ids".
     const { count, isLoading, error } = useResourceCount({
         resourceType,
-        queryParameters: id ? [`_id=${id}`] : undefined,
+        queryParameters: id ? [`id=${id}`] : undefined,
+        limit: 1,
     });
 
     return (

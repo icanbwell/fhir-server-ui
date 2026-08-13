@@ -15,9 +15,10 @@ function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenc
     // FhirApi.addMissingRequiredParams for both the href's click-through (via
     // IndexPage -> getBundleAsync) and the count-fetch below, so there is
     // nothing target-specific left to do here.
-    const { count, isLoading, error } = useResourceCount({
+    const { count, atLimit, isLoading, error } = useResourceCount({
         resourceType: target,
         queryParameters: [`${property}=${resolvedId}`],
+        limit: 10,
     });
 
     return (
@@ -38,7 +39,7 @@ function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenc
             <Typography>{target}</Typography>
             {isLoading && <CircularProgress size={14} aria-label="Loading count" />}
             {!isLoading && !error && count !== null && (
-                <Chip label={`(${count})`} size="small" />
+                <Chip label={atLimit ? '10+' : `(${count})`} size="small" />
             )}
             <OpenInNewIcon />
         </Link>

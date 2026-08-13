@@ -6,13 +6,16 @@ import FhirApi from '../api/fhirApi';
 export function useResourceCount({
     resourceType,
     queryParameters,
+    limit,
 }: {
     resourceType: string | undefined;
     queryParameters: string[] | undefined;
-}): { count: number | null; isLoading: boolean; error: string | null } {
+    limit: number;
+}): { count: number | null; atLimit: boolean; isLoading: boolean; error: string | null } {
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
     const [count, setCount] = useState<number | null>(null);
+    const [atLimit, setAtLimit] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -31,10 +34,11 @@ export function useResourceCount({
         setIsLoading(true);
         setError(null);
         fhirApi
-            .getResourceCount({ resourceType, queryParameters, signal: controller.signal })
+            .getResourceCount({ resourceType, queryParameters, limit, signal: controller.signal })
             .then((result) => {
                 if (!cancelled) {
-                    setCount(result);
+                    setCount(result ? result.count : null);
+                    setAtLimit(result ? result.atLimit : false);
                 }
             })
             .catch((err: unknown) => {
@@ -56,7 +60,7 @@ export function useResourceCount({
             controller.abort();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fhirUrl, setUserDetails, resourceType, serializedParams]);
+    }, [fhirUrl, setUserDetails, resourceType, serializedParams, limit]);
 
-    return { count, isLoading, error };
+    return { count, atLimit, isLoading, error };
 }

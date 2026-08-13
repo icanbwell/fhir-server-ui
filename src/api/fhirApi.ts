@@ -26,6 +26,7 @@ interface GetUrlParams {
 interface GetResourceCountParams {
     resourceType: string;
     queryParameters?: string[];
+    limit: number;
     signal?: AbortSignal;
 }
 
@@ -124,16 +125,21 @@ class FhirApi extends BaseApi {
         return url;
     }
 
-    async getResourceCount({ resourceType, queryParameters, signal }: GetResourceCountParams): Promise<number | null> {
+    // Deliberately avoids `_total=accurate` — the FHIR server's own docs warn it's "an
+    // expensive operation when the count of records that match your query is high."
+    // Instead this asks for at most `limit + 1` id-only entries: a plain paginated search
+    // is cheap regardless of how large the true total is, and `limit + 1` entries coming
+    // back is enough to know "more than `limit`" without ever computing the exact total.
+    async getResourceCount({ resourceType, queryParameters, limit, signal }: GetResourceCountParams): Promise<{ count: number; atLimit: boolean } | null> {
         const url = this.getUrl({ resourceType, queryParameters });
-        url.searchParams.set('_summary', 'count');
-        url.searchParams.set('_total', 'accurate');
-        url.searchParams.delete('_count');
+        url.searchParams.set('_elements', 'id');
+        url.searchParams.set('_count', String(limit + 1));
         const { status, json } = await this.getData({ urlString: url.toString(), signal });
-        if (status && status >= 200 && status < 300 && typeof json?.total === 'number') {
-            return json.total;
+        if (!status || status < 200 || status >= 300) {
+            return null;
         }
-        return null;
+        const entryCount = Array.isArray(json?.entry) ? json.entry.length : 0;
+        return entryCount > limit ? { count: limit, atLimit: true } : { count: entryCount, atLimit: false };
     }
 
     async mergeResource({ resourceType, id, resource, smartMerge = true }: PostResourceParams) {

@@ -11,13 +11,12 @@ type TReverseReferenceLinkProps = {
 function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenceLinkProps) {
     const href = `/4_0_0/${target}?${property}=${resolvedId}`;
 
-    // AuditEvent's rolling 7-day window is applied uniformly by
-    // FhirApi.addMissingRequiredParams for both the href's click-through (via
-    // IndexPage -> getBundleAsync) and the count-fetch below, so there is
-    // nothing target-specific left to do here.
+    // AuditEvent queries are slow on this FHIR server, so this link is excluded from
+    // counting entirely (queryParameters: undefined short-circuits useResourceCount's
+    // effect before it fetches anything) — it still renders as a plain link, with no badge.
     const { count, atLimit, isLoading, error } = useResourceCount({
         resourceType: target,
-        queryParameters: [`${property}=${resolvedId}`],
+        queryParameters: target === 'AuditEvent' ? undefined : [`${property}=${resolvedId}`],
         limit: 10,
     });
 

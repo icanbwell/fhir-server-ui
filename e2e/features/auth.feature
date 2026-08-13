@@ -7,7 +7,7 @@ Feature: Client credentials sign-in
   Background:
     Given I am on the client credentials login page
 
-  @smoke @requires-e2e-credentials
+  @auth-smoke @requires-e2e-credentials
   Scenario: Successful sign-in with valid credentials
     When I sign in with valid client credentials
     Then I should be signed in

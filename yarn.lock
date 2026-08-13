@@ -3608,7 +3608,6 @@ __metadata:
     globals: "npm:^17.6.0"
     jwt-decode: "npm:^4.0.0"
     lru-cache: "npm:^11.5.0"
-    playwright: "npm:^1.62.1"
     postcss: "npm:^8.5.25"
     postcss-flexbugs-fixes: "npm:^5.0.2"
     postcss-preset-env: "npm:^11.3.0"
@@ -5523,7 +5522,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:1.62.1, playwright@npm:^1.62.1":
+"playwright@npm:1.62.1":
   version: 1.62.1
   resolution: "playwright@npm:1.62.1"
   dependencies:

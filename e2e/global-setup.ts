@@ -7,12 +7,14 @@ import { chromium } from '@playwright/test';
 // harness follows: docs/testing-plan.md's "Auth strategy" section.
 export const AUTH_STATE_PATH = path.join(process.cwd(), 'e2e', '.auth', 'state.json');
 
-const BASE_URL = process.env.E2E_BASE_URL || 'http://localhost:5051';
-
 // Client-credentials sign-in is a single POST (no interactive redirect), so driving the real
 // login form once here is just as fast as hand-replicating what it writes to local storage -
 // and it stays correct automatically if that internal shape ever changes.
-export async function ensureAuthState(): Promise<void> {
+//
+// `baseURL` is passed in (from hooks.ts's BeforeAll, which reads it off cucumber.cjs's
+// worldParameters) rather than re-reading E2E_BASE_URL here too - keeps the
+// 'http://localhost:5051' fallback defined in exactly one place.
+export async function ensureAuthState(baseURL: string): Promise<void> {
     const clientId = process.env.E2E_CLIENT_ID;
     const clientSecret = process.env.E2E_CLIENT_SECRET;
     if (!clientId || !clientSecret) {
@@ -29,7 +31,7 @@ export async function ensureAuthState(): Promise<void> {
     try {
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto(`${BASE_URL}/client-credentials-login`);
+        await page.goto(`${baseURL}/client-credentials-login`);
         await page.getByLabel('Client ID').fill(clientId);
         await page.getByLabel('Client Secret').fill(clientSecret);
         await page.getByRole('button', { name: /sign in/i }).click();

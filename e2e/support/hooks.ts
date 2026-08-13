@@ -12,8 +12,19 @@ setDefaultTimeout(30 * 1000);
 
 let browser: Browser;
 
-BeforeAll(async function () {
-    await ensureAuthState();
+BeforeAll(async function (this: { parameters: { baseURL?: string } }) {
+    // A wrong/expired credential or an unreachable login page would otherwise throw here and
+    // abort the entire run - including not-found.feature, which is deliberately a zero-dependency,
+    // no-auth smoke test that should keep working regardless of credential state.
+    try {
+        await ensureAuthState(this.parameters?.baseURL || 'http://localhost:5051');
+    } catch (error) {
+        console.warn(
+            '[e2e] ensureAuthState() failed - scenarios that call `authenticate()` will fail, ' +
+                'but the rest of the suite will still run:',
+            error
+        );
+    }
     browser = await chromium.launch({
         headless: !process.env.HEADED,
         slowMo: process.env.SLOWMO ? Number(process.env.SLOWMO) : process.env.HEADED ? 250 : 0,
@@ -31,7 +42,14 @@ Before(async function (this: CustomWorld) {
 });
 
 After(async function (this: CustomWorld, { result }) {
-    if (result?.status === Status.FAILED) {
+    // Before failing (e.g. browser.newContext() rejects) leaves `context`/`page` unset - without
+    // this guard, the screenshot call below throws a TypeError that replaces the real Before-hook
+    // error in the report, and (when only newPage() failed) skips context.close() entirely,
+    // leaking that context for the rest of the run.
+    if (!this.context) {
+        return;
+    }
+    if (result?.status === Status.FAILED && this.page) {
         const screenshot = await this.page.screenshot();
         this.attach(screenshot, 'image/png');
     }

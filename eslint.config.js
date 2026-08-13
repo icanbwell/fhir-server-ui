@@ -35,23 +35,8 @@ export default [
         },
     },
     security.configs.recommended,
-    {
-        files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', 'src/**/*.jsx'],
-        plugins: {
-            '@typescript-eslint': tsPlugin,
-            'react-hooks': reactHooks,
-        },
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-            },
-            parser: tsParser,
-            ecmaVersion: 2022,
-            sourceType: 'module',
-        },
-        rules: {
-            ...reactHooks.configs.recommended.rules,
-
+    ...(() => {
+        const sharedRules = {
             'no-console': 0,
             'no-debugger': 2,
             'no-array-constructor': 2,
@@ -93,11 +78,48 @@ export default [
             }],
             '@typescript-eslint/no-explicit-any': 'off',
 
-            // Disabled: this flags legitimate data-fetching patterns (setState after await/then)
-            'react-hooks/set-state-in-effect': 'off',
-
             // Security
             'security/detect-non-literal-fs-filename': 'off',
-        },
-    },
+        };
+        return [
+            {
+                files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', 'src/**/*.jsx'],
+                plugins: {
+                    '@typescript-eslint': tsPlugin,
+                    'react-hooks': reactHooks,
+                },
+                languageOptions: {
+                    globals: {
+                        ...globals.browser,
+                    },
+                    parser: tsParser,
+                    ecmaVersion: 2022,
+                    sourceType: 'module',
+                },
+                rules: {
+                    ...reactHooks.configs.recommended.rules,
+                    ...sharedRules,
+                    // Disabled: this flags legitimate data-fetching patterns (setState after await/then)
+                    'react-hooks/set-state-in-effect': 'off',
+                },
+            },
+            {
+                // e2e/ runs under Node (Playwright/Cucumber), not the browser - separate block so
+                // it gets Node globals (process, console, ...) instead of window/document.
+                files: ['e2e/**/*.ts'],
+                plugins: {
+                    '@typescript-eslint': tsPlugin,
+                },
+                languageOptions: {
+                    globals: {
+                        ...globals.node,
+                    },
+                    parser: tsParser,
+                    ecmaVersion: 2022,
+                    sourceType: 'module',
+                },
+                rules: sharedRules,
+            },
+        ];
+    })(),
 ];

@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\" \"e2e/**/*.ts\"",
     "e2e:setup": "playwright install chromium",
     "e2e": "cucumber-js",
-    "e2e:headed": "HEADED=1 cucumber-js"
+    "e2e:headed": "HEADED=1 cucumber-js",
+    "e2e:typecheck": "tsc -p e2e/tsconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -68,7 +69,6 @@
   "devDependencies": {
     "@cucumber/cucumber": "^13.2.0",
     "@playwright/test": "^1.62.1",
-    "playwright": "^1.62.1",
     "prettier": "^3.8.3"
   },
   "resolutions": {

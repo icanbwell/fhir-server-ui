@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { setWorldConstructor, World } from '@cucumber/cucumber';
 import type { IWorldOptions } from '@cucumber/cucumber';
-import type { Browser, BrowserContext, Page } from '@playwright/test';
+import type { Browser, BrowserContext, Page, Response } from '@playwright/test';
 import { AUTH_STATE_PATH } from '../global-setup.ts';
 
 export interface WorldParameters {
@@ -12,6 +12,9 @@ export class CustomWorld extends World<WorldParameters> {
     browser!: Browser;
     context!: BrowserContext;
     page!: Page;
+    // Scenario-scoped scratch data set by search.steps.ts's "When" step and read by its "Then"
+    // step - the standard Cucumber pattern for passing data between steps in the same scenario.
+    lastSearchResponse?: Response;
 
     constructor(options: IWorldOptions<WorldParameters>) {
         super(options);

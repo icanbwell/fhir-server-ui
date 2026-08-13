@@ -10,22 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { TBaseResourceProps } from '../types/baseTypes';
 import { TAttachment } from '../types/partials/Attachment';
 import DocumentViewerLink, { TDocumentViewerResourceType } from './DocumentViewerLink';
-
-// Resource types whose attachment-bearing field renders through this shared partial and is
-// also viewable via the Document Viewer. DocumentReference.content and Binary go through their
-// own dedicated partial/route instead (see DocumentContent.tsx), so they're deliberately not
-// listed here — this partial never receives those two.
-const DOCUMENT_VIEWER_RESOURCE_TYPES: ReadonlyArray<
-    Exclude<TDocumentViewerResourceType, 'Binary' | 'DocumentReference'>
-> = [
-    'DiagnosticReport',
-    'Media',
-    'Patient',
-    'Practitioner',
-    'RelatedPerson',
-    'Consent',
-    'Contract',
-];
+import { ATTACHMENT_PARTIAL_RESOURCE_TYPES } from '../components/DocumentViewer';
 
 type TAttachmentProps = TBaseResourceProps & {
   attachment: TAttachment|TAttachment[]|undefined;
@@ -43,7 +28,7 @@ const Attachment = ({ attachment, name, resourceType, id }: TAttachmentProps) =>
     return <></>;
   }
 
-  const documentViewerResourceType = DOCUMENT_VIEWER_RESOURCE_TYPES.find(
+  const documentViewerResourceType = ATTACHMENT_PARTIAL_RESOURCE_TYPES.find(
     (supported) => supported === String(resourceType)
   ) as TDocumentViewerResourceType | undefined;
 

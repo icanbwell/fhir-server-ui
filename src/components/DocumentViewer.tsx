@@ -51,6 +51,12 @@ const ATTACHMENT_FIELD_BY_RESOURCE_TYPE: Record<
     Contract: { field: 'legallyBindingAttachment', shape: 'single' },
 };
 
+// Derived (not hand-listed) so it can never drift from ATTACHMENT_FIELD_BY_RESOURCE_TYPE above —
+// consumed by Attachment.tsx to decide which resource types get a "View in Document Viewer" link.
+export const ATTACHMENT_PARTIAL_RESOURCE_TYPES = (
+    Object.keys(ATTACHMENT_FIELD_BY_RESOURCE_TYPE) as Exclude<TDocumentViewerResourceType, 'Binary'>[]
+).filter((resourceType) => resourceType !== 'DocumentReference');
+
 const isSupportedResourceType = (resourceType: string | undefined): resourceType is TDocumentViewerResourceType =>
     resourceType === 'Binary' ||
     Object.prototype.hasOwnProperty.call(ATTACHMENT_FIELD_BY_RESOURCE_TYPE, resourceType ?? '');

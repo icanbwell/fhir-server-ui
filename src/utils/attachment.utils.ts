@@ -37,6 +37,36 @@ function isFhirJsonContentType(contentType: string | undefined): boolean {
     return ct.includes('json');
 }
 
+// Requests the FHIR JSON Binary wrapper (`_format=json`) resolved against this page's own
+// origin rather than the configured FHIR server. A cross-origin fetch to the FHIR server needs
+// that server to answer the browser's CORS preflight with the UI's origin allow-listed, which
+// isn't guaranteed — whereas many deployments front the FHIR server with a same-origin reverse
+// proxy for exactly this path, keeping the fetch same-origin and sidestepping CORS entirely.
+// Throws (rather than returning an 'unavailable' result) on any deviation from that shape, so
+// the caller falls back to the direct fetch instead of mistaking an environment with no such
+// proxy (e.g. local dev, where this would 404 or hit the SPA's own index.html) for a genuinely
+// corrupted attachment.
+async function fetchBinaryViaSameOriginProxy(
+    baseApi: BaseApi,
+    binaryUrl: string,
+    binaryId: string,
+    contentType: string
+): Promise<ResolvedAttachmentContent> {
+    const response = await baseApi.downloadFile(binaryUrl, {
+        baseUrlOverride: window.location.origin,
+        params: { _format: 'json' },
+    });
+    const actualContentType = response.headers['content-type'];
+    if (!isFhirJsonContentType(actualContentType)) {
+        throw new Error(`Same-origin proxy returned content-type "${actualContentType}" instead of a FHIR JSON Binary wrapper`);
+    }
+    const json = JSON.parse(await response.data.text());
+    if (json?.resourceType !== 'Binary' || typeof json?.data !== 'string') {
+        throw new Error(`Same-origin proxy response for Binary/${binaryId} was not a usable FHIR Binary wrapper`);
+    }
+    return { blob: decodeBase64ToBlob(json.data, contentType), contentType };
+}
+
 // Extracts a `Binary/{id}` reference from an attachment URL, honoring the same-origin
 // guarantee that `streamRequest` already enforces on the actual fetch: an absolute URL is
 // only treated as a same-server Binary reference when its origin matches the app's
@@ -89,6 +119,13 @@ export async function resolveAttachmentContent(
     const binaryId = url ? extractBinaryId(url, fhirBaseUrl) : undefined;
     if (binaryId) {
         const binaryUrl = `/4_0_0/Binary/${binaryId}`;
+
+        try {
+            return { kind: 'resolved', content: await fetchBinaryViaSameOriginProxy(baseApi, binaryUrl, binaryId, contentType) };
+        } catch (sameOriginError) {
+            console.warn(`Same-origin fetch of ${binaryUrl} unavailable, falling back to the configured FHIR server`, sameOriginError);
+        }
+
         let response;
         try {
             // Always fetch via the relative path — never the absolute URL — so streamRequest's

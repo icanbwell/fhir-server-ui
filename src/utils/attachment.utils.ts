@@ -37,6 +37,39 @@ function isFhirJsonContentType(contentType: string | undefined): boolean {
     return ct.includes('json');
 }
 
+type BinaryWrapperParseResult =
+    | { kind: 'usable'; content: ResolvedAttachmentContent }
+    // The response was legitimate JSON, just not the Binary wrapper shape (e.g. a genuinely
+    // JSON-typed attachment) — distinct from 'malformed' so callers can hand it back as real
+    // content instead of reporting a decode failure.
+    | { kind: 'not-a-wrapper'; text: string }
+    | { kind: 'malformed'; detail: string; rawContent?: string };
+
+// Shared shape-check-and-decode core for a FHIR Binary JSON wrapper
+// (`{ resourceType: 'Binary', data: '<base64>' }`), used by both the same-origin proxy probe
+// and the direct-fetch fallback below. The two call sites apply different policies on top of
+// this result (throw-to-fall-back vs. a nuanced 'malformed' result with rawContent), which is
+// why this returns a discriminated result rather than throwing itself.
+function parseFhirBinaryWrapper(bodyText: string, decodeContentType: string, context: string): BinaryWrapperParseResult {
+    let json: any;
+    try {
+        json = JSON.parse(bodyText);
+    } catch (error) {
+        return { kind: 'malformed', detail: `Failed to parse the JSON response returned by ${context}: ${errorDetail(error)}`, rawContent: bodyText };
+    }
+    if (json?.resourceType !== 'Binary') {
+        return { kind: 'not-a-wrapper', text: bodyText };
+    }
+    if (typeof json?.data !== 'string') {
+        return { kind: 'malformed', detail: `${context} returned a FHIR JSON wrapper with no usable "data" field`, rawContent: bodyText };
+    }
+    try {
+        return { kind: 'usable', content: { blob: decodeBase64ToBlob(json.data, decodeContentType), contentType: decodeContentType } };
+    } catch (error) {
+        return { kind: 'malformed', detail: `Failed to decode base64 "data" field from ${context}: ${errorDetail(error)}`, rawContent: bodyText };
+    }
+}
+
 // Requests the FHIR JSON Binary wrapper — both `_format=json` and an explicit
 // `Accept: application/fhir+json` header, since a proxy in this path may honor either one
 // (and without both, a same-origin SPA's history-fallback routing could otherwise hand back
@@ -45,10 +78,10 @@ function isFhirJsonContentType(contentType: string | undefined): boolean {
 // that server to answer the browser's CORS preflight with the UI's origin allow-listed, which
 // isn't guaranteed — whereas many deployments front the FHIR server with a same-origin reverse
 // proxy for exactly this path, keeping the fetch same-origin and sidestepping CORS entirely.
-// Throws (rather than returning an 'unavailable' result) on any deviation from that shape, so
-// the caller falls back to the direct fetch instead of mistaking an environment with no such
-// proxy (e.g. local dev, where this would 404 or hit the SPA's own index.html) for a genuinely
-// corrupted attachment.
+// Throws (rather than returning an 'unavailable' result) on any deviation from that shape,
+// including a well-formed but non-Binary JSON body, so the caller falls back to the direct
+// fetch instead of mistaking an environment with no such proxy (e.g. local dev, where this
+// would 404 or hit the SPA's own index.html) for a genuinely corrupted attachment.
 async function fetchBinaryViaSameOriginProxy(
     baseApi: BaseApi,
     binaryUrl: string,
@@ -64,11 +97,11 @@ async function fetchBinaryViaSameOriginProxy(
     if (!isFhirJsonContentType(actualContentType)) {
         throw new Error(`Same-origin proxy returned content-type "${actualContentType}" instead of a FHIR JSON Binary wrapper`);
     }
-    const json = JSON.parse(await response.data.text());
-    if (json?.resourceType !== 'Binary' || typeof json?.data !== 'string') {
+    const parsed = parseFhirBinaryWrapper(await response.data.text(), contentType, `Binary/${binaryId}`);
+    if (parsed.kind !== 'usable') {
         throw new Error(`Same-origin proxy response for Binary/${binaryId} was not a usable FHIR Binary wrapper`);
     }
-    return { blob: decodeBase64ToBlob(json.data, contentType), contentType };
+    return parsed.content;
 }
 
 // Extracts a `Binary/{id}` reference from an attachment URL, honoring the same-origin
@@ -158,37 +191,28 @@ export async function resolveAttachmentContent(
             // itself legitimately be JSON-flavored (application/json, application/fhir+json),
             // in which case a content-type-only check could never tell a real JSON attachment
             // apart from the wrapper.
-            // Hoisted above the try so a mid-parse failure (JSON.parse, decodeBase64ToBlob) still
-            // leaves the raw response body available to report below — only response.data.text()
-            // itself failing leaves this undefined.
-            let text: string | undefined;
+            let text: string;
             try {
                 text = await response.data.text();
-                const json = JSON.parse(text);
-                if (json?.resourceType !== 'Binary') {
-                    // Not the wrapper — this JSON-flavored response is the attachment's actual
-                    // content (e.g. a genuinely JSON attachment), so hand it back as-is.
-                    return { kind: 'resolved', content: { blob: new Blob([text], { type: contentType }), contentType } };
-                }
-                if (typeof json?.data !== 'string') {
-                    console.warn('Binary response was a FHIR JSON wrapper with no usable data field', json);
-                    return {
-                        kind: 'unavailable',
-                        reason: 'malformed',
-                        detail: `Binary/${binaryId} returned a FHIR JSON wrapper with no usable "data" field`,
-                        rawContent: text,
-                    };
-                }
-                return { kind: 'resolved', content: { blob: decodeBase64ToBlob(json.data, contentType), contentType } };
             } catch (error) {
-                console.warn('Failed to decode the JSON response returned instead of raw Binary content', error);
+                console.warn('Failed to read the Binary response body', error);
                 return {
                     kind: 'unavailable',
                     reason: 'malformed',
-                    detail: `Failed to parse the JSON response returned by Binary/${binaryId}: ${errorDetail(error)}`,
-                    rawContent: text,
+                    detail: `Failed to read the response body returned by Binary/${binaryId}: ${errorDetail(error)}`,
                 };
             }
+            const parsed = parseFhirBinaryWrapper(text, contentType, `Binary/${binaryId}`);
+            if (parsed.kind === 'usable') {
+                return { kind: 'resolved', content: parsed.content };
+            }
+            if (parsed.kind === 'not-a-wrapper') {
+                // Not the wrapper — this JSON-flavored response is the attachment's actual
+                // content (e.g. a genuinely JSON attachment), so hand it back as-is.
+                return { kind: 'resolved', content: { blob: new Blob([parsed.text], { type: contentType }), contentType } };
+            }
+            console.warn(parsed.detail);
+            return { kind: 'unavailable', reason: 'malformed', detail: parsed.detail, rawContent: parsed.rawContent };
         }
 
         return { kind: 'resolved', content: { blob: response.data, contentType } };

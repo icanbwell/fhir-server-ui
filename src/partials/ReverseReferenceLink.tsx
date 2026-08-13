@@ -1,4 +1,4 @@
-import { Typography, Link, Chip, CircularProgress } from '@mui/material';
+import { Typography, Link, CircularProgress } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useResourceCount } from '../hooks/useResourceCount';
 
@@ -38,7 +38,9 @@ function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenc
             <Typography>{target}</Typography>
             {isLoading && <CircularProgress size={14} aria-label="Loading count" />}
             {!isLoading && !error && count !== null && (
-                <Chip label={atLimit ? '10+' : `(${count})`} size="small" variant="outlined" color="primary" />
+                <Typography color="primary" sx={{ textDecoration: 'none' }}>
+                    {atLimit ? '10+' : `(${count})`}
+                </Typography>
             )}
             <OpenInNewIcon />
         </Link>

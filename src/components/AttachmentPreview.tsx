@@ -33,6 +33,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [rawErrorContent, setRawErrorContent] = useState<string | null>(null);
     const [blob, setBlob] = useState<Blob | null>(null);
     const [externalUrl, setExternalUrl] = useState<string | null>(null);
     const [textContent, setTextContent] = useState<string>('');
@@ -49,6 +50,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         let cancelled = false;
         setIsLoading(true);
         setErrorMessage(null);
+        setRawErrorContent(null);
         setBlob(null);
         setExternalUrl(null);
 
@@ -63,6 +65,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
                     setExternalUrl(result.externalUrl);
                 } else if (result.reason === 'malformed') {
                     setErrorMessage(`This attachment’s content could not be decoded — it may be corrupted. (${result.detail})`);
+                    setRawErrorContent(result.rawContent ?? null);
                 } else {
                     setErrorMessage('This attachment has no retrievable content.');
                 }
@@ -206,6 +209,30 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
             </Box>
             {isLoading && <Typography color="text.secondary">Loading…</Typography>}
             {!isLoading && errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+            {!isLoading && errorMessage && rawErrorContent && (
+                <Box sx={{ mt: 1 }}>
+                    <Typography variant="caption" color="text.secondary">
+                        Raw content received (for debugging):
+                    </Typography>
+                    <Box
+                        component="pre"
+                        sx={{
+                            whiteSpace: 'pre-wrap',
+                            overflow: 'auto',
+                            maxHeight: '40vh',
+                            m: 0,
+                            p: 1,
+                            bgcolor: 'grey.100',
+                            border: '1px solid',
+                            borderColor: 'grey.300',
+                            borderRadius: 1,
+                            fontSize: '0.75rem',
+                        }}
+                    >
+                        {rawErrorContent}
+                    </Box>
+                </Box>
+            )}
             {!isLoading && !errorMessage && renderPreview()}
         </Paper>
     );

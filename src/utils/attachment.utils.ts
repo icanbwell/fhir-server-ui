@@ -13,8 +13,10 @@ export type ResolveAttachmentResult =
     // Binary response with no usable content) — distinct from 'missing' so the UI can tell a
     // corrupted attachment apart from one that genuinely has nothing to show. `detail` carries
     // the underlying failure (an error message, or a description of the unexpected shape) for
-    // display to technical users rather than being logged and discarded.
-    | { kind: 'unavailable'; reason: 'malformed'; detail: string }
+    // display to technical users rather than being logged and discarded. `rawContent`, when
+    // available, is the actual text we failed to decode (the raw attachment.data string, or the
+    // raw Binary response body) so it can be inspected directly instead of just described.
+    | { kind: 'unavailable'; reason: 'malformed'; detail: string; rawContent?: string }
     | { kind: 'unavailable'; reason: 'missing' };
 
 function errorDetail(error: unknown): string {
@@ -74,7 +76,12 @@ export async function resolveAttachmentContent(
             return { kind: 'resolved', content: { blob: decodeBase64ToBlob(String(attachment.data), contentType), contentType } };
         } catch (error) {
             console.warn('Failed to decode inline attachment.data as base64', error);
-            return { kind: 'unavailable', reason: 'malformed', detail: `Invalid base64 in attachment.data: ${errorDetail(error)}` };
+            return {
+                kind: 'unavailable',
+                reason: 'malformed',
+                detail: `Invalid base64 in attachment.data: ${errorDetail(error)}`,
+                rawContent: String(attachment.data),
+            };
         }
     }
 
@@ -93,8 +100,12 @@ export async function resolveAttachmentContent(
             // The server didn't honor content negotiation and returned the FHIR JSON wrapper
             // instead of raw bytes — decode the base64 `data` field out of it rather than
             // silently handing JSON to a renderer expecting the declared contentType.
+            // Hoisted above the try so a mid-parse failure (JSON.parse, decodeBase64ToBlob) still
+            // leaves the raw response body available to report below — only response.data.text()
+            // itself failing leaves this undefined.
+            let text: string | undefined;
             try {
-                const text = await response.data.text();
+                text = await response.data.text();
                 const json = JSON.parse(text);
                 if (typeof json?.data !== 'string') {
                     console.warn('Binary response was a FHIR JSON wrapper with no usable data field', json);
@@ -102,6 +113,7 @@ export async function resolveAttachmentContent(
                         kind: 'unavailable',
                         reason: 'malformed',
                         detail: `Binary/${binaryId} returned a FHIR JSON wrapper with no usable "data" field`,
+                        rawContent: text,
                     };
                 }
                 return { kind: 'resolved', content: { blob: decodeBase64ToBlob(json.data, contentType), contentType } };
@@ -111,6 +123,7 @@ export async function resolveAttachmentContent(
                     kind: 'unavailable',
                     reason: 'malformed',
                     detail: `Failed to decode the FHIR JSON wrapper returned by Binary/${binaryId}: ${errorDetail(error)}`,
+                    rawContent: text,
                 };
             }
         }

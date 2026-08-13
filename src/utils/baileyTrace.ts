@@ -25,7 +25,10 @@ function resolveEventToolCall(event: BaileyTraceEvent): ResolvedToolCall | null 
 }
 
 export function traceEventToolName(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string | null {
-    return event.kind === 'pseudo_tool_call' ? event.name : (resolved?.name ?? null);
+    if (event.kind === 'pseudo_tool_call') {
+        return event.name;
+    }
+    return resolved?.name ?? null;
 }
 
 export function traceEventSummary(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string {

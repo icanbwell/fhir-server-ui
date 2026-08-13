@@ -37,6 +37,12 @@ export function extractPseudoToolCalls(text: string): ExtractPseudoToolCallsResu
         matches.push(tag === 'call_tool' ? parseCallTool(inner) : { name: 'search_tools', args: inner.trim() });
         return '';
     });
+    if (matches.length === 0) {
+        // Nothing was removed, so there's no gap to collapse — running the collapse below
+        // unconditionally would also rewrite unrelated 3+-blank-line runs the model never meant
+        // as tool-call padding, e.g. PEP8-style double-blank-lines inside a fenced code sample.
+        return { cleanedText: withoutTags, matches };
+    }
     // Removing a block often leaves behind the blank line(s) that separated it from surrounding
     // prose; collapse those so the visible message doesn't end up with odd paragraph gaps.
     const cleanedText = withoutTags.replace(/\n{3,}/g, '\n\n');

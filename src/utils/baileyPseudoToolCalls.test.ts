@@ -25,6 +25,13 @@ describe('extractPseudoToolCalls', () => {
         expect(extractPseudoToolCalls(text)).toEqual({ cleanedText: text, matches: [] });
     });
 
+    it('preserves blank lines inside a fenced code block when there are no pseudo tool call blocks', () => {
+        // PEP8-style double-blank-line spacing between functions is 3 newlines in the raw text —
+        // must survive untouched since nothing was removed to collapse a gap around.
+        const text = "Here's a helper:\n```python\ndef foo():\n    return 1\n\n\ndef bar():\n    return 2\n```";
+        expect(extractPseudoToolCalls(text)).toEqual({ cleanedText: text, matches: [] });
+    });
+
     it('leaves an incomplete (still-streaming) block untouched', () => {
         const text = 'Let me check.\n\n<call_tool>\n<name>search_observations</name>';
         const { cleanedText, matches } = extractPseudoToolCalls(text);

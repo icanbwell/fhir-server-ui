@@ -47,6 +47,8 @@ const hasDedicatedRenderer = (contentType: string) =>
     contentType === 'text/html' ||
     contentType === 'application/pdf' ||
     contentType.startsWith('image/') ||
+    contentType.startsWith('video/') ||
+    contentType.startsWith('audio/') ||
     contentType === 'text/rtf' ||
     contentType === 'application/rtf';
 
@@ -63,6 +65,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
     const [textContent, setTextContent] = useState<string>('');
     const [objectUrl, setObjectUrl] = useState<string | null>(null);
     const [rtfError, setRtfError] = useState<string | null>(null);
+    const [mediaError, setMediaError] = useState<string | null>(null);
     const [pdfLoadId, setPdfLoadId] = useState<number>(0);
     const rtfContainerRef = useRef<HTMLDivElement>(null);
 
@@ -119,17 +122,25 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [attachment.data, attachment.url, attachment.contentType]);
 
-    // Object URL for image preview — must be revoked on cleanup or attachment change to
-    // avoid leaking memory across repeated views. PDFs render directly from the Blob via
-    // react-pdf/pdf.js, which doesn't need one.
+    // Object URL for image/video/audio preview — must be revoked on cleanup or attachment
+    // change to avoid leaking memory across repeated views. PDFs render directly from the
+    // Blob via react-pdf/pdf.js, which doesn't need one.
     useEffect(() => {
-        if (!blob || !contentType.startsWith('image/')) {
+        const needsObjectUrl =
+            contentType.startsWith('image/') || contentType.startsWith('video/') || contentType.startsWith('audio/');
+        if (!blob || !needsObjectUrl) {
             setObjectUrl(null);
             return;
         }
         const url = URL.createObjectURL(blob);
         setObjectUrl(url);
         return () => URL.revokeObjectURL(url);
+    }, [blob, contentType]);
+
+    // Clears any previous "can't play this" state when a new attachment loads, so a media
+    // error from a prior attachment doesn't linger after switching to a playable one.
+    useEffect(() => {
+        setMediaError(null);
     }, [blob, contentType]);
 
     // Decoded text for html preview, and as the fallback render for every content type
@@ -210,6 +221,32 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
         }
         if (contentType.startsWith('image/') && objectUrl) {
             return <Box component="img" src={objectUrl} sx={{ maxWidth: '100%' }} />;
+        }
+        if (contentType.startsWith('video/') && objectUrl) {
+            return mediaError ? (
+                <Alert severity="warning">{mediaError}</Alert>
+            ) : (
+                <Box
+                    component="video"
+                    controls
+                    src={objectUrl}
+                    sx={{ maxWidth: '100%' }}
+                    onError={() => setMediaError('This browser cannot play this video format — use Download instead.')}
+                />
+            );
+        }
+        if (contentType.startsWith('audio/') && objectUrl) {
+            return mediaError ? (
+                <Alert severity="warning">{mediaError}</Alert>
+            ) : (
+                <Box
+                    component="audio"
+                    controls
+                    src={objectUrl}
+                    sx={{ width: '100%' }}
+                    onError={() => setMediaError('This browser cannot play this audio format — use Download instead.')}
+                />
+            );
         }
         if (contentType === 'text/rtf' || contentType === 'application/rtf') {
             return rtfError ? <Alert severity="warning">{rtfError}</Alert> : <div ref={rtfContainerRef} />;

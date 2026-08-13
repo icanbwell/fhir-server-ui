@@ -3,12 +3,16 @@ import { Alert, Box, Button, CircularProgress, IconButton, Paper, TextField, Typ
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import useBaileyChat from '../hooks/useBaileyChat';
 import BaileyTracePanel from './BaileyTracePanel';
 import { traceEventHint } from '../utils/baileyTrace';
+import { useTheme } from '../context/ThemeContext';
+import './BaileyMarkdown.css';
 
 const BaileyChatPanel = () => {
     const { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
+    const { isDarkMode } = useTheme();
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -60,7 +64,9 @@ const BaileyChatPanel = () => {
                                         </Typography>
                                     ) : (
                                         <>
-                                            <Markdown>{message.content}</Markdown>
+                                            <div className={`bailey-markdown-content${isDarkMode ? ' dark-mode' : ''}`}>
+                                                <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
+                                            </div>
                                             {message.streaming && streamingHint && (
                                                 <Typography
                                                     variant="caption"

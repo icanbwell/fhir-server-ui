@@ -1,0 +1,50 @@
+/* Bailey chat markdown content styling */
+
+.bailey-markdown-content table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+  display: block;
+}
+
+.bailey-markdown-content th {
+  background-color: var(--table-header-bg, #F7F7FA);
+  color: var(--table-header-color, #494949);
+  font-weight: 600;
+  text-align: left;
+  padding: 6px 10px;
+  border: 1px solid var(--table-border-color, #E0E0E6);
+}
+
+.bailey-markdown-content td {
+  padding: 6px 10px;
+  border: 1px solid var(--table-border-color, #E0E0E6);
+  vertical-align: top;
+}
+
+.bailey-markdown-content tr:nth-child(even) {
+  background-color: var(--table-stripe-color, #F7F7FA);
+}
+
+.bailey-markdown-content p:first-child {
+  margin-top: 0;
+}
+
+.bailey-markdown-content p:last-child {
+  margin-bottom: 0;
+}
+
+.dark-mode .bailey-markdown-content th {
+  background-color: var(--table-header-bg, var(--bwell-dark-mode-paper));
+  color: var(--table-header-color, #F7F7FA);
+}
+
+.dark-mode .bailey-markdown-content td {
+  border-color: var(--table-border-color, var(--bwell-dark-mode-border));
+}
+
+.dark-mode .bailey-markdown-content tr:nth-child(even) {
+  background-color: var(--table-stripe-color, var(--bwell-dark-mode-paper));
+}

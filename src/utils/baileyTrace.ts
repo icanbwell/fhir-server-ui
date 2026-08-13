@@ -8,6 +8,7 @@ import { resolveToolCall, ResolvedToolCall } from './baileyToolCalls';
 export const TRACE_KIND_LABEL: Record<BaileyTraceEvent['kind'], string> = {
     tool_start: 'Tool start',
     tool_end: 'Tool end',
+    pseudo_tool_call: 'Narrated tool call',
     progress: 'Progress',
     error: 'Error',
     raw: 'Raw event',
@@ -24,7 +25,7 @@ function resolveEventToolCall(event: BaileyTraceEvent): ResolvedToolCall | null 
 }
 
 export function traceEventToolName(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string | null {
-    return resolved?.name ?? null;
+    return event.kind === 'pseudo_tool_call' ? event.name : (resolved?.name ?? null);
 }
 
 export function traceEventSummary(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string {
@@ -36,6 +37,8 @@ export function traceEventSummary(event: BaileyTraceEvent, resolved = resolveEve
             const duration = event.runtimeSeconds !== undefined ? ` — ${event.runtimeSeconds.toFixed(2)}s` : '';
             return `${name}${duration}${event.isError ? ' — failed' : ''}`;
         }
+        case 'pseudo_tool_call':
+            return `${event.name} — written as text, not actually called`;
         case 'progress':
             return event.message ? `${event.status} — ${event.message}` : event.status;
         case 'error':
@@ -48,6 +51,9 @@ export function traceEventSummary(event: BaileyTraceEvent, resolved = resolveEve
 export function traceEventArgsDetail(event: BaileyTraceEvent, resolved = resolveEventToolCall(event)): string | null {
     if (event.kind === 'tool_start' || event.kind === 'tool_end') {
         return resolved!.args ? JSON.stringify(resolved!.args, null, 2) : (event.args ?? null);
+    }
+    if (event.kind === 'pseudo_tool_call') {
+        return event.args ?? null;
     }
     return null;
 }
@@ -68,6 +74,8 @@ export function traceEventHint(event: BaileyTraceEvent): string {
             const name = resolveToolCall(event.name, event.args).name;
             return event.isError ? `${name} failed` : `${name} returned`;
         }
+        case 'pseudo_tool_call':
+            return `${event.name} (written as text, not called)`;
         case 'progress':
             return event.message ?? event.status;
         case 'error':

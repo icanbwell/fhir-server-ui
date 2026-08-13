@@ -53,6 +53,11 @@ export type BaileyTraceEvent =
           isError?: boolean;
           runtimeSeconds?: number;
       }
+    // The model wrote what looks like a tool call as plain text (e.g. <call_tool>...</call_tool>)
+    // instead of making a real one — see baileyPseudoToolCalls.ts. Kept distinct from tool_start/
+    // tool_end (rather than faking one of those) so the details panel never implies a tool
+    // actually ran when nothing did.
+    | { kind: 'pseudo_tool_call'; name: string; args?: string; at: number }
     | { kind: 'progress'; status: string; message?: string; at: number }
     | { kind: 'error'; message: string; at: number }
     // Any SSE event type this client doesn't have specific handling for at all (message/

@@ -8,7 +8,7 @@ import BaileyTracePanel from './BaileyTracePanel';
 import { traceEventHint } from '../utils/baileyTrace';
 
 const BaileyChatPanel = () => {
-    const { messages, traceEvents, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
+    const { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -96,7 +96,7 @@ const BaileyChatPanel = () => {
                 </Alert>
             )}
 
-            <BaileyTracePanel events={traceEvents} onClear={clearTrace} />
+            <BaileyTracePanel events={traceEvents} lastRequest={lastRequest} onClear={clearTrace} />
 
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                 <TextField

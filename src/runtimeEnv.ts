@@ -11,7 +11,7 @@ declare global {
 // `window.__ENV__` from real environment variables - it overrides import.meta.env here,
 // letting one built image be deployed unchanged across environments instead of
 // rebuilding per environment. See docs/runtime-environment-config.md.
-export const APP_ENV: Record<string, string> = {
-  ...(import.meta.env as unknown as Record<string, string>),
+export const APP_ENV: Record<string, string | undefined> = {
+  ...(import.meta.env as unknown as Record<string, string | undefined>),
   ...window.__ENV__,
 };

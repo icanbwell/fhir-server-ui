@@ -1,5 +1,12 @@
 # Connections Console: Merge List + Console Into One Page — Design
 
+## Amendment (2026-08-13): moved to fhir-tool-service
+
+This feature has been removed from this repo (PHR-3383) and ported to
+`fhir-tool-service` (DCON-5011) — see the amendment note in
+`2026-08-07-connections-fhir-console-design.md` for the full rationale. Kept
+as historical record, not current documentation of this repo.
+
 ## Problem
 
 PR #220 (`docs/superpowers/specs/2026-08-07-connections-fhir-console-design.md`) added

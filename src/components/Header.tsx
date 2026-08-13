@@ -6,7 +6,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import TerminalIcon from '@mui/icons-material/Terminal';
-import HubIcon from '@mui/icons-material/Hub';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { Link, useLocation } from 'react-router';
 import BwellIcon from '../dist/images/bwell.png';
@@ -86,20 +85,6 @@ const Header = () => {
                             </IconButton>
                         </span>
                     </Tooltip>
-                    {userDetails && (
-                        <Tooltip title="Connections">
-                            <IconButton
-                                color="inherit"
-                                aria-label="connections"
-                                id="btnConnections"
-                                component={Link}
-                                to="/connections"
-                                sx={{ ml: 1 }}
-                            >
-                                <HubIcon />
-                            </IconButton>
-                        </Tooltip>
-                    )}
                     {userDetails && env.baileyEnabled && (
                         <Tooltip title="Bailey AI">
                             <IconButton

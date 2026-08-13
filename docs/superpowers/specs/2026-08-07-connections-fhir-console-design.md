@@ -1,5 +1,17 @@
 # Connections Console: Token Service Connections + Free-Form FHIR Requests — Design
 
+## Amendment (2026-08-13): moved to fhir-tool-service
+
+This feature has been removed from this repo (PHR-3383) and ported to
+`fhir-tool-service` — an internal staff debugging tool, not a patient-facing
+feature, belongs in this org's dedicated home for FHIR engineering tools
+rather than this patient-facing app. The port (fhir-tool-service DCON-5011,
+stacked on DCON-5010 which added the `bwellapp` login this feature's self
+mode needs) is close to 1:1 with the design below, including its
+security-critical invariants (origin locks, the connection-switch remount,
+the streaming decoder-flush fix). This document is kept as historical
+record of the original design, not as current documentation of this repo.
+
 ## Problem
 
 A logged-in member's health data often doesn't live only on b.well's own FHIR server —

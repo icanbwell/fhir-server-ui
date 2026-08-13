@@ -18,6 +18,7 @@ import { jwtParser } from '../utils/jwtParser';
 import { removeAuthData } from '../utils/auth.utils';
 import { getClientCredentialsToken } from '../services/ClientCredentialsAuthService';
 import AuthUrlProvider from '../utils/authUrlProvider';
+import { APP_ENV } from '../runtimeEnv';
 
 type ProviderOption = {
     label: string;
@@ -29,12 +30,12 @@ const PROVIDERS: ProviderOption[] = [
     {
         label: 'Cognito',
         identityProvider: 'cognitocc',
-        tokenUrl: import.meta.env.REACT_APP_AUTH_COGNITOCC_TOKEN_URL,
+        tokenUrl: APP_ENV.REACT_APP_AUTH_COGNITOCC_TOKEN_URL,
     },
     {
         label: 'Descope',
         identityProvider: 'descopecc',
-        tokenUrl: import.meta.env.REACT_APP_AUTH_DESCOPECC_TOKEN_URL,
+        tokenUrl: APP_ENV.REACT_APP_AUTH_DESCOPECC_TOKEN_URL,
     },
 ];
 

@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { APP_ENV } from '../runtimeEnv';
 
 export async function login(
     email: string,
     password: string,
     clientKey: string
 ): Promise<string> {
-    const baseUrl = import.meta.env.REACT_APP_AUTH_BWELLAPP_BASE_URL;
+    const baseUrl = APP_ENV.REACT_APP_AUTH_BWELLAPP_BASE_URL;
     if (!baseUrl) {
         throw new Error('REACT_APP_AUTH_BWELLAPP_BASE_URL is not defined');
     }

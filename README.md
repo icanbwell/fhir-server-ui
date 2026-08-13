@@ -102,6 +102,7 @@ make generate_types
 ## Feature Documentation
 
 - [Composition Summary Screen](docs/composition-summary-screen.md) — how the readable Composition view (`/composition-summary/...`) is implemented.
+- [Runtime Environment Configuration](docs/runtime-environment-config.md) — how to supply `REACT_APP_*` config at container start instead of baking it into the build, for containerized deployments.
 
 ## Terminal Warning
 When running the application, you might encounter the following warning in the terminal `Failed to parse source map`.

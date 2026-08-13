@@ -23,6 +23,11 @@ interface GetUrlParams {
     operation?: string;
 }
 
+interface GetResourceCountParams {
+    resourceType: string;
+    queryParameters?: string[];
+}
+
 interface PostResourceParams {
     resourceType: string;
     id: string;
@@ -116,6 +121,17 @@ class FhirApi extends BaseApi {
         }
         this.addMissingRequiredParams({ queryParams: url.searchParams, id, resourceType, operation });
         return url;
+    }
+
+    async getResourceCount({ resourceType, queryParameters }: GetResourceCountParams): Promise<number | null> {
+        const url = this.getUrl({ resourceType, queryParameters });
+        url.searchParams.set('_summary', 'count');
+        url.searchParams.set('_total', 'accurate');
+        const { status, json } = await this.getData({ urlString: url.toString() });
+        if (status && status >= 200 && status < 300 && typeof json?.total === 'number') {
+            return json.total;
+        }
+        return null;
     }
 
     async mergeResource({ resourceType, id, resource, smartMerge = true }: PostResourceParams) {

@@ -39,7 +39,7 @@ function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenc
             <Typography>{target}</Typography>
             {isLoading && <CircularProgress size={14} aria-label="Loading count" />}
             {!isLoading && !error && count !== null && (
-                <Chip label={atLimit ? '10+' : `(${count})`} size="small" />
+                <Chip label={atLimit ? '10+' : `(${count})`} size="small" variant="outlined" color="primary" />
             )}
             <OpenInNewIcon />
         </Link>

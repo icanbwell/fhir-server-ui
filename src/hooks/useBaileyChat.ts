@@ -3,6 +3,7 @@ import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaileyApi from '../api/baileyApi';
 import { parseSseFrames } from '../utils/baileySse';
+import { extractPseudoToolCalls } from '../utils/baileyPseudoToolCalls';
 import { BAILEY_MCP_SERVER_LABEL, BAILEY_SYSTEM_INSTRUCTIONS } from '../constants/baileyConstants';
 import { BaileyMessage, BaileyStreamEvent, BaileyTraceEvent } from '../types/baileyChat';
 
@@ -61,6 +62,14 @@ const useBaileyChat = (): UseBaileyChatResult => {
         messagesRef.current = messages;
     }, [messages]);
 
+    // Per-assistant-message state for extractPseudoToolCalls: `raw` accumulates every delta
+    // exactly as the model wrote it (extraction needs the untouched text to keep matching
+    // correctly as later deltas arrive), while `emittedCount` tracks how many of the matches
+    // found so far have already become trace events, so a match already surfaced isn't
+    // re-added to traceEvents on every subsequent delta. Cleared in runTurn's finally once the
+    // assistantId is done being written to.
+    const pseudoToolStateRef = useRef<Map<string, { raw: string; emittedCount: number }>>(new Map());
+
     // Returns true when the event actually contributed something visible to the assistant
     // turn (message text or a trace event), so the caller can tell "streamed a real answer"
     // from "parsed nothing at all". Ported from baileyai-skills-service's
@@ -72,9 +81,25 @@ const useBaileyChat = (): UseBaileyChatResult => {
             if (!event.delta) {
                 return false;
             }
-            setMessages((prev) =>
-                prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + event.delta } : m))
-            );
+
+            // Recompute from the full raw buffer (not just this delta) on every chunk, since a
+            // <call_tool> block can straddle several deltas — only a complete block gets matched
+            // and stripped, so cleanedText is always what's safe to show right now.
+            const state = pseudoToolStateRef.current.get(assistantId) ?? { raw: '', emittedCount: 0 };
+            state.raw += event.delta;
+            const { cleanedText, matches } = extractPseudoToolCalls(state.raw);
+            const newMatches = matches.slice(state.emittedCount);
+            state.emittedCount = matches.length;
+            pseudoToolStateRef.current.set(assistantId, state);
+
+            setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, content: cleanedText } : m)));
+            if (newMatches.length > 0) {
+                const at = Date.now();
+                setTraceEvents((prev) => [
+                    ...prev,
+                    ...newMatches.map((match): BaileyTraceEvent => ({ kind: 'pseudo_tool_call', name: match.name, args: match.args, at })),
+                ]);
+            }
             return true;
         }
 
@@ -220,6 +245,9 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 }
                 reportError(err?.message || 'Bailey request failed.');
             } finally {
+                // This assistantId won't receive any more deltas — drop its entry so the map
+                // doesn't grow for the lifetime of the session.
+                pseudoToolStateRef.current.delete(assistantId);
                 // Drop the assistant placeholder entirely unless it actually accumulated text
                 // (errored/aborted/tool-only turns are dropped even if some trace activity — a
                 // tool call, a progress event — happened first; that activity alone doesn't mean

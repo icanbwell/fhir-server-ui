@@ -8,6 +8,12 @@ tmp
 .vscode
 .idea
 
+# Claude Code / agent tooling (session data, worktrees, skill caches - not part of the app)
+.claude
+.worktrees
+.playwright-mcp
+.superpowers
+
 # Dependencies (container runs its own yarn install)
 .yarn
 node_modules
@@ -16,6 +22,18 @@ node_modules
 build
 dist
 coverage
+
+# Not needed by the dev server (this image only runs `yarn dev`)
+e2e
+docs
+policies
+config
+cucumber.cjs
+AGENTS.md
+CLAUDE.md
+README.md
+LICENSE
+copilot-instructions.md
 
 # Env files
 .env

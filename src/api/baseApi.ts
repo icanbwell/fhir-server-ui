@@ -25,6 +25,12 @@ export interface StreamRequestParams {
     headers?: Record<string, string>;
     signal?: AbortSignal;
     responseMode?: 'text' | 'binary';
+    // Resolves the request against this origin instead of the configured FHIR server. The only
+    // intended caller is a same-origin reverse proxy in front of the FHIR server (e.g.
+    // `window.location.origin`), which keeps the browser fetch same-origin and avoids CORS
+    // entirely — never pass anything derived from user input, since this bypasses the
+    // same-origin guard below by design.
+    baseUrlOverride?: string;
     onHeaders?: (status: number, headers: Record<string, string>) => void;
     onChunk?: (chunk: Uint8Array) => void;
     onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
@@ -128,6 +134,7 @@ class BaseApi {
         headers,
         signal,
         responseMode = 'text',
+        baseUrlOverride,
         onHeaders,
         onChunk,
         onProgress,
@@ -136,25 +143,25 @@ class BaseApi {
         if (path.startsWith(window.location.origin)) {
             path = path.slice(window.location.origin.length);
         }
+        const effectiveBase = baseUrlOverride || this.getBaseUrl();
         // `new URL(path, base)` treats a leading-slash `path` as path-absolute, replacing the
         // entire path component of `base` instead of appending to it — so a base URL with its own
         // path segment (e.g. the token service's `/api/v1.0`) would otherwise silently lose that
         // prefix. Normalizing both sides to the relative-append form keeps it intact.
-        const normalizedBase = this.getBaseUrl().endsWith('/')
-            ? this.getBaseUrl()
-            : `${this.getBaseUrl()}/`;
+        const normalizedBase = effectiveBase.endsWith('/') ? effectiveBase : `${effectiveBase}/`;
         const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
         const url = new URL(normalizedPath, normalizedBase);
         if (params) {
             Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
         }
 
-        // The session's bearer token must never leave the configured base URL. A scheme-relative
-        // or absolute path can resolve to a different origin via `new URL()`, so refuse before any
-        // fetch happens rather than trusting every caller to have validated its own input. This
-        // check used to live only in FhirApi.sendRequest (the one caller that took a free-form path
-        // from user input); moving it here means every BaseApi-derived call gets the guarantee.
-        if (url.origin !== new URL(this.getBaseUrl()).origin) {
+        // The session's bearer token must never leave the configured base URL (or the explicit
+        // override above). A scheme-relative or absolute path can resolve to a different origin
+        // via `new URL()`, so refuse before any fetch happens rather than trusting every caller to
+        // have validated its own input. This check used to live only in FhirApi.sendRequest (the
+        // one caller that took a free-form path from user input); moving it here means every
+        // BaseApi-derived call gets the guarantee.
+        if (url.origin !== new URL(effectiveBase).origin) {
             return {
                 status: undefined,
                 headers: {},
@@ -207,7 +214,13 @@ class BaseApi {
         // Surface status/headers as soon as fetch() resolves — before the body streaming loop
         // below starts — so callers can populate UI without waiting for the whole body.
         onHeaders?.(response.status, responseHeaders);
-        await this.handleUnauthorized(response.status);
+        // A 401 from baseUrlOverride's target says nothing about whether the actual FHIR
+        // session is still valid — that origin isn't the session's auth boundary, so treating
+        // its 401 as "the user is logged out" would log the whole app out over a probe the
+        // caller (e.g. the same-origin Binary fetch) is meant to fail silently and fall back on.
+        if (!baseUrlOverride) {
+            await this.handleUnauthorized(response.status);
+        }
 
         // Content-Length reflects the compressed size when the server sends a Content-Encoding
         // (gzip/br/deflate), but reader.read() yields decompressed bytes — comparing the two would
@@ -351,6 +364,8 @@ class BaseApi {
         options?: {
             onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
             headers?: Record<string, string>;
+            params?: Record<string, string>;
+            baseUrlOverride?: string;
         }
     ): Promise<{ status: number; data: Blob; headers: Record<string, string> }> {
         const { status, chunks, headers, errorMessage, incomplete } = await this.streamRequest({
@@ -359,6 +374,8 @@ class BaseApi {
             responseMode: 'binary',
             onProgress: options?.onProgress,
             headers: options?.headers,
+            params: options?.params,
+            baseUrlOverride: options?.baseUrlOverride,
         });
         if (!status || status < 200 || status >= 300) {
             // The server's response body (e.g. a FHIR OperationOutcome on a 404/403) already

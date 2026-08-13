@@ -54,8 +54,13 @@ describe('resolveAttachmentContent', () => {
 
         const result = await resolveAttachmentContent(attachment, baseApi);
 
-        expect(baseApi.downloadFile).toHaveBeenCalledWith('/4_0_0/Binary/abc123', {
-            headers: { Accept: 'image/png' },
+        expect(baseApi.downloadFile).toHaveBeenNthCalledWith(1, '/4_0_0/Binary/abc123', {
+            baseUrlOverride: window.location.origin,
+            params: { _format: 'json' },
+            headers: { Accept: 'application/fhir+json' },
+        });
+        expect(baseApi.downloadFile).toHaveBeenNthCalledWith(2, '/4_0_0/Binary/abc123', {
+            headers: { Accept: 'application/fhir+json' },
         });
         expect(result.kind).toBe('resolved');
         if (result.kind !== 'resolved') {
@@ -124,7 +129,7 @@ describe('resolveAttachmentContent', () => {
         expect(await result.content.blob.text()).toBe(payload);
     });
 
-    it('reports malformed with the HTTP status when the Binary fetch fails', async () => {
+    it('reports a network failure with the HTTP status when the Binary fetch fails', async () => {
         const attachment: TAttachment = { url: 'Binary/abc123' as any };
         vi.spyOn(baseApi, 'downloadFile').mockRejectedValue(
             Object.assign(new Error('Request failed with status 404'), { status: 404 })
@@ -136,9 +141,9 @@ describe('resolveAttachmentContent', () => {
         if (result.kind !== 'unavailable') {
             throw new Error('expected unavailable');
         }
-        expect(result.reason).toBe('malformed');
-        if (result.reason !== 'malformed') {
-            throw new Error('expected malformed');
+        expect(result.reason).toBe('network');
+        if (result.reason !== 'network') {
+            throw new Error('expected network');
         }
         expect(result.detail).toContain('HTTP 404');
     });

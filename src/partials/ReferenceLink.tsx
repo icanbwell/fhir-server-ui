@@ -3,6 +3,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useResourceCount } from '../hooks/useResourceCount';
+import { resourceLinkSx } from './resourceLinkSx';
 
 type TReferenceLinkProps = {
     reference: string;
@@ -23,15 +24,7 @@ function ReferenceLink({ reference, display }: TReferenceLinkProps) {
         <Link
             href={`/4_0_0/${reference}`}
             rel="noopener noreferrer"
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                textDecoration: 'none',
-                '&:hover': {
-                    textDecoration: 'underline',
-                },
-            }}
+            sx={resourceLinkSx}
         >
             <Typography>{display || reference}</Typography>
             {isLoading && <CircularProgress size={14} aria-label="Loading count" />}

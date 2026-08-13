@@ -1,6 +1,7 @@
 import { Typography, Link, CircularProgress } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useResourceCount } from '../hooks/useResourceCount';
+import { resourceLinkSx } from './resourceLinkSx';
 
 type TReverseReferenceLinkProps = {
     target: string;
@@ -25,15 +26,7 @@ function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenc
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                textDecoration: 'none',
-                '&:hover': {
-                    textDecoration: 'underline',
-                },
-            }}
+            sx={resourceLinkSx}
         >
             <Typography>{target}</Typography>
             {isLoading && <CircularProgress size={14} aria-label="Loading count" />}

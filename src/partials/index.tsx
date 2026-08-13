@@ -1,6 +1,7 @@
 import Address from './Address';
 import Annotation from './Annotation';
 import Attachment from './Attachment';
+import BinaryContent from './BinaryContent';
 import Boolean from './Boolean';
 import Canonical from './Canonical';
 import Code from './Code';
@@ -10,7 +11,16 @@ import ContactPoint from './ContactPoint';
 import DateTime from './DateTime';
 import Decimal from './Decimal';
 import DispenseRequest from './DispenseRequest';
+import DocumentContent from './DocumentContent';
+import DocumentReferenceContextPartial from './DocumentReferenceContext';
+import DocumentReferenceRelatesTo from './DocumentReferenceRelatesTo';
 import Dosage from './Dosage';
+import EncounterParticipant from './EncounterParticipant';
+import EncounterHospitalization from './EncounterHospitalization';
+import EncounterDiagnosis from './EncounterDiagnosis';
+import EncounterLocation from './EncounterLocation';
+import EncounterStatusHistory from './EncounterStatusHistory';
+import EncounterClassHistory from './EncounterClassHistory';
 import Extension from './Extension';
 import HumanName from './HumanName';
 import Identifier from './Identifier';
@@ -40,6 +50,7 @@ export default {
   Address,
   Annotation,
   Attachment,
+  BinaryContent,
   Boolean,
   Canonical,
   Code,
@@ -49,7 +60,16 @@ export default {
   DateTime,
   Decimal,
   DispenseRequest,
+  DocumentContent,
+  DocumentReferenceContext: DocumentReferenceContextPartial,
+  DocumentReferenceRelatesTo,
   Dosage,
+  EncounterParticipant,
+  EncounterHospitalization,
+  EncounterDiagnosis,
+  EncounterLocation,
+  EncounterStatusHistory,
+  EncounterClassHistory,
   Extension,
   HumanName,
   Identifier,

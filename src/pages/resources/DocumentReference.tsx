@@ -181,13 +181,21 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
             }
             {
                 resource.relatesTo &&
-                <Partials.Reference
-                    reference={resource.relatesTo}
+                <Partials.DocumentReferenceRelatesTo
+                    relatesTo={resource.relatesTo}
                     name='Relates To'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='relates-to'
-                    field='target'
+                    field=''
+                />
+            }
+            {
+                resource.description &&
+                <Partials.NameValue
+                    name='Description'
+                    value={resource.description}
+                    searchParameter='description'
                 />
             }
             {
@@ -198,6 +206,28 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='security-label'
+                />
+            }
+            {
+                resource.content &&
+                <Partials.DocumentContent
+                    content={resource.content}
+                    name='Content'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='content'
+                    field=''
+                />
+            }
+            {
+                resource.context &&
+                <Partials.DocumentReferenceContext
+                    context={resource.context}
+                    name='Context'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='context'
+                    field=''
                 />
             }
         </>

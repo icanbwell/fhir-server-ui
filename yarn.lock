@@ -2502,6 +2502,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"codepage@npm:^1.15.0":
+  version: 1.15.0
+  resolution: "codepage@npm:1.15.0"
+  checksum: 10c0/2455b482302cb784b46dea60a8ee83f0c23e794bdd979556bdb107abe681bba722af62a37f5c955ff4efd68fdb9688c3986e719b4fd536c0e06bb25bc82abea3
+  languageName: node
+  linkType: hard
+
 "combined-stream@npm:^1.0.8":
   version: 1.0.8
   resolution: "combined-stream@npm:1.0.8"
@@ -3298,6 +3305,7 @@ __metadata:
     react-router: "npm:^8.3.0"
     react-vertical-timeline-component: "npm:^4.0.0"
     react18-json-view: "npm:^0.2.10"
+    rtf.js: "npm:^3.0.9"
     typescript: "npm:^6.0.3"
     uuid: "npm:^14.0.0"
     vite: "npm:^8.0.16"
@@ -5796,6 +5804,15 @@ __metadata:
   bin:
     rolldown: ./bin/cli.mjs
   checksum: 10c0/78a804b9d0947d0569aac5f78ae789b107d097ef94df2ee04b0d89621ca0b62f5336037e6fc1e24209ece2f1d7cbf0d66b27db10b8022684eaf5bea89b9aa97e
+  languageName: node
+  linkType: hard
+
+"rtf.js@npm:^3.0.9":
+  version: 3.0.9
+  resolution: "rtf.js@npm:3.0.9"
+  dependencies:
+    codepage: "npm:^1.15.0"
+  checksum: 10c0/f1b0f66a9e601d3f3993bbba84792ce5a7de1ba0536cd8c25c5a2fcf19375217126b250edbdd0acc707c9b34599c5b8f9fba5fd6f8b66802f994f02eb68c993a
   languageName: node
   linkType: hard
 

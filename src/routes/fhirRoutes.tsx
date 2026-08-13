@@ -11,6 +11,7 @@ const SearchPage = lazy(() => import('../pages/SearchPage'));
 const ExcelViewerPage = lazy(() => import('../pages/ExcelViewerPage'));
 const IPSViewerPage = lazy(() => import('../pages/IPSViewerPage'));
 const CompositionSummaryPage = lazy(() => import('../pages/CompositionSummaryPage'));
+const DocumentViewerPage = lazy(() => import('../pages/DocumentViewerPage'));
 const APIConsolePage = lazy(() => import('../pages/APIConsolePage'));
 const ConnectionConsolePage = lazy(() => import('../pages/ConnectionConsolePage'));
 const BaileyAIPage = lazy(() => import('../pages/BaileyAIPage'));
@@ -40,5 +41,15 @@ export default [
         key="compositionSummaryOperation"
         path="/composition-summary/4_0_0/:resourceType/:operation?/*"
         element={<CompositionSummaryPage />}
+    />,
+    <Route
+        key="documentViewerIdOperation"
+        path="/document-viewer/4_0_0/:resourceType/:id?/:operation?/*"
+        element={<DocumentViewerPage />}
+    />,
+    <Route
+        key="documentViewerOperation"
+        path="/document-viewer/4_0_0/:resourceType/:operation?/*"
+        element={<DocumentViewerPage />}
     />,
 ];

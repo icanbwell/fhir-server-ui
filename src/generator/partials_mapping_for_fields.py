@@ -84,10 +84,20 @@ partials_mapping = {
         'field': 'link',
         'prop_name': 'reference'
     },
+    'DocumentReferenceContent': {
+        'partial': 'DocumentContent',
+        'field': '',
+        'prop_name': 'content'
+    },
+    'DocumentReferenceContext': {
+        'partial': 'DocumentReferenceContext',
+        'field': '',
+        'prop_name': 'context'
+    },
     'DocumentReferenceRelatesTo': {
-        'partial': 'Reference',
-        'field': 'target',
-        'prop_name': 'reference'
+        'partial': 'DocumentReferenceRelatesTo',
+        'field': '',
+        'prop_name': 'relatesTo'
     },
     'EffectEvidenceSynthesisResultsByExposure': {
         'partial': 'Reference',
@@ -95,14 +105,34 @@ partials_mapping = {
         'prop_name': 'reference'
     },
     'EncounterDiagnosis': {
-        'partial': 'Reference',
-        'field': 'condition',
-        'prop_name': 'reference'
+        'partial': 'EncounterDiagnosis',
+        'field': '',
+        'prop_name': 'diagnosis'
     },
     'EncounterLocation': {
-        'partial': 'Reference',
-        'field': 'location',
-        'prop_name': 'reference'
+        'partial': 'EncounterLocation',
+        'field': '',
+        'prop_name': 'location'
+    },
+    'EncounterParticipant': {
+        'partial': 'EncounterParticipant',
+        'field': '',
+        'prop_name': 'participant'
+    },
+    'EncounterHospitalization': {
+        'partial': 'EncounterHospitalization',
+        'field': '',
+        'prop_name': 'hospitalization'
+    },
+    'EncounterStatusHistory': {
+        'partial': 'EncounterStatusHistory',
+        'field': '',
+        'prop_name': 'statusHistory'
+    },
+    'EncounterClassHistory': {
+        'partial': 'EncounterClassHistory',
+        'field': '',
+        'prop_name': 'classHistory'
     },
     'EpisodeOfCareDiagnosis': {
         'partial': 'Reference',

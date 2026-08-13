@@ -36,39 +36,14 @@ type TGetIPSLinkProps = {
     uuid?: string;
 };
 
-const getIPSLink = ({
-    resource,
-    uuid,
-}: TGetIPSLinkProps) => {
+// Shared shape for the header-action links below (IPS, Composition View): a Tooltip-wrapped
+// Link with stopPropagation so clicking it doesn't also toggle the card's own open/closed
+// state (these links live inside CardHeader's clickable area).
+const getResourceLinkAction = ({ to, label, tooltip }: { to: string; label: string; tooltip: string }) => {
     return (
-        <Tooltip title="View International Patient Summary">
+        <Tooltip title={tooltip}>
             <Link
-                to={`/ips/4_0_0/Patient/${resource.resourceType === 'Person' ? 'person.' : ''}${uuid}/$summary?_includeSummaryCompositionOnly=true`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    textDecoration: 'none',
-                    color: 'inherit',
-                }}
-            >
-                <DescriptionIcon color="primary" fontSize="small" />
-                <Typography variant="body2" color="primary">
-                    IPS
-                </Typography>
-                <OpenInNewIcon color="primary" fontSize="small" />
-            </Link>
-        </Tooltip>
-    );
-};
-
-const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) => {
-    return (
-        <Tooltip title="View Composition Summary">
-            <Link
-                to={`/composition-summary/4_0_0/Composition/${uuid}`}
+                to={to}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -82,13 +57,27 @@ const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) => {
             >
                 <DescriptionIcon color="primary" fontSize="small" />
                 <Typography variant="body2" color="primary">
-                    Composition View
+                    {label}
                 </Typography>
                 <OpenInNewIcon color="primary" fontSize="small" />
             </Link>
         </Tooltip>
     );
 };
+
+const getIPSLink = ({ resource, uuid }: TGetIPSLinkProps) =>
+    getResourceLinkAction({
+        to: `/ips/4_0_0/Patient/${resource.resourceType === 'Person' ? 'person.' : ''}${uuid}/$summary?_includeSummaryCompositionOnly=true`,
+        label: 'IPS',
+        tooltip: 'View International Patient Summary',
+    });
+
+const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) =>
+    getResourceLinkAction({
+        to: `/composition-summary/4_0_0/Composition/${uuid}`,
+        label: 'Composition View',
+        tooltip: 'View Composition Summary',
+    });
 
 const ResourceCard = ({
     index,

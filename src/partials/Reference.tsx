@@ -17,17 +17,14 @@ function Reference({ reference: references = [], name, field }: TReferenceProps)
 
         return referenceArray
             .map((reference: any) => {
-                let uuidReference: string | undefined;
-                if (field) {
-                    uuidReference = reference[`${field}`]?.extension?.find(
-                        (e: TExtension) => e.url === IdentifierSystem.uuid
-                    )?.valueString;
-                } else {
-                    uuidReference = reference?.extension?.find(
-                        (e: TExtension) => e.url === IdentifierSystem.uuid
-                    )?.valueString;
-                }
-                return { reference: uuidReference, display: reference.display };
+                // When `field` is set, `reference` is a backbone-element wrapper (e.g. an
+                // Encounter.diagnosis entry) and the actual FHIR Reference — including its
+                // `display` — lives at reference[field], not on the wrapper itself.
+                const target = field ? reference[`${field}`] : reference;
+                const uuidReference = target?.extension?.find(
+                    (e: TExtension) => e.url === IdentifierSystem.uuid
+                )?.valueString;
+                return { reference: uuidReference, display: target?.display };
             })
             .filter((u: TReference) => u.reference);
     }, [references, field]);

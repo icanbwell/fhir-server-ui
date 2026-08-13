@@ -348,16 +348,25 @@ class BaseApi {
 
     async downloadFile(
         url: string,
-        options?: { onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void }
+        options?: {
+            onProgress?: (bytesReceived: number, totalBytes: number | undefined) => void;
+            headers?: Record<string, string>;
+        }
     ): Promise<{ status: number; data: Blob; headers: Record<string, string> }> {
         const { status, chunks, headers, errorMessage, incomplete } = await this.streamRequest({
             method: 'GET',
             urlString: url,
             responseMode: 'binary',
             onProgress: options?.onProgress,
+            headers: options?.headers,
         });
         if (!status || status < 200 || status >= 300) {
-            throw Object.assign(new Error(errorMessage || `Request failed with status ${status}`), { status });
+            // The server's response body (e.g. a FHIR OperationOutcome on a 404/403) already
+            // arrived via readStreamedBody regardless of status — decode it here rather than
+            // discarding it, so callers can show what the server actually said instead of just
+            // the status code.
+            const body = chunks.length ? await new Blob(chunks as BlobPart[]).text() : undefined;
+            throw Object.assign(new Error(errorMessage || `Request failed with status ${status}`), { status, url, body });
         }
         if (incomplete) {
             // streamRequest() still reports the original 2xx status captured when fetch()
@@ -368,6 +377,7 @@ class BaseApi {
             // SpreadsheetViewer.tsx already handle with a visible error in their catch blocks.
             throw Object.assign(new Error('Connection interrupted before the download finished'), {
                 status,
+                url,
                 incomplete: true,
             });
         }

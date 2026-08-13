@@ -15,6 +15,7 @@ This document describes the conventions, patterns, and execution instructions fo
 7. [Payload Files](#payload-files)
 8. [Executing Tests](#executing-tests)
 9. [Test Reports](#test-reports)
+10. [Commit Messages & PR Titles](#commit-messages--pr-titles)
 
 ---
 
@@ -723,7 +724,9 @@ open build/karate-reports/karate-summary.html
 
 ## Commit Messages & PR Titles
 
-Every commit message, and the PR title, must begin with a Jira issue key (e.g. `PHR-1234`) — or one of the allowed exceptions: `Bump`, `Merge`, `Revert`, `Reapply`, `build(deps): bump`. This is enforced by `.github/workflows/check-commit-message.yml` (`gsactions/commit-message-checker`) on every PR push and on push to `main`/`releases/*`; an unprefixed commit or PR title fails the "Check Commit Message" CI check and blocks merge.
+Every commit message, and the PR title, must begin with a Jira issue key (e.g. `PHR-1234`) — or one of the allowed exceptions: `Bump`, `Merge`, `Revert`, `Reapply`, `build(deps): bump`, `build(deps-dev): bump`. This is enforced by `.github/workflows/check-commit-message.yml` (`gsactions/commit-message-checker`) on every PR push (`opened`/`edited`/`reopened`/`synchronize`) and on push to `main`/`releases/*`.
+
+The check validates the **PR title** on `pull_request` events — interim commit messages on a branch aren't individually checked before merge, so don't rely on per-commit CI feedback while iterating. What matters is that the PR title carries the prefix by the time it's merged; an unprefixed PR title fails the "Check Commit Message" CI check and blocks merge.
 
 PRs in this repo are typically squash-merged, so the commit landing on `main` is `<PR title> (#N)` — the **PR title** needs the ticket key, not just the individual commits.
 

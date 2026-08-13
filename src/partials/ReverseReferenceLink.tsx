@@ -9,19 +9,12 @@ type TReverseReferenceLinkProps = {
 };
 
 function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenceLinkProps) {
-    const href = (() => {
-        if (target === 'AuditEvent') {
-            const currDate = new Date().toISOString().split('T')[0];
-            const dateBeforeWeek = new Date();
-            dateBeforeWeek.setDate(dateBeforeWeek.getDate() - 7);
-            return `/4_0_0/${target}?${property}=${resolvedId}&date=lt.${currDate}&date=gt.${dateBeforeWeek.toISOString().split('T')[0]}`;
-        }
-        return `/4_0_0/${target}?${property}=${resolvedId}`;
-    })();
+    const href = `/4_0_0/${target}?${property}=${resolvedId}`;
 
-    // AuditEvent's date bounds don't need to be repeated here: FhirApi.getUrl() ->
-    // addMissingRequiredParams() already appends the same rolling 7-day window
-    // (src/utils/auditEventDateFilter.ts) automatically for AuditEvent searches.
+    // AuditEvent's rolling 7-day window is applied uniformly by
+    // FhirApi.addMissingRequiredParams for both the href's click-through (via
+    // IndexPage -> getBundleAsync) and the count-fetch below, so there is
+    // nothing target-specific left to do here.
     const { count, isLoading, error } = useResourceCount({
         resourceType: target,
         queryParameters: [`${property}=${resolvedId}`],
@@ -43,7 +36,7 @@ function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenc
             }}
         >
             <Typography>{target}</Typography>
-            {isLoading && <CircularProgress size={14} />}
+            {isLoading && <CircularProgress size={14} aria-label="Loading count" />}
             {!isLoading && !error && count !== null && (
                 <Chip label={`(${count})`} size="small" />
             )}

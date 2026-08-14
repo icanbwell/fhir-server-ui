@@ -14,12 +14,13 @@ import '@fontsource/open-sans/latin-700.css';
 import App from './App';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { APP_ENV } from './runtimeEnv';
 
 // Initialize Sentry
-if (import.meta.env.REACT_APP_SENTRY_DSN) {
+if (APP_ENV.REACT_APP_SENTRY_DSN) {
   init({
-    dsn: import.meta.env.REACT_APP_SENTRY_DSN,
-    environment: import.meta.env.REACT_APP_ENVIRONMENT,
+    dsn: APP_ENV.REACT_APP_SENTRY_DSN,
+    environment: APP_ENV.REACT_APP_ENVIRONMENT,
     // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/#removing-a-default-integration
     integrations: function (integrations) {
       return integrations.filter(function (integration) {

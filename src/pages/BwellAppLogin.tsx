@@ -19,6 +19,7 @@ import { getLocalData, setLocalData } from '../utils/localData.utils';
 import { jwtParser } from '../utils/jwtParser';
 import { removeAuthData } from '../utils/auth.utils';
 import { login, parseClientKeys } from '../services/BwellAppAuthService';
+import { APP_ENV } from '../runtimeEnv';
 
 const CLIENT_KEYS_MISSING_MESSAGE =
     'No b.well App client keys are configured (REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS).';
@@ -30,12 +31,12 @@ const BwellAppLogin = () => {
     const resourceUrl = location.state?.resourceUrl || '/';
 
     const clientKeys = useMemo(
-        () => parseClientKeys(import.meta.env.REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS),
+        () => parseClientKeys(APP_ENV.REACT_APP_AUTH_BWELLAPP_CLIENT_KEYS),
         []
     );
 
     const configError = useMemo(() => {
-        if (!import.meta.env.REACT_APP_AUTH_BWELLAPP_BASE_URL) {
+        if (!APP_ENV.REACT_APP_AUTH_BWELLAPP_BASE_URL) {
             return 'b.well App sign-in is not configured (missing base URL).';
         }
         if (clientKeys.length === 0) {

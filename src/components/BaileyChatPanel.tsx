@@ -112,7 +112,7 @@ const BaileyChatPanel = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '78vh' }}>
-            <Box sx={{ flex: 1, overflowY: 'auto', p: 1 }}>
+            <Box sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: 1 }}>
                 {messages.map((message, index) => {
                     const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;
                     const isAwaitingFirstToken = status === 'streaming' && isLastAssistant && message.content === '';

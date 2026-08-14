@@ -13,6 +13,12 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!-- Populates window.__ENV__. This checked-in copy is just the empty-object
+         fallback for local dev and static builds; a containerized deploy can have its
+         entrypoint overwrite this file at start with real env vars instead of baking
+         them into the build - see docs/runtime-environment-config.md. Must load before
+         the app bundle. -->
+    <script src="/env-config.js"></script>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>

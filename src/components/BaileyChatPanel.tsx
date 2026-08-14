@@ -1,4 +1,4 @@
-import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, ReactNode, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
@@ -44,6 +44,26 @@ const markdownComponents = {
         return <pre>{children}</pre>;
     },
 };
+
+// Hoisted alongside markdownComponents for the same reason: a stable reference so react-markdown
+// isn't handed a fresh array every render.
+const remarkPlugins = [remarkGfm];
+
+// A finished message's content never changes again, but BaileyChatPanel re-renders on every
+// streamed token of *other* messages (new `messages` array reference each chunk) and on every
+// keystroke in the input field. Without memoizing per-message, every earlier message's markdown
+// tree — including markdownComponents.pre's parseBaileyChartSpec call — re-runs on each of those
+// renders even though nothing about that message changed. React.memo skips this component
+// entirely once `content`/`darkMode` are unchanged.
+const MessageMarkdown = memo(function MessageMarkdown({ content, darkMode }: { content: string; darkMode: boolean }) {
+    return (
+        <div className={`bailey-markdown-content markdown-table-content${darkMode ? ' dark-mode' : ''}`}>
+            <Markdown remarkPlugins={remarkPlugins} components={markdownComponents}>
+                {content}
+            </Markdown>
+        </div>
+    );
+});
 
 const BaileyChatPanel = () => {
     const { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
@@ -99,13 +119,7 @@ const BaileyChatPanel = () => {
                                         </Typography>
                                     ) : (
                                         <>
-                                            <div
-                                                className={`bailey-markdown-content markdown-table-content${isDarkMode ? ' dark-mode' : ''}`}
-                                            >
-                                                <Markdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                                                    {message.content}
-                                                </Markdown>
-                                            </div>
+                                            <MessageMarkdown content={message.content} darkMode={isDarkMode} />
                                             {message.streaming && streamingHint && (
                                                 <Typography
                                                     variant="caption"

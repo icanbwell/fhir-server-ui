@@ -1,8 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import BaileyChatPanel from './BaileyChatPanel';
 import { ThemeContextProvider } from '../context/ThemeContext';
 import { UseBaileyChatResult } from '../hooks/useBaileyChat';
+
+// jsdom doesn't implement the Clipboard API; BaileyChatPanel's copy button calls
+// navigator.clipboard.writeText directly.
+const writeTextMock = vi.fn().mockResolvedValue(undefined);
+Object.defineProperty(navigator, 'clipboard', {
+    value: { writeText: writeTextMock },
+    configurable: true,
+});
+
 
 const baseChatResult: UseBaileyChatResult = {
     messages: [],
@@ -175,5 +184,38 @@ describe('BaileyChatPanel', () => {
 
         expect(screen.getByText('{not valid json')).toBeInTheDocument();
         expect(baileyChartPropsSpy).not.toHaveBeenCalled();
+    });
+
+    it('copies the raw markdown of a completed assistant response to the clipboard', () => {
+        mockUseBaileyChat.mockReturnValue({
+            ...baseChatResult,
+            messages: [{ id: 'assistant-1', role: 'assistant', content: '# Heading\n\n- one\n- two' }],
+        });
+
+        render(
+            <ThemeContextProvider>
+                <BaileyChatPanel />
+            </ThemeContextProvider>
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'copy response as markdown' }));
+
+        expect(writeTextMock).toHaveBeenCalledWith('# Heading\n\n- one\n- two');
+    });
+
+    it('hides the copy button while an assistant response is still streaming', () => {
+        mockUseBaileyChat.mockReturnValue({
+            ...baseChatResult,
+            status: 'streaming',
+            messages: [{ id: 'assistant-1', role: 'assistant', content: 'partial answer', streaming: true }],
+        });
+
+        render(
+            <ThemeContextProvider>
+                <BaileyChatPanel />
+            </ThemeContextProvider>
+        );
+
+        expect(screen.queryByRole('button', { name: 'copy response as markdown' })).not.toBeInTheDocument();
     });
 });

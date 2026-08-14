@@ -1,7 +1,9 @@
 import { FormEvent, ReactNode, memo, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import useBaileyChat from '../hooks/useBaileyChat';
@@ -12,9 +14,33 @@ import { traceEventHint } from '../utils/baileyTrace';
 import { isSafeMarkdownUrl } from '../utils/safeMarkdownUrl';
 import { parseBaileyChartSpec } from '../utils/baileyChart';
 import { extractTableData, shouldUseGrid, type HastNode } from '../utils/baileyTable';
+import { copyToClipboard } from '../utils/clipboard';
 import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
 import './MarkdownTable.css';
+
+// How long the icon flips to a checkmark after a successful copy, mirroring the
+// affordance in Claude Desktop's own response-footer copy button.
+const COPY_CONFIRMATION_MS = 1500;
+
+function CopyMarkdownButton({ markdown }: { markdown: string }) {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = async () => {
+        await copyToClipboard(markdown);
+        setCopied(true);
+        setTimeout(() => setCopied(false), COPY_CONFIRMATION_MS);
+    };
+
+    return (
+        <Tooltip title={copied ? 'Copied!' : 'Copy as markdown'}>
+            <IconButton size="small" onClick={handleCopy} aria-label="copy response as markdown" sx={{ color: 'text.secondary' }}>
+                {copied ? <CheckIcon fontSize="inherit" /> : <ContentCopyIcon fontSize="inherit" />}
+            </IconButton>
+        </Tooltip>
+    );
+}
+
 
 // Matches the target="_blank" rel="noopener noreferrer" convention used for every other outbound
 // link in this app (ResourceCard, IPSViewer, AttachmentPreview, etc.) — without this override,
@@ -66,8 +92,8 @@ const remarkPlugins = [remarkGfm];
 // tree — including markdownComponents.pre's parseBaileyChartSpec call and markdownComponents.
 // table's extractTableData call — re-runs on each of those renders even though nothing about
 // that message changed. React.memo skips this component entirely once `content`/`darkMode` are
-// unchanged, which also keeps BaileyTable's `headers`/`rows` props referentially stable so its
-// own internal useMemo actually hits.
+// unchanged, which also keeps BaileyChart's `spec` prop and BaileyTable's `headers`/`rows` props
+// referentially stable so their own internal useMemo calls actually hit.
 const MessageMarkdown = memo(function MessageMarkdown({ content, darkMode }: { content: string; darkMode: boolean }) {
     return (
         <div className={`bailey-markdown-content markdown-table-content${darkMode ? ' dark-mode' : ''}`}>
@@ -108,46 +134,54 @@ const BaileyChatPanel = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '78vh' }}>
-            <Box sx={{ flex: 1, overflowY: 'auto', p: 1 }}>
+            <Box sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: 1 }}>
                 {messages.map((message, index) => {
                     const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;
                     const isAwaitingFirstToken = status === 'streaming' && isLastAssistant && message.content === '';
+                    const assistantBody = isAwaitingFirstToken ? (
+                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                            {streamingHint ?? 'Thinking…'}
+                        </Typography>
+                    ) : (
+                        <>
+                            <MessageMarkdown content={message.content} darkMode={isDarkMode} />
+                            {message.streaming && streamingHint && (
+                                <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    sx={{ display: 'block', mt: 0.5, fontStyle: 'italic' }}
+                                >
+                                    {streamingHint}
+                                </Typography>
+                            )}
+                            {!message.streaming && (
+                                <Box sx={{ mt: 0.5 }}>
+                                    <CopyMarkdownButton markdown={message.content} />
+                                </Box>
+                            )}
+                        </>
+                    );
+
                     return (
                         <Box
                             key={message.id}
-                            sx={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', mb: 1 }}
+                            sx={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', mb: 2 }}
                         >
-                            <Paper
-                                sx={{
-                                    p: 1.5,
-                                    maxWidth: '75%',
-                                    bgcolor: message.role === 'user' ? 'primary.main' : 'background.paper',
-                                    color: message.role === 'user' ? 'primary.contrastText' : 'text.primary',
-                                }}
-                            >
-                                {message.role === 'assistant' ? (
-                                    isAwaitingFirstToken ? (
-                                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                                            {streamingHint ?? 'Thinking…'}
-                                        </Typography>
-                                    ) : (
-                                        <>
-                                            <MessageMarkdown content={message.content} darkMode={isDarkMode} />
-                                            {message.streaming && streamingHint && (
-                                                <Typography
-                                                    variant="caption"
-                                                    color="text.secondary"
-                                                    sx={{ display: 'block', mt: 0.5, fontStyle: 'italic' }}
-                                                >
-                                                    {streamingHint}
-                                                </Typography>
-                                            )}
-                                        </>
-                                    )
-                                ) : (
+                            {message.role === 'user' ? (
+                                <Paper
+                                    sx={{
+                                        p: 1.5,
+                                        maxWidth: '75%',
+                                        borderRadius: 3,
+                                        bgcolor: 'action.selected',
+                                        color: 'text.primary',
+                                    }}
+                                >
                                     <Typography sx={{ whiteSpace: 'pre-wrap' }}>{message.content}</Typography>
-                                )}
-                            </Paper>
+                                </Paper>
+                            ) : (
+                                <Box sx={{ width: '100%', px: 0.5 }}>{assistantBody}</Box>
+                            )}
                         </Box>
                     );
                 })}

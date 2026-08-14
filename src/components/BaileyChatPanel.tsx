@@ -86,48 +86,49 @@ const BaileyChatPanel = () => {
                 {messages.map((message, index) => {
                     const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;
                     const isAwaitingFirstToken = status === 'streaming' && isLastAssistant && message.content === '';
+                    const assistantBody = isAwaitingFirstToken ? (
+                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                            {streamingHint ?? 'Thinking…'}
+                        </Typography>
+                    ) : (
+                        <>
+                            <div className={`bailey-markdown-content markdown-table-content${isDarkMode ? ' dark-mode' : ''}`}>
+                                <Markdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                                    {message.content}
+                                </Markdown>
+                            </div>
+                            {message.streaming && streamingHint && (
+                                <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    sx={{ display: 'block', mt: 0.5, fontStyle: 'italic' }}
+                                >
+                                    {streamingHint}
+                                </Typography>
+                            )}
+                        </>
+                    );
+
                     return (
                         <Box
                             key={message.id}
-                            sx={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', mb: 1 }}
+                            sx={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', mb: 2 }}
                         >
-                            <Paper
-                                sx={{
-                                    p: 1.5,
-                                    maxWidth: '75%',
-                                    bgcolor: message.role === 'user' ? 'primary.main' : 'background.paper',
-                                    color: message.role === 'user' ? 'primary.contrastText' : 'text.primary',
-                                }}
-                            >
-                                {message.role === 'assistant' ? (
-                                    isAwaitingFirstToken ? (
-                                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                                            {streamingHint ?? 'Thinking…'}
-                                        </Typography>
-                                    ) : (
-                                        <>
-                                            <div
-                                                className={`bailey-markdown-content markdown-table-content${isDarkMode ? ' dark-mode' : ''}`}
-                                            >
-                                                <Markdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                                                    {message.content}
-                                                </Markdown>
-                                            </div>
-                                            {message.streaming && streamingHint && (
-                                                <Typography
-                                                    variant="caption"
-                                                    color="text.secondary"
-                                                    sx={{ display: 'block', mt: 0.5, fontStyle: 'italic' }}
-                                                >
-                                                    {streamingHint}
-                                                </Typography>
-                                            )}
-                                        </>
-                                    )
-                                ) : (
+                            {message.role === 'user' ? (
+                                <Paper
+                                    sx={{
+                                        p: 1.5,
+                                        maxWidth: '75%',
+                                        borderRadius: 3,
+                                        bgcolor: 'primary.main',
+                                        color: 'primary.contrastText',
+                                    }}
+                                >
                                     <Typography sx={{ whiteSpace: 'pre-wrap' }}>{message.content}</Typography>
-                                )}
-                            </Paper>
+                                </Paper>
+                            ) : (
+                                <Box sx={{ width: '100%', px: 0.5 }}>{assistantBody}</Box>
+                            )}
                         </Box>
                     );
                 })}

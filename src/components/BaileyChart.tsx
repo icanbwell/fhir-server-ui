@@ -64,10 +64,7 @@ const DARK_PALETTE = [
     brandColors.orange,
     brandColors.lightGray,
     brandColors.midGray,
-    // Was brandColors.white — an 8-unit-per-channel diff from lightGray at index 4, effectively
-    // indistinguishable as chart series once a bar/line/scatter chart or pie/doughnut cycles
-    // through 7+ entries (both valid per MAX_DATASETS/MAX_PIE_LABELS in baileyChart.ts).
-    brandColors.blue,
+    brandColors.white,
     brandColors.errorRed,
 ];
 

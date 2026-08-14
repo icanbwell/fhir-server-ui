@@ -12,6 +12,7 @@ Object.defineProperty(navigator, 'clipboard', {
     configurable: true,
 });
 
+
 const baseChatResult: UseBaileyChatResult = {
     messages: [],
     traceEvents: [],
@@ -34,6 +35,20 @@ vi.mock('../hooks/useBaileyChat', () => ({
 // scrolled to the latest message.
 Element.prototype.scrollIntoView = vi.fn();
 
+const baileyChartPropsSpy = vi.fn();
+
+// BaileyChart wraps react-chartjs-2, which renders to canvas — not assertable via RTL queries.
+// Mocked here for the same reason as BaileyChart.test.tsx: this test is about which code blocks
+// get routed to BaileyChart, not about chart.js's own rendering.
+vi.mock('./BaileyChart', () => ({
+    default: (props: unknown) => {
+        baileyChartPropsSpy(props);
+        return <div data-testid="bailey-chart-stub" />;
+    },
+}));
+
+const chartjsBlock = (json: string) => '```chartjs\n' + json + '\n```';
+
 const baileyTablePropsSpy = vi.fn();
 
 // BaileyTable wraps ag-grid, which needs real layout measurement jsdom can't provide (see
@@ -51,20 +66,6 @@ const gfmTable = (dataRowCount: number) => {
     const rows = Array.from({ length: dataRowCount }, (_, i) => `| Row${i} | ${i} |`).join('\n');
     return header + rows;
 };
-
-const baileyChartPropsSpy = vi.fn();
-
-// BaileyChart wraps react-chartjs-2, which renders to canvas — not assertable via RTL queries.
-// Mocked here for the same reason as BaileyChart.test.tsx: this test is about which code blocks
-// get routed to BaileyChart, not about chart.js's own rendering.
-vi.mock('./BaileyChart', () => ({
-    default: (props: unknown) => {
-        baileyChartPropsSpy(props);
-        return <div data-testid="bailey-chart-stub" />;
-    },
-}));
-
-const chartjsBlock = (json: string) => '```chartjs\n' + json + '\n```';
 
 describe('BaileyChatPanel', () => {
     beforeEach(() => {
@@ -119,7 +120,7 @@ describe('BaileyChatPanel', () => {
         const props = baileyTablePropsSpy.mock.calls[0][0] as { headers: string[]; rows: string[][] };
         expect(props.headers).toEqual(['Name', 'Value']);
         expect(props.rows).toHaveLength(6);
-        expect(props.rows[0]).toEqual(['Row0', '0']);
+        expect(props.rows[0]).toEqual([{ text: 'Row0' }, { text: '0' }]);
     });
 
     it('renders a plain code block unaffected when its language is not chartjs', () => {

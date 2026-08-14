@@ -132,8 +132,8 @@ describe('parseBaileyChartSpec', () => {
         ).toBeNull();
     });
 
-    it('returns null when a pie/doughnut chart has more than 12 labels', () => {
-        const labels = Array.from({ length: 13 }, (_, i) => `l${i}`);
+    it('returns null when a pie/doughnut chart has more than 8 labels', () => {
+        const labels = Array.from({ length: 9 }, (_, i) => `l${i}`);
         const data = labels.map(() => 1);
         expect(
             parseBaileyChartSpec(

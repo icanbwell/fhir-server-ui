@@ -17,7 +17,9 @@ export interface BaileyChartSpec {
 const CHART_TYPES: BaileyChartType[] = ['bar', 'line', 'pie', 'doughnut', 'scatter'];
 const MAX_DATASETS = 8;
 const MAX_LABELS = 50;
-const MAX_PIE_LABELS = 12;
+// Matches MAX_DATASETS/the 8-color palette in BaileyChart.tsx — a 9th+ slice would wrap the
+// palette (palette[sliceIndex % palette.length]) and reuse an earlier slice's color.
+const MAX_PIE_LABELS = 8;
 const MAX_SCATTER_POINTS = 500;
 
 const isPoint = (value: unknown): value is { x: number; y: number } =>

@@ -28,6 +28,7 @@ export type BaileyStreamEvent =
     | { type: 'response.output_item.added'; item: BaileyOutputItem }
     | { type: 'response.output_item.done'; item: BaileyOutputItem }
     | { type: 'task.progress'; status: string; message?: string }
+    | { type: 'response.created' }
     | { type: 'response.completed' }
     | { type: 'error'; message: string };
 

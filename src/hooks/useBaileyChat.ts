@@ -166,6 +166,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
             // Purely a completion signal — [DONE] already drives turn completion here (see
             // parseSseFrames), so there's nothing worth recording.
             return false;
+        } else if (event.type === 'response.created') {
+            // Fires as the very first event of every turn, before any output exists — purely a
+            // lifecycle signal with nothing to show. Without this case it fell into the 'raw'/
+            // "unrecognized" bucket below and showed up in the trace panel on every single turn.
+            return false;
         }
 
         // Every other event still gets recorded — never silently dropped — so the details

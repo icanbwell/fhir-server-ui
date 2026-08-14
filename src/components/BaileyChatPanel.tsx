@@ -1,4 +1,4 @@
-import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, ReactNode, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
@@ -40,21 +40,26 @@ function CopyMarkdownButton({ markdown }: { markdown: string }) {
     );
 }
 
+// Only these schemes (plus scheme-relative/relative URLs, which have no scheme to check) are
+// safe to hand to the browser as a clickable link. An allowlist — rather than blocking known-bad
+// schemes like javascript:/data:/vbscript: one at a time — closes the whole class of bypass via
+// an as-yet-unlisted scheme, per the app's XSS scan finding on this override.
+const SAFE_URL_PROTOCOLS = /^(https?|mailto):/i;
+const isSafeMarkdownUrl = (href: string): boolean => !/^[a-z][a-z0-9+.-]*:/i.test(href) || SAFE_URL_PROTOCOLS.test(href);
+
 // Matches the target="_blank" rel="noopener noreferrer" convention used for every other outbound
 // link in this app (ResourceCard, IPSViewer, AttachmentPreview, etc.) — without this override,
 // remark-gfm's autolink-literal extension turns bare URLs in assistant text into <a> tags that
 // navigate the SPA away in-place instead of opening in a new tab.
 const markdownComponents = {
-    a: ({ href, children }: { href?: string; children?: ReactNode }) => (
-        // Reject javascript:, data:, and vbscript: protocols to prevent XSS via malicious URLs.
-        !href || /^(javascript|data|vbscript):/i.test(href)
-            ? <>{children}</>
-            : (
-        <Link href={href} target="_blank" rel="noopener noreferrer">
-            {children}
-        </Link>
-        )
-    ),
+    a: ({ href, children }: { href?: string; children?: ReactNode }) =>
+        !href || !isSafeMarkdownUrl(href) ? (
+            <>{children}</>
+        ) : (
+            <Link href={href} target="_blank" rel="noopener noreferrer">
+                {children}
+            </Link>
+        ),
     // Upgrades markdown tables past BAILEY_TABLE_GRID_ROW_THRESHOLD rows to a sortable/
     // filterable ag-grid widget; smaller tables keep the plain GFM rendering from #257.
     table: ({ node, children }: { node?: HastNode; children?: ReactNode }) => {
@@ -81,6 +86,28 @@ const markdownComponents = {
         return <pre>{children}</pre>;
     },
 };
+
+// Hoisted alongside markdownComponents for the same reason: a stable reference so react-markdown
+// isn't handed a fresh array every render.
+const remarkPlugins = [remarkGfm];
+
+// A finished message's content never changes again, but BaileyChatPanel re-renders on every
+// streamed token of *other* messages (new `messages` array reference each chunk) and on every
+// keystroke in the input field. Without memoizing per-message, every earlier message's markdown
+// tree — including markdownComponents.table's extractTableData call and .pre's JSON.parse +
+// parseBaileyChartSpec call — re-runs on each of those renders even though nothing about that
+// message changed. React.memo skips this component (and therefore those parse calls) entirely
+// once `content`/`darkMode` are unchanged, which also keeps BaileyChart's `spec` prop reference
+// stable so its own internal useMemo actually hits.
+const MessageMarkdown = memo(function MessageMarkdown({ content, darkMode }: { content: string; darkMode: boolean }) {
+    return (
+        <div className={`bailey-markdown-content markdown-table-content${darkMode ? ' dark-mode' : ''}`}>
+            <Markdown remarkPlugins={remarkPlugins} components={markdownComponents}>
+                {content}
+            </Markdown>
+        </div>
+    );
+});
 
 const BaileyChatPanel = () => {
     const { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
@@ -122,11 +149,7 @@ const BaileyChatPanel = () => {
                         </Typography>
                     ) : (
                         <>
-                            <div className={`bailey-markdown-content markdown-table-content${isDarkMode ? ' dark-mode' : ''}`}>
-                                <Markdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                                    {message.content}
-                                </Markdown>
-                            </div>
+                            <MessageMarkdown content={message.content} darkMode={isDarkMode} />
                             {message.streaming && streamingHint && (
                                 <Typography
                                     variant="caption"

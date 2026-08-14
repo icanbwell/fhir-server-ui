@@ -11,6 +11,11 @@ import {
     Title,
     Tooltip,
     Legend,
+    BarController,
+    LineController,
+    PieController,
+    DoughnutController,
+    ScatterController,
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import type { BaileyChartSpec } from '../utils/baileyChart';
@@ -18,7 +23,11 @@ import { useTheme } from '../context/ThemeContext';
 import { brandColors } from '../theme/brandColors';
 
 // Registration is additive/idempotent across modules (ObservationGraph.tsx registers its own
-// overlapping set), so it's safe for both to declare what they need independently.
+// overlapping set), so it's safe for both to declare what they need independently. Controllers
+// are a distinct registerable category from elements/scales/plugins — without them, the generic
+// <Chart type={...} /> below (unlike react-chartjs-2's typed <Line>/<Bar> exports, which
+// self-register via createTypedChart) throws "'<type>' is not a registered controller" for
+// every spec.type this component supports.
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -28,7 +37,12 @@ ChartJS.register(
     ArcElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    BarController,
+    LineController,
+    PieController,
+    DoughnutController,
+    ScatterController
 );
 
 // Colors always come from here, never from the incoming spec — keeps rendered charts on-brand
@@ -50,7 +64,10 @@ const DARK_PALETTE = [
     brandColors.orange,
     brandColors.lightGray,
     brandColors.midGray,
-    brandColors.white,
+    // Was brandColors.white — an 8-unit-per-channel diff from lightGray at index 4, effectively
+    // indistinguishable as chart series once a bar/line/scatter chart or pie/doughnut cycles
+    // through 7+ entries (both valid per MAX_DATASETS/MAX_PIE_LABELS in baileyChart.ts).
+    brandColors.blue,
     brandColors.errorRed,
 ];
 

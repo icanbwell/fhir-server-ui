@@ -85,7 +85,15 @@ const BaileyTable = ({ headers, rows }: BaileyTableProps) => {
         const data = rows.map((row) =>
             row.reduce<Record<string, unknown>>((acc, cellValue, index) => {
                 const field = `col${index}`;
-                acc[field] = columnIsNumeric[index] ? Number(cellValue.text) : cellValue.text;
+                const isBlank = cellValue.text.trim() === '';
+                // A numeric column can still have blank cells (e.g. a missing lab value); Number('')
+                // is 0, so coercing unconditionally would render a blank as an indistinguishable
+                // literal zero. Leave blank cells as null instead of coercing them.
+                if (columnIsNumeric[index]) {
+                    acc[field] = isBlank ? null : Number(cellValue.text);
+                } else {
+                    acc[field] = cellValue.text;
+                }
                 if (cellValue.href) {
                     acc[`${field}Href`] = cellValue.href;
                 }

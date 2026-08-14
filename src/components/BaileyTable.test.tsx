@@ -73,6 +73,18 @@ describe('BaileyTable', () => {
         ]);
     });
 
+    it('leaves a blank cell in a numeric column as null instead of coercing it to 0', () => {
+        render(
+            <ThemeContextProvider>
+                <BaileyTable headers={['Value']} rows={[[cell('5')], [cell('')], [cell('3')]]} />
+            </ThemeContextProvider>
+        );
+
+        const props = agGridPropsSpy.mock.calls[0][0] as { columnDefs: Array<Record<string, unknown>>; rowData: unknown };
+        expect(props.columnDefs[0]).toMatchObject({ cellDataType: 'number' });
+        expect(props.rowData).toEqual([{ col0: 5 }, { col0: null }, { col0: 3 }]);
+    });
+
     it('does not mark a column numeric when any cell is non-numeric', () => {
         render(
             <ThemeContextProvider>

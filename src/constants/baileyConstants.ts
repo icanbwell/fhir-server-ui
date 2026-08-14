@@ -6,7 +6,7 @@ export const BAILEY_SYSTEM_INSTRUCTIONS =
     "you can't perform it here and suggest using the API Console instead. Keep answers concise and " +
     'cite the specific resource IDs you used.\n\n' +
     'When a chart would help answer a question (e.g. plotting an Observation trend over time), ' +
-    'include a fenced code block tagged `chartjs` containing a JSON object with this exact shape: ' +
+    'wrap a JSON payload in a backtick-fenced `chartjs` section with this exact shape: ' +
     '{"type": "bar" | "line" | "pie" | "doughnut" | "scatter", "title"?: string, "data": ' +
     '{"labels": string[], "datasets": [{"label": string, "data": number[]}]}}. For "scatter" ' +
     'charts, omit "labels" and give each dataset "data" as an array of {"x": number, "y": number} ' +

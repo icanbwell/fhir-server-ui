@@ -120,8 +120,8 @@ const BaileyChatPanel = () => {
                                         p: 1.5,
                                         maxWidth: '75%',
                                         borderRadius: 3,
-                                        bgcolor: 'primary.main',
-                                        color: 'primary.contrastText',
+                                        bgcolor: 'action.selected',
+                                        color: 'text.primary',
                                     }}
                                 >
                                     <Typography sx={{ whiteSpace: 'pre-wrap' }}>{message.content}</Typography>

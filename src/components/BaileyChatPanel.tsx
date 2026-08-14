@@ -6,7 +6,9 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import useBaileyChat from '../hooks/useBaileyChat';
 import BaileyTracePanel from './BaileyTracePanel';
+import BaileyChart from './BaileyChart';
 import { traceEventHint } from '../utils/baileyTrace';
+import { parseBaileyChartSpec } from '../utils/baileyChart';
 import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
 import './MarkdownTable.css';
@@ -21,6 +23,22 @@ const markdownComponents = {
             {children}
         </Link>
     ),
+    // Routes ```chartjs code blocks to BaileyChart once a valid spec has streamed in; anything
+    // else (a different language, or a chartjs block that's still mid-stream / malformed) falls
+    // through to the default <pre> rendering unchanged.
+    pre: ({ children }: { children?: ReactNode }) => {
+        const codeElement = Array.isArray(children) ? children[0] : children;
+        const codeProps = (codeElement as { props?: { className?: string; children?: ReactNode } } | undefined)
+            ?.props;
+        if (codeProps?.className === 'language-chartjs') {
+            const raw = Array.isArray(codeProps.children) ? codeProps.children.join('') : String(codeProps.children ?? '');
+            const spec = parseBaileyChartSpec(raw);
+            if (spec) {
+                return <BaileyChart spec={spec} />;
+            }
+        }
+        return <pre>{children}</pre>;
+    },
 };
 
 const BaileyChatPanel = () => {

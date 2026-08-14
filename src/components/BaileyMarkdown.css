@@ -1,0 +1,18 @@
+/* Bailey chat markdown content styling.
+   Shared table rules (border-collapse, th/td/tr, dark mode) live in MarkdownTable.css via the
+   markdown-table-content class applied alongside bailey-markdown-content. */
+
+/* overflow-x lives on the container, not the <table> itself: setting display:block on a
+   <table> to make it scrollable strips its implicit ARIA table/row/columnheader/cell roles in
+   Safari/VoiceOver, since WebKit derives those roles from the CSS display value. */
+.bailey-markdown-content {
+  overflow-x: auto;
+}
+
+.bailey-markdown-content p:first-child {
+  margin-top: 0;
+}
+
+.bailey-markdown-content p:last-child {
+  margin-bottom: 0;
+}

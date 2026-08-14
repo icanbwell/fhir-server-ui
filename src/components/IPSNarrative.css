@@ -8,30 +8,8 @@
   overflow-x: auto;
 }
 
-/* Tables */
-.ips-narrative-container table {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 0.9rem;
-}
-
-.ips-narrative-container th {
-  background-color: var(--table-header-bg, #F7F7FA);
-  color: var(--table-header-color, #494949);
-  font-weight: 600;
-  text-align: left;
-  padding: 8px 12px;
-}
-
-.ips-narrative-container td {
-  padding: 8px 12px;
-  border: 1px solid var(--table-border-color, #F7F7FA);
-  vertical-align: top;
-}
-
-.ips-narrative-container tr:nth-child(even) {
-  background-color: var(--table-stripe-color, #F7F7FA);
-}
+/* Table rules (border-collapse, th/td/tr, dark mode) live in MarkdownTable.css via the
+   markdown-table-content class applied alongside ips-narrative-container. */
 
 /* Dark mode overrides */
 .dark-mode .ips-narrative-container {
@@ -40,19 +18,6 @@
 
 .dark-mode .ips-narrative-container table {
   color: var(--text-color, #F7F7FA);
-}
-
-.dark-mode .ips-narrative-container th {
-  background-color: var(--table-header-bg, var(--bwell-dark-mode-paper));
-  color: var(--table-header-color, #F7F7FA);
-}
-
-.dark-mode .ips-narrative-container td {
-  border-color: var(--table-border-color, var(--bwell-dark-mode-border));
-}
-
-.dark-mode .ips-narrative-container tr:nth-child(even) {
-  background-color: var(--table-stripe-color, var(--bwell-dark-mode-paper));
 }
 
 /* Sections */

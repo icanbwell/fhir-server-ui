@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const agGridPropsSpy = vi.fn();
 
@@ -16,16 +16,25 @@ vi.mock('ag-grid-react', () => ({
 
 import BaileyTable from './BaileyTable';
 import { ThemeContextProvider } from '../context/ThemeContext';
+import type { BaileyTableCell } from '../utils/baileyTable';
+
+const cell = (text: string, href?: string): BaileyTableCell => (href ? { text, href } : { text });
 
 describe('BaileyTable', () => {
-    it('builds ag-grid column defs and row data from headers and rows', () => {
+    // Without this, agGridPropsSpy.mock.calls[0] always refers to the FIRST render across the
+    // whole test file (module-level mock, not reset by default), not the current test's render.
+    beforeEach(() => {
+        agGridPropsSpy.mockClear();
+    });
+
+    it('builds ag-grid column defs and row data for plain text columns', () => {
         render(
             <ThemeContextProvider>
                 <BaileyTable
-                    headers={['Name', 'Age']}
+                    headers={['Name', 'Notes']}
                     rows={[
-                        ['Imran', '30'],
-                        ['Bob', '40'],
+                        [cell('Imran'), cell('n/a')],
+                        [cell('Bob'), cell('follow up')],
                     ]}
                 />
             </ThemeContextProvider>
@@ -35,11 +44,65 @@ describe('BaileyTable', () => {
         const props = agGridPropsSpy.mock.calls[0][0] as { columnDefs: unknown; rowData: unknown };
         expect(props.columnDefs).toEqual([
             { headerName: 'Name', field: 'col0' },
-            { headerName: 'Age', field: 'col1' },
+            { headerName: 'Notes', field: 'col1' },
         ]);
         expect(props.rowData).toEqual([
-            { col0: 'Imran', col1: '30' },
-            { col0: 'Bob', col1: '40' },
+            { col0: 'Imran', col1: 'n/a' },
+            { col0: 'Bob', col1: 'follow up' },
+        ]);
+    });
+
+    it('marks a column as numeric and coerces its values when every cell parses as a number', () => {
+        render(
+            <ThemeContextProvider>
+                <BaileyTable
+                    headers={['Name', 'Age']}
+                    rows={[
+                        [cell('Imran'), cell('30')],
+                        [cell('Bob'), cell('9')],
+                    ]}
+                />
+            </ThemeContextProvider>
+        );
+
+        const props = agGridPropsSpy.mock.calls[0][0] as { columnDefs: Array<Record<string, unknown>>; rowData: unknown };
+        expect(props.columnDefs[1]).toMatchObject({ headerName: 'Age', field: 'col1', cellDataType: 'number' });
+        expect(props.rowData).toEqual([
+            { col0: 'Imran', col1: 30 },
+            { col0: 'Bob', col1: 9 },
+        ]);
+    });
+
+    it('does not mark a column numeric when any cell is non-numeric', () => {
+        render(
+            <ThemeContextProvider>
+                <BaileyTable headers={['Value']} rows={[[cell('30')], [cell('n/a')]]} />
+            </ThemeContextProvider>
+        );
+
+        const props = agGridPropsSpy.mock.calls[0][0] as { columnDefs: Array<Record<string, unknown>> };
+        expect(props.columnDefs[0]).not.toHaveProperty('cellDataType');
+    });
+
+    it('attaches a cellRenderer and an href sidecar field for a column containing links', () => {
+        render(
+            <ThemeContextProvider>
+                <BaileyTable
+                    headers={['Patient']}
+                    rows={[[cell('View Patient', 'https://fhir.example.com/Patient/123')], [cell('No link')]]}
+                />
+            </ThemeContextProvider>
+        );
+
+        const props = agGridPropsSpy.mock.calls[0][0] as {
+            columnDefs: Array<Record<string, unknown>>;
+            rowData: Array<Record<string, unknown>>;
+        };
+        expect(props.columnDefs[0]).toMatchObject({ headerName: 'Patient', field: 'col0' });
+        expect(props.columnDefs[0].cellRenderer).toBeDefined();
+        expect(props.rowData).toEqual([
+            { col0: 'View Patient', col0Href: 'https://fhir.example.com/Patient/123' },
+            { col0: 'No link' },
         ]);
     });
 });

@@ -14,6 +14,7 @@ import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
 import { useStreamProgress } from '../hooks/useStreamProgress';
+import { useAgGridBrandTheme } from '../hooks/useAgGridBrandTheme';
 import StreamProgressIndicator from './StreamProgressIndicator';
 import {
     ModuleRegistry,
@@ -28,12 +29,10 @@ import {
     QuickFilterModule,
     ClientSideRowModelModule,
 } from 'ag-grid-community';
-import { themeBalham } from 'ag-grid-community';
 import FileDownload from './FileDownload';
 import type { ColDef, ColGroupDef, ICellRendererParams } from 'ag-grid-community';
 import { useNavigate, useLocation } from 'react-router';
 import { useTheme } from '../context/ThemeContext';
-import { brandColors } from '../theme/brandColors';
 
 ModuleRegistry.registerModules([
     ColumnAutoSizeModule,
@@ -91,21 +90,7 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
         return [...sheets].sort((a, b) => a.name.localeCompare(b.name));
     }, [sheets]);
 
-    // Select the appropriate ag-grid theme based on dark mode, tinted with b.well brand colors
-    // (ag-grid has its own theming system, separate from the MUI theme in ThemeContext.tsx).
-    const gridTheme = useMemo(() => {
-        if (isDarkMode) {
-            return themeBalham.withParams({
-                backgroundColor: brandColors.darkModePaper,
-                foregroundColor: brandColors.lightGray,
-                borderColor: brandColors.darkModeBorder,
-                accentColor: brandColors.lilac,
-            });
-        }
-        return themeBalham.withParams({
-            accentColor: brandColors.blue,
-        });
-    }, [isDarkMode]);
+    const gridTheme = useAgGridBrandTheme(isDarkMode);
 
     const downloadUri = useMemo(() => {
         const uri = new URL(relativeUrl, fhirUrl);

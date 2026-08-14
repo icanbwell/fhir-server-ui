@@ -97,6 +97,6 @@ describe('BaileyChatPanel', () => {
         const props = baileyTablePropsSpy.mock.calls[0][0] as { headers: string[]; rows: string[][] };
         expect(props.headers).toEqual(['Name', 'Value']);
         expect(props.rows).toHaveLength(6);
-        expect(props.rows[0]).toEqual(['Row0', '0']);
+        expect(props.rows[0]).toEqual([{ text: 'Row0' }, { text: '0' }]);
     });
 });

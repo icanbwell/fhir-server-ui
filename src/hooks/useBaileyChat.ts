@@ -166,6 +166,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
             // Purely a completion signal — [DONE] already drives turn completion here (see
             // parseSseFrames), so there's nothing worth recording.
             return false;
+        } else if (event.type === 'response.created') {
+            // Fires as the very first event of every turn, before any output exists — purely a
+            // lifecycle signal with nothing to show. Without this case it fell into the 'raw'/
+            // "unrecognized" bucket below and showed up in the trace panel on every single turn.
+            return false;
         }
 
         // Every other event still gets recorded — never silently dropped — so the details
@@ -208,6 +213,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
             let buffer = '';
             let streamError: string | null = null;
             let receivedOutput = false;
+            // Distinct from receivedOutput: a turn that only ran tools (no text.delta ever
+            // arrived) sets receivedOutput via the tool trace events, which would otherwise let
+            // the turn complete as 'idle' with an empty, silently-dropped bubble — indistinguishable
+            // from Bailey actually answering with nothing to say.
+            let receivedText = false;
 
             const reportError = (message: string) => {
                 setStatus('error');
@@ -221,6 +231,9 @@ const useBaileyChat = (): UseBaileyChatResult => {
                         streamError = event.message;
                         setTraceEvents((prev) => [...prev, { kind: 'error', message: event.message, at: Date.now(), turnSentAt: sentAt }]);
                         return;
+                    }
+                    if (event.type === 'response.output_text.delta' && event.delta) {
+                        receivedText = true;
                     }
                     if (applyEvent(assistantId, event)) {
                         receivedOutput = true;
@@ -283,6 +296,14 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 // silence; a framing variant this parser doesn't understand is far more likely.
                 if (!receivedOutput) {
                     reportError('Bailey returned an empty response.');
+                    return;
+                }
+                // Tool calls ran (satisfying receivedOutput above) but the model never streamed
+                // any answer text — e.g. it stalled or was cut off after tool results came back.
+                // Reporting 'idle' here would drop the empty assistant bubble and look exactly
+                // like Bailey finished normally with silence.
+                if (!receivedText) {
+                    reportError("Bailey ran some tools but didn't return an answer. Try asking again.");
                     return;
                 }
                 setStatus('idle');

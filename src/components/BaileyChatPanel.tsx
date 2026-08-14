@@ -43,7 +43,8 @@ function CopyMarkdownButton({ markdown }: { markdown: string }) {
 // Only these schemes (plus scheme-relative/relative URLs, which have no scheme to check) are
 // safe to hand to the browser as a clickable link. An allowlist — rather than blocking known-bad
 // schemes like javascript:/data:/vbscript: one at a time — closes the whole class of bypass via
-// an as-yet-unlisted scheme, per the app's XSS scan finding on this override.
+// an as-yet-unlisted scheme: Bailey's response text is model output, not trusted input, and a
+// markdown link is enough to get an arbitrary href in front of `<Link href={href}>` here.
 const SAFE_URL_PROTOCOLS = /^(https?|mailto):/i;
 const isSafeMarkdownUrl = (href: string): boolean => !/^[a-z][a-z0-9+.-]*:/i.test(href) || SAFE_URL_PROTOCOLS.test(href);
 

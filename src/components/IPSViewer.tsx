@@ -22,6 +22,7 @@ import { useTheme } from '../context/ThemeContext';
 import CodeIcon from '@mui/icons-material/Code';
 import PaginatedTable from './PaginatedTable';
 import './IPSNarrative.css'; // Import the CSS file for styling the IPS narrative
+import './MarkdownTable.css';
 import PreJson from './PreJson';
 import { getMandatorySectionContent } from '../constants/ipsConstants';
 import { appendFormatJson } from '../utils/url.utils';
@@ -378,7 +379,7 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                     className={isDarkMode ? 'dark-mode' : ''}
                 >
                     <Box
-                        className="ips-narrative-container"
+                        className="ips-narrative-container markdown-table-content"
                         sx={{
                             '& a': {
                                 color: isDarkMode ? theme.palette.brand.lilac : theme.palette.primary.main,

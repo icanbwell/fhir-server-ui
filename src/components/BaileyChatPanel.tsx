@@ -1,5 +1,5 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Box, Button, CircularProgress, IconButton, Paper, TextField, Typography } from '@mui/material';
+import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
 import Markdown from 'react-markdown';
@@ -9,6 +9,19 @@ import BaileyTracePanel from './BaileyTracePanel';
 import { traceEventHint } from '../utils/baileyTrace';
 import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
+import './MarkdownTable.css';
+
+// Matches the target="_blank" rel="noopener noreferrer" convention used for every other outbound
+// link in this app (ResourceCard, IPSViewer, AttachmentPreview, etc.) — without this override,
+// remark-gfm's autolink-literal extension turns bare URLs in assistant text into <a> tags that
+// navigate the SPA away in-place instead of opening in a new tab.
+const markdownComponents = {
+    a: ({ href, children }: { href?: string; children?: ReactNode }) => (
+        <Link href={href} target="_blank" rel="noopener noreferrer">
+            {children}
+        </Link>
+    ),
+};
 
 const BaileyChatPanel = () => {
     const { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
@@ -64,8 +77,12 @@ const BaileyChatPanel = () => {
                                         </Typography>
                                     ) : (
                                         <>
-                                            <div className={`bailey-markdown-content${isDarkMode ? ' dark-mode' : ''}`}>
-                                                <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
+                                            <div
+                                                className={`bailey-markdown-content markdown-table-content${isDarkMode ? ' dark-mode' : ''}`}
+                                            >
+                                                <Markdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                                                    {message.content}
+                                                </Markdown>
                                             </div>
                                             {message.streaming && streamingHint && (
                                                 <Typography

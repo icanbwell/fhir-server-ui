@@ -1,0 +1,42 @@
+/* Shared table styling for rendered markdown/narrative content (IPSNarrative, Bailey chat).
+   Apply the `markdown-table-content` class alongside a component's own container class.
+   Consumers may set --table-header-bg / --table-header-color / --table-border-color /
+   --table-stripe-color (see IPSViewer.tsx for a theme-driven example); otherwise the
+   fallback values below apply. */
+
+.markdown-table-content table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.markdown-table-content th {
+  background-color: var(--table-header-bg, #F7F7FA);
+  color: var(--table-header-color, #494949);
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 12px;
+}
+
+.markdown-table-content td {
+  padding: 8px 12px;
+  border: 1px solid var(--table-border-color, #F7F7FA);
+  vertical-align: top;
+}
+
+.markdown-table-content tr:nth-child(even) {
+  background-color: var(--table-stripe-color, #F7F7FA);
+}
+
+.dark-mode .markdown-table-content th {
+  background-color: var(--table-header-bg, var(--bwell-dark-mode-paper));
+  color: var(--table-header-color, #F7F7FA);
+}
+
+.dark-mode .markdown-table-content td {
+  border-color: var(--table-border-color, var(--bwell-dark-mode-border));
+}
+
+.dark-mode .markdown-table-content tr:nth-child(even) {
+  background-color: var(--table-stripe-color, var(--bwell-dark-mode-paper));
+}

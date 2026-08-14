@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { BaileyLastRequest, BaileyStreamStats, BaileyTraceEvent } from '../types/baileyChat';
 import { formatTraceGap, hasTraceFailure, toTraceRows, toTraceSegments, traceSummaryLine, TraceRow } from '../utils/baileyTrace';
+import { copyToClipboard } from '../utils/clipboard';
 
 interface BaileyTracePanelProps {
     events: BaileyTraceEvent[];
@@ -14,14 +15,6 @@ interface BaileyTracePanelProps {
 // and stream errors are collected into one "Show details" panel — collapsed by default — rather
 // than rendered inline in the transcript, so a non-developer chat user isn't shown raw tool
 // names/args/JSON on every turn.
-
-async function copyToClipboard(text: string): Promise<void> {
-    try {
-        await navigator.clipboard.writeText(text);
-    } catch {
-        /* ignore — older browsers / missing clipboard permission */
-    }
-}
 
 function CopyButton({ text }: { text: string }) {
     return (

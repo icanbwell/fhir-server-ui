@@ -1,7 +1,9 @@
 import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import useBaileyChat from '../hooks/useBaileyChat';
@@ -11,9 +13,32 @@ import BaileyChart from './BaileyChart';
 import { traceEventHint } from '../utils/baileyTrace';
 import { extractTableData, shouldUseGrid, type HastNode } from '../utils/baileyTable';
 import { parseBaileyChartSpec } from '../utils/baileyChart';
+import { copyToClipboard } from '../utils/clipboard';
 import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
 import './MarkdownTable.css';
+
+// How long the icon flips to a checkmark after a successful copy, mirroring the
+// affordance in Claude Desktop's own response-footer copy button.
+const COPY_CONFIRMATION_MS = 1500;
+
+function CopyMarkdownButton({ markdown }: { markdown: string }) {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = async () => {
+        await copyToClipboard(markdown);
+        setCopied(true);
+        setTimeout(() => setCopied(false), COPY_CONFIRMATION_MS);
+    };
+
+    return (
+        <Tooltip title={copied ? 'Copied!' : 'Copy as markdown'}>
+            <IconButton size="small" onClick={handleCopy} aria-label="copy response as markdown" sx={{ color: 'text.secondary' }}>
+                {copied ? <CheckIcon fontSize="inherit" /> : <ContentCopyIcon fontSize="inherit" />}
+            </IconButton>
+        </Tooltip>
+    );
+}
 
 // Matches the target="_blank" rel="noopener noreferrer" convention used for every other outbound
 // link in this app (ResourceCard, IPSViewer, AttachmentPreview, etc.) — without this override,
@@ -105,6 +130,11 @@ const BaileyChatPanel = () => {
                                 >
                                     {streamingHint}
                                 </Typography>
+                            )}
+                            {!message.streaming && (
+                                <Box sx={{ mt: 0.5 }}>
+                                    <CopyMarkdownButton markdown={message.content} />
+                                </Box>
                             )}
                         </>
                     );

@@ -6,7 +6,9 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import useBaileyChat from '../hooks/useBaileyChat';
 import BaileyTracePanel from './BaileyTracePanel';
+import BaileyTable from './BaileyTable';
 import { traceEventHint } from '../utils/baileyTrace';
+import { extractTableData, shouldUseGrid, type HastNode } from '../utils/baileyTable';
 import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
 import './MarkdownTable.css';
@@ -21,6 +23,15 @@ const markdownComponents = {
             {children}
         </Link>
     ),
+    // Upgrades markdown tables past BAILEY_TABLE_GRID_ROW_THRESHOLD rows to a sortable/
+    // filterable ag-grid widget; smaller tables keep the plain GFM rendering from #257.
+    table: ({ node, children }: { node?: HastNode; children?: ReactNode }) => {
+        const data = node && extractTableData(node);
+        if (data && shouldUseGrid(data.rows)) {
+            return <BaileyTable headers={data.headers} rows={data.rows} />;
+        }
+        return <table>{children}</table>;
+    },
 };
 
 const BaileyChatPanel = () => {

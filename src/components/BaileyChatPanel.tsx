@@ -6,9 +6,11 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import useBaileyChat from '../hooks/useBaileyChat';
 import BaileyTracePanel from './BaileyTracePanel';
+import BaileyChart from './BaileyChart';
 import BaileyTable from './BaileyTable';
 import { traceEventHint } from '../utils/baileyTrace';
 import { isSafeMarkdownUrl } from '../utils/safeMarkdownUrl';
+import { parseBaileyChartSpec } from '../utils/baileyChart';
 import { extractTableData, shouldUseGrid, type HastNode } from '../utils/baileyTable';
 import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
@@ -27,6 +29,22 @@ const markdownComponents = {
                 {children}
             </Link>
         ),
+    // Routes ```chartjs code blocks to BaileyChart once a valid spec has streamed in; anything
+    // else (a different language, or a chartjs block that's still mid-stream / malformed) falls
+    // through to the default <pre> rendering unchanged.
+    pre: ({ children }: { children?: ReactNode }) => {
+        const codeElement = Array.isArray(children) ? children[0] : children;
+        const codeProps = (codeElement as { props?: { className?: string; children?: ReactNode } } | undefined)
+            ?.props;
+        if (codeProps?.className === 'language-chartjs') {
+            const raw = Array.isArray(codeProps.children) ? codeProps.children.join('') : String(codeProps.children ?? '');
+            const spec = parseBaileyChartSpec(raw);
+            if (spec) {
+                return <BaileyChart spec={spec} />;
+            }
+        }
+        return <pre>{children}</pre>;
+    },
     // Upgrades markdown tables past BAILEY_TABLE_GRID_ROW_THRESHOLD rows to a sortable/
     // filterable ag-grid widget; smaller tables keep the plain GFM rendering from #257.
     table: ({ node, children }: { node?: HastNode; children?: ReactNode }) => {
@@ -45,10 +63,11 @@ const remarkPlugins = [remarkGfm];
 // A finished message's content never changes again, but BaileyChatPanel re-renders on every
 // streamed token of *other* messages (new `messages` array reference each chunk) and on every
 // keystroke in the input field. Without memoizing per-message, every earlier message's markdown
-// tree — including markdownComponents.table's extractTableData call — re-runs on each of those
-// renders even though nothing about that message changed. React.memo skips this component
-// entirely once `content`/`darkMode` are unchanged, which also keeps BaileyTable's `headers`/
-// `rows` props referentially stable so its own internal useMemo actually hits.
+// tree — including markdownComponents.pre's parseBaileyChartSpec call and markdownComponents.
+// table's extractTableData call — re-runs on each of those renders even though nothing about
+// that message changed. React.memo skips this component entirely once `content`/`darkMode` are
+// unchanged, which also keeps BaileyTable's `headers`/`rows` props referentially stable so its
+// own internal useMemo actually hits.
 const MessageMarkdown = memo(function MessageMarkdown({ content, darkMode }: { content: string; darkMode: boolean }) {
     return (
         <div className={`bailey-markdown-content markdown-table-content${darkMode ? ' dark-mode' : ''}`}>

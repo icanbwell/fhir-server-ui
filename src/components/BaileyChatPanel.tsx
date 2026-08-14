@@ -7,17 +7,10 @@ import remarkGfm from 'remark-gfm';
 import useBaileyChat from '../hooks/useBaileyChat';
 import BaileyTracePanel from './BaileyTracePanel';
 import { traceEventHint } from '../utils/baileyTrace';
+import { isSafeMarkdownUrl } from '../utils/safeMarkdownUrl';
 import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
 import './MarkdownTable.css';
-
-// Only these schemes (plus scheme-relative/relative URLs, which have no scheme to check) are
-// safe to hand to the browser as a clickable link. An allowlist — rather than blocking known-bad
-// schemes like javascript:/data:/vbscript: one at a time — closes the whole class of bypass via
-// an as-yet-unlisted scheme: Bailey's response text is model output, not trusted input, and a
-// markdown link is enough to get an arbitrary href in front of `<Link href={href}>` here.
-const SAFE_URL_PROTOCOLS = /^(https?|mailto):/i;
-const isSafeMarkdownUrl = (href: string): boolean => !/^[a-z][a-z0-9+.-]*:/i.test(href) || SAFE_URL_PROTOCOLS.test(href);
 
 // Matches the target="_blank" rel="noopener noreferrer" convention used for every other outbound
 // link in this app (ResourceCard, IPSViewer, AttachmentPreview, etc.) — without this override,

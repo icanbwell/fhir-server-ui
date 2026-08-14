@@ -11,16 +11,27 @@ import { useTheme } from '../context/ThemeContext';
 import './BaileyMarkdown.css';
 import './MarkdownTable.css';
 
+// Only these schemes (plus scheme-relative/relative URLs, which have no scheme to check) are
+// safe to hand to the browser as a clickable link. An allowlist — rather than blocking known-bad
+// schemes like javascript:/data:/vbscript: one at a time — closes the whole class of bypass via
+// an as-yet-unlisted scheme: Bailey's response text is model output, not trusted input, and a
+// markdown link is enough to get an arbitrary href in front of `<Link href={href}>` here.
+const SAFE_URL_PROTOCOLS = /^(https?|mailto):/i;
+const isSafeMarkdownUrl = (href: string): boolean => !/^[a-z][a-z0-9+.-]*:/i.test(href) || SAFE_URL_PROTOCOLS.test(href);
+
 // Matches the target="_blank" rel="noopener noreferrer" convention used for every other outbound
 // link in this app (ResourceCard, IPSViewer, AttachmentPreview, etc.) — without this override,
 // remark-gfm's autolink-literal extension turns bare URLs in assistant text into <a> tags that
 // navigate the SPA away in-place instead of opening in a new tab.
 const markdownComponents = {
-    a: ({ href, children }: { href?: string; children?: ReactNode }) => (
-        <Link href={href} target="_blank" rel="noopener noreferrer">
-            {children}
-        </Link>
-    ),
+    a: ({ href, children }: { href?: string; children?: ReactNode }) =>
+        !href || !isSafeMarkdownUrl(href) ? (
+            <>{children}</>
+        ) : (
+            <Link href={href} target="_blank" rel="noopener noreferrer">
+                {children}
+            </Link>
+        ),
 };
 
 const BaileyChatPanel = () => {

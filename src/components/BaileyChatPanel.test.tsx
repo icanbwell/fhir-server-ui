@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import BaileyChatPanel from './BaileyChatPanel';
 import { ThemeContextProvider } from '../context/ThemeContext';
 import { UseBaileyChatResult } from '../hooks/useBaileyChat';
@@ -45,6 +45,10 @@ const gfmTable = (dataRowCount: number) => {
 };
 
 describe('BaileyChatPanel', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     it('renders a small GFM markdown table from an assistant message as a plain table', () => {
         mockUseBaileyChat.mockReturnValue({
             ...baseChatResult,

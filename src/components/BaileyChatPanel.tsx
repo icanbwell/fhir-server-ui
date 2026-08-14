@@ -46,9 +46,14 @@ function CopyMarkdownButton({ markdown }: { markdown: string }) {
 // navigate the SPA away in-place instead of opening in a new tab.
 const markdownComponents = {
     a: ({ href, children }: { href?: string; children?: ReactNode }) => (
+        // Reject javascript:, data:, and vbscript: protocols to prevent XSS via malicious URLs.
+        !href || /^(javascript|data|vbscript):/i.test(href)
+            ? <>{children}</>
+            : (
         <Link href={href} target="_blank" rel="noopener noreferrer">
             {children}
         </Link>
+        )
     ),
     // Upgrades markdown tables past BAILEY_TABLE_GRID_ROW_THRESHOLD rows to a sortable/
     // filterable ag-grid widget; smaller tables keep the plain GFM rendering from #257.

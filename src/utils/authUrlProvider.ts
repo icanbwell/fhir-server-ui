@@ -2,6 +2,7 @@ import {
     WellKnownConfigurationInfo,
     WellKnownConfigurationService,
 } from '../services/WellKnownConfigurationService';
+import { APP_ENV } from '../runtimeEnv';
 
 class AuthUrlProvider {
     async getAuthUrlsAsync(provider: string): Promise<{
@@ -10,7 +11,7 @@ class AuthUrlProvider {
         logoutUrl?: string;
         wellKnownUrl?: string;
     }> {
-        const wellKnownUrl = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_WELL_KNOWN_URL`];
+        const wellKnownUrl = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_WELL_KNOWN_URL`];
         let authorizeUrl: string | undefined;
         let tokenUrl: string | undefined;
         let logoutUrl: string | undefined;
@@ -25,9 +26,9 @@ class AuthUrlProvider {
             logoutUrl = wellKnownConfig.end_session_endpoint;
         } else {
             // otherwise, use the environment variables
-            authorizeUrl = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_AUTHORIZE_URL`];
-            tokenUrl = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_TOKEN_URL`];
-            logoutUrl = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_LOGOUT_URL`];
+            authorizeUrl = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_AUTHORIZE_URL`];
+            tokenUrl = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_TOKEN_URL`];
+            logoutUrl = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_LOGOUT_URL`];
         }
 
         if (!authorizeUrl) {
@@ -64,18 +65,18 @@ class AuthUrlProvider {
         loginScopes?: string;
     } {
         const customUserName =
-            import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_CUSTOM_USERNAME`];
-        const customGroup = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_CUSTOM_GROUP`];
-        const customScope = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_CUSTOM_SCOPE`];
-        const clientId = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_CLIENT_ID`];
+            APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_CUSTOM_USERNAME`];
+        const customGroup = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_CUSTOM_GROUP`];
+        const customScope = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_CUSTOM_SCOPE`];
+        const clientId = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_CLIENT_ID`];
         const tokenForUserDetails =
-            import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_TOKEN_FOR_USER_DETAILS`];
+            APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_TOKEN_FOR_USER_DETAILS`];
         const scopeRemovePrefixValue =
-            import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_REMOVE_SCOPE_PREFIX`];
+            APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_REMOVE_SCOPE_PREFIX`];
         const scopeRemovePrefix = scopeRemovePrefixValue
             ? scopeRemovePrefixValue.split(',').map((s) => s.trim())
             : undefined;
-        const loginScopes = import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_LOGIN_SCOPES`];
+        const loginScopes = APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_LOGIN_SCOPES`];
 
         if (!customUserName) {
             throw new Error(
@@ -96,7 +97,7 @@ class AuthUrlProvider {
         }
 
         let tokenToSendToFhirServer =
-            import.meta.env[`REACT_APP_AUTH_${provider.toUpperCase()}_TOKEN_TO_SEND_TO_FHIR_SERVER`];
+            APP_ENV[`REACT_APP_AUTH_${provider.toUpperCase()}_TOKEN_TO_SEND_TO_FHIR_SERVER`];
 
         if (!tokenToSendToFhirServer) {
             tokenToSendToFhirServer = 'jwt';

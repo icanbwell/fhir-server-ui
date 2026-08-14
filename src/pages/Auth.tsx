@@ -7,6 +7,7 @@ import { jwtParser } from '../utils/jwtParser';
 import AuthServiceFactory from '../services/AuthServiceFactory';
 import { IAuthService } from '../services/IAuthService';
 import { AxiosError } from 'axios';
+import { APP_ENV } from '../runtimeEnv';
 
 const Auth = () => {
     const { setUserDetails } = useContext(UserContext);
@@ -113,8 +114,8 @@ const Auth = () => {
                 console.error('Failed to decode state parameter, falling back to "/"', decodeError);
             }
         }
-        const authAppRedirectPath = import.meta.env.REACT_APP_AUTH_REDIRECT_PATH;
-        if (authAppRedirectPath && resourceUrl === import.meta.env.REACT_APP_AUTH_REDIRECT_STATE) {
+        const authAppRedirectPath = APP_ENV.REACT_APP_AUTH_REDIRECT_PATH;
+        if (authAppRedirectPath && resourceUrl === APP_ENV.REACT_APP_AUTH_REDIRECT_STATE) {
             window.location.href = authAppRedirectPath + location.search;
 
             // Redirect to home page after callback

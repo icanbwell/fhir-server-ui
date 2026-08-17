@@ -17,6 +17,7 @@ export interface UseBaileyChatResult {
     stop: () => void;
     retryLast: () => void;
     clearTrace: () => void;
+    newChat: () => void;
 }
 
 // Bailey's error bodies can be long (validation dumps, stack traces). Show enough to identify
@@ -342,6 +343,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
         [baileyUrl, baileyModel, fhirUrl, setUserDetails, applyEvent]
     );
 
+    const setMessagesAndRef = useCallback((next: BaileyMessage[]) => {
+        messagesRef.current = next;
+        setMessages(next);
+    }, []);
+
     const send = useCallback(
         (text: string) => {
             const trimmed = text.trim();
@@ -353,11 +359,10 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 ...messagesRef.current,
                 { id: crypto.randomUUID(), role: 'user', content: trimmed },
             ];
-            messagesRef.current = next;
-            setMessages(next);
+            setMessagesAndRef(next);
             runTurn(next);
         },
-        [runTurn]
+        [runTurn, setMessagesAndRef]
     );
 
     const stop = useCallback(() => {
@@ -375,14 +380,26 @@ const useBaileyChat = (): UseBaileyChatResult => {
         const current = messagesRef.current;
         const last = current[current.length - 1];
         const trimmed = last && last.role === 'assistant' ? current.slice(0, -1) : current;
-        messagesRef.current = trimmed;
-        setMessages(trimmed);
+        setMessagesAndRef(trimmed);
         runTurn(trimmed);
-    }, [runTurn]);
+    }, [runTurn, setMessagesAndRef]);
 
     const clearTrace = useCallback(() => setTraceEvents([]), []);
 
-    return { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace };
+    // Aborting a still-streaming turn resolves runTurn's promise asynchronously via its
+    // AbortError catch branch, but that branch only sets status back to 'idle' and returns —
+    // it never touches messages, so the reset below isn't undone by the abort settling later.
+    const newChat = useCallback(() => {
+        abortRef.current?.abort();
+        setMessagesAndRef([]);
+        setTraceEvents([]);
+        setLastRequest(null);
+        setStatus('idle');
+        setError(null);
+        lastUserTextRef.current = '';
+    }, [setMessagesAndRef]);
+
+    return { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace, newChat };
 };
 
 export default useBaileyChat;

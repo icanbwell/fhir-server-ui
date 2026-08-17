@@ -10,6 +10,9 @@ list/search screen of its own, no editing. It answers one question — "here's
 an attachment on a FHIR resource, show it to the user" — and nothing else.
 
 Design background (this repo): `docs/superpowers/specs/2026-08-12-document-viewer-and-encounter-links-design.md`.
+Note: that spec's PDF-rendering guidance (`<iframe>`/`<embed>` on an Object
+URL) is superseded by the canvas/pdf.js approach documented below in
+[PDF rendering: canvas, not iframe](#pdf-rendering-canvas-not-iframe).
 
 ## The problem this solves
 

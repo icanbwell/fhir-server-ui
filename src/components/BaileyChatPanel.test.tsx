@@ -23,6 +23,7 @@ const baseChatResult: UseBaileyChatResult = {
     stop: vi.fn(),
     retryLast: vi.fn(),
     clearTrace: vi.fn(),
+    newChat: vi.fn(),
 };
 
 const mockUseBaileyChat = vi.fn<() => UseBaileyChatResult>(() => baseChatResult);
@@ -217,5 +218,36 @@ describe('BaileyChatPanel', () => {
         );
 
         expect(screen.queryByRole('button', { name: 'copy response as markdown' })).not.toBeInTheDocument();
+    });
+
+    it('disables the new chat button when there are no messages yet', () => {
+        mockUseBaileyChat.mockReturnValue(baseChatResult);
+
+        render(
+            <ThemeContextProvider>
+                <BaileyChatPanel />
+            </ThemeContextProvider>
+        );
+
+        expect(screen.getByRole('button', { name: 'new chat' })).toBeDisabled();
+    });
+
+    it('calls newChat when the new chat button is clicked', () => {
+        mockUseBaileyChat.mockReturnValue({
+            ...baseChatResult,
+            messages: [{ id: 'user-1', role: 'user', content: 'hi' }],
+        });
+
+        render(
+            <ThemeContextProvider>
+                <BaileyChatPanel />
+            </ThemeContextProvider>
+        );
+
+        const button = screen.getByRole('button', { name: 'new chat' });
+        expect(button).toBeEnabled();
+        fireEvent.click(button);
+
+        expect(baseChatResult.newChat).toHaveBeenCalledTimes(1);
     });
 });

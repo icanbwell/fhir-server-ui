@@ -17,6 +17,7 @@ export interface UseBaileyChatResult {
     stop: () => void;
     retryLast: () => void;
     clearTrace: () => void;
+    newChat: () => void;
 }
 
 // Bailey's error bodies can be long (validation dumps, stack traces). Show enough to identify
@@ -382,7 +383,21 @@ const useBaileyChat = (): UseBaileyChatResult => {
 
     const clearTrace = useCallback(() => setTraceEvents([]), []);
 
-    return { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace };
+    // Aborting a still-streaming turn resolves runTurn's promise asynchronously via its
+    // AbortError catch branch, but that branch only sets status back to 'idle' and returns —
+    // it never touches messages, so the reset below isn't undone by the abort settling later.
+    const newChat = useCallback(() => {
+        abortRef.current?.abort();
+        messagesRef.current = [];
+        setMessages([]);
+        setTraceEvents([]);
+        setLastRequest(null);
+        setStatus('idle');
+        setError(null);
+        lastUserTextRef.current = '';
+    }, []);
+
+    return { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace, newChat };
 };
 
 export default useBaileyChat;

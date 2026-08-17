@@ -2,6 +2,7 @@ import { FormEvent, ReactNode, memo, useEffect, useMemo, useRef, useState } from
 import { Alert, Box, Button, CircularProgress, IconButton, Link, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import StopIcon from '@mui/icons-material/Stop';
+import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import Markdown from 'react-markdown';
@@ -105,7 +106,7 @@ const MessageMarkdown = memo(function MessageMarkdown({ content, darkMode }: { c
 });
 
 const BaileyChatPanel = () => {
-    const { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace } = useBaileyChat();
+    const { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace, newChat } = useBaileyChat();
     const { isDarkMode } = useTheme();
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -134,6 +135,20 @@ const BaileyChatPanel = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '78vh' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Tooltip title="New chat">
+                    <span>
+                        <IconButton
+                            size="small"
+                            onClick={newChat}
+                            disabled={messages.length === 0}
+                            aria-label="new chat"
+                        >
+                            <AddCommentOutlinedIcon fontSize="small" />
+                        </IconButton>
+                    </span>
+                </Tooltip>
+            </Box>
             <Box sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: 1 }}>
                 {messages.map((message, index) => {
                     const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;

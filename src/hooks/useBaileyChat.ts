@@ -343,6 +343,11 @@ const useBaileyChat = (): UseBaileyChatResult => {
         [baileyUrl, baileyModel, fhirUrl, setUserDetails, applyEvent]
     );
 
+    const setMessagesAndRef = useCallback((next: BaileyMessage[]) => {
+        messagesRef.current = next;
+        setMessages(next);
+    }, []);
+
     const send = useCallback(
         (text: string) => {
             const trimmed = text.trim();
@@ -354,11 +359,10 @@ const useBaileyChat = (): UseBaileyChatResult => {
                 ...messagesRef.current,
                 { id: crypto.randomUUID(), role: 'user', content: trimmed },
             ];
-            messagesRef.current = next;
-            setMessages(next);
+            setMessagesAndRef(next);
             runTurn(next);
         },
-        [runTurn]
+        [runTurn, setMessagesAndRef]
     );
 
     const stop = useCallback(() => {
@@ -376,10 +380,9 @@ const useBaileyChat = (): UseBaileyChatResult => {
         const current = messagesRef.current;
         const last = current[current.length - 1];
         const trimmed = last && last.role === 'assistant' ? current.slice(0, -1) : current;
-        messagesRef.current = trimmed;
-        setMessages(trimmed);
+        setMessagesAndRef(trimmed);
         runTurn(trimmed);
-    }, [runTurn]);
+    }, [runTurn, setMessagesAndRef]);
 
     const clearTrace = useCallback(() => setTraceEvents([]), []);
 
@@ -388,14 +391,13 @@ const useBaileyChat = (): UseBaileyChatResult => {
     // it never touches messages, so the reset below isn't undone by the abort settling later.
     const newChat = useCallback(() => {
         abortRef.current?.abort();
-        messagesRef.current = [];
-        setMessages([]);
+        setMessagesAndRef([]);
         setTraceEvents([]);
         setLastRequest(null);
         setStatus('idle');
         setError(null);
         lastUserTextRef.current = '';
-    }, []);
+    }, [setMessagesAndRef]);
 
     return { messages, traceEvents, lastRequest, status, error, send, stop, retryLast, clearTrace, newChat };
 };

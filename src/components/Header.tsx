@@ -23,6 +23,8 @@ const Header = () => {
     const location = useLocation();
     const [anchorEl, setAnchorEl] = useState(null);
 
+    const isBaileyPage = location.pathname === '/bailey';
+
     const canOpenInConsole = Boolean(lastRequest && lastRequest.pathname === location.pathname);
 
     const handleOpenInConsole = () => {
@@ -59,9 +61,13 @@ const Header = () => {
                             gap: 1
                         }}
                     >
-                        <img src={BwellIcon} alt="b.well Icon" style={{ height: 28 }} />
+                        {isBaileyPage ? (
+                            <SmartToyIcon sx={{ height: 28, width: 28 }} />
+                        ) : (
+                            <img src={BwellIcon} alt="b.well Icon" style={{ height: 28 }} />
+                        )}
                         <Typography variant="h5" style={{ fontWeight: 500 }}>
-                            FHIR Server
+                            {isBaileyPage ? 'FHIR Server AI Chat' : 'FHIR Server'}
                         </Typography>
                     </Button>
                     <div style={{ flexGrow: 1 }} />

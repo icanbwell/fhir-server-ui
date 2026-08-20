@@ -23,6 +23,7 @@
     "@emotion/styled": "^11.14.1",
     "@fontsource/open-sans": "^5.3.0",
     "@fontsource/quicksand": "^5.3.0",
+    "@icanbwell/baileyai-chat-ui": "^0.3.0",
     "@mui/icons-material": "^9.0.1",
     "@mui/material": "^9.0.1",
     "@mui/x-date-pickers": "^9.3.0",

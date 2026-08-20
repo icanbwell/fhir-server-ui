@@ -23,7 +23,7 @@ const Header = () => {
     const location = useLocation();
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const isBaileyPage = location.pathname === '/bailey';
+    const isBaileyPage = env.baileyEnabled && location.pathname.replace(/\/+$/, '').toLowerCase() === '/bailey';
 
     const canOpenInConsole = Boolean(lastRequest && lastRequest.pathname === location.pathname);
 

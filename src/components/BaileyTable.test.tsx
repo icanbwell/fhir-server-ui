@@ -16,7 +16,7 @@ vi.mock('ag-grid-react', () => ({
 
 import BaileyTable from './BaileyTable';
 import { ThemeContextProvider } from '../context/ThemeContext';
-import type { BaileyTableCell } from '../utils/baileyTable';
+import type { BaileyTableCell } from '@icanbwell/baileyai-chat-ui';
 
 const cell = (text: string, href?: string): BaileyTableCell => (href ? { text, href } : { text });
 

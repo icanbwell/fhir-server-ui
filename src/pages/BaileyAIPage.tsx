@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Box, Typography } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import BaileyChatPanel from '../components/BaileyChatPanel';
+import BaileyChatContainer from '../components/BaileyChatContainer';
 import EnvContext from '../context/EnvironmentContext';
 
 const BaileyAIPage = () => {
@@ -18,7 +18,7 @@ const BaileyAIPage = () => {
                             Bailey AI is not configured (missing REACT_APP_BAILEY_URL).
                         </Typography>
                     ) : (
-                        <BaileyChatPanel />
+                        <BaileyChatContainer />
                     )}
                 </Box>
             </div>

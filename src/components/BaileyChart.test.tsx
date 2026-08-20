@@ -16,7 +16,7 @@ vi.mock('react-chartjs-2', () => ({
 
 import BaileyChart from './BaileyChart';
 import { ThemeContextProvider } from '../context/ThemeContext';
-import type { BaileyChartSpec } from '../utils/baileyChart';
+import type { BaileyChartSpec } from '@icanbwell/baileyai-chat-ui';
 
 const lastCallProps = () => chartPropsSpy.mock.calls[chartPropsSpy.mock.calls.length - 1][0] as {
     type: string;

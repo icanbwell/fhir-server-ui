@@ -15,8 +15,7 @@ import {
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { useAgGridBrandTheme } from '../hooks/useAgGridBrandTheme';
 import { useTheme } from '../context/ThemeContext';
-import { isSafeMarkdownUrl } from '../utils/safeMarkdownUrl';
-import type { BaileyTableCell } from '../utils/baileyTable';
+import { isSafeMarkdownUrl, type BaileyTableCell } from '@icanbwell/baileyai-chat-ui';
 
 // Registration is additive/idempotent across modules (SpreadsheetViewer.tsx registers its own
 // overlapping set), so it's safe for both to declare what they need independently.

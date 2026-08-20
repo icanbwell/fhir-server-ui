@@ -79,6 +79,13 @@ const getCompositionSummaryLink = ({ uuid }: { uuid?: string }) =>
         tooltip: 'View Composition Summary',
     });
 
+const getCompositionIndexLink = ({ resource, uuid }: TGetIPSLinkProps) =>
+    getResourceLinkAction({
+        to: `/compositions/4_0_0/${resource.resourceType === 'Person' ? 'person.' : ''}${uuid}`,
+        label: 'Compositions',
+        tooltip: 'View all Compositions by version and category',
+    });
+
 const ResourceCard = ({
     index,
     resource,
@@ -202,6 +209,9 @@ const ResourceCard = ({
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getIPSLink({ resource, uuid: uuid?.toString() })}
                         {resource.resourceType &&
+                            summaryResourceTypes.includes(resource.resourceType.toString()) &&
+                            getCompositionIndexLink({ resource, uuid: uuid?.toString() })}
+                        {resource.resourceType &&
                             compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}
                         <Button>{open ? 'Close' : 'Open'}</Button>
@@ -257,6 +267,14 @@ const ResourceCard = ({
                                 {summaryResourceTypes.includes(
                                     resource.resourceType.toString()
                                 ) && <Box>{getIPSLink({ resource, uuid: uuid?.toString() })}</Box>}
+
+                                {summaryResourceTypes.includes(
+                                    resource.resourceType.toString()
+                                ) && (
+                                    <Box>
+                                        {getCompositionIndexLink({ resource, uuid: uuid?.toString() })}
+                                    </Box>
+                                )}
 
                                 {compositionSummaryResourceTypes.includes(resource.resourceType.toString()) && (
                                     <Box>{getCompositionSummaryLink({ uuid: uuid?.toString() })}</Box>

@@ -1,6 +1,6 @@
 import BaseApi from './baseApi';
 import { HttpMethod } from '../context/LastRequestContext';
-import { BaileyChatInputMessage, BaileyMcpToolConfig } from '../types/baileyChat';
+import { BaileyChatInputMessage, BaileyMcpToolConfig } from '@icanbwell/baileyai-chat-ui';
 
 export interface StreamChatParams {
     model: string;

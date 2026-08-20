@@ -1431,9 +1431,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@icanbwell/baileyai-chat-ui@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@icanbwell/baileyai-chat-ui@npm:0.3.0"
+"@icanbwell/baileyai-chat-ui@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@icanbwell/baileyai-chat-ui@npm:0.3.2"
   dependencies:
     "@radix-ui/react-tooltip": "npm:^1.1.8"
     react-markdown: "npm:^10.1.0"
@@ -1441,7 +1441,7 @@ __metadata:
   peerDependencies:
     react: ^19.0.0
     react-dom: ^19.0.0
-  checksum: 10c0/1f28148dba4d697109ac5d8ae07da09c32dec1a20aa490b379c47fc0a534a69336bace0d925eaba013a84c83ce03f2226ac369c224239368c61f345b5b4afef2
+  checksum: 10c0/c84e952cda85175ead9ca340831a72fcf4e00b117932e86be87f61cf271060671fff54000662d78db7e1fec4feee33b5df607af1862da6b8a9ca6e1f41223a4d
   languageName: node
   linkType: hard
 
@@ -4783,7 +4783,7 @@ __metadata:
     "@emotion/styled": "npm:^11.14.1"
     "@fontsource/open-sans": "npm:^5.3.0"
     "@fontsource/quicksand": "npm:^5.3.0"
-    "@icanbwell/baileyai-chat-ui": "npm:^0.3.0"
+    "@icanbwell/baileyai-chat-ui": "npm:^0.3.2"
     "@mui/icons-material": "npm:^9.0.1"
     "@mui/material": "npm:^9.0.1"
     "@mui/x-date-pickers": "npm:^9.3.0"

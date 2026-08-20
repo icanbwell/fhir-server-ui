@@ -9,6 +9,7 @@ export interface StreamChatParams {
     tools: BaileyMcpToolConfig[];
     signal?: AbortSignal;
     onChunk: (text: string) => void;
+    onRequestId?: (requestId: string) => void;
 }
 
 // Bailey validates the caller's bearer token against its own AUTH_PROVIDERS, which may not
@@ -33,6 +34,7 @@ class BaileyApi extends BaseApi {
         tools,
         signal,
         onChunk,
+        onRequestId,
     }: StreamChatParams): Promise<{ status: number | undefined; text: string; errorMessage?: string }> {
         const decoder = new TextDecoder();
         const { status, text, errorMessage } = await this.streamRequest({
@@ -45,6 +47,12 @@ class BaileyApi extends BaseApi {
             },
             signal,
             onChunk: (chunk) => onChunk(decoder.decode(chunk, { stream: true })),
+            onHeaders: (_status, headers) => {
+                const requestId = headers['x-request-id'];
+                if (requestId) {
+                    onRequestId?.(requestId);
+                }
+            },
         });
         // Flush any dangling partial multi-byte UTF-8 sequence left buffered by the last
         // `{ stream: true }` call — without this, a stream that ends mid-character (an abrupt

@@ -18,7 +18,7 @@ import {
     ScatterController,
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
-import type { BaileyChartSpec } from '../utils/baileyChart';
+import type { BaileyChartSpec } from '@icanbwell/baileyai-chat-ui';
 import { useTheme } from '../context/ThemeContext';
 import { brandColors } from '../theme/brandColors';
 
@@ -64,7 +64,9 @@ const DARK_PALETTE = [
     brandColors.orange,
     brandColors.lightGray,
     brandColors.midGray,
-    brandColors.white,
+    // white sits only 8 units per channel from lightGray (#F7F7FA) at index 4, making adjacent
+    // series indistinguishable; blue gives this slot real contrast against lightGray instead.
+    brandColors.blue,
     brandColors.errorRed,
 ];
 

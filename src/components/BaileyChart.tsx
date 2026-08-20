@@ -65,8 +65,11 @@ const DARK_PALETTE = [
     brandColors.lightGray,
     brandColors.midGray,
     // white sits only 8 units per channel from lightGray (#F7F7FA) at index 4, making adjacent
-    // series indistinguishable; blue gives this slot real contrast against lightGray instead.
-    brandColors.blue,
+    // series indistinguishable — but brandColors.blue (a light-mode navy) fails the opposite way:
+    // ~1.4:1-1.7:1 contrast against the actual dark-mode chart backgrounds (darkModePaper/
+    // darkModeBackground), under WCAG's 3:1 minimum for graphical objects. darkModeTextSecondary
+    // clears both bars: ~6.8:1/7.9:1 against those backgrounds, and distinct enough from lightGray.
+    brandColors.darkModeTextSecondary,
     brandColors.errorRed,
 ];
 

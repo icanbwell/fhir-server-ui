@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { brandColors } from '../theme/brandColors';
 
@@ -24,7 +24,10 @@ const THEME_VARIABLES: Record<string, { light: string; dark: string }> = {
 export function useBaileyThemeBridge(): void {
     const { isDarkMode } = useTheme();
 
-    useEffect(() => {
+    // useLayoutEffect (not useEffect) so these overrides land before the browser paints — the
+    // package's stylesheet bakes light-mode defaults into :root, and a passive effect would let
+    // one frame paint with those defaults before this hook's dark-mode values ever apply.
+    useLayoutEffect(() => {
         const root = document.documentElement;
         Object.entries(THEME_VARIABLES).forEach(([name, { light, dark }]) => {
             root.style.setProperty(name, isDarkMode ? dark : light);

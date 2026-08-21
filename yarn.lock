@@ -1431,17 +1431,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@icanbwell/baileyai-chat-ui@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "@icanbwell/baileyai-chat-ui@npm:0.3.2"
+"@icanbwell/baileyai-chat-ui@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "@icanbwell/baileyai-chat-ui@npm:0.3.4"
   dependencies:
     "@radix-ui/react-tooltip": "npm:^1.1.8"
     react-markdown: "npm:^10.1.0"
     remark-gfm: "npm:^4.0.1"
   peerDependencies:
+    "@emotion/react": ^11.0.0
+    "@emotion/styled": ^11.0.0
+    "@mui/material": ^9.0.0
+    ag-grid-community: ^35.0.0
+    ag-grid-react: ^35.0.0
+    chart.js: ^4.0.0
     react: ^19.0.0
+    react-chartjs-2: ^5.0.0
     react-dom: ^19.0.0
-  checksum: 10c0/c84e952cda85175ead9ca340831a72fcf4e00b117932e86be87f61cf271060671fff54000662d78db7e1fec4feee33b5df607af1862da6b8a9ca6e1f41223a4d
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    "@mui/material":
+      optional: true
+    ag-grid-community:
+      optional: true
+    ag-grid-react:
+      optional: true
+    chart.js:
+      optional: true
+    react-chartjs-2:
+      optional: true
+  checksum: 10c0/6f3af8ffbda100433c5749c9757ff642f78de85567c70c107dfd676661fbea4ea75ac112d7dabdbe940814036eb46df3480d12ca848af6e96ac8ce34a21c8ab0
   languageName: node
   linkType: hard
 
@@ -4783,7 +4805,7 @@ __metadata:
     "@emotion/styled": "npm:^11.14.1"
     "@fontsource/open-sans": "npm:^5.3.0"
     "@fontsource/quicksand": "npm:^5.3.0"
-    "@icanbwell/baileyai-chat-ui": "npm:^0.3.2"
+    "@icanbwell/baileyai-chat-ui": "npm:^0.3.4"
     "@mui/icons-material": "npm:^9.0.1"
     "@mui/material": "npm:^9.0.1"
     "@mui/x-date-pickers": "npm:^9.3.0"

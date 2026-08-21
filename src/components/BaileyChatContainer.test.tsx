@@ -27,8 +27,8 @@ vi.mock('../hooks/useBaileyThemeBridge', () => ({
     useBaileyThemeBridge: vi.fn(),
 }));
 
-vi.mock('./BaileyTable', () => ({ default: () => <div data-testid="bailey-table" /> }));
-vi.mock('./BaileyChart', () => ({ default: () => <div data-testid="bailey-chart" /> }));
+vi.mock('@icanbwell/baileyai-chat-ui/table', () => ({ BaileyTable: () => <div data-testid="bailey-table" /> }));
+vi.mock('@icanbwell/baileyai-chat-ui/chart', () => ({ BaileyChart: () => <div data-testid="bailey-chart" /> }));
 
 function renderContainer() {
     return render(

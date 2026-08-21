@@ -152,9 +152,34 @@ export const buildCompositionMatrix = (compositions: TComposition[]): TCompositi
     return { columns, rows, other };
 };
 
-// Bug Bash inputs are usually a bare Person uuid. The FHIR client-id convention
-// prefixes it with "person." — this accepts either form.
+// Bug Bash inputs are usually a bare Person uuid. The FHIR client-id convention prefixes it with
+// "person." — this accepts either form. Intended for exactly one call site: turning free-text
+// manual entry (CompositionIndexPage's "Go" button) into a URL segment. Do NOT call this on an
+// id that's already been placed in a URL (e.g. the route param) - ResourceCard already encodes
+// Patient-vs-Person unambiguously there (bare id vs "person."-prefixed id), and re-defaulting a
+// bare id to Person there silently breaks every Patient-card entry point instead.
 export const normalizePersonId = (raw: string): string => {
     const trimmed = raw.trim();
     return trimmed.includes('.') ? trimmed : `person.${trimmed}`;
+};
+
+export type TPersonReference = {
+    resourceType: 'Person' | 'Patient';
+    bareId: string;
+    // What to pass as `patient=` on a Composition search. Person uses b.well's own bare
+    // "person.{uuid}" convention (verified working); Patient needs the typed "Patient/{uuid}"
+    // reference - verified live that a bare Patient uuid does not filter at all on the FHIR
+    // server (it silently falls through to the server's default unfiltered result set).
+    searchValue: string;
+};
+
+// Interprets an id already in the URL's encoding (see normalizePersonId's caveat above) into
+// which resource it refers to and how to search for its Compositions.
+export const parsePersonReference = (raw: string): TPersonReference => {
+    const trimmed = raw.trim();
+    if (trimmed.startsWith('person.')) {
+        const bareId = trimmed.slice('person.'.length);
+        return { resourceType: 'Person', bareId, searchValue: trimmed };
+    }
+    return { resourceType: 'Patient', bareId: trimmed, searchValue: `Patient/${trimmed}` };
 };

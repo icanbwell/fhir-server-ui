@@ -4,6 +4,7 @@ import {
     getCategoryKey,
     getVersionKey,
     normalizePersonId,
+    parsePersonReference,
 } from './compositionIndex';
 import { TComposition } from '../types/resources/Composition';
 
@@ -260,5 +261,33 @@ describe('normalizePersonId', () => {
         expect(normalizePersonId('  cc362570-1c65-4535-9d74-a9328debbb89  ')).toBe(
             'person.cc362570-1c65-4535-9d74-a9328debbb89'
         );
+    });
+});
+
+describe('parsePersonReference', () => {
+    it('recognizes a "person."-prefixed id as a Person, stripping the prefix for bareId', () => {
+        expect(parsePersonReference('person.cc362570-1c65-4535-9d74-a9328debbb89')).toEqual({
+            resourceType: 'Person',
+            bareId: 'cc362570-1c65-4535-9d74-a9328debbb89',
+            searchValue: 'person.cc362570-1c65-4535-9d74-a9328debbb89',
+        });
+    });
+
+    it('recognizes a bare id as a Patient, building a typed reference for searchValue', () => {
+        // A bare uuid patient search param doesn't filter at all on the FHIR server (verified
+        // live against a real environment) - it must be the typed "Patient/{uuid}" reference.
+        expect(parsePersonReference('cc362570-1c65-4535-9d74-a9328debbb89')).toEqual({
+            resourceType: 'Patient',
+            bareId: 'cc362570-1c65-4535-9d74-a9328debbb89',
+            searchValue: 'Patient/cc362570-1c65-4535-9d74-a9328debbb89',
+        });
+    });
+
+    it('trims surrounding whitespace', () => {
+        expect(parsePersonReference('  cc362570-1c65-4535-9d74-a9328debbb89  ')).toEqual({
+            resourceType: 'Patient',
+            bareId: 'cc362570-1c65-4535-9d74-a9328debbb89',
+            searchValue: 'Patient/cc362570-1c65-4535-9d74-a9328debbb89',
+        });
     });
 });

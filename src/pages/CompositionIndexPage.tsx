@@ -10,7 +10,7 @@ import UserContext from '../context/UserContext';
 import LastRequestContext from '../context/LastRequestContext';
 import BaseApi from '../api/baseApi';
 import { TComposition } from '../types/resources/Composition';
-import { buildCompositionMatrix, normalizePersonId } from '../utils/compositionIndex';
+import { buildCompositionMatrix, normalizePersonId, parsePersonReference } from '../utils/compositionIndex';
 import { formatHumanName } from '../utils/humanName';
 import { useStreamProgress } from '../hooks/useStreamProgress';
 import StreamProgressIndicator from '../components/StreamProgressIndicator';
@@ -45,36 +45,39 @@ const CompositionIndexPage: React.FC = () => {
         [fhirUrl, setUserDetails, recordRequest]
     );
 
-    const normalizedPersonId = useMemo(
-        () => (personId ? normalizePersonId(personId) : undefined),
-        [personId]
+    // Trimmed only - NOT run through normalizePersonId here. ResourceCard already encodes
+    // Patient-vs-Person unambiguously in the URL itself (bare id vs "person."-prefixed id);
+    // defaulting a bare id to Person here would silently break every Patient-card entry point
+    // (a bare Patient uuid used as-is would search Person's compartment instead of the
+    // Patient's). normalizePersonId is for the "Go" button's free-text entry only - see
+    // handleGoToPersonId below.
+    const trimmedPersonId = useMemo(() => personId?.trim() || undefined, [personId]);
+
+    const personRef = useMemo(
+        () => (trimmedPersonId ? parsePersonReference(trimmedPersonId) : undefined),
+        [trimmedPersonId]
     );
 
     const relativeUrl = useMemo(() => {
-        if (!normalizedPersonId) {
+        if (!personRef) {
             return '';
         }
         const params = new URLSearchParams({
-            patient: normalizedPersonId,
+            patient: personRef.searchValue,
             _count: String(PAGE_SIZE),
             _elements: 'id,meta,type,title,date,status',
         });
         return `/4_0_0/Composition?${params}`;
-    }, [normalizedPersonId]);
+    }, [personRef]);
 
-    // A "person." prefix (see normalizePersonId) means the id refers to a Person; anything else
-    // (e.g. a bare uuid, from ResourceCard's Patient entry point) refers to a Patient directly.
     const personResourceUrl = useMemo(() => {
-        if (!normalizedPersonId) {
+        if (!personRef) {
             return '';
         }
-        const isPerson = normalizedPersonId.startsWith('person.');
-        const resourceType = isPerson ? 'Person' : 'Patient';
-        const bareId = isPerson ? normalizedPersonId.slice('person.'.length) : normalizedPersonId;
-        return `/4_0_0/${resourceType}/${bareId}?_elements=name`;
-    }, [normalizedPersonId]);
+        return `/4_0_0/${personRef.resourceType}/${personRef.bareId}?_elements=name`;
+    }, [personRef]);
 
-    const personLabel = personName ?? normalizedPersonId;
+    const personLabel = personName ?? trimmedPersonId;
 
     useEffect(() => {
         document.title = personLabel ? `Compositions for ${personLabel}` : 'Compositions';
@@ -94,6 +97,7 @@ const CompositionIndexPage: React.FC = () => {
         const fetchCompositions = async () => {
             setIsLoading(true);
             setErrorMessage(null);
+            setIsPossiblyTruncated(false);
             start();
             try {
                 const response = await baseApi.getData({ urlString: relativeUrl }, { onProgress });
@@ -167,7 +171,9 @@ const CompositionIndexPage: React.FC = () => {
 
     const handleGoToPersonId = () => {
         if (personIdDraft.trim()) {
-            navigate(`/compositions/4_0_0/${encodeURIComponent(personIdDraft.trim())}`);
+            // Defaults a bare paste to a Person id (Bug Bash's typical case) - see
+            // normalizePersonId. This is the one intended call site for that default.
+            navigate(`/compositions/4_0_0/${encodeURIComponent(normalizePersonId(personIdDraft))}`);
         }
     };
 
@@ -189,7 +195,7 @@ const CompositionIndexPage: React.FC = () => {
         >
             <Header />
             <Box sx={{ flex: 1, width: '100%', padding: '20px', boxSizing: 'border-box' }}>
-                {!normalizedPersonId && (
+                {!trimmedPersonId && (
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', maxWidth: 480 }}>
                         <TextField
                             fullWidth

@@ -1,7 +1,8 @@
 import { TDateTime } from '../types/simpleTypes/DateTime';
 
-// FHIR dateTime values can be date-only or include a time component; format accordingly
-// and let the caller show the raw value alongside for anyone who needs the exact string.
+// FHIR dateTime values can be date-only or include a time component; format accordingly.
+// Returns null (rather than the raw string) when unparseable, so callers like DateValue can
+// fall back to showing the raw value themselves.
 // dateStyle/timeStyle can't be combined with timeZoneName (Intl throws), so time values use
 // individual field options instead so the viewer's local timezone abbreviation is visible.
 export const formatHumanDate = (value?: TDateTime): string | null => {

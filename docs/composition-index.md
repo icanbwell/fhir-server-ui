@@ -47,11 +47,26 @@ parameterize.
 
 ## Data flow
 
-1. `CompositionIndexPage` reads `:personId`, normalizes it with
-   `normalizePersonId` (bare uuid -> prefixed with `person.`; already-prefixed
-   IDs pass through), and fetches
-   `/4_0_0/Composition?patient={personId}&_count=100&_elements=id,meta,type,title,date,status`
+1. `CompositionIndexPage` reads `:personId` (trimmed only - **not** run through
+   `normalizePersonId`, see below) and passes it to `parsePersonReference`,
+   which resolves `{ resourceType, bareId, searchValue }`: a `"person."`
+   prefix means `Person` (searched with b.well's own bare `person.{uuid}`
+   convention); a bare id means `Patient` (searched with the typed
+   `Patient/{uuid}` reference - verified live that a bare uuid alone doesn't
+   filter at all on the FHIR server). It fetches
+   `/4_0_0/Composition?patient={searchValue}&_count=100&_elements=id,meta,type,title,date,status`
    via `BaseApi.getData`.
+
+   **`normalizePersonId` vs `parsePersonReference`:** `ResourceCard.tsx`
+   already encodes Patient-vs-Person unambiguously in the URL it builds (bare
+   id for Patient, `person.`-prefixed for Person - mirroring `getIPSLink`).
+   `parsePersonReference` trusts that encoding as-is. `normalizePersonId`
+   (bare uuid -> defaults to `person.{uuid}`) is for exactly one call site:
+   `CompositionIndexPage`'s manual "Go" text box, where a Bug-Basher pasting
+   a bare uuid almost always means a Person id. Calling `normalizePersonId`
+   on the route param itself was a real shipped bug - it silently rewrote
+   every Patient-card link's bare id to `person.{uuid}`, so the search always
+   came back empty ("No Compositions found") for a Patient with real data.
 2. `buildCompositionMatrix` (in `compositionIndex.ts`) splits the returned
    Compositions into `{ columns, rows, other }`, based on whether
    `getVersionKey` resolves to a known version:

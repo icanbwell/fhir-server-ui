@@ -13,7 +13,11 @@ Then(
     'I should see the composition index or a {string} message',
     async function (this: CustomWorld, emptyMessage: string) {
         const noResults = this.page.getByText(emptyMessage);
-        const hasResults = this.page.getByRole('table');
+        // .first(): CompositionIndex.tsx renders up to two <Table>s (Health Summary + Other
+        // Compositions) when a person has both - an unscoped locator matching >1 element throws
+        // a strict-mode violation instead of resolving to pass/fail on visibility, same hazard
+        // search.steps.ts hits with its "Search" button and fixes the same way.
+        const hasResults = this.page.getByRole('table').first();
         await expect(noResults.or(hasResults)).toBeVisible({ timeout: 15000 });
     }
 );

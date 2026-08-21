@@ -69,8 +69,9 @@ content, so rather than injecting sanitized HTML (as `src/partials/Narrative.tsx
 and `IPSViewer.tsx` do for full narrative blocks), `narrativeText()` strips all
 tags via `DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })` and renders the
 result as plain text. Any leaf value that looks like an ISO date/dateTime
-(`looksLikeIsoDate`) is additionally formatted with the viewer's local timezone
-via `DateValue`.
+(`looksLikeIsoDate`, from `src/utils/dateFormat.ts`) is additionally formatted
+with the viewer's local timezone via `DateValue` (`src/components/DateValue.tsx`)
+— both shared with `CompositionIndex.tsx`, not local to this file.
 
 ### References
 

@@ -11,6 +11,7 @@ const SearchPage = lazy(() => import('../pages/SearchPage'));
 const ExcelViewerPage = lazy(() => import('../pages/ExcelViewerPage'));
 const IPSViewerPage = lazy(() => import('../pages/IPSViewerPage'));
 const CompositionSummaryPage = lazy(() => import('../pages/CompositionSummaryPage'));
+const CompositionIndexPage = lazy(() => import('../pages/CompositionIndexPage'));
 const DocumentViewerPage = lazy(() => import('../pages/DocumentViewerPage'));
 const APIConsolePage = lazy(() => import('../pages/APIConsolePage'));
 const BaileyAIPage = lazy(() => import('../pages/BaileyAIPage'));
@@ -40,6 +41,11 @@ export default [
         path="/composition-summary/4_0_0/:resourceType/:operation?/*"
         element={<CompositionSummaryPage />}
     />,
+    // Person-scoped rather than resource-addressed like its siblings above (no :resourceType, no
+    // :operation) - its whole point is being typeable in a meeting from a Person client ID alone,
+    // e.g. /compositions/4_0_0/person.<uuid>. The literal 4_0_0 segment is kept only for visual
+    // consistency with every other route here - this app has no other FHIR version to parameterize it.
+    <Route key="compositionIndex" path="/compositions/4_0_0/:personId?" element={<CompositionIndexPage />} />,
     <Route
         key="documentViewerIdOperation"
         path="/document-viewer/4_0_0/:resourceType/:id?/:operation?/*"

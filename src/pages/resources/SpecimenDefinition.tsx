@@ -137,6 +137,17 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                     searchParameter='collection'
                 />
             }
+            {
+                resource.typeTested &&
+                <Partials.SpecimenDefinitionTypeTested
+                    typeTested={resource.typeTested}
+                    name='Type Tested'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='type-tested'
+                    field=''
+                />
+            }
         </>
     );
 };

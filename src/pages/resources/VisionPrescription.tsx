@@ -152,6 +152,17 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                     searchParameter='prescriber'
                 />
             }
+            {
+                resource.lensSpecification &&
+                <Partials.VisionPrescriptionLensSpecification
+                    lensSpecification={resource.lensSpecification}
+                    name='Lens Specification'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='lens-specification'
+                    field=''
+                />
+            }
         </>
     );
 };

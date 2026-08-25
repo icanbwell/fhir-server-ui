@@ -333,6 +333,17 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
+                resource.term &&
+                <Partials.ContractTerm
+                    term={resource.term}
+                    name='Term'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='term'
+                    field=''
+                />
+            }
+            {
                 resource.supportingInfo &&
                 <Partials.Reference
                     reference={resource.supportingInfo}
@@ -361,6 +372,17 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                     id={uuid}
                     searchParameter='signer'
                     field='party'
+                />
+            }
+            {
+                resource.legal &&
+                <Partials.ContractLegal
+                    legal={resource.legal}
+                    name='Legal'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='legal'
+                    field=''
                 />
             }
             {

@@ -184,6 +184,17 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 <Partials.Code code={resource.confidentiality} name='Confidentiality'/>
             }
             {
+                resource.attester &&
+                <Partials.CompositionAttester
+                    attester={resource.attester}
+                    name='Attester'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='attester'
+                    field=''
+                />
+            }
+            {
                 resource.custodian &&
                 <Partials.Reference
                     reference={resource.custodian}
@@ -191,6 +202,28 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='custodian'
+                />
+            }
+            {
+                resource.event &&
+                <Partials.CompositionEvent
+                    event={resource.event}
+                    name='Event'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='event'
+                    field=''
+                />
+            }
+            {
+                resource.section &&
+                <Partials.CompositionSection
+                    section={resource.section}
+                    name='Section'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='section'
+                    field=''
                 />
             }
         </>

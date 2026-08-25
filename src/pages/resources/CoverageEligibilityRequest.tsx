@@ -221,6 +221,17 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                     field='coverage'
                 />
             }
+            {
+                resource.item &&
+                <Partials.CoverageEligibilityRequestItem
+                    item={resource.item}
+                    name='Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='item'
+                    field=''
+                />
+            }
         </>
     );
 };

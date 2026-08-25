@@ -442,6 +442,17 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                     searchParameter='derived-from'
                 />
             }
+            {
+                resource.component &&
+                <Partials.ObservationComponent
+                    component={resource.component}
+                    name='Component'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='component'
+                    field=''
+                />
+            }
         </>
     );
 };

@@ -153,6 +153,17 @@ const CareTeam = ({ resource }: { resource: TCareTeam }): React.ReactElement => 
                 />
             }
             {
+                resource.participant &&
+                <Partials.CareTeamParticipant
+                    participant={resource.participant}
+                    name='Participant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='participant'
+                    field=''
+                />
+            }
+            {
                 resource.reasonCode &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}

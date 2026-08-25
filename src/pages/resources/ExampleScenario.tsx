@@ -192,6 +192,39 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
+                resource.actor &&
+                <Partials.ExampleScenarioActor
+                    actor={resource.actor}
+                    name='Actor'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='actor'
+                    field=''
+                />
+            }
+            {
+                resource.instance &&
+                <Partials.ExampleScenarioInstance
+                    instance={resource.instance}
+                    name='Instance'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='instance'
+                    field=''
+                />
+            }
+            {
+                resource.process &&
+                <Partials.ExampleScenarioProcess
+                    process={resource.process}
+                    name='Process'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='process'
+                    field=''
+                />
+            }
+            {
                 resource.workflow &&
                 <Partials.Canonical
                     canonical={resource.workflow}

@@ -288,6 +288,17 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
+                resource.activity &&
+                <Partials.CarePlanActivity
+                    activity={resource.activity}
+                    name='Activity'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='activity'
+                    field=''
+                />
+            }
+            {
                 resource.note &&
                 <Partials.Annotation
                     annotation={resource.note}

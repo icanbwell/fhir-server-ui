@@ -268,6 +268,17 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 <Partials.Code code={resource.category} name='Category'/>
             }
             {
+                resource.focus &&
+                <Partials.MessageDefinitionFocus
+                    focus={resource.focus}
+                    name='Focus'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='focus'
+                    field=''
+                />
+            }
+            {
                 resource.responseRequired &&
                 <Partials.Code code={resource.responseRequired} name='Response Required'/>
             }

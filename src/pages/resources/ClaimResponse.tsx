@@ -221,6 +221,50 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
+                resource.item &&
+                <Partials.ClaimResponseItem
+                    item={resource.item}
+                    name='Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='item'
+                    field=''
+                />
+            }
+            {
+                resource.adjudication &&
+                <Partials.ClaimResponseAdjudication
+                    adjudication={resource.adjudication}
+                    name='Adjudication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='adjudication'
+                    field=''
+                />
+            }
+            {
+                resource.total &&
+                <Partials.ClaimResponseTotal
+                    total={resource.total}
+                    name='Total'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='total'
+                    field=''
+                />
+            }
+            {
+                resource.payment &&
+                <Partials.ClaimResponsePayment
+                    payment={resource.payment}
+                    name='Payment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payment'
+                    field=''
+                />
+            }
+            {
                 resource.fundsReserve &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.fundsReserve}
@@ -269,6 +313,17 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                     id={uuid}
                     searchParameter='insurance'
                     field='coverage'
+                />
+            }
+            {
+                resource.error &&
+                <Partials.ClaimResponseError
+                    error={resource.error}
+                    name='Error'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='error'
+                    field=''
                 />
             }
         </>

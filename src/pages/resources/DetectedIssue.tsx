@@ -168,6 +168,17 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
+                resource.evidence &&
+                <Partials.DetectedIssueEvidence
+                    evidence={resource.evidence}
+                    name='Evidence'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='evidence'
+                    field=''
+                />
+            }
+            {
                 resource.detail &&
                 <Partials.String
                     string={resource.detail}
@@ -185,6 +196,17 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='reference'
+                />
+            }
+            {
+                resource.mitigation &&
+                <Partials.DetectedIssueMitigation
+                    mitigation={resource.mitigation}
+                    name='Mitigation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='mitigation'
+                    field=''
                 />
             }
         </>

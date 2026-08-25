@@ -275,6 +275,28 @@ const StructureDefinition = ({ resource }: { resource: TStructureDefinition }): 
                 resource.derivation &&
                 <Partials.Code code={resource.derivation} name='Derivation'/>
             }
+            {
+                resource.snapshot &&
+                <Partials.StructureDefinitionSnapshot
+                    snapshot={resource.snapshot}
+                    name='Snapshot'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='snapshot'
+                    field=''
+                />
+            }
+            {
+                resource.differential &&
+                <Partials.StructureDefinitionDifferential
+                    differential={resource.differential}
+                    name='Differential'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='differential'
+                    field=''
+                />
+            }
         </>
     );
 };

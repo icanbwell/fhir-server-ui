@@ -284,6 +284,17 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
+                resource.participant &&
+                <Partials.AppointmentParticipant
+                    participant={resource.participant}
+                    name='Participant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='participant'
+                    field=''
+                />
+            }
+            {
                 resource.requestedPeriod &&
                 <Partials.Period
                     period={resource.requestedPeriod}

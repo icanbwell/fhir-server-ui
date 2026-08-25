@@ -235,6 +235,17 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
+                resource.variableDefinition &&
+                <Partials.EvidenceVariableDefinition
+                    variableDefinition={resource.variableDefinition}
+                    name='Variable Definition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='variable-definition'
+                    field=''
+                />
+            }
+            {
                 resource.synthesisType &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.synthesisType}
@@ -252,6 +263,28 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='study-type'
+                />
+            }
+            {
+                resource.statistic &&
+                <Partials.EvidenceStatistic
+                    statistic={resource.statistic}
+                    name='Statistic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='statistic'
+                    field=''
+                />
+            }
+            {
+                resource.certainty &&
+                <Partials.EvidenceCertainty
+                    certainty={resource.certainty}
+                    name='Certainty'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='certainty'
+                    field=''
                 />
             }
         </>

@@ -164,6 +164,17 @@ const Practitioner = ({ resource }: { resource: TPractitioner }): React.ReactEle
                 />
             }
             {
+                resource.qualification &&
+                <Partials.PractitionerQualification
+                    qualification={resource.qualification}
+                    name='Qualification'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='qualification'
+                    field=''
+                />
+            }
+            {
                 resource.communication &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.communication}

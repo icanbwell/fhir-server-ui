@@ -174,6 +174,17 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
+                resource.subject &&
+                <Partials.EvidenceReportSubject
+                    subject={resource.subject}
+                    name='Subject'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='subject'
+                    field=''
+                />
+            }
+            {
                 resource.publisher &&
                 <Partials.String
                     string={resource.publisher}
@@ -181,6 +192,28 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='publisher'
+                />
+            }
+            {
+                resource.relatesTo &&
+                <Partials.EvidenceReportRelatesTo
+                    relatesTo={resource.relatesTo}
+                    name='Relates To'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='relates-to'
+                    field=''
+                />
+            }
+            {
+                resource.section &&
+                <Partials.EvidenceReportSection
+                    section={resource.section}
+                    name='Section'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='section'
+                    field=''
                 />
             }
         </>

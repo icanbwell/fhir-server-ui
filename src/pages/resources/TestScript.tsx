@@ -222,6 +222,39 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                     searchParameter='profile'
                 />
             }
+            {
+                resource.variable &&
+                <Partials.TestScriptVariable
+                    variable={resource.variable}
+                    name='Variable'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='variable'
+                    field=''
+                />
+            }
+            {
+                resource.setup &&
+                <Partials.TestScriptSetup
+                    setup={resource.setup}
+                    name='Setup'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='setup'
+                    field=''
+                />
+            }
+            {
+                resource.test &&
+                <Partials.TestScriptTest
+                    test={resource.test}
+                    name='Test'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='test'
+                    field=''
+                />
+            }
         </>
     );
 };

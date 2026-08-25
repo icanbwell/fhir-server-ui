@@ -233,6 +233,17 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
+                resource.prediction &&
+                <Partials.RiskAssessmentPrediction
+                    prediction={resource.prediction}
+                    name='Prediction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='prediction'
+                    field=''
+                />
+            }
+            {
                 resource.mitigation &&
                 <Partials.String
                     string={resource.mitigation}

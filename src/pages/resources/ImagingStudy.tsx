@@ -275,6 +275,17 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                     searchParameter='description'
                 />
             }
+            {
+                resource.series &&
+                <Partials.ImagingStudySeries
+                    series={resource.series}
+                    name='Series'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series'
+                    field=''
+                />
+            }
         </>
     );
 };

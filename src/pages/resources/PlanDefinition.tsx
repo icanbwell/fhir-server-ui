@@ -335,6 +335,28 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                     searchParameter='library'
                 />
             }
+            {
+                resource.goal &&
+                <Partials.PlanDefinitionGoal
+                    goal={resource.goal}
+                    name='Goal'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='goal'
+                    field=''
+                />
+            }
+            {
+                resource.action &&
+                <Partials.PlanDefinitionAction
+                    action={resource.action}
+                    name='Action'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='action'
+                    field=''
+                />
+            }
         </>
     );
 };

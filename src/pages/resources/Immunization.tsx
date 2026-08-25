@@ -343,6 +343,28 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                     searchParameter='funding-source'
                 />
             }
+            {
+                resource.reaction &&
+                <Partials.ImmunizationReaction
+                    reaction={resource.reaction}
+                    name='Reaction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='reaction'
+                    field=''
+                />
+            }
+            {
+                resource.protocolApplied &&
+                <Partials.ImmunizationProtocolApplied
+                    protocolApplied={resource.protocolApplied}
+                    name='Protocol Applied'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='protocol-applied'
+                    field=''
+                />
+            }
         </>
     );
 };

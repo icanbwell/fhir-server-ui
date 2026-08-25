@@ -104,6 +104,17 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
+                resource.statusHistory &&
+                <Partials.EpisodeOfCareStatusHistory
+                    statusHistory={resource.statusHistory}
+                    name='Status History'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='status-history'
+                    field=''
+                />
+            }
+            {
                 resource.type &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}

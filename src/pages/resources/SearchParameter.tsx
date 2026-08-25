@@ -270,6 +270,17 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                     searchParameter='chain'
                 />
             }
+            {
+                resource.component &&
+                <Partials.SearchParameterComponent
+                    component={resource.component}
+                    name='Component'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='component'
+                    field=''
+                />
+            }
         </>
     );
 };

@@ -227,8 +227,30 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 <Partials.Code code={resource.characteristicCombination} name='Characteristic Combination'/>
             }
             {
+                resource.characteristic &&
+                <Partials.EvidenceVariableCharacteristic
+                    characteristic={resource.characteristic}
+                    name='Characteristic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='characteristic'
+                    field=''
+                />
+            }
+            {
                 resource.handling &&
                 <Partials.Code code={resource.handling} name='Handling'/>
+            }
+            {
+                resource.category &&
+                <Partials.EvidenceVariableCategory
+                    category={resource.category}
+                    name='Category'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='category'
+                    field=''
+                />
             }
         </>
     );

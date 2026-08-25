@@ -421,6 +421,28 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                     searchParameter='guidance'
                 />
             }
+            {
+                resource.group &&
+                <Partials.MeasureGroup
+                    group={resource.group}
+                    name='Group'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='group'
+                    field=''
+                />
+            }
+            {
+                resource.supplementalData &&
+                <Partials.MeasureSupplementalData
+                    supplementalData={resource.supplementalData}
+                    name='Supplemental Data'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='supplemental-data'
+                    field=''
+                />
+            }
         </>
     );
 };

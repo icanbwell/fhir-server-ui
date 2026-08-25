@@ -253,6 +253,17 @@ const ConceptMap = ({ resource }: { resource: TConceptMap }): React.ReactElement
                     searchParameter='target-canonical'
                 />
             }
+            {
+                resource.group &&
+                <Partials.ConceptMapGroup
+                    group={resource.group}
+                    name='Group'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='group'
+                    field=''
+                />
+            }
         </>
     );
 };

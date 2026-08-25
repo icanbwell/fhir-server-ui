@@ -110,6 +110,17 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
+                resource.udiCarrier &&
+                <Partials.DeviceUdiCarrier
+                    udiCarrier={resource.udiCarrier}
+                    name='Udi Carrier'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='udi-carrier'
+                    field=''
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
@@ -181,6 +192,17 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='serial-number'
+                />
+            }
+            {
+                resource.deviceName &&
+                <Partials.DeviceDeviceName
+                    deviceName={resource.deviceName}
+                    name='Device Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='device-name'
+                    field=''
                 />
             }
             {

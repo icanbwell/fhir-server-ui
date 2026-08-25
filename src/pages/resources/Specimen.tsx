@@ -162,6 +162,28 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
+                resource.collection &&
+                <Partials.SpecimenCollection
+                    collection={resource.collection}
+                    name='Collection'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='collection'
+                    field=''
+                />
+            }
+            {
+                resource.container &&
+                <Partials.SpecimenContainer
+                    container={resource.container}
+                    name='Container'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='container'
+                    field=''
+                />
+            }
+            {
                 resource.condition &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.condition}

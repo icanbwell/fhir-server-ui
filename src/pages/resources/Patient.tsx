@@ -224,6 +224,17 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
+                resource.communication &&
+                <Partials.PatientCommunication
+                    communication={resource.communication}
+                    name='Communication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='communication'
+                    field=''
+                />
+            }
+            {
                 resource.generalPractitioner &&
                 <Partials.Reference
                     reference={resource.generalPractitioner}

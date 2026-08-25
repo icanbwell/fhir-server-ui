@@ -59,6 +59,17 @@ const Parameters = ({ resource }: { resource: TParameters }): React.ReactElement
                 resource.language &&
                 <Partials.Code code={resource.language} name='Language'/>
             }
+            {
+                resource.parameter &&
+                <Partials.ParametersParameter
+                    parameter={resource.parameter}
+                    name='Parameter'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='parameter'
+                    field=''
+                />
+            }
         </>
     );
 };

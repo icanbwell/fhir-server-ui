@@ -220,6 +220,17 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                     searchParameter='regulator'
                 />
             }
+            {
+                resource.case &&
+                <Partials.RegulatedAuthorizationCase
+                    case={resource.case}
+                    name='Case'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='case'
+                    field=''
+                />
+            }
         </>
     );
 };

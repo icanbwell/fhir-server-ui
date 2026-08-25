@@ -240,6 +240,17 @@ const RequestGroup = ({ resource }: { resource: TRequestGroup }): React.ReactEle
                     searchParameter='note'
                 />
             }
+            {
+                resource.action &&
+                <Partials.RequestGroupAction
+                    action={resource.action}
+                    name='Action'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='action'
+                    field=''
+                />
+            }
         </>
     );
 };

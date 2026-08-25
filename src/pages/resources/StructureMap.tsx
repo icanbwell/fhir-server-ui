@@ -213,6 +213,17 @@ const StructureMap = ({ resource }: { resource: TStructureMap }): React.ReactEle
                 />
             }
             {
+                resource.structure &&
+                <Partials.StructureMapStructure
+                    structure={resource.structure}
+                    name='Structure'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='structure'
+                    field=''
+                />
+            }
+            {
                 resource.import_ &&
                 <Partials.Canonical
                     canonical={resource.import_}
@@ -220,6 +231,17 @@ const StructureMap = ({ resource }: { resource: TStructureMap }): React.ReactEle
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='import_'
+                />
+            }
+            {
+                resource.group &&
+                <Partials.StructureMapGroup
+                    group={resource.group}
+                    name='Group'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='group'
+                    field=''
                 />
             }
         </>

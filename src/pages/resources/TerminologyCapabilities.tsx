@@ -208,6 +208,17 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 <Partials.Code code={resource.kind} name='Kind'/>
             }
             {
+                resource.software &&
+                <Partials.TerminologyCapabilitiesSoftware
+                    software={resource.software}
+                    name='Software'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='software'
+                    field=''
+                />
+            }
+            {
                 resource.lockedDate &&
                 <Partials.Boolean
                     boolean={resource.lockedDate}
@@ -215,6 +226,17 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='locked-date'
+                />
+            }
+            {
+                resource.codeSystem &&
+                <Partials.TerminologyCapabilitiesCodeSystem
+                    codeSystem={resource.codeSystem}
+                    name='Code System'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='code-system'
+                    field=''
                 />
             }
             {

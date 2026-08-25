@@ -143,6 +143,28 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                     searchParameter='amount'
                 />
             }
+            {
+                resource.ingredient &&
+                <Partials.MedicationIngredient
+                    ingredient={resource.ingredient}
+                    name='Ingredient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='ingredient'
+                    field=''
+                />
+            }
+            {
+                resource.batch &&
+                <Partials.MedicationBatch
+                    batch={resource.batch}
+                    name='Batch'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='batch'
+                    field=''
+                />
+            }
         </>
     );
 };

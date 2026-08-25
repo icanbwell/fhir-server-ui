@@ -260,6 +260,17 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                     searchParameter='note'
                 />
             }
+            {
+                resource.reaction &&
+                <Partials.AllergyIntoleranceReaction
+                    reaction={resource.reaction}
+                    name='Reaction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='reaction'
+                    field=''
+                />
+            }
         </>
     );
 };

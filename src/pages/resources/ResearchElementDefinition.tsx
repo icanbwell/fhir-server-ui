@@ -340,6 +340,17 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                 resource.variableType &&
                 <Partials.Code code={resource.variableType} name='Variable Type'/>
             }
+            {
+                resource.characteristic &&
+                <Partials.ResearchElementDefinitionCharacteristic
+                    characteristic={resource.characteristic}
+                    name='Characteristic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='characteristic'
+                    field=''
+                />
+            }
         </>
     );
 };

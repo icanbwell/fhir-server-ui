@@ -229,6 +229,17 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
+                resource.eligibility &&
+                <Partials.HealthcareServiceEligibility
+                    eligibility={resource.eligibility}
+                    name='Eligibility'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='eligibility'
+                    field=''
+                />
+            }
+            {
                 resource.program &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.program}
@@ -276,6 +287,17 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='appointment-required'
+                />
+            }
+            {
+                resource.availableTime &&
+                <Partials.HealthcareServiceAvailableTime
+                    availableTime={resource.availableTime}
+                    name='Available Time'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='available-time'
+                    field=''
                 />
             }
             {

@@ -165,6 +165,17 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
+                resource.characteristic &&
+                <Partials.GroupCharacteristic
+                    characteristic={resource.characteristic}
+                    name='Characteristic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='characteristic'
+                    field=''
+                />
+            }
+            {
                 resource.member &&
                 <Partials.Reference
                     reference={resource.member}

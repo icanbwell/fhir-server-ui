@@ -197,6 +197,17 @@ const GraphDefinition = ({ resource }: { resource: TGraphDefinition }): React.Re
                     searchParameter='profile'
                 />
             }
+            {
+                resource.link &&
+                <Partials.GraphDefinitionLink
+                    link={resource.link}
+                    name='Link'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='link'
+                    field=''
+                />
+            }
         </>
     );
 };

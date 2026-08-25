@@ -246,6 +246,28 @@ const Citation = ({ resource }: { resource: TCitation }): React.ReactElement => 
                 />
             }
             {
+                resource.summary &&
+                <Partials.CitationSummary
+                    summary={resource.summary}
+                    name='Summary'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='summary'
+                    field=''
+                />
+            }
+            {
+                resource.classification &&
+                <Partials.CitationClassification
+                    classification={resource.classification}
+                    name='Classification'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='classification'
+                    field=''
+                />
+            }
+            {
                 resource.note &&
                 <Partials.Annotation
                     annotation={resource.note}
@@ -263,6 +285,17 @@ const Citation = ({ resource }: { resource: TCitation }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='current-state'
+                />
+            }
+            {
+                resource.citedArtifact &&
+                <Partials.CitationCitedArtifact
+                    citedArtifact={resource.citedArtifact}
+                    name='Cited Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='cited-artifact'
+                    field=''
                 />
             }
         </>

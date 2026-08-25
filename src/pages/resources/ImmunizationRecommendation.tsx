@@ -128,6 +128,17 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                     searchParameter='authority'
                 />
             }
+            {
+                resource.recommendation &&
+                <Partials.ImmunizationRecommendationRecommendation
+                    recommendation={resource.recommendation}
+                    name='Recommendation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='recommendation'
+                    field=''
+                />
+            }
         </>
     );
 };

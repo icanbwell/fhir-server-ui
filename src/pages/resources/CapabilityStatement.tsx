@@ -229,6 +229,28 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
+                resource.software &&
+                <Partials.CapabilityStatementSoftware
+                    software={resource.software}
+                    name='Software'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='software'
+                    field=''
+                />
+            }
+            {
+                resource.implementation &&
+                <Partials.CapabilityStatementImplementation
+                    implementation={resource.implementation}
+                    name='Implementation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='implementation'
+                    field=''
+                />
+            }
+            {
                 resource.fhirVersion &&
                 <Partials.Code code={resource.fhirVersion} name='Fhir Version'/>
             }
@@ -248,6 +270,17 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='implementation-guide'
+                />
+            }
+            {
+                resource.rest &&
+                <Partials.CapabilityStatementRest
+                    rest={resource.rest}
+                    name='Rest'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='rest'
+                    field=''
                 />
             }
         </>

@@ -277,6 +277,17 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
+                resource.dosage &&
+                <Partials.MedicationAdministrationDosage
+                    dosage={resource.dosage}
+                    name='Dosage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dosage'
+                    field=''
+                />
+            }
+            {
                 resource.eventHistory &&
                 <Partials.Reference
                     reference={resource.eventHistory}

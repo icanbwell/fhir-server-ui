@@ -284,6 +284,17 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                     searchParameter='output-profile'
                 />
             }
+            {
+                resource.parameter &&
+                <Partials.OperationDefinitionParameter
+                    parameter={resource.parameter}
+                    name='Parameter'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='parameter'
+                    field=''
+                />
+            }
         </>
     );
 };

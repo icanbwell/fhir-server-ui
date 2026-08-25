@@ -198,6 +198,39 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                     searchParameter='supplier'
                 />
             }
+            {
+                resource.structure &&
+                <Partials.SubstanceDefinitionStructure
+                    structure={resource.structure}
+                    name='Structure'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='structure'
+                    field=''
+                />
+            }
+            {
+                resource.code &&
+                <Partials.SubstanceDefinitionCode
+                    code={resource.code}
+                    name='Code'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='code'
+                    field=''
+                />
+            }
+            {
+                resource.name &&
+                <Partials.SubstanceDefinitionName
+                    name_={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                    field=''
+                />
+            }
         </>
     );
 };

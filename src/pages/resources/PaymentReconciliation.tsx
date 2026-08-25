@@ -197,6 +197,17 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
+                resource.detail &&
+                <Partials.PaymentReconciliationDetail
+                    detail={resource.detail}
+                    name='Detail'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='detail'
+                    field=''
+                />
+            }
+            {
                 resource.formCode &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.formCode}
@@ -204,6 +215,17 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='form-code'
+                />
+            }
+            {
+                resource.processNote &&
+                <Partials.PaymentReconciliationProcessNote
+                    processNote={resource.processNote}
+                    name='Process Note'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='process-note'
+                    field=''
                 />
             }
         </>

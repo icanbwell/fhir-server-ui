@@ -155,6 +155,39 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                     searchParameter='issued'
                 />
             }
+            {
+                resource.participant &&
+                <Partials.TestReportParticipant
+                    participant={resource.participant}
+                    name='Participant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='participant'
+                    field=''
+                />
+            }
+            {
+                resource.setup &&
+                <Partials.TestReportSetup
+                    setup={resource.setup}
+                    name='Setup'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='setup'
+                    field=''
+                />
+            }
+            {
+                resource.test &&
+                <Partials.TestReportTest
+                    test={resource.test}
+                    name='Test'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='test'
+                    field=''
+                />
+            }
         </>
     );
 };

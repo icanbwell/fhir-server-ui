@@ -160,6 +160,17 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                     searchParameter='measurement-period'
                 />
             }
+            {
+                resource.calibration &&
+                <Partials.DeviceMetricCalibration
+                    calibration={resource.calibration}
+                    name='Calibration'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='calibration'
+                    field=''
+                />
+            }
         </>
     );
 };

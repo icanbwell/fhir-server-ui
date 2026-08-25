@@ -189,6 +189,17 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
+                resource.position &&
+                <Partials.LocationPosition
+                    position={resource.position}
+                    name='Position'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='position'
+                    field=''
+                />
+            }
+            {
                 resource.managingOrganization &&
                 <Partials.Reference
                     reference={resource.managingOrganization}
@@ -206,6 +217,17 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='part-of'
+                />
+            }
+            {
+                resource.hoursOfOperation &&
+                <Partials.LocationHoursOfOperation
+                    hoursOfOperation={resource.hoursOfOperation}
+                    name='Hours Of Operation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='hours-of-operation'
+                    field=''
                 />
             }
             {

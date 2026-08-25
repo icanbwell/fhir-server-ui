@@ -174,6 +174,17 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
+                resource.target &&
+                <Partials.GoalTarget
+                    target={resource.target}
+                    name='Target'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='target'
+                    field=''
+                />
+            }
+            {
                 resource.statusDate &&
                 <Partials.Date
                     date={resource.statusDate}

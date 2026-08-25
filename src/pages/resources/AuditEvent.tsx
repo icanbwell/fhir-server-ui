@@ -160,6 +160,17 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
+                resource.agent &&
+                <Partials.AuditEventAgent
+                    agent={resource.agent}
+                    name='Agent'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='agent'
+                    field=''
+                />
+            }
+            {
                 resource.source &&
                 <Partials.Reference
                     reference={resource.source}
@@ -168,6 +179,17 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                     id={uuid}
                     searchParameter='source'
                     field='observer'
+                />
+            }
+            {
+                resource.entity &&
+                <Partials.AuditEventEntity
+                    entity={resource.entity}
+                    name='Entity'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='entity'
+                    field=''
                 />
             }
         </>

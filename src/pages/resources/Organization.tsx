@@ -172,6 +172,17 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
+                resource.contact &&
+                <Partials.OrganizationContact
+                    contact={resource.contact}
+                    name='Contact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='contact'
+                    field=''
+                />
+            }
+            {
                 resource.endpoint &&
                 <Partials.Reference
                     reference={resource.endpoint}

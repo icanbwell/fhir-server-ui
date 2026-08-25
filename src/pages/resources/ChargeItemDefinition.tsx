@@ -274,6 +274,28 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                     searchParameter='instance'
                 />
             }
+            {
+                resource.applicability &&
+                <Partials.ChargeItemDefinitionApplicability
+                    applicability={resource.applicability}
+                    name='Applicability'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='applicability'
+                    field=''
+                />
+            }
+            {
+                resource.propertyGroup &&
+                <Partials.ChargeItemDefinitionPropertyGroup
+                    propertyGroup={resource.propertyGroup}
+                    name='Property Group'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='property-group'
+                    field=''
+                />
+            }
         </>
     );
 };

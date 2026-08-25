@@ -163,6 +163,28 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                     searchParameter='device'
                 />
             }
+            {
+                resource.property &&
+                <Partials.AdministrableProductDefinitionProperty
+                    property={resource.property}
+                    name='Property'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='property'
+                    field=''
+                />
+            }
+            {
+                resource.routeOfAdministration &&
+                <Partials.AdministrableProductDefinitionRouteOfAdministration
+                    routeOfAdministration={resource.routeOfAdministration}
+                    name='Route Of Administration'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='route-of-administration'
+                    field=''
+                />
+            }
         </>
     );
 };

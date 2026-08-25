@@ -181,6 +181,17 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
+                resource.parameter &&
+                <Partials.DeviceRequestParameter
+                    parameter={resource.parameter}
+                    name='Parameter'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='parameter'
+                    field=''
+                />
+            }
+            {
                 resource.subject &&
                 <Partials.Reference
                     reference={resource.subject}

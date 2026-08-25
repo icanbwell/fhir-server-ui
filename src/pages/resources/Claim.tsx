@@ -228,6 +228,17 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
+                resource.payee &&
+                <Partials.ClaimPayee
+                    payee={resource.payee}
+                    name='Payee'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payee'
+                    field=''
+                />
+            }
+            {
                 resource.referral &&
                 <Partials.Reference
                     reference={resource.referral}
@@ -259,6 +270,28 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
+                resource.diagnosis &&
+                <Partials.ClaimDiagnosis
+                    diagnosis={resource.diagnosis}
+                    name='Diagnosis'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='diagnosis'
+                    field=''
+                />
+            }
+            {
+                resource.procedure &&
+                <Partials.ClaimProcedure
+                    procedure={resource.procedure}
+                    name='Procedure'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='procedure'
+                    field=''
+                />
+            }
+            {
                 resource.insurance &&
                 <Partials.Reference
                     reference={resource.insurance}
@@ -267,6 +300,17 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                     id={uuid}
                     searchParameter='insurance'
                     field='coverage'
+                />
+            }
+            {
+                resource.item &&
+                <Partials.ClaimItem
+                    item={resource.item}
+                    name='Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='item'
+                    field=''
                 />
             }
             {

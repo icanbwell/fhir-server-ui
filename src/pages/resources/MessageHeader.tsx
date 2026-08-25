@@ -112,6 +112,17 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
+                resource.destination &&
+                <Partials.MessageHeaderDestination
+                    destination={resource.destination}
+                    name='Destination'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='destination'
+                    field=''
+                />
+            }
+            {
                 resource.sender &&
                 <Partials.Reference
                     reference={resource.sender}
@@ -142,6 +153,17 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
+                resource.source &&
+                <Partials.MessageHeaderSource
+                    source={resource.source}
+                    name='Source'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='source'
+                    field=''
+                />
+            }
+            {
                 resource.responsible &&
                 <Partials.Reference
                     reference={resource.responsible}
@@ -159,6 +181,17 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='reason'
+                />
+            }
+            {
+                resource.response &&
+                <Partials.MessageHeaderResponse
+                    response={resource.response}
+                    name='Response'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='response'
+                    field=''
                 />
             }
             {

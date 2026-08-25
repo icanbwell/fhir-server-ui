@@ -208,6 +208,17 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
+                resource.payload &&
+                <Partials.CommunicationRequestPayload
+                    payload={resource.payload}
+                    name='Payload'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payload'
+                    field=''
+                />
+            }
+            {
                 resource.occurrenceDateTime &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}

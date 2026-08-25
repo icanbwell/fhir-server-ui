@@ -141,6 +141,28 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                     searchParameter='allergenic-indicator'
                 />
             }
+            {
+                resource.manufacturer &&
+                <Partials.IngredientManufacturer
+                    manufacturer={resource.manufacturer}
+                    name='Manufacturer'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='manufacturer'
+                    field=''
+                />
+            }
+            {
+                resource.substance &&
+                <Partials.IngredientSubstance
+                    substance={resource.substance}
+                    name='Substance'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='substance'
+                    field=''
+                />
+            }
         </>
     );
 };

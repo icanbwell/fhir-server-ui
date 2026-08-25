@@ -224,6 +224,28 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                     searchParameter='copyright'
                 />
             }
+            {
+                resource.compose &&
+                <Partials.ValueSetCompose
+                    compose={resource.compose}
+                    name='Compose'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='compose'
+                    field=''
+                />
+            }
+            {
+                resource.expansion &&
+                <Partials.ValueSetExpansion
+                    expansion={resource.expansion}
+                    name='Expansion'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='expansion'
+                    field=''
+                />
+            }
         </>
     );
 };

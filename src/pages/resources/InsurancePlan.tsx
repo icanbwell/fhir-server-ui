@@ -191,6 +191,28 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                     searchParameter='network'
                 />
             }
+            {
+                resource.coverage &&
+                <Partials.InsurancePlanCoverage
+                    coverage={resource.coverage}
+                    name='Coverage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='coverage'
+                    field=''
+                />
+            }
+            {
+                resource.plan &&
+                <Partials.InsurancePlanPlan
+                    plan={resource.plan}
+                    name='Plan'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='plan'
+                    field=''
+                />
+            }
         </>
     );
 };

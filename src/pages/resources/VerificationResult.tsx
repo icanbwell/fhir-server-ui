@@ -193,6 +193,28 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
+                resource.primarySource &&
+                <Partials.VerificationResultPrimarySource
+                    primarySource={resource.primarySource}
+                    name='Primary Source'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='primary-source'
+                    field=''
+                />
+            }
+            {
+                resource.attestation &&
+                <Partials.VerificationResultAttestation
+                    attestation={resource.attestation}
+                    name='Attestation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='attestation'
+                    field=''
+                />
+            }
+            {
                 resource.validator &&
                 <Partials.Reference
                     reference={resource.validator}

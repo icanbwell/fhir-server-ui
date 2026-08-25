@@ -147,6 +147,39 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                     searchParameter='parent'
                 />
             }
+            {
+                resource.collection &&
+                <Partials.BiologicallyDerivedProductCollection
+                    collection={resource.collection}
+                    name='Collection'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='collection'
+                    field=''
+                />
+            }
+            {
+                resource.processing &&
+                <Partials.BiologicallyDerivedProductProcessing
+                    processing={resource.processing}
+                    name='Processing'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='processing'
+                    field=''
+                />
+            }
+            {
+                resource.storage &&
+                <Partials.BiologicallyDerivedProductStorage
+                    storage={resource.storage}
+                    name='Storage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='storage'
+                    field=''
+                />
+            }
         </>
     );
 };

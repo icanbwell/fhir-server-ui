@@ -122,6 +122,28 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 />
             }
             {
+                resource.nutrient &&
+                <Partials.NutritionProductNutrient
+                    nutrient={resource.nutrient}
+                    name='Nutrient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='nutrient'
+                    field=''
+                />
+            }
+            {
+                resource.ingredient &&
+                <Partials.NutritionProductIngredient
+                    ingredient={resource.ingredient}
+                    name='Ingredient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='ingredient'
+                    field=''
+                />
+            }
+            {
                 resource.knownAllergen &&
                 <Partials.CodeableReference
                     codeableReference={resource.knownAllergen}

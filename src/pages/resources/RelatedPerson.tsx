@@ -193,6 +193,17 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                     searchParameter='period'
                 />
             }
+            {
+                resource.communication &&
+                <Partials.RelatedPersonCommunication
+                    communication={resource.communication}
+                    name='Communication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='communication'
+                    field=''
+                />
+            }
         </>
     );
 };

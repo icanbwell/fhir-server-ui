@@ -190,6 +190,17 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
+                resource.availableTime &&
+                <Partials.PractitionerRoleAvailableTime
+                    availableTime={resource.availableTime}
+                    name='Available Time'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='available-time'
+                    field=''
+                />
+            }
+            {
                 resource.availabilityExceptions &&
                 <Partials.String
                     string={resource.availabilityExceptions}

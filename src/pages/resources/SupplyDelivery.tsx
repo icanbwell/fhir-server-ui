@@ -142,6 +142,17 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
+                resource.suppliedItem &&
+                <Partials.SupplyDeliverySuppliedItem
+                    suppliedItem={resource.suppliedItem}
+                    name='Supplied Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='supplied-item'
+                    field=''
+                />
+            }
+            {
                 resource.occurrenceDateTime &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}

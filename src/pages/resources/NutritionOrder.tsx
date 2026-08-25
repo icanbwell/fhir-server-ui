@@ -207,6 +207,39 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
+                resource.oralDiet &&
+                <Partials.NutritionOrderOralDiet
+                    oralDiet={resource.oralDiet}
+                    name='Oral Diet'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='oral-diet'
+                    field=''
+                />
+            }
+            {
+                resource.supplement &&
+                <Partials.NutritionOrderSupplement
+                    supplement={resource.supplement}
+                    name='Supplement'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='supplement'
+                    field=''
+                />
+            }
+            {
+                resource.enteralFormula &&
+                <Partials.NutritionOrderEnteralFormula
+                    enteralFormula={resource.enteralFormula}
+                    name='Enteral Formula'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='enteral-formula'
+                    field=''
+                />
+            }
+            {
                 resource.note &&
                 <Partials.Annotation
                     annotation={resource.note}

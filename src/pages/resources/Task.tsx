@@ -349,6 +349,39 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                     searchParameter='relevant-history'
                 />
             }
+            {
+                resource.restriction &&
+                <Partials.TaskRestriction
+                    restriction={resource.restriction}
+                    name='Restriction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='restriction'
+                    field=''
+                />
+            }
+            {
+                resource.input &&
+                <Partials.TaskInput
+                    input={resource.input}
+                    name='Input'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='input'
+                    field=''
+                />
+            }
+            {
+                resource.output &&
+                <Partials.TaskOutput
+                    output={resource.output}
+                    name='Output'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='output'
+                    field=''
+                />
+            }
         </>
     );
 };

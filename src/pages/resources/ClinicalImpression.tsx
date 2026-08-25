@@ -218,6 +218,17 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
+                resource.investigation &&
+                <Partials.ClinicalImpressionInvestigation
+                    investigation={resource.investigation}
+                    name='Investigation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='investigation'
+                    field=''
+                />
+            }
+            {
                 resource.protocol &&
                 <Partials.Uri
                     uri={resource.protocol}
@@ -235,6 +246,17 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='summary'
+                />
+            }
+            {
+                resource.finding &&
+                <Partials.ClinicalImpressionFinding
+                    finding={resource.finding}
+                    name='Finding'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='finding'
+                    field=''
                 />
             }
             {

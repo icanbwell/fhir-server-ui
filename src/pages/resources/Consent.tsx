@@ -184,6 +184,17 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
+                resource.policy &&
+                <Partials.ConsentPolicy
+                    policy={resource.policy}
+                    name='Policy'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='policy'
+                    field=''
+                />
+            }
+            {
                 resource.policyRule &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.policyRule}
@@ -191,6 +202,28 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='policy-rule'
+                />
+            }
+            {
+                resource.verification &&
+                <Partials.ConsentVerification
+                    verification={resource.verification}
+                    name='Verification'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='verification'
+                    field=''
+                />
+            }
+            {
+                resource.provision &&
+                <Partials.ConsentProvision
+                    provision={resource.provision}
+                    name='Provision'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='provision'
+                    field=''
                 />
             }
         </>

@@ -267,6 +267,17 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                     searchParameter='code'
                 />
             }
+            {
+                resource.item &&
+                <Partials.QuestionnaireItem
+                    item={resource.item}
+                    name='Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='item'
+                    field=''
+                />
+            }
         </>
     );
 };

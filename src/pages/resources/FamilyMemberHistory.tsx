@@ -332,6 +332,17 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                     searchParameter='note'
                 />
             }
+            {
+                resource.condition &&
+                <Partials.FamilyMemberHistoryCondition
+                    condition={resource.condition}
+                    name='Condition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='condition'
+                    field=''
+                />
+            }
         </>
     );
 };

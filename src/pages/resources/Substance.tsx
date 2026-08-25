@@ -131,6 +131,28 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                     searchParameter='description'
                 />
             }
+            {
+                resource.instance &&
+                <Partials.SubstanceInstance
+                    instance={resource.instance}
+                    name='Instance'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='instance'
+                    field=''
+                />
+            }
+            {
+                resource.ingredient &&
+                <Partials.SubstanceIngredient
+                    ingredient={resource.ingredient}
+                    name='Ingredient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='ingredient'
+                    field=''
+                />
+            }
         </>
     );
 };

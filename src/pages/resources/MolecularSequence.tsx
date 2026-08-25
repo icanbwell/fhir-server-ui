@@ -162,6 +162,28 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
+                resource.referenceSeq &&
+                <Partials.MolecularSequenceReferenceSeq
+                    referenceSeq={resource.referenceSeq}
+                    name='Reference Seq'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='reference-seq'
+                    field=''
+                />
+            }
+            {
+                resource.variant &&
+                <Partials.MolecularSequenceVariant
+                    variant={resource.variant}
+                    name='Variant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='variant'
+                    field=''
+                />
+            }
+            {
                 resource.observedSeq &&
                 <Partials.String
                     string={resource.observedSeq}
@@ -169,6 +191,17 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='observed-seq'
+                />
+            }
+            {
+                resource.quality &&
+                <Partials.MolecularSequenceQuality
+                    quality={resource.quality}
+                    name='Quality'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='quality'
+                    field=''
                 />
             }
             {
@@ -189,6 +222,17 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='pointer'
+                />
+            }
+            {
+                resource.structureVariant &&
+                <Partials.MolecularSequenceStructureVariant
+                    structureVariant={resource.structureVariant}
+                    name='Structure Variant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='structure-variant'
+                    field=''
                 />
             }
         </>

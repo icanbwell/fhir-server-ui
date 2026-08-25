@@ -317,6 +317,17 @@ const MedicationDispense = ({ resource }: { resource: TMedicationDispense }): Re
                 />
             }
             {
+                resource.substitution &&
+                <Partials.MedicationDispenseSubstitution
+                    substitution={resource.substitution}
+                    name='Substitution'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='substitution'
+                    field=''
+                />
+            }
+            {
                 resource.detectedIssue &&
                 <Partials.Reference
                     reference={resource.detectedIssue}

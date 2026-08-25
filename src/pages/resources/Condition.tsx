@@ -309,6 +309,17 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
+                resource.stage &&
+                <Partials.ConditionStage
+                    stage={resource.stage}
+                    name='Stage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='stage'
+                    field=''
+                />
+            }
+            {
                 resource.note &&
                 <Partials.Annotation
                     annotation={resource.note}

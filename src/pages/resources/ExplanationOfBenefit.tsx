@@ -238,6 +238,17 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
+                resource.payee &&
+                <Partials.ExplanationOfBenefitPayee
+                    payee={resource.payee}
+                    name='Payee'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payee'
+                    field=''
+                />
+            }
+            {
                 resource.referral &&
                 <Partials.Reference
                     reference={resource.referral}
@@ -323,6 +334,17 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
+                resource.diagnosis &&
+                <Partials.ExplanationOfBenefitDiagnosis
+                    diagnosis={resource.diagnosis}
+                    name='Diagnosis'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='diagnosis'
+                    field=''
+                />
+            }
+            {
                 resource.precedence &&
                 <Partials.Int
                     int={resource.precedence}
@@ -341,6 +363,50 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                     id={uuid}
                     searchParameter='insurance'
                     field='coverage'
+                />
+            }
+            {
+                resource.item &&
+                <Partials.ExplanationOfBenefitItem
+                    item={resource.item}
+                    name='Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='item'
+                    field=''
+                />
+            }
+            {
+                resource.adjudication &&
+                <Partials.ExplanationOfBenefitAdjudication
+                    adjudication={resource.adjudication}
+                    name='Adjudication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='adjudication'
+                    field=''
+                />
+            }
+            {
+                resource.total &&
+                <Partials.ExplanationOfBenefitTotal
+                    total={resource.total}
+                    name='Total'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='total'
+                    field=''
+                />
+            }
+            {
+                resource.payment &&
+                <Partials.ExplanationOfBenefitPayment
+                    payment={resource.payment}
+                    name='Payment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payment'
+                    field=''
                 />
             }
             {
@@ -364,6 +430,17 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
+                resource.processNote &&
+                <Partials.ExplanationOfBenefitProcessNote
+                    processNote={resource.processNote}
+                    name='Process Note'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='process-note'
+                    field=''
+                />
+            }
+            {
                 resource.benefitPeriod &&
                 <Partials.Period
                     period={resource.benefitPeriod}
@@ -371,6 +448,17 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='benefit-period'
+                />
+            }
+            {
+                resource.benefitBalance &&
+                <Partials.ExplanationOfBenefitBenefitBalance
+                    benefitBalance={resource.benefitBalance}
+                    name='Benefit Balance'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='benefit-balance'
+                    field=''
                 />
             }
         </>

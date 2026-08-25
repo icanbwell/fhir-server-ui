@@ -162,6 +162,17 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
+                resource.ingredient &&
+                <Partials.MedicationKnowledgeIngredient
+                    ingredient={resource.ingredient}
+                    name='Ingredient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='ingredient'
+                    field=''
+                />
+            }
+            {
                 resource.preparationInstruction &&
                 <Partials.Markdown
                     markdown={resource.preparationInstruction}
@@ -179,6 +190,28 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='intended-route'
+                />
+            }
+            {
+                resource.administrationGuidelines &&
+                <Partials.MedicationKnowledgeAdministrationGuidelines
+                    administrationGuidelines={resource.administrationGuidelines}
+                    name='Administration Guidelines'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='administration-guidelines'
+                    field=''
+                />
+            }
+            {
+                resource.drugCharacteristic &&
+                <Partials.MedicationKnowledgeDrugCharacteristic
+                    drugCharacteristic={resource.drugCharacteristic}
+                    name='Drug Characteristic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='drug-characteristic'
+                    field=''
                 />
             }
             {

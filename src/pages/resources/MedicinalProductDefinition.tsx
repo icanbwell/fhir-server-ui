@@ -322,6 +322,28 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                     searchParameter='code'
                 />
             }
+            {
+                resource.name &&
+                <Partials.MedicinalProductDefinitionName
+                    name_={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                    field=''
+                />
+            }
+            {
+                resource.characteristic &&
+                <Partials.MedicinalProductDefinitionCharacteristic
+                    characteristic={resource.characteristic}
+                    name='Characteristic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='characteristic'
+                    field=''
+                />
+            }
         </>
     );
 };

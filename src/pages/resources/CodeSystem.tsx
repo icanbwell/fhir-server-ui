@@ -281,6 +281,39 @@ const CodeSystem = ({ resource }: { resource: TCodeSystem }): React.ReactElement
                     searchParameter='count'
                 />
             }
+            {
+                resource.filter &&
+                <Partials.CodeSystemFilter
+                    filter={resource.filter}
+                    name='Filter'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='filter'
+                    field=''
+                />
+            }
+            {
+                resource.property &&
+                <Partials.CodeSystemProperty
+                    property={resource.property}
+                    name='Property'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='property'
+                    field=''
+                />
+            }
+            {
+                resource.concept &&
+                <Partials.CodeSystemConcept
+                    concept={resource.concept}
+                    name='Concept'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='concept'
+                    field=''
+                />
+            }
         </>
     );
 };

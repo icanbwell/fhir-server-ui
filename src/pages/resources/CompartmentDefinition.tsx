@@ -185,6 +185,17 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                     searchParameter='search'
                 />
             }
+            {
+                resource.resource &&
+                <Partials.CompartmentDefinitionResource
+                    resource={resource.resource}
+                    name='Resource'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='resource'
+                    field=''
+                />
+            }
         </>
     );
 };

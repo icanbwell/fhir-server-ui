@@ -436,6 +436,17 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
+                resource.participant &&
+                <Partials.ActivityDefinitionParticipant
+                    participant={resource.participant}
+                    name='Participant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='participant'
+                    field=''
+                />
+            }
+            {
                 resource.productReference &&
                 <Partials.Reference
                     reference={resource.productReference}
@@ -523,6 +534,17 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='transform'
+                />
+            }
+            {
+                resource.dynamicValue &&
+                <Partials.ActivityDefinitionDynamicValue
+                    dynamicValue={resource.dynamicValue}
+                    name='Dynamic Value'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dynamic-value'
+                    field=''
                 />
             }
         </>

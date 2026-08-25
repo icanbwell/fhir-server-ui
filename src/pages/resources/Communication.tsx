@@ -288,6 +288,17 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
+                resource.payload &&
+                <Partials.CommunicationPayload
+                    payload={resource.payload}
+                    name='Payload'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payload'
+                    field=''
+                />
+            }
+            {
                 resource.note &&
                 <Partials.Annotation
                     annotation={resource.note}

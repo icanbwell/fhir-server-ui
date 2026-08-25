@@ -168,6 +168,17 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
+                resource.group &&
+                <Partials.MeasureReportGroup
+                    group={resource.group}
+                    name='Group'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='group'
+                    field=''
+                />
+            }
+            {
                 resource.evaluatedResource &&
                 <Partials.Reference
                     reference={resource.evaluatedResource}

@@ -296,6 +296,28 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                     searchParameter='note'
                 />
             }
+            {
+                resource.arm &&
+                <Partials.ResearchStudyArm
+                    arm={resource.arm}
+                    name='Arm'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='arm'
+                    field=''
+                />
+            }
+            {
+                resource.objective &&
+                <Partials.ResearchStudyObjective
+                    objective={resource.objective}
+                    name='Objective'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='objective'
+                    field=''
+                />
+            }
         </>
     );
 };

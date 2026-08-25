@@ -92,6 +92,28 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                 />
             }
             {
+                resource.link &&
+                <Partials.BundleLink
+                    link={resource.link}
+                    name='Link'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='link'
+                    field=''
+                />
+            }
+            {
+                resource.entry &&
+                <Partials.BundleEntry
+                    entry={resource.entry}
+                    name='Entry'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='entry'
+                    field=''
+                />
+            }
+            {
                 resource.signature &&
                 <Partials.Reference
                     reference={resource.signature}

@@ -202,6 +202,39 @@ const ImplementationGuide = ({ resource }: { resource: TImplementationGuide }): 
                 resource.fhirVersion &&
                 <Partials.Code code={resource.fhirVersion} name='Fhir Version'/>
             }
+            {
+                resource.dependsOn &&
+                <Partials.ImplementationGuideDependsOn
+                    dependsOn={resource.dependsOn}
+                    name='Depends On'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='depends-on'
+                    field=''
+                />
+            }
+            {
+                resource.definition &&
+                <Partials.ImplementationGuideDefinition
+                    definition={resource.definition}
+                    name='Definition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='definition'
+                    field=''
+                />
+            }
+            {
+                resource.manifest &&
+                <Partials.ImplementationGuideManifest
+                    manifest={resource.manifest}
+                    name='Manifest'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='manifest'
+                    field=''
+                />
+            }
         </>
     );
 };

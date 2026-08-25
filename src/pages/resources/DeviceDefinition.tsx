@@ -99,6 +99,17 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
+                resource.udiDeviceIdentifier &&
+                <Partials.DeviceDefinitionUdiDeviceIdentifier
+                    udiDeviceIdentifier={resource.udiDeviceIdentifier}
+                    name='Udi Device Identifier'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='udi-device-identifier'
+                    field=''
+                />
+            }
+            {
                 resource.manufacturerString &&
                 <Partials.String
                     string={resource.manufacturerString}

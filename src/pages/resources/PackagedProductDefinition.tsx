@@ -207,6 +207,17 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                     searchParameter='manufacturer'
                 />
             }
+            {
+                resource.package &&
+                <Partials.PackagedProductDefinitionPackage
+                    package={resource.package}
+                    name='Package'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='package'
+                    field=''
+                />
+            }
         </>
     );
 };

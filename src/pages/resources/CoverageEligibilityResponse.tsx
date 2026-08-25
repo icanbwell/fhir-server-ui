@@ -221,6 +221,17 @@ const CoverageEligibilityResponse = ({ resource }: { resource: TCoverageEligibil
                     searchParameter='form'
                 />
             }
+            {
+                resource.error &&
+                <Partials.CoverageEligibilityResponseError
+                    error={resource.error}
+                    name='Error'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='error'
+                    field=''
+                />
+            }
         </>
     );
 };

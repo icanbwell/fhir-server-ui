@@ -364,6 +364,28 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
+                resource.dispenseRequest &&
+                <Partials.MedicationRequestDispenseRequest
+                    dispenseRequest={resource.dispenseRequest}
+                    name='Dispense Request'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dispense-request'
+                    field=''
+                />
+            }
+            {
+                resource.substitution &&
+                <Partials.MedicationRequestSubstitution
+                    substitution={resource.substitution}
+                    name='Substitution'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='substitution'
+                    field=''
+                />
+            }
+            {
                 resource.priorPrescription &&
                 <Partials.Reference
                     reference={resource.priorPrescription}

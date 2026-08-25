@@ -133,6 +133,39 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
+                resource.contraindication &&
+                <Partials.ClinicalUseDefinitionContraindication
+                    contraindication={resource.contraindication}
+                    name='Contraindication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='contraindication'
+                    field=''
+                />
+            }
+            {
+                resource.indication &&
+                <Partials.ClinicalUseDefinitionIndication
+                    indication={resource.indication}
+                    name='Indication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='indication'
+                    field=''
+                />
+            }
+            {
+                resource.interaction &&
+                <Partials.ClinicalUseDefinitionInteraction
+                    interaction={resource.interaction}
+                    name='Interaction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='interaction'
+                    field=''
+                />
+            }
+            {
                 resource.population &&
                 <Partials.Reference
                     reference={resource.population}
@@ -140,6 +173,28 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='population'
+                />
+            }
+            {
+                resource.undesirableEffect &&
+                <Partials.ClinicalUseDefinitionUndesirableEffect
+                    undesirableEffect={resource.undesirableEffect}
+                    name='Undesirable Effect'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='undesirable-effect'
+                    field=''
+                />
+            }
+            {
+                resource.warning &&
+                <Partials.ClinicalUseDefinitionWarning
+                    warning={resource.warning}
+                    name='Warning'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='warning'
+                    field=''
                 />
             }
         </>

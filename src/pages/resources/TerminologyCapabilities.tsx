@@ -26,7 +26,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -100,7 +100,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -110,7 +110,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -120,7 +120,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -134,7 +134,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -144,7 +144,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -154,7 +154,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -164,7 +164,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -174,7 +174,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -184,7 +184,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -194,7 +194,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -208,7 +208,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 <Partials.Code code={resource.kind} name='Kind'/>
             }
             {
-                resource.software &&
+                resource.software !== undefined && resource.software !== null &&
                 <Partials.TerminologyCapabilitiesSoftware
                     software={resource.software}
                     name='Software'
@@ -219,7 +219,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.lockedDate &&
+                resource.lockedDate !== undefined && resource.lockedDate !== null &&
                 <Partials.Boolean
                     boolean={resource.lockedDate}
                     name='Locked Date'
@@ -229,7 +229,7 @@ const TerminologyCapabilities = ({ resource }: { resource: TTerminologyCapabilit
                 />
             }
             {
-                resource.codeSystem &&
+                resource.codeSystem !== undefined && resource.codeSystem !== null &&
                 <Partials.TerminologyCapabilitiesCodeSystem
                     codeSystem={resource.codeSystem}
                     name='Code System'

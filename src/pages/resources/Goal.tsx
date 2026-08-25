@@ -26,7 +26,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -104,7 +104,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 <Partials.Code code={resource.lifecycleStatus} name='Lifecycle Status'/>
             }
             {
-                resource.achievementStatus &&
+                resource.achievementStatus !== undefined && resource.achievementStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.achievementStatus}
                     name='Achievement Status'
@@ -114,7 +114,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -124,7 +124,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.priority &&
+                resource.priority !== undefined && resource.priority !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.priority}
                     name='Priority'
@@ -134,7 +134,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.description}
                     name='Description'
@@ -144,7 +144,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -154,7 +154,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.startDate &&
+                resource.startDate !== undefined && resource.startDate !== null &&
                 <Partials.Date
                     date={resource.startDate}
                     name='Start Date'
@@ -164,7 +164,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.startCodeableConcept &&
+                resource.startCodeableConcept !== undefined && resource.startCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.startCodeableConcept}
                     name='Start Codeable Concept'
@@ -174,7 +174,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.target &&
+                resource.target !== undefined && resource.target !== null &&
                 <Partials.GoalTarget
                     target={resource.target}
                     name='Target'
@@ -185,7 +185,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.statusDate &&
+                resource.statusDate !== undefined && resource.statusDate !== null &&
                 <Partials.Date
                     date={resource.statusDate}
                     name='Status Date'
@@ -195,7 +195,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.String
                     string={resource.statusReason}
                     name='Status Reason'
@@ -205,7 +205,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.expressedBy &&
+                resource.expressedBy !== undefined && resource.expressedBy !== null &&
                 <Partials.Reference
                     reference={resource.expressedBy}
                     name='Expressed By'
@@ -215,7 +215,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.addresses &&
+                resource.addresses !== undefined && resource.addresses !== null &&
                 <Partials.Reference
                     reference={resource.addresses}
                     name='Addresses'
@@ -225,7 +225,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -235,7 +235,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.outcomeCode &&
+                resource.outcomeCode !== undefined && resource.outcomeCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.outcomeCode}
                     name='Outcome Code'
@@ -245,7 +245,7 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
-                resource.outcomeReference &&
+                resource.outcomeReference !== undefined && resource.outcomeReference !== null &&
                 <Partials.Reference
                     reference={resource.outcomeReference}
                     name='Outcome Reference'

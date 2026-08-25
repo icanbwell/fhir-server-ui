@@ -25,7 +25,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -99,7 +99,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -109,7 +109,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -119,7 +119,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -129,7 +129,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -143,7 +143,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -153,7 +153,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -163,7 +163,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -173,7 +173,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -183,7 +183,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -193,7 +193,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -203,7 +203,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -213,7 +213,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.profile &&
+                resource.profile !== undefined && resource.profile !== null &&
                 <Partials.Reference
                     reference={resource.profile}
                     name='Profile'
@@ -223,7 +223,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.variable &&
+                resource.variable !== undefined && resource.variable !== null &&
                 <Partials.TestScriptVariable
                     variable={resource.variable}
                     name='Variable'
@@ -234,7 +234,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.setup &&
+                resource.setup !== undefined && resource.setup !== null &&
                 <Partials.TestScriptSetup
                     setup={resource.setup}
                     name='Setup'
@@ -245,7 +245,7 @@ const TestScript = ({ resource }: { resource: TTestScript }): React.ReactElement
                 />
             }
             {
-                resource.test &&
+                resource.test !== undefined && resource.test !== null &&
                 <Partials.TestScriptTest
                     test={resource.test}
                     name='Test'

@@ -26,7 +26,7 @@ const Binary = ({ resource }: { resource: TBinary }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Binary = ({ resource }: { resource: TBinary }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Binary = ({ resource }: { resource: TBinary }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -64,7 +64,7 @@ const Binary = ({ resource }: { resource: TBinary }): React.ReactElement => {
                 <Partials.Code code={resource.contentType} name='Content Type'/>
             }
             {
-                resource.securityContext &&
+                resource.securityContext !== undefined && resource.securityContext !== null &&
                 <Partials.Reference
                     reference={resource.securityContext}
                     name='Security Context'

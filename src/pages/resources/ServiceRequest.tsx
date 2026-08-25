@@ -25,7 +25,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -109,7 +109,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -119,7 +119,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -129,7 +129,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.replaces &&
+                resource.replaces !== undefined && resource.replaces !== null &&
                 <Partials.Reference
                     reference={resource.replaces}
                     name='Replaces'
@@ -139,7 +139,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.requisition &&
+                resource.requisition !== undefined && resource.requisition !== null &&
                 <Partials.Identifier
                     identifier={resource.requisition}
                     name='Requisition'
@@ -157,7 +157,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 <Partials.Code code={resource.intent} name='Intent'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -171,7 +171,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.doNotPerform &&
+                resource.doNotPerform !== undefined && resource.doNotPerform !== null &&
                 <Partials.Boolean
                     boolean={resource.doNotPerform}
                     name='Do Not Perform'
@@ -181,7 +181,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -191,7 +191,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.orderDetail &&
+                resource.orderDetail !== undefined && resource.orderDetail !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.orderDetail}
                     name='Order Detail'
@@ -201,7 +201,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.quantityQuantity &&
+                resource.quantityQuantity !== undefined && resource.quantityQuantity !== null &&
                 <Partials.Quantity
                     quantity={resource.quantityQuantity}
                     name='Quantity Quantity'
@@ -211,7 +211,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.quantityRatio &&
+                resource.quantityRatio !== undefined && resource.quantityRatio !== null &&
                 <Partials.Ratio
                     ratio={resource.quantityRatio}
                     name='Quantity Ratio'
@@ -221,7 +221,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.quantityRange &&
+                resource.quantityRange !== undefined && resource.quantityRange !== null &&
                 <Partials.Range
                     range={resource.quantityRange}
                     name='Quantity Range'
@@ -231,7 +231,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -241,7 +241,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -251,7 +251,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -261,7 +261,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.occurrencePeriod &&
+                resource.occurrencePeriod !== undefined && resource.occurrencePeriod !== null &&
                 <Partials.Period
                     period={resource.occurrencePeriod}
                     name='Occurrence Period'
@@ -271,7 +271,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.occurrenceTiming &&
+                resource.occurrenceTiming !== undefined && resource.occurrenceTiming !== null &&
                 <Partials.Timing
                     timing={resource.occurrenceTiming}
                     name='Occurrence Timing'
@@ -281,7 +281,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.asNeededBoolean &&
+                resource.asNeededBoolean !== undefined && resource.asNeededBoolean !== null &&
                 <Partials.Boolean
                     boolean={resource.asNeededBoolean}
                     name='As Needed Boolean'
@@ -291,7 +291,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.asNeededCodeableConcept &&
+                resource.asNeededCodeableConcept !== undefined && resource.asNeededCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.asNeededCodeableConcept}
                     name='As Needed Codeable Concept'
@@ -301,7 +301,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.authoredOn &&
+                resource.authoredOn !== undefined && resource.authoredOn !== null &&
                 <Partials.DateTime
                     dateTime={resource.authoredOn}
                     name='Authored On'
@@ -311,7 +311,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.requester &&
+                resource.requester !== undefined && resource.requester !== null &&
                 <Partials.Reference
                     reference={resource.requester}
                     name='Requester'
@@ -321,7 +321,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.performerType &&
+                resource.performerType !== undefined && resource.performerType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.performerType}
                     name='Performer Type'
@@ -331,7 +331,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -341,7 +341,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.locationCode &&
+                resource.locationCode !== undefined && resource.locationCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.locationCode}
                     name='Location Code'
@@ -351,7 +351,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.locationReference &&
+                resource.locationReference !== undefined && resource.locationReference !== null &&
                 <Partials.Reference
                     reference={resource.locationReference}
                     name='Location Reference'
@@ -361,7 +361,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -371,7 +371,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -381,7 +381,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -391,7 +391,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.supportingInfo &&
+                resource.supportingInfo !== undefined && resource.supportingInfo !== null &&
                 <Partials.Reference
                     reference={resource.supportingInfo}
                     name='Supporting Info'
@@ -401,7 +401,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.specimen &&
+                resource.specimen !== undefined && resource.specimen !== null &&
                 <Partials.Reference
                     reference={resource.specimen}
                     name='Specimen'
@@ -411,7 +411,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.bodySite &&
+                resource.bodySite !== undefined && resource.bodySite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodySite}
                     name='Body Site'
@@ -421,7 +421,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -431,7 +431,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.patientInstruction &&
+                resource.patientInstruction !== undefined && resource.patientInstruction !== null &&
                 <Partials.String
                     string={resource.patientInstruction}
                     name='Patient Instruction'
@@ -441,7 +441,7 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 />
             }
             {
-                resource.relevantHistory &&
+                resource.relevantHistory !== undefined && resource.relevantHistory !== null &&
                 <Partials.Reference
                     reference={resource.relevantHistory}
                     name='Relevant History'

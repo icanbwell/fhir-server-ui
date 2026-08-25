@@ -26,7 +26,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +100,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -110,7 +110,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -120,7 +120,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -130,7 +130,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -144,7 +144,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -154,7 +154,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -164,7 +164,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -174,7 +174,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -184,7 +184,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -194,7 +194,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.performedDateTime &&
+                resource.performedDateTime !== undefined && resource.performedDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.performedDateTime}
                     name='Performed Date Time'
@@ -204,7 +204,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.performedPeriod &&
+                resource.performedPeriod !== undefined && resource.performedPeriod !== null &&
                 <Partials.Period
                     period={resource.performedPeriod}
                     name='Performed Period'
@@ -214,7 +214,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.performedString &&
+                resource.performedString !== undefined && resource.performedString !== null &&
                 <Partials.String
                     string={resource.performedString}
                     name='Performed String'
@@ -224,7 +224,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.performedAge &&
+                resource.performedAge !== undefined && resource.performedAge !== null &&
                 <Partials.Quantity
                     quantity={resource.performedAge}
                     name='Performed Age'
@@ -234,7 +234,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.performedRange &&
+                resource.performedRange !== undefined && resource.performedRange !== null &&
                 <Partials.Range
                     range={resource.performedRange}
                     name='Performed Range'
@@ -244,7 +244,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.recorder &&
+                resource.recorder !== undefined && resource.recorder !== null &&
                 <Partials.Reference
                     reference={resource.recorder}
                     name='Recorder'
@@ -254,7 +254,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.asserter &&
+                resource.asserter !== undefined && resource.asserter !== null &&
                 <Partials.Reference
                     reference={resource.asserter}
                     name='Asserter'
@@ -264,7 +264,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -275,7 +275,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -285,7 +285,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -295,7 +295,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -305,7 +305,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.bodySite &&
+                resource.bodySite !== undefined && resource.bodySite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodySite}
                     name='Body Site'
@@ -315,7 +315,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.outcome &&
+                resource.outcome !== undefined && resource.outcome !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.outcome}
                     name='Outcome'
@@ -325,7 +325,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.report &&
+                resource.report !== undefined && resource.report !== null &&
                 <Partials.Reference
                     reference={resource.report}
                     name='Report'
@@ -335,7 +335,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.complication &&
+                resource.complication !== undefined && resource.complication !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.complication}
                     name='Complication'
@@ -345,7 +345,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.complicationDetail &&
+                resource.complicationDetail !== undefined && resource.complicationDetail !== null &&
                 <Partials.Reference
                     reference={resource.complicationDetail}
                     name='Complication Detail'
@@ -355,7 +355,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.followUp &&
+                resource.followUp !== undefined && resource.followUp !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.followUp}
                     name='Follow Up'
@@ -365,7 +365,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -375,7 +375,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.focalDevice &&
+                resource.focalDevice !== undefined && resource.focalDevice !== null &&
                 <Partials.Reference
                     reference={resource.focalDevice}
                     name='Focal Device'
@@ -386,7 +386,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.usedReference &&
+                resource.usedReference !== undefined && resource.usedReference !== null &&
                 <Partials.Reference
                     reference={resource.usedReference}
                     name='Used Reference'
@@ -396,7 +396,7 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
-                resource.usedCode &&
+                resource.usedCode !== undefined && resource.usedCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.usedCode}
                     name='Used Code'

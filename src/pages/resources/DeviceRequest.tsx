@@ -25,7 +25,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -109,7 +109,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -119,7 +119,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -129,7 +129,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.priorRequest &&
+                resource.priorRequest !== undefined && resource.priorRequest !== null &&
                 <Partials.Reference
                     reference={resource.priorRequest}
                     name='Prior Request'
@@ -139,7 +139,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.groupIdentifier &&
+                resource.groupIdentifier !== undefined && resource.groupIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.groupIdentifier}
                     name='Group Identifier'
@@ -161,7 +161,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.codeReference &&
+                resource.codeReference !== undefined && resource.codeReference !== null &&
                 <Partials.Reference
                     reference={resource.codeReference}
                     name='Code Reference'
@@ -171,7 +171,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.codeCodeableConcept &&
+                resource.codeCodeableConcept !== undefined && resource.codeCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.codeCodeableConcept}
                     name='Code Codeable Concept'
@@ -181,7 +181,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.parameter &&
+                resource.parameter !== undefined && resource.parameter !== null &&
                 <Partials.DeviceRequestParameter
                     parameter={resource.parameter}
                     name='Parameter'
@@ -192,7 +192,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -202,7 +202,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -212,7 +212,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -222,7 +222,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.occurrencePeriod &&
+                resource.occurrencePeriod !== undefined && resource.occurrencePeriod !== null &&
                 <Partials.Period
                     period={resource.occurrencePeriod}
                     name='Occurrence Period'
@@ -232,7 +232,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.occurrenceTiming &&
+                resource.occurrenceTiming !== undefined && resource.occurrenceTiming !== null &&
                 <Partials.Timing
                     timing={resource.occurrenceTiming}
                     name='Occurrence Timing'
@@ -242,7 +242,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.authoredOn &&
+                resource.authoredOn !== undefined && resource.authoredOn !== null &&
                 <Partials.DateTime
                     dateTime={resource.authoredOn}
                     name='Authored On'
@@ -252,7 +252,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.requester &&
+                resource.requester !== undefined && resource.requester !== null &&
                 <Partials.Reference
                     reference={resource.requester}
                     name='Requester'
@@ -262,7 +262,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.performerType &&
+                resource.performerType !== undefined && resource.performerType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.performerType}
                     name='Performer Type'
@@ -272,7 +272,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -282,7 +282,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -292,7 +292,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -302,7 +302,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -312,7 +312,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.supportingInfo &&
+                resource.supportingInfo !== undefined && resource.supportingInfo !== null &&
                 <Partials.Reference
                     reference={resource.supportingInfo}
                     name='Supporting Info'
@@ -322,7 +322,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -332,7 +332,7 @@ const DeviceRequest = ({ resource }: { resource: TDeviceRequest }): React.ReactE
                 />
             }
             {
-                resource.relevantHistory &&
+                resource.relevantHistory !== undefined && resource.relevantHistory !== null &&
                 <Partials.Reference
                     reference={resource.relevantHistory}
                     name='Relevant History'

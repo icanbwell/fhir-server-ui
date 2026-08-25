@@ -24,7 +24,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -98,7 +98,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -108,7 +108,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -118,7 +118,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -128,7 +128,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.groupIdentifier &&
+                resource.groupIdentifier !== undefined && resource.groupIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.groupIdentifier}
                     name='Group Identifier'
@@ -138,7 +138,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -152,7 +152,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -162,7 +162,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.businessStatus &&
+                resource.businessStatus !== undefined && resource.businessStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.businessStatus}
                     name='Business Status'
@@ -180,7 +180,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -190,7 +190,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.String
                     string={resource.description}
                     name='Description'
@@ -200,7 +200,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.focus &&
+                resource.focus !== undefined && resource.focus !== null &&
                 <Partials.Reference
                     reference={resource.focus}
                     name='Focus'
@@ -210,7 +210,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.for_ &&
+                resource.for_ !== undefined && resource.for_ !== null &&
                 <Partials.Reference
                     reference={resource.for_}
                     name='For_'
@@ -220,7 +220,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -230,7 +230,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.executionPeriod &&
+                resource.executionPeriod !== undefined && resource.executionPeriod !== null &&
                 <Partials.Period
                     period={resource.executionPeriod}
                     name='Execution Period'
@@ -240,7 +240,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.authoredOn &&
+                resource.authoredOn !== undefined && resource.authoredOn !== null &&
                 <Partials.DateTime
                     dateTime={resource.authoredOn}
                     name='Authored On'
@@ -250,7 +250,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.lastModified &&
+                resource.lastModified !== undefined && resource.lastModified !== null &&
                 <Partials.DateTime
                     dateTime={resource.lastModified}
                     name='Last Modified'
@@ -260,7 +260,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.requester &&
+                resource.requester !== undefined && resource.requester !== null &&
                 <Partials.Reference
                     reference={resource.requester}
                     name='Requester'
@@ -270,7 +270,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.performerType &&
+                resource.performerType !== undefined && resource.performerType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.performerType}
                     name='Performer Type'
@@ -280,7 +280,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.owner &&
+                resource.owner !== undefined && resource.owner !== null &&
                 <Partials.Reference
                     reference={resource.owner}
                     name='Owner'
@@ -290,7 +290,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -300,7 +300,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -310,7 +310,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -320,7 +320,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -330,7 +330,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -340,7 +340,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.relevantHistory &&
+                resource.relevantHistory !== undefined && resource.relevantHistory !== null &&
                 <Partials.Reference
                     reference={resource.relevantHistory}
                     name='Relevant History'
@@ -350,7 +350,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.restriction &&
+                resource.restriction !== undefined && resource.restriction !== null &&
                 <Partials.TaskRestriction
                     restriction={resource.restriction}
                     name='Restriction'
@@ -361,7 +361,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.input &&
+                resource.input !== undefined && resource.input !== null &&
                 <Partials.TaskInput
                     input={resource.input}
                     name='Input'
@@ -372,7 +372,7 @@ const Task = ({ resource }: { resource: TTask }): React.ReactElement => {
                 />
             }
             {
-                resource.output &&
+                resource.output !== undefined && resource.output !== null &&
                 <Partials.TaskOutput
                     output={resource.output}
                     name='Output'

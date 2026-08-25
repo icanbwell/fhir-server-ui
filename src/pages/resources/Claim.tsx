@@ -26,7 +26,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -104,7 +104,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -114,7 +114,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.subType &&
+                resource.subType !== undefined && resource.subType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subType}
                     name='Sub Type'
@@ -128,7 +128,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 <Partials.Code code={resource.use} name='Use'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -138,7 +138,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.billablePeriod &&
+                resource.billablePeriod !== undefined && resource.billablePeriod !== null &&
                 <Partials.Period
                     period={resource.billablePeriod}
                     name='Billable Period'
@@ -148,7 +148,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -158,7 +158,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.enterer &&
+                resource.enterer !== undefined && resource.enterer !== null &&
                 <Partials.Reference
                     reference={resource.enterer}
                     name='Enterer'
@@ -168,7 +168,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.insurer &&
+                resource.insurer !== undefined && resource.insurer !== null &&
                 <Partials.Reference
                     reference={resource.insurer}
                     name='Insurer'
@@ -178,7 +178,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.provider &&
+                resource.provider !== undefined && resource.provider !== null &&
                 <Partials.Reference
                     reference={resource.provider}
                     name='Provider'
@@ -188,7 +188,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.priority &&
+                resource.priority !== undefined && resource.priority !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.priority}
                     name='Priority'
@@ -198,7 +198,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.fundsReserve &&
+                resource.fundsReserve !== undefined && resource.fundsReserve !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.fundsReserve}
                     name='Funds Reserve'
@@ -208,7 +208,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.prescription &&
+                resource.prescription !== undefined && resource.prescription !== null &&
                 <Partials.Reference
                     reference={resource.prescription}
                     name='Prescription'
@@ -218,7 +218,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.originalPrescription &&
+                resource.originalPrescription !== undefined && resource.originalPrescription !== null &&
                 <Partials.Reference
                     reference={resource.originalPrescription}
                     name='Original Prescription'
@@ -228,7 +228,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.payee &&
+                resource.payee !== undefined && resource.payee !== null &&
                 <Partials.ClaimPayee
                     payee={resource.payee}
                     name='Payee'
@@ -239,7 +239,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.referral &&
+                resource.referral !== undefined && resource.referral !== null &&
                 <Partials.Reference
                     reference={resource.referral}
                     name='Referral'
@@ -249,7 +249,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.facility &&
+                resource.facility !== undefined && resource.facility !== null &&
                 <Partials.Reference
                     reference={resource.facility}
                     name='Facility'
@@ -259,7 +259,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.careTeam &&
+                resource.careTeam !== undefined && resource.careTeam !== null &&
                 <Partials.Reference
                     reference={resource.careTeam}
                     name='Care Team'
@@ -270,7 +270,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.diagnosis &&
+                resource.diagnosis !== undefined && resource.diagnosis !== null &&
                 <Partials.ClaimDiagnosis
                     diagnosis={resource.diagnosis}
                     name='Diagnosis'
@@ -281,7 +281,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.procedure &&
+                resource.procedure !== undefined && resource.procedure !== null &&
                 <Partials.ClaimProcedure
                     procedure={resource.procedure}
                     name='Procedure'
@@ -292,7 +292,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -303,7 +303,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.item &&
+                resource.item !== undefined && resource.item !== null &&
                 <Partials.ClaimItem
                     item={resource.item}
                     name='Item'
@@ -314,7 +314,7 @@ const Claim = ({ resource }: { resource: TClaim }): React.ReactElement => {
                 />
             }
             {
-                resource.total &&
+                resource.total !== undefined && resource.total !== null &&
                 <Partials.Money
                     money={resource.total}
                     name='Total'

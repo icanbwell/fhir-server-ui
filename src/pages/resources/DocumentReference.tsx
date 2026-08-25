@@ -28,7 +28,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -38,7 +38,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -48,7 +48,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -62,7 +62,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -72,7 +72,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -82,7 +82,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -92,7 +92,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.masterIdentifier &&
+                resource.masterIdentifier !== undefined && resource.masterIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.masterIdentifier}
                     name='Master Identifier'
@@ -102,7 +102,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -120,7 +120,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 <Partials.Code code={resource.docStatus} name='Doc Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -130,7 +130,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -140,7 +140,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -150,7 +150,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.Instant
                     instant={resource.date}
                     name='Date'
@@ -160,7 +160,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -170,7 +170,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.authenticator &&
+                resource.authenticator !== undefined && resource.authenticator !== null &&
                 <Partials.Reference
                     reference={resource.authenticator}
                     name='Authenticator'
@@ -180,7 +180,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.custodian &&
+                resource.custodian !== undefined && resource.custodian !== null &&
                 <Partials.Reference
                     reference={resource.custodian}
                     name='Custodian'
@@ -190,7 +190,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.relatesTo &&
+                resource.relatesTo !== undefined && resource.relatesTo !== null &&
                 <Partials.DocumentReferenceRelatesTo
                     relatesTo={resource.relatesTo}
                     name='Relates To'
@@ -201,7 +201,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.String
                     string={resource.description}
                     name='Description'
@@ -211,7 +211,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.securityLabel &&
+                resource.securityLabel !== undefined && resource.securityLabel !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.securityLabel}
                     name='Security Label'
@@ -221,7 +221,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.content &&
+                resource.content !== undefined && resource.content !== null &&
                 <Partials.DocumentContent
                     content={resource.content}
                     name='Content'
@@ -232,7 +232,7 @@ const DocumentReference = ({ resource }: { resource: TDocumentReference }): Reac
                 />
             }
             {
-                resource.context &&
+                resource.context !== undefined && resource.context !== null &&
                 <Partials.DocumentReferenceContext
                     context={resource.context}
                     name='Context'

@@ -25,7 +25,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -109,7 +109,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.serviceCategory &&
+                resource.serviceCategory !== undefined && resource.serviceCategory !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceCategory}
                     name='Service Category'
@@ -119,7 +119,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.serviceType &&
+                resource.serviceType !== undefined && resource.serviceType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceType}
                     name='Service Type'
@@ -129,7 +129,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.specialty &&
+                resource.specialty !== undefined && resource.specialty !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.specialty}
                     name='Specialty'
@@ -139,7 +139,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.actor &&
+                resource.actor !== undefined && resource.actor !== null &&
                 <Partials.Reference
                     reference={resource.actor}
                     name='Actor'
@@ -149,7 +149,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.planningHorizon &&
+                resource.planningHorizon !== undefined && resource.planningHorizon !== null &&
                 <Partials.Period
                     period={resource.planningHorizon}
                     name='Planning Horizon'
@@ -159,7 +159,7 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 />
             }
             {
-                resource.comment &&
+                resource.comment !== undefined && resource.comment !== null &&
                 <Partials.String
                     string={resource.comment}
                     name='Comment'

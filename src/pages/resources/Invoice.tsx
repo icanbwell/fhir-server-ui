@@ -25,7 +25,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +103,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.cancelledReason &&
+                resource.cancelledReason !== undefined && resource.cancelledReason !== null &&
                 <Partials.String
                     string={resource.cancelledReason}
                     name='Cancelled Reason'
@@ -113,7 +113,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -123,7 +123,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -133,7 +133,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.recipient &&
+                resource.recipient !== undefined && resource.recipient !== null &&
                 <Partials.Reference
                     reference={resource.recipient}
                     name='Recipient'
@@ -143,7 +143,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -153,7 +153,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.participant &&
+                resource.participant !== undefined && resource.participant !== null &&
                 <Partials.Reference
                     reference={resource.participant}
                     name='Participant'
@@ -164,7 +164,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.issuer &&
+                resource.issuer !== undefined && resource.issuer !== null &&
                 <Partials.Reference
                     reference={resource.issuer}
                     name='Issuer'
@@ -174,7 +174,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.account &&
+                resource.account !== undefined && resource.account !== null &&
                 <Partials.Reference
                     reference={resource.account}
                     name='Account'
@@ -184,7 +184,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.lineItem &&
+                resource.lineItem !== undefined && resource.lineItem !== null &&
                 <Partials.InvoiceLineItem
                     invoiceLineItem={resource.lineItem}
                     name='Line Item'
@@ -194,7 +194,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.totalPriceComponent &&
+                resource.totalPriceComponent !== undefined && resource.totalPriceComponent !== null &&
                 <Partials.InvoicePriceComponent
                     invoicePriceComponent={resource.totalPriceComponent}
                     name='Total Price Component'
@@ -204,7 +204,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.totalNet &&
+                resource.totalNet !== undefined && resource.totalNet !== null &&
                 <Partials.Money
                     money={resource.totalNet}
                     name='Total Net'
@@ -214,7 +214,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.totalGross &&
+                resource.totalGross !== undefined && resource.totalGross !== null &&
                 <Partials.Money
                     money={resource.totalGross}
                     name='Total Gross'
@@ -224,7 +224,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.paymentTerms &&
+                resource.paymentTerms !== undefined && resource.paymentTerms !== null &&
                 <Partials.Markdown
                     markdown={resource.paymentTerms}
                     name='Payment Terms'
@@ -234,7 +234,7 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

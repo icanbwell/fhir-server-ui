@@ -25,7 +25,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -109,7 +109,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.status &&
+                resource.status !== undefined && resource.status !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.status}
                     name='Status'
@@ -119,7 +119,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.classification &&
+                resource.classification !== undefined && resource.classification !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.classification}
                     name='Classification'
@@ -129,7 +129,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.domain &&
+                resource.domain !== undefined && resource.domain !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.domain}
                     name='Domain'
@@ -139,7 +139,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.grade &&
+                resource.grade !== undefined && resource.grade !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.grade}
                     name='Grade'
@@ -149,7 +149,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -159,7 +159,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.informationSource &&
+                resource.informationSource !== undefined && resource.informationSource !== null &&
                 <Partials.Reference
                     reference={resource.informationSource}
                     name='Information Source'
@@ -169,7 +169,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -179,7 +179,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.Reference
                     reference={resource.manufacturer}
                     name='Manufacturer'
@@ -189,7 +189,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.supplier &&
+                resource.supplier !== undefined && resource.supplier !== null &&
                 <Partials.Reference
                     reference={resource.supplier}
                     name='Supplier'
@@ -199,7 +199,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.structure &&
+                resource.structure !== undefined && resource.structure !== null &&
                 <Partials.SubstanceDefinitionStructure
                     structure={resource.structure}
                     name='Structure'
@@ -210,7 +210,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.SubstanceDefinitionCode
                     code={resource.code}
                     name='Code'
@@ -221,7 +221,7 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.SubstanceDefinitionName
                     name_={resource.name}
                     name='Name'

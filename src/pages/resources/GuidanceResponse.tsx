@@ -26,7 +26,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.requestIdentifier &&
+                resource.requestIdentifier !== undefined && resource.requestIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.requestIdentifier}
                     name='Request Identifier'
@@ -100,7 +100,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -110,7 +110,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.moduleUri &&
+                resource.moduleUri !== undefined && resource.moduleUri !== null &&
                 <Partials.Uri
                     uri={resource.moduleUri}
                     name='Module Uri'
@@ -120,7 +120,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.moduleCanonical &&
+                resource.moduleCanonical !== undefined && resource.moduleCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.moduleCanonical}
                     name='Module Canonical'
@@ -130,7 +130,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.moduleCodeableConcept &&
+                resource.moduleCodeableConcept !== undefined && resource.moduleCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.moduleCodeableConcept}
                     name='Module Codeable Concept'
@@ -144,7 +144,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -154,7 +154,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -164,7 +164,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -174,7 +174,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -184,7 +184,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -194,7 +194,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -204,7 +204,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -214,7 +214,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.evaluationMessage &&
+                resource.evaluationMessage !== undefined && resource.evaluationMessage !== null &&
                 <Partials.Reference
                     reference={resource.evaluationMessage}
                     name='Evaluation Message'
@@ -224,7 +224,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.outputParameters &&
+                resource.outputParameters !== undefined && resource.outputParameters !== null &&
                 <Partials.Reference
                     reference={resource.outputParameters}
                     name='Output Parameters'
@@ -234,7 +234,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.result &&
+                resource.result !== undefined && resource.result !== null &&
                 <Partials.Reference
                     reference={resource.result}
                     name='Result'
@@ -244,7 +244,7 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 />
             }
             {
-                resource.dataRequirement &&
+                resource.dataRequirement !== undefined && resource.dataRequirement !== null &&
                 <Partials.DataRequirement
                     dataRequirement={resource.dataRequirement}
                     name='Data Requirement'

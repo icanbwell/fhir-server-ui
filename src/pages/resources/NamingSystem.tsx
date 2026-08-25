@@ -26,7 +26,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -108,7 +108,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 <Partials.Code code={resource.kind} name='Kind'/>
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -118,7 +118,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -128,7 +128,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.responsible &&
+                resource.responsible !== undefined && resource.responsible !== null &&
                 <Partials.String
                     string={resource.responsible}
                     name='Responsible'
@@ -138,7 +138,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -148,7 +148,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -158,7 +158,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -168,7 +168,7 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
-                resource.usage &&
+                resource.usage !== undefined && resource.usage !== null &&
                 <Partials.String
                     string={resource.usage}
                     name='Usage'

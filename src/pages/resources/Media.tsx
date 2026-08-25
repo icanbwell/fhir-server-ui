@@ -25,7 +25,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -109,7 +109,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -123,7 +123,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -133,7 +133,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.modality &&
+                resource.modality !== undefined && resource.modality !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.modality}
                     name='Modality'
@@ -143,7 +143,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.view &&
+                resource.view !== undefined && resource.view !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.view}
                     name='View'
@@ -153,7 +153,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -163,7 +163,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -173,7 +173,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.createdDateTime &&
+                resource.createdDateTime !== undefined && resource.createdDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.createdDateTime}
                     name='Created Date Time'
@@ -183,7 +183,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.createdPeriod &&
+                resource.createdPeriod !== undefined && resource.createdPeriod !== null &&
                 <Partials.Period
                     period={resource.createdPeriod}
                     name='Created Period'
@@ -193,7 +193,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.issued &&
+                resource.issued !== undefined && resource.issued !== null &&
                 <Partials.Instant
                     instant={resource.issued}
                     name='Issued'
@@ -203,7 +203,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.operator &&
+                resource.operator !== undefined && resource.operator !== null &&
                 <Partials.Reference
                     reference={resource.operator}
                     name='Operator'
@@ -213,7 +213,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -223,7 +223,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.bodySite &&
+                resource.bodySite !== undefined && resource.bodySite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodySite}
                     name='Body Site'
@@ -233,7 +233,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.deviceName &&
+                resource.deviceName !== undefined && resource.deviceName !== null &&
                 <Partials.String
                     string={resource.deviceName}
                     name='Device Name'
@@ -243,7 +243,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.device &&
+                resource.device !== undefined && resource.device !== null &&
                 <Partials.Reference
                     reference={resource.device}
                     name='Device'
@@ -253,7 +253,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.height &&
+                resource.height !== undefined && resource.height !== null &&
                 <Partials.Int
                     int={resource.height}
                     name='Height'
@@ -263,7 +263,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.width &&
+                resource.width !== undefined && resource.width !== null &&
                 <Partials.Int
                     int={resource.width}
                     name='Width'
@@ -273,7 +273,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.frames &&
+                resource.frames !== undefined && resource.frames !== null &&
                 <Partials.Int
                     int={resource.frames}
                     name='Frames'
@@ -283,7 +283,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.duration &&
+                resource.duration !== undefined && resource.duration !== null &&
                 <Partials.Decimal
                     decimal={resource.duration}
                     name='Duration'
@@ -293,7 +293,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.content &&
+                resource.content !== undefined && resource.content !== null &&
                 <Partials.Attachment
                     attachment={resource.content}
                     name='Content'
@@ -303,7 +303,7 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

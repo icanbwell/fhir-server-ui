@@ -28,7 +28,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -38,7 +38,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -48,7 +48,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -62,7 +62,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -72,7 +72,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -82,7 +82,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -92,7 +92,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -102,7 +102,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -112,7 +112,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -122,7 +122,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -132,7 +132,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -142,7 +142,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.subtitle &&
+                resource.subtitle !== undefined && resource.subtitle !== null &&
                 <Partials.String
                     string={resource.subtitle}
                     name='Subtitle'
@@ -152,7 +152,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -166,7 +166,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -176,7 +176,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.subjectCodeableConcept &&
+                resource.subjectCodeableConcept !== undefined && resource.subjectCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subjectCodeableConcept}
                     name='Subject Codeable Concept'
@@ -186,7 +186,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.subjectReference &&
+                resource.subjectReference !== undefined && resource.subjectReference !== null &&
                 <Partials.Reference
                     reference={resource.subjectReference}
                     name='Subject Reference'
@@ -196,7 +196,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.subjectCanonical &&
+                resource.subjectCanonical !== undefined && resource.subjectCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.subjectCanonical}
                     name='Subject Canonical'
@@ -206,7 +206,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -216,7 +216,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -226,7 +226,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -236,7 +236,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -246,7 +246,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -256,7 +256,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.usage &&
+                resource.usage !== undefined && resource.usage !== null &&
                 <Partials.String
                     string={resource.usage}
                     name='Usage'
@@ -266,7 +266,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -276,7 +276,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.approvalDate &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
                 <Partials.Date
                     date={resource.approvalDate}
                     name='Approval Date'
@@ -286,7 +286,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.lastReviewDate &&
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
                 <Partials.Date
                     date={resource.lastReviewDate}
                     name='Last Review Date'
@@ -296,7 +296,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -306,7 +306,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.topic &&
+                resource.topic !== undefined && resource.topic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.topic}
                     name='Topic'
@@ -316,7 +316,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.relatedArtifact &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
                 <Partials.RelatedArtifact
                     relatedArtifact={resource.relatedArtifact}
                     name='Related Artifact'
@@ -326,7 +326,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.library &&
+                resource.library !== undefined && resource.library !== null &&
                 <Partials.Canonical
                     canonical={resource.library}
                     name='Library'
@@ -336,7 +336,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.goal &&
+                resource.goal !== undefined && resource.goal !== null &&
                 <Partials.PlanDefinitionGoal
                     goal={resource.goal}
                     name='Goal'
@@ -347,7 +347,7 @@ const PlanDefinition = ({ resource }: { resource: TPlanDefinition }): React.Reac
                 />
             }
             {
-                resource.action &&
+                resource.action !== undefined && resource.action !== null &&
                 <Partials.PlanDefinitionAction
                     action={resource.action}
                     name='Action'

@@ -25,7 +25,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -99,7 +99,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -109,7 +109,7 @@ const Linkage = ({ resource }: { resource: TLinkage }): React.ReactElement => {
                 />
             }
             {
-                resource.item &&
+                resource.item !== undefined && resource.item !== null &&
                 <Partials.Reference
                     reference={resource.item}
                     name='Item'

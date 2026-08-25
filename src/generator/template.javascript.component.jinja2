@@ -57,7 +57,7 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
             }
         {% elif (get_component_name(property.cleaned_type) in available_partial_resources) %}
             {
-                resource.{{- property.javascript_clean_name }} &&
+                resource.{{- property.javascript_clean_name }} !== undefined && resource.{{- property.javascript_clean_name }} !== null &&
                 <Partials.{{ get_component_name(property.cleaned_type) }}
                     {{ property.type_snake_case }}={resource.{{- property.javascript_clean_name }}}
                     name='{{- generate_name(property.javascript_clean_name) -}}'
@@ -68,7 +68,7 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
             }
         {% elif get_component_name(property.cleaned_type) in partials_mapping %}
             {
-                resource.{{- property.javascript_clean_name }} &&
+                resource.{{- property.javascript_clean_name }} !== undefined && resource.{{- property.javascript_clean_name }} !== null &&
                 <Partials.{{ partials_mapping[get_component_name(property.cleaned_type)]['partial'] }}
                     {{ partials_mapping[get_component_name(property.cleaned_type)]['prop_name'] }}={resource.{{- property.javascript_clean_name }}}
                     name='{{- generate_name(property.javascript_clean_name) -}}'

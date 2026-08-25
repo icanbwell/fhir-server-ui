@@ -16,9 +16,9 @@ const CodeableReferenceField = ({ codeableReference, name, resourceType }: TCode
 
   return (
     <Box>
+      <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
       {values.map((value, index) => (
         <Box key={index}>
-          <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
           <CodeableConcept codeableConcept={value.concept} name="Concept" resourceType={resourceType} />
           <Reference reference={value.reference} name="Reference" resourceType={resourceType} />
         </Box>

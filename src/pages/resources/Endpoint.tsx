@@ -26,7 +26,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -104,7 +104,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.connectionType &&
+                resource.connectionType !== undefined && resource.connectionType !== null &&
                 <Partials.Coding
                     coding={resource.connectionType}
                     name='Connection Type'
@@ -114,7 +114,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -124,7 +124,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.managingOrganization &&
+                resource.managingOrganization !== undefined && resource.managingOrganization !== null &&
                 <Partials.Reference
                     reference={resource.managingOrganization}
                     name='Managing Organization'
@@ -134,7 +134,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.contact &&
+                resource.contact !== undefined && resource.contact !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.contact}
                     name='Contact'
@@ -144,7 +144,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -154,7 +154,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.payloadType &&
+                resource.payloadType !== undefined && resource.payloadType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.payloadType}
                     name='Payload Type'
@@ -168,7 +168,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 <Partials.Code code={resource.payloadMimeType} name='Payload Mime Type'/>
             }
             {
-                resource.address &&
+                resource.address !== undefined && resource.address !== null &&
                 <Partials.Url
                     url={resource.address}
                     name='Address'
@@ -178,7 +178,7 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
-                resource.header &&
+                resource.header !== undefined && resource.header !== null &&
                 <Partials.String
                     string={resource.header}
                     name='Header'

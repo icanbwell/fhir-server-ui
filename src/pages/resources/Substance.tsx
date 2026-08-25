@@ -24,7 +24,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -102,7 +102,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -112,7 +112,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -122,7 +122,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.String
                     string={resource.description}
                     name='Description'
@@ -132,7 +132,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.instance &&
+                resource.instance !== undefined && resource.instance !== null &&
                 <Partials.SubstanceInstance
                     instance={resource.instance}
                     name='Instance'
@@ -143,7 +143,7 @@ const Substance = ({ resource }: { resource: TSubstance }): React.ReactElement =
                 />
             }
             {
-                resource.ingredient &&
+                resource.ingredient !== undefined && resource.ingredient !== null &&
                 <Partials.SubstanceIngredient
                     ingredient={resource.ingredient}
                     name='Ingredient'

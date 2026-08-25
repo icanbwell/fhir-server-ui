@@ -25,7 +25,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -99,7 +99,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -109,7 +109,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -119,7 +119,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -129,7 +129,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.derivedFrom &&
+                resource.derivedFrom !== undefined && resource.derivedFrom !== null &&
                 <Partials.Canonical
                     canonical={resource.derivedFrom}
                     name='Derived From'
@@ -143,7 +143,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -153,7 +153,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -163,7 +163,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -173,7 +173,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -183,7 +183,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -193,7 +193,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -203,7 +203,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -213,7 +213,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.approvalDate &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
                 <Partials.Date
                     date={resource.approvalDate}
                     name='Approval Date'
@@ -223,7 +223,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.lastReviewDate &&
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
                 <Partials.Date
                     date={resource.lastReviewDate}
                     name='Last Review Date'
@@ -233,7 +233,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -243,7 +243,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.resourceTrigger &&
+                resource.resourceTrigger !== undefined && resource.resourceTrigger !== null &&
                 <Partials.SubscriptionTopicResourceTrigger
                     resourceTrigger={resource.resourceTrigger}
                     name='Resource Trigger'
@@ -254,7 +254,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.eventTrigger &&
+                resource.eventTrigger !== undefined && resource.eventTrigger !== null &&
                 <Partials.SubscriptionTopicEventTrigger
                     eventTrigger={resource.eventTrigger}
                     name='Event Trigger'
@@ -265,7 +265,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.canFilterBy &&
+                resource.canFilterBy !== undefined && resource.canFilterBy !== null &&
                 <Partials.SubscriptionTopicCanFilterBy
                     canFilterBy={resource.canFilterBy}
                     name='Can Filter By'
@@ -276,7 +276,7 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
-                resource.notificationShape &&
+                resource.notificationShape !== undefined && resource.notificationShape !== null &&
                 <Partials.SubscriptionTopicNotificationShape
                     notificationShape={resource.notificationShape}
                     name='Notification Shape'

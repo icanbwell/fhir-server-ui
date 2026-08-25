@@ -26,7 +26,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +100,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -110,7 +110,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -120,7 +120,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.Date
                     date={resource.created}
                     name='Created'
@@ -130,7 +130,7 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'

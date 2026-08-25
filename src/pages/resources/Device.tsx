@@ -26,7 +26,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +100,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.definition &&
+                resource.definition !== undefined && resource.definition !== null &&
                 <Partials.Reference
                     reference={resource.definition}
                     name='Definition'
@@ -110,7 +110,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.udiCarrier &&
+                resource.udiCarrier !== undefined && resource.udiCarrier !== null &&
                 <Partials.DeviceUdiCarrier
                     udiCarrier={resource.udiCarrier}
                     name='Udi Carrier'
@@ -125,7 +125,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -135,7 +135,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.distinctIdentifier &&
+                resource.distinctIdentifier !== undefined && resource.distinctIdentifier !== null &&
                 <Partials.String
                     string={resource.distinctIdentifier}
                     name='Distinct Identifier'
@@ -145,7 +145,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.String
                     string={resource.manufacturer}
                     name='Manufacturer'
@@ -155,7 +155,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.manufactureDate &&
+                resource.manufactureDate !== undefined && resource.manufactureDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.manufactureDate}
                     name='Manufacture Date'
@@ -165,7 +165,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.expirationDate &&
+                resource.expirationDate !== undefined && resource.expirationDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.expirationDate}
                     name='Expiration Date'
@@ -175,7 +175,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.lotNumber &&
+                resource.lotNumber !== undefined && resource.lotNumber !== null &&
                 <Partials.String
                     string={resource.lotNumber}
                     name='Lot Number'
@@ -185,7 +185,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.serialNumber &&
+                resource.serialNumber !== undefined && resource.serialNumber !== null &&
                 <Partials.String
                     string={resource.serialNumber}
                     name='Serial Number'
@@ -195,7 +195,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.deviceName &&
+                resource.deviceName !== undefined && resource.deviceName !== null &&
                 <Partials.DeviceDeviceName
                     deviceName={resource.deviceName}
                     name='Device Name'
@@ -206,7 +206,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.modelNumber &&
+                resource.modelNumber !== undefined && resource.modelNumber !== null &&
                 <Partials.String
                     string={resource.modelNumber}
                     name='Model Number'
@@ -216,7 +216,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.partNumber &&
+                resource.partNumber !== undefined && resource.partNumber !== null &&
                 <Partials.String
                     string={resource.partNumber}
                     name='Part Number'
@@ -226,7 +226,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -236,7 +236,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -246,7 +246,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.owner &&
+                resource.owner !== undefined && resource.owner !== null &&
                 <Partials.Reference
                     reference={resource.owner}
                     name='Owner'
@@ -256,7 +256,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.contact &&
+                resource.contact !== undefined && resource.contact !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.contact}
                     name='Contact'
@@ -266,7 +266,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -276,7 +276,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -286,7 +286,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -296,7 +296,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.safety &&
+                resource.safety !== undefined && resource.safety !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.safety}
                     name='Safety'
@@ -306,7 +306,7 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
-                resource.parent &&
+                resource.parent !== undefined && resource.parent !== null &&
                 <Partials.Reference
                     reference={resource.parent}
                     name='Parent'

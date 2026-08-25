@@ -25,7 +25,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +103,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.manufacturedDoseForm &&
+                resource.manufacturedDoseForm !== undefined && resource.manufacturedDoseForm !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.manufacturedDoseForm}
                     name='Manufactured Dose Form'
@@ -113,7 +113,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.unitOfPresentation &&
+                resource.unitOfPresentation !== undefined && resource.unitOfPresentation !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.unitOfPresentation}
                     name='Unit Of Presentation'
@@ -123,7 +123,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.Reference
                     reference={resource.manufacturer}
                     name='Manufacturer'
@@ -133,7 +133,7 @@ const ManufacturedItemDefinition = ({ resource }: { resource: TManufacturedItemD
                 />
             }
             {
-                resource.ingredient &&
+                resource.ingredient !== undefined && resource.ingredient !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.ingredient}
                     name='Ingredient'

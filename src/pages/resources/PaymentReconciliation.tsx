@@ -25,7 +25,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +103,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -113,7 +113,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -123,7 +123,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.paymentIssuer &&
+                resource.paymentIssuer !== undefined && resource.paymentIssuer !== null &&
                 <Partials.Reference
                     reference={resource.paymentIssuer}
                     name='Payment Issuer'
@@ -133,7 +133,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.request &&
+                resource.request !== undefined && resource.request !== null &&
                 <Partials.Reference
                     reference={resource.request}
                     name='Request'
@@ -143,7 +143,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.requestor &&
+                resource.requestor !== undefined && resource.requestor !== null &&
                 <Partials.Reference
                     reference={resource.requestor}
                     name='Requestor'
@@ -157,7 +157,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 <Partials.Code code={resource.outcome} name='Outcome'/>
             }
             {
-                resource.disposition &&
+                resource.disposition !== undefined && resource.disposition !== null &&
                 <Partials.String
                     string={resource.disposition}
                     name='Disposition'
@@ -167,7 +167,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.paymentDate &&
+                resource.paymentDate !== undefined && resource.paymentDate !== null &&
                 <Partials.Date
                     date={resource.paymentDate}
                     name='Payment Date'
@@ -177,7 +177,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.paymentAmount &&
+                resource.paymentAmount !== undefined && resource.paymentAmount !== null &&
                 <Partials.Money
                     money={resource.paymentAmount}
                     name='Payment Amount'
@@ -187,7 +187,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.paymentIdentifier &&
+                resource.paymentIdentifier !== undefined && resource.paymentIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.paymentIdentifier}
                     name='Payment Identifier'
@@ -197,7 +197,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.detail &&
+                resource.detail !== undefined && resource.detail !== null &&
                 <Partials.PaymentReconciliationDetail
                     detail={resource.detail}
                     name='Detail'
@@ -208,7 +208,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.formCode &&
+                resource.formCode !== undefined && resource.formCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.formCode}
                     name='Form Code'
@@ -218,7 +218,7 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 />
             }
             {
-                resource.processNote &&
+                resource.processNote !== undefined && resource.processNote !== null &&
                 <Partials.PaymentReconciliationProcessNote
                     processNote={resource.processNote}
                     name='Process Note'

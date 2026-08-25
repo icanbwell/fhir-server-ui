@@ -25,7 +25,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -99,7 +99,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -109,7 +109,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -119,7 +119,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -137,7 +137,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 <Partials.Code code={resource.kind} name='Kind'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -147,7 +147,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -157,7 +157,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -167,7 +167,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -177,7 +177,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -187,7 +187,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -197,7 +197,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.affectsState &&
+                resource.affectsState !== undefined && resource.affectsState !== null &&
                 <Partials.Boolean
                     boolean={resource.affectsState}
                     name='Affects State'
@@ -211,7 +211,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 <Partials.Code code={resource.code} name='Code'/>
             }
             {
-                resource.comment &&
+                resource.comment !== undefined && resource.comment !== null &&
                 <Partials.Markdown
                     markdown={resource.comment}
                     name='Comment'
@@ -221,7 +221,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.base &&
+                resource.base !== undefined && resource.base !== null &&
                 <Partials.Canonical
                     canonical={resource.base}
                     name='Base'
@@ -235,7 +235,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 <Partials.Code code={resource.resource} name='Resource'/>
             }
             {
-                resource.system &&
+                resource.system !== undefined && resource.system !== null &&
                 <Partials.Boolean
                     boolean={resource.system}
                     name='System'
@@ -245,7 +245,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.Boolean
                     boolean={resource.type}
                     name='Type'
@@ -255,7 +255,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.instance &&
+                resource.instance !== undefined && resource.instance !== null &&
                 <Partials.Boolean
                     boolean={resource.instance}
                     name='Instance'
@@ -265,7 +265,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.inputProfile &&
+                resource.inputProfile !== undefined && resource.inputProfile !== null &&
                 <Partials.Canonical
                     canonical={resource.inputProfile}
                     name='Input Profile'
@@ -275,7 +275,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.outputProfile &&
+                resource.outputProfile !== undefined && resource.outputProfile !== null &&
                 <Partials.Canonical
                     canonical={resource.outputProfile}
                     name='Output Profile'
@@ -285,7 +285,7 @@ const OperationDefinition = ({ resource }: { resource: TOperationDefinition }): 
                 />
             }
             {
-                resource.parameter &&
+                resource.parameter !== undefined && resource.parameter !== null &&
                 <Partials.OperationDefinitionParameter
                     parameter={resource.parameter}
                     name='Parameter'

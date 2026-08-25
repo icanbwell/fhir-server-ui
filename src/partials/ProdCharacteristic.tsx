@@ -15,9 +15,9 @@ const ProdCharacteristicField = ({ prodCharacteristic, name, resourceType }: TPr
 
   return (
     <Box>
+      <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
       {values.map((value, index) => (
         <Box key={index}>
-          <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
           <Quantity quantity={value.height} name="Height" resourceType={resourceType} />
           <Quantity quantity={value.width} name="Width" resourceType={resourceType} />
           <Quantity quantity={value.depth} name="Depth" resourceType={resourceType} />

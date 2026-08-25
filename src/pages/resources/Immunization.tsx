@@ -25,7 +25,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +103,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -113,7 +113,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.vaccineCode &&
+                resource.vaccineCode !== undefined && resource.vaccineCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.vaccineCode}
                     name='Vaccine Code'
@@ -123,7 +123,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -133,7 +133,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -143,7 +143,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -153,7 +153,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.occurrenceString &&
+                resource.occurrenceString !== undefined && resource.occurrenceString !== null &&
                 <Partials.String
                     string={resource.occurrenceString}
                     name='Occurrence String'
@@ -163,7 +163,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.recorded &&
+                resource.recorded !== undefined && resource.recorded !== null &&
                 <Partials.DateTime
                     dateTime={resource.recorded}
                     name='Recorded'
@@ -173,7 +173,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.primarySource &&
+                resource.primarySource !== undefined && resource.primarySource !== null &&
                 <Partials.Boolean
                     boolean={resource.primarySource}
                     name='Primary Source'
@@ -183,7 +183,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.reportOrigin &&
+                resource.reportOrigin !== undefined && resource.reportOrigin !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reportOrigin}
                     name='Report Origin'
@@ -193,7 +193,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -203,7 +203,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.Reference
                     reference={resource.manufacturer}
                     name='Manufacturer'
@@ -213,7 +213,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.lotNumber &&
+                resource.lotNumber !== undefined && resource.lotNumber !== null &&
                 <Partials.String
                     string={resource.lotNumber}
                     name='Lot Number'
@@ -223,7 +223,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.expirationDate &&
+                resource.expirationDate !== undefined && resource.expirationDate !== null &&
                 <Partials.Date
                     date={resource.expirationDate}
                     name='Expiration Date'
@@ -233,7 +233,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.site &&
+                resource.site !== undefined && resource.site !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.site}
                     name='Site'
@@ -243,7 +243,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.route &&
+                resource.route !== undefined && resource.route !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.route}
                     name='Route'
@@ -253,7 +253,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.doseQuantity &&
+                resource.doseQuantity !== undefined && resource.doseQuantity !== null &&
                 <Partials.Quantity
                     quantity={resource.doseQuantity}
                     name='Dose Quantity'
@@ -263,7 +263,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -274,7 +274,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -284,7 +284,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -294,7 +294,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -304,7 +304,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.isSubpotent &&
+                resource.isSubpotent !== undefined && resource.isSubpotent !== null &&
                 <Partials.Boolean
                     boolean={resource.isSubpotent}
                     name='Is Subpotent'
@@ -314,7 +314,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.subpotentReason &&
+                resource.subpotentReason !== undefined && resource.subpotentReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subpotentReason}
                     name='Subpotent Reason'
@@ -324,7 +324,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.programEligibility &&
+                resource.programEligibility !== undefined && resource.programEligibility !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.programEligibility}
                     name='Program Eligibility'
@@ -334,7 +334,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.fundingSource &&
+                resource.fundingSource !== undefined && resource.fundingSource !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.fundingSource}
                     name='Funding Source'
@@ -344,7 +344,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.reaction &&
+                resource.reaction !== undefined && resource.reaction !== null &&
                 <Partials.ImmunizationReaction
                     reaction={resource.reaction}
                     name='Reaction'
@@ -355,7 +355,7 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
-                resource.protocolApplied &&
+                resource.protocolApplied !== undefined && resource.protocolApplied !== null &&
                 <Partials.ImmunizationProtocolApplied
                     protocolApplied={resource.protocolApplied}
                     name='Protocol Applied'

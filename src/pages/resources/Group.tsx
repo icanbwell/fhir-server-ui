@@ -27,7 +27,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -37,7 +37,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -47,7 +47,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -61,7 +61,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -71,7 +71,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -81,7 +81,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -91,7 +91,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -101,7 +101,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -115,7 +115,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
-                resource.actual &&
+                resource.actual !== undefined && resource.actual !== null &&
                 <Partials.Boolean
                     boolean={resource.actual}
                     name='Actual'
@@ -125,7 +125,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -135,7 +135,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -145,7 +145,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.quantity &&
+                resource.quantity !== undefined && resource.quantity !== null &&
                 <Partials.UnsignedInt
                     unsignedInt={resource.quantity}
                     name='Quantity'
@@ -155,7 +155,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.managingEntity &&
+                resource.managingEntity !== undefined && resource.managingEntity !== null &&
                 <Partials.Reference
                     reference={resource.managingEntity}
                     name='Managing Entity'
@@ -165,7 +165,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.characteristic &&
+                resource.characteristic !== undefined && resource.characteristic !== null &&
                 <Partials.GroupCharacteristic
                     characteristic={resource.characteristic}
                     name='Characteristic'
@@ -176,7 +176,7 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 />
             }
             {
-                resource.member &&
+                resource.member !== undefined && resource.member !== null &&
                 <Partials.Reference
                     reference={resource.member}
                     name='Member'

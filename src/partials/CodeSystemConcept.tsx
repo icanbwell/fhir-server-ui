@@ -11,7 +11,11 @@ const CodeSystemConcept = ({ concept, name }: TCodeSystemConceptProps) => {
   if (!concept) {
     return null;
   }
-  const values = Array.isArray(concept) ? concept : [concept];
+  const allValues = Array.isArray(concept) ? concept : [concept];
+  // Local/custom terminologies can inline hundreds to tens of thousands of concepts - cap the
+  // render the same way ValueSetExpansion.tsx caps its `contains` list, so a large CodeSystem
+  // doesn't make the resource detail page slow or unresponsive.
+  const values = allValues.slice(0, 20);
 
   return (
     <Box>
@@ -27,6 +31,9 @@ const CodeSystemConcept = ({ concept, name }: TCodeSystemConceptProps) => {
           )}
         </Box>
       ))}
+      {allValues.length > 20 && (
+        <Typography component="div">…and {allValues.length - 20} more</Typography>
+      )}
     </Box>
   );
 };

@@ -28,7 +28,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -38,7 +38,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -48,7 +48,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -62,7 +62,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -72,7 +72,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -82,7 +82,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -92,7 +92,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -102,7 +102,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.definitionUri &&
+                resource.definitionUri !== undefined && resource.definitionUri !== null &&
                 <Partials.Uri
                     uri={resource.definitionUri}
                     name='Definition Uri'
@@ -112,7 +112,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.definitionCanonical &&
+                resource.definitionCanonical !== undefined && resource.definitionCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.definitionCanonical}
                     name='Definition Canonical'
@@ -126,7 +126,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -136,7 +136,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -146,7 +146,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -156,7 +156,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.context &&
+                resource.context !== undefined && resource.context !== null &&
                 <Partials.Reference
                     reference={resource.context}
                     name='Context'
@@ -166,7 +166,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -176,7 +176,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.occurrencePeriod &&
+                resource.occurrencePeriod !== undefined && resource.occurrencePeriod !== null &&
                 <Partials.Period
                     period={resource.occurrencePeriod}
                     name='Occurrence Period'
@@ -186,7 +186,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.occurrenceTiming &&
+                resource.occurrenceTiming !== undefined && resource.occurrenceTiming !== null &&
                 <Partials.Timing
                     timing={resource.occurrenceTiming}
                     name='Occurrence Timing'
@@ -196,7 +196,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -207,7 +207,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.performingOrganization &&
+                resource.performingOrganization !== undefined && resource.performingOrganization !== null &&
                 <Partials.Reference
                     reference={resource.performingOrganization}
                     name='Performing Organization'
@@ -217,7 +217,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.requestingOrganization &&
+                resource.requestingOrganization !== undefined && resource.requestingOrganization !== null &&
                 <Partials.Reference
                     reference={resource.requestingOrganization}
                     name='Requesting Organization'
@@ -227,7 +227,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.costCenter &&
+                resource.costCenter !== undefined && resource.costCenter !== null &&
                 <Partials.Reference
                     reference={resource.costCenter}
                     name='Cost Center'
@@ -237,7 +237,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.quantity &&
+                resource.quantity !== undefined && resource.quantity !== null &&
                 <Partials.Quantity
                     quantity={resource.quantity}
                     name='Quantity'
@@ -247,7 +247,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.bodysite &&
+                resource.bodysite !== undefined && resource.bodysite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodysite}
                     name='Bodysite'
@@ -257,7 +257,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.factorOverride &&
+                resource.factorOverride !== undefined && resource.factorOverride !== null &&
                 <Partials.Decimal
                     decimal={resource.factorOverride}
                     name='Factor Override'
@@ -267,7 +267,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.priceOverride &&
+                resource.priceOverride !== undefined && resource.priceOverride !== null &&
                 <Partials.Money
                     money={resource.priceOverride}
                     name='Price Override'
@@ -277,7 +277,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.overrideReason &&
+                resource.overrideReason !== undefined && resource.overrideReason !== null &&
                 <Partials.String
                     string={resource.overrideReason}
                     name='Override Reason'
@@ -287,7 +287,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.enterer &&
+                resource.enterer !== undefined && resource.enterer !== null &&
                 <Partials.Reference
                     reference={resource.enterer}
                     name='Enterer'
@@ -297,7 +297,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.enteredDate &&
+                resource.enteredDate !== undefined && resource.enteredDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.enteredDate}
                     name='Entered Date'
@@ -307,7 +307,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.reason &&
+                resource.reason !== undefined && resource.reason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reason}
                     name='Reason'
@@ -317,7 +317,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.service &&
+                resource.service !== undefined && resource.service !== null &&
                 <Partials.Reference
                     reference={resource.service}
                     name='Service'
@@ -327,7 +327,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.productReference &&
+                resource.productReference !== undefined && resource.productReference !== null &&
                 <Partials.Reference
                     reference={resource.productReference}
                     name='Product Reference'
@@ -337,7 +337,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.productCodeableConcept &&
+                resource.productCodeableConcept !== undefined && resource.productCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.productCodeableConcept}
                     name='Product Codeable Concept'
@@ -347,7 +347,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.account &&
+                resource.account !== undefined && resource.account !== null &&
                 <Partials.Reference
                     reference={resource.account}
                     name='Account'
@@ -357,7 +357,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -367,7 +367,7 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 />
             }
             {
-                resource.supportingInformation &&
+                resource.supportingInformation !== undefined && resource.supportingInformation !== null &&
                 <Partials.Reference
                     reference={resource.supportingInformation}
                     name='Supporting Information'

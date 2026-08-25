@@ -24,7 +24,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -98,7 +98,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -108,7 +108,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -118,7 +118,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.packageFor &&
+                resource.packageFor !== undefined && resource.packageFor !== null &&
                 <Partials.Reference
                     reference={resource.packageFor}
                     name='Package For'
@@ -128,7 +128,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.status &&
+                resource.status !== undefined && resource.status !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.status}
                     name='Status'
@@ -138,7 +138,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.statusDate &&
+                resource.statusDate !== undefined && resource.statusDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.statusDate}
                     name='Status Date'
@@ -148,7 +148,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.containedItemQuantity &&
+                resource.containedItemQuantity !== undefined && resource.containedItemQuantity !== null &&
                 <Partials.Quantity
                     quantity={resource.containedItemQuantity}
                     name='Contained Item Quantity'
@@ -158,7 +158,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -168,7 +168,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.marketingStatus &&
+                resource.marketingStatus !== undefined && resource.marketingStatus !== null &&
                 <Partials.MarketingStatus
                     marketingStatus={resource.marketingStatus}
                     name='Marketing Status'
@@ -178,7 +178,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.characteristic &&
+                resource.characteristic !== undefined && resource.characteristic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.characteristic}
                     name='Characteristic'
@@ -188,7 +188,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.copackagedIndicator &&
+                resource.copackagedIndicator !== undefined && resource.copackagedIndicator !== null &&
                 <Partials.Boolean
                     boolean={resource.copackagedIndicator}
                     name='Copackaged Indicator'
@@ -198,7 +198,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.Reference
                     reference={resource.manufacturer}
                     name='Manufacturer'
@@ -208,7 +208,7 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
-                resource.package &&
+                resource.package !== undefined && resource.package !== null &&
                 <Partials.PackagedProductDefinitionPackage
                     package={resource.package}
                     name='Package'

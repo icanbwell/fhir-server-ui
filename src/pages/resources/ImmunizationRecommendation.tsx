@@ -25,7 +25,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -109,7 +109,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -119,7 +119,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.authority &&
+                resource.authority !== undefined && resource.authority !== null &&
                 <Partials.Reference
                     reference={resource.authority}
                     name='Authority'
@@ -129,7 +129,7 @@ const ImmunizationRecommendation = ({ resource }: { resource: TImmunizationRecom
                 />
             }
             {
-                resource.recommendation &&
+                resource.recommendation !== undefined && resource.recommendation !== null &&
                 <Partials.ImmunizationRecommendationRecommendation
                     recommendation={resource.recommendation}
                     name='Recommendation'

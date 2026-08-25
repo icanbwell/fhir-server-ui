@@ -24,7 +24,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -98,7 +98,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.typeCollected &&
+                resource.typeCollected !== undefined && resource.typeCollected !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.typeCollected}
                     name='Type Collected'
@@ -108,7 +108,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.patientPreparation &&
+                resource.patientPreparation !== undefined && resource.patientPreparation !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.patientPreparation}
                     name='Patient Preparation'
@@ -118,7 +118,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.timeAspect &&
+                resource.timeAspect !== undefined && resource.timeAspect !== null &&
                 <Partials.String
                     string={resource.timeAspect}
                     name='Time Aspect'
@@ -128,7 +128,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.collection &&
+                resource.collection !== undefined && resource.collection !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.collection}
                     name='Collection'
@@ -138,7 +138,7 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 />
             }
             {
-                resource.typeTested &&
+                resource.typeTested !== undefined && resource.typeTested !== null &&
                 <Partials.SpecimenDefinitionTypeTested
                     typeTested={resource.typeTested}
                     name='Type Tested'

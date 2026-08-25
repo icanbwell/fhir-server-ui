@@ -25,7 +25,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +103,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -113,7 +113,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.study &&
+                resource.study !== undefined && resource.study !== null &&
                 <Partials.Reference
                     reference={resource.study}
                     name='Study'
@@ -123,7 +123,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.individual &&
+                resource.individual !== undefined && resource.individual !== null &&
                 <Partials.Reference
                     reference={resource.individual}
                     name='Individual'
@@ -133,7 +133,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.assignedArm &&
+                resource.assignedArm !== undefined && resource.assignedArm !== null &&
                 <Partials.String
                     string={resource.assignedArm}
                     name='Assigned Arm'
@@ -143,7 +143,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.actualArm &&
+                resource.actualArm !== undefined && resource.actualArm !== null &&
                 <Partials.String
                     string={resource.actualArm}
                     name='Actual Arm'
@@ -153,7 +153,7 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 />
             }
             {
-                resource.consent &&
+                resource.consent !== undefined && resource.consent !== null &&
                 <Partials.Reference
                     reference={resource.consent}
                     name='Consent'

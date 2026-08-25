@@ -24,7 +24,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -106,7 +106,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 <Partials.Code code={resource.mode} name='Mode'/>
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -116,7 +116,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -126,7 +126,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -136,7 +136,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -146,7 +146,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -156,7 +156,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.source &&
+                resource.source !== undefined && resource.source !== null &&
                 <Partials.Reference
                     reference={resource.source}
                     name='Source'
@@ -166,7 +166,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.orderedBy &&
+                resource.orderedBy !== undefined && resource.orderedBy !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.orderedBy}
                     name='Ordered By'
@@ -176,7 +176,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -186,7 +186,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.entry &&
+                resource.entry !== undefined && resource.entry !== null &&
                 <Partials.Reference
                     reference={resource.entry}
                     name='Entry'
@@ -197,7 +197,7 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 />
             }
             {
-                resource.emptyReason &&
+                resource.emptyReason !== undefined && resource.emptyReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.emptyReason}
                     name='Empty Reason'

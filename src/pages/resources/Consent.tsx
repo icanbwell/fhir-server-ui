@@ -26,7 +26,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -104,7 +104,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.scope &&
+                resource.scope !== undefined && resource.scope !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.scope}
                     name='Scope'
@@ -114,7 +114,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -124,7 +124,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -134,7 +134,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.dateTime &&
+                resource.dateTime !== undefined && resource.dateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.dateTime}
                     name='Date Time'
@@ -144,7 +144,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -154,7 +154,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.organization &&
+                resource.organization !== undefined && resource.organization !== null &&
                 <Partials.Reference
                     reference={resource.organization}
                     name='Organization'
@@ -164,7 +164,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.sourceAttachment &&
+                resource.sourceAttachment !== undefined && resource.sourceAttachment !== null &&
                 <Partials.Attachment
                     attachment={resource.sourceAttachment}
                     name='Source Attachment'
@@ -174,7 +174,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.sourceReference &&
+                resource.sourceReference !== undefined && resource.sourceReference !== null &&
                 <Partials.Reference
                     reference={resource.sourceReference}
                     name='Source Reference'
@@ -184,7 +184,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.policy &&
+                resource.policy !== undefined && resource.policy !== null &&
                 <Partials.ConsentPolicy
                     policy={resource.policy}
                     name='Policy'
@@ -195,7 +195,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.policyRule &&
+                resource.policyRule !== undefined && resource.policyRule !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.policyRule}
                     name='Policy Rule'
@@ -205,7 +205,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.verification &&
+                resource.verification !== undefined && resource.verification !== null &&
                 <Partials.ConsentVerification
                     verification={resource.verification}
                     name='Verification'
@@ -216,7 +216,7 @@ const Consent = ({ resource }: { resource: TConsent }): React.ReactElement => {
                 />
             }
             {
-                resource.provision &&
+                resource.provision !== undefined && resource.provision !== null &&
                 <Partials.ConsentProvision
                     provision={resource.provision}
                     name='Provision'

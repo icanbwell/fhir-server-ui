@@ -26,7 +26,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -104,7 +104,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusHistory &&
+                resource.statusHistory !== undefined && resource.statusHistory !== null &&
                 <Partials.EpisodeOfCareStatusHistory
                     statusHistory={resource.statusHistory}
                     name='Status History'
@@ -115,7 +115,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -125,7 +125,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.diagnosis &&
+                resource.diagnosis !== undefined && resource.diagnosis !== null &&
                 <Partials.Reference
                     reference={resource.diagnosis}
                     name='Diagnosis'
@@ -136,7 +136,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -146,7 +146,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.managingOrganization &&
+                resource.managingOrganization !== undefined && resource.managingOrganization !== null &&
                 <Partials.Reference
                     reference={resource.managingOrganization}
                     name='Managing Organization'
@@ -156,7 +156,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -166,7 +166,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.referralRequest &&
+                resource.referralRequest !== undefined && resource.referralRequest !== null &&
                 <Partials.Reference
                     reference={resource.referralRequest}
                     name='Referral Request'
@@ -176,7 +176,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.careManager &&
+                resource.careManager !== undefined && resource.careManager !== null &&
                 <Partials.Reference
                     reference={resource.careManager}
                     name='Care Manager'
@@ -186,7 +186,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.team &&
+                resource.team !== undefined && resource.team !== null &&
                 <Partials.Reference
                     reference={resource.team}
                     name='Team'
@@ -196,7 +196,7 @@ const EpisodeOfCare = ({ resource }: { resource: TEpisodeOfCare }): React.ReactE
                 />
             }
             {
-                resource.account &&
+                resource.account !== undefined && resource.account !== null &&
                 <Partials.Reference
                     reference={resource.account}
                     name='Account'

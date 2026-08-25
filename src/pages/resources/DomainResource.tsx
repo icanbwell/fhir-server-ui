@@ -23,7 +23,7 @@ const DomainResource = ({ resource }: { resource: TDomainResource }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -33,7 +33,7 @@ const DomainResource = ({ resource }: { resource: TDomainResource }): React.Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -43,7 +43,7 @@ const DomainResource = ({ resource }: { resource: TDomainResource }): React.Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -57,7 +57,7 @@ const DomainResource = ({ resource }: { resource: TDomainResource }): React.Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -67,7 +67,7 @@ const DomainResource = ({ resource }: { resource: TDomainResource }): React.Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -77,7 +77,7 @@ const DomainResource = ({ resource }: { resource: TDomainResource }): React.Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'

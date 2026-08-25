@@ -26,7 +26,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -104,7 +104,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -114,7 +114,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.subType &&
+                resource.subType !== undefined && resource.subType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subType}
                     name='Sub Type'
@@ -128,7 +128,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 <Partials.Code code={resource.use} name='Use'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -138,7 +138,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.billablePeriod &&
+                resource.billablePeriod !== undefined && resource.billablePeriod !== null &&
                 <Partials.Period
                     period={resource.billablePeriod}
                     name='Billable Period'
@@ -148,7 +148,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -158,7 +158,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.enterer &&
+                resource.enterer !== undefined && resource.enterer !== null &&
                 <Partials.Reference
                     reference={resource.enterer}
                     name='Enterer'
@@ -168,7 +168,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.insurer &&
+                resource.insurer !== undefined && resource.insurer !== null &&
                 <Partials.Reference
                     reference={resource.insurer}
                     name='Insurer'
@@ -178,7 +178,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.provider &&
+                resource.provider !== undefined && resource.provider !== null &&
                 <Partials.Reference
                     reference={resource.provider}
                     name='Provider'
@@ -188,7 +188,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.priority &&
+                resource.priority !== undefined && resource.priority !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.priority}
                     name='Priority'
@@ -198,7 +198,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.fundsReserveRequested &&
+                resource.fundsReserveRequested !== undefined && resource.fundsReserveRequested !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.fundsReserveRequested}
                     name='Funds Reserve Requested'
@@ -208,7 +208,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.fundsReserve &&
+                resource.fundsReserve !== undefined && resource.fundsReserve !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.fundsReserve}
                     name='Funds Reserve'
@@ -218,7 +218,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.prescription &&
+                resource.prescription !== undefined && resource.prescription !== null &&
                 <Partials.Reference
                     reference={resource.prescription}
                     name='Prescription'
@@ -228,7 +228,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.originalPrescription &&
+                resource.originalPrescription !== undefined && resource.originalPrescription !== null &&
                 <Partials.Reference
                     reference={resource.originalPrescription}
                     name='Original Prescription'
@@ -238,7 +238,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.payee &&
+                resource.payee !== undefined && resource.payee !== null &&
                 <Partials.ExplanationOfBenefitPayee
                     payee={resource.payee}
                     name='Payee'
@@ -249,7 +249,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.referral &&
+                resource.referral !== undefined && resource.referral !== null &&
                 <Partials.Reference
                     reference={resource.referral}
                     name='Referral'
@@ -259,7 +259,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.facility &&
+                resource.facility !== undefined && resource.facility !== null &&
                 <Partials.Reference
                     reference={resource.facility}
                     name='Facility'
@@ -269,7 +269,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.claim &&
+                resource.claim !== undefined && resource.claim !== null &&
                 <Partials.Reference
                     reference={resource.claim}
                     name='Claim'
@@ -279,7 +279,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.claimResponse &&
+                resource.claimResponse !== undefined && resource.claimResponse !== null &&
                 <Partials.Reference
                     reference={resource.claimResponse}
                     name='Claim Response'
@@ -293,7 +293,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 <Partials.Code code={resource.outcome} name='Outcome'/>
             }
             {
-                resource.disposition &&
+                resource.disposition !== undefined && resource.disposition !== null &&
                 <Partials.String
                     string={resource.disposition}
                     name='Disposition'
@@ -303,7 +303,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.preAuthRef &&
+                resource.preAuthRef !== undefined && resource.preAuthRef !== null &&
                 <Partials.String
                     string={resource.preAuthRef}
                     name='Pre Auth Ref'
@@ -313,7 +313,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.preAuthRefPeriod &&
+                resource.preAuthRefPeriod !== undefined && resource.preAuthRefPeriod !== null &&
                 <Partials.Period
                     period={resource.preAuthRefPeriod}
                     name='Pre Auth Ref Period'
@@ -323,7 +323,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.careTeam &&
+                resource.careTeam !== undefined && resource.careTeam !== null &&
                 <Partials.Reference
                     reference={resource.careTeam}
                     name='Care Team'
@@ -334,7 +334,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.diagnosis &&
+                resource.diagnosis !== undefined && resource.diagnosis !== null &&
                 <Partials.ExplanationOfBenefitDiagnosis
                     diagnosis={resource.diagnosis}
                     name='Diagnosis'
@@ -345,7 +345,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.precedence &&
+                resource.precedence !== undefined && resource.precedence !== null &&
                 <Partials.Int
                     int={resource.precedence}
                     name='Precedence'
@@ -355,7 +355,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -366,7 +366,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.item &&
+                resource.item !== undefined && resource.item !== null &&
                 <Partials.ExplanationOfBenefitItem
                     item={resource.item}
                     name='Item'
@@ -377,7 +377,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.adjudication &&
+                resource.adjudication !== undefined && resource.adjudication !== null &&
                 <Partials.ExplanationOfBenefitAdjudication
                     adjudication={resource.adjudication}
                     name='Adjudication'
@@ -388,7 +388,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.total &&
+                resource.total !== undefined && resource.total !== null &&
                 <Partials.ExplanationOfBenefitTotal
                     total={resource.total}
                     name='Total'
@@ -399,7 +399,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.payment &&
+                resource.payment !== undefined && resource.payment !== null &&
                 <Partials.ExplanationOfBenefitPayment
                     payment={resource.payment}
                     name='Payment'
@@ -410,7 +410,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.formCode &&
+                resource.formCode !== undefined && resource.formCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.formCode}
                     name='Form Code'
@@ -420,7 +420,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.form &&
+                resource.form !== undefined && resource.form !== null &&
                 <Partials.Attachment
                     attachment={resource.form}
                     name='Form'
@@ -430,7 +430,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.processNote &&
+                resource.processNote !== undefined && resource.processNote !== null &&
                 <Partials.ExplanationOfBenefitProcessNote
                     processNote={resource.processNote}
                     name='Process Note'
@@ -441,7 +441,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.benefitPeriod &&
+                resource.benefitPeriod !== undefined && resource.benefitPeriod !== null &&
                 <Partials.Period
                     period={resource.benefitPeriod}
                     name='Benefit Period'
@@ -451,7 +451,7 @@ const ExplanationOfBenefit = ({ resource }: { resource: TExplanationOfBenefit })
                 />
             }
             {
-                resource.benefitBalance &&
+                resource.benefitBalance !== undefined && resource.benefitBalance !== null &&
                 <Partials.ExplanationOfBenefitBenefitBalance
                     benefitBalance={resource.benefitBalance}
                     name='Benefit Balance'

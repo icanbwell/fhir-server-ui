@@ -25,7 +25,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -99,7 +99,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -109,7 +109,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -119,7 +119,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -129,7 +129,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -139,7 +139,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.shortTitle &&
+                resource.shortTitle !== undefined && resource.shortTitle !== null &&
                 <Partials.String
                     string={resource.shortTitle}
                     name='Short Title'
@@ -149,7 +149,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.subtitle &&
+                resource.subtitle !== undefined && resource.subtitle !== null &&
                 <Partials.String
                     string={resource.subtitle}
                     name='Subtitle'
@@ -163,7 +163,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -173,7 +173,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -183,7 +183,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -193,7 +193,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -203,7 +203,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.relatedArtifact &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
                 <Partials.RelatedArtifact
                     relatedArtifact={resource.relatedArtifact}
                     name='Related Artifact'
@@ -213,7 +213,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 />
             }
             {
-                resource.actual &&
+                resource.actual !== undefined && resource.actual !== null &&
                 <Partials.Boolean
                     boolean={resource.actual}
                     name='Actual'
@@ -227,7 +227,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 <Partials.Code code={resource.characteristicCombination} name='Characteristic Combination'/>
             }
             {
-                resource.characteristic &&
+                resource.characteristic !== undefined && resource.characteristic !== null &&
                 <Partials.EvidenceVariableCharacteristic
                     characteristic={resource.characteristic}
                     name='Characteristic'
@@ -242,7 +242,7 @@ const EvidenceVariable = ({ resource }: { resource: TEvidenceVariable }): React.
                 <Partials.Code code={resource.handling} name='Handling'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.EvidenceVariableCategory
                     category={resource.category}
                     name='Category'

@@ -24,7 +24,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -98,7 +98,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -108,7 +108,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.orderable &&
+                resource.orderable !== undefined && resource.orderable !== null &&
                 <Partials.Boolean
                     boolean={resource.orderable}
                     name='Orderable'
@@ -118,7 +118,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.referencedItem &&
+                resource.referencedItem !== undefined && resource.referencedItem !== null &&
                 <Partials.Reference
                     reference={resource.referencedItem}
                     name='Referenced Item'
@@ -128,7 +128,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.additionalIdentifier &&
+                resource.additionalIdentifier !== undefined && resource.additionalIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.additionalIdentifier}
                     name='Additional Identifier'
@@ -138,7 +138,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.classification &&
+                resource.classification !== undefined && resource.classification !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.classification}
                     name='Classification'
@@ -152,7 +152,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.validityPeriod &&
+                resource.validityPeriod !== undefined && resource.validityPeriod !== null &&
                 <Partials.Period
                     period={resource.validityPeriod}
                     name='Validity Period'
@@ -162,7 +162,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.validTo &&
+                resource.validTo !== undefined && resource.validTo !== null &&
                 <Partials.DateTime
                     dateTime={resource.validTo}
                     name='Valid To'
@@ -172,7 +172,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.lastUpdated &&
+                resource.lastUpdated !== undefined && resource.lastUpdated !== null &&
                 <Partials.DateTime
                     dateTime={resource.lastUpdated}
                     name='Last Updated'
@@ -182,7 +182,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.additionalCharacteristic &&
+                resource.additionalCharacteristic !== undefined && resource.additionalCharacteristic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.additionalCharacteristic}
                     name='Additional Characteristic'
@@ -192,7 +192,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.additionalClassification &&
+                resource.additionalClassification !== undefined && resource.additionalClassification !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.additionalClassification}
                     name='Additional Classification'
@@ -202,7 +202,7 @@ const CatalogEntry = ({ resource }: { resource: TCatalogEntry }): React.ReactEle
                 />
             }
             {
-                resource.relatedEntry &&
+                resource.relatedEntry !== undefined && resource.relatedEntry !== null &&
                 <Partials.Reference
                     reference={resource.relatedEntry}
                     name='Related Entry'

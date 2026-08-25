@@ -25,7 +25,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.appointment &&
+                resource.appointment !== undefined && resource.appointment !== null &&
                 <Partials.Reference
                     reference={resource.appointment}
                     name='Appointment'
@@ -109,7 +109,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.start &&
+                resource.start !== undefined && resource.start !== null &&
                 <Partials.Instant
                     instant={resource.start}
                     name='Start'
@@ -119,7 +119,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.end &&
+                resource.end !== undefined && resource.end !== null &&
                 <Partials.Instant
                     instant={resource.end}
                     name='End'
@@ -129,7 +129,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.participantType &&
+                resource.participantType !== undefined && resource.participantType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.participantType}
                     name='Participant Type'
@@ -139,7 +139,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 />
             }
             {
-                resource.actor &&
+                resource.actor !== undefined && resource.actor !== null &&
                 <Partials.Reference
                     reference={resource.actor}
                     name='Actor'
@@ -153,7 +153,7 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 <Partials.Code code={resource.participantStatus} name='Participant Status'/>
             }
             {
-                resource.comment &&
+                resource.comment !== undefined && resource.comment !== null &&
                 <Partials.String
                     string={resource.comment}
                     name='Comment'

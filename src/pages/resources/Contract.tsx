@@ -25,7 +25,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -109,7 +109,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -123,7 +123,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.legalState &&
+                resource.legalState !== undefined && resource.legalState !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.legalState}
                     name='Legal State'
@@ -133,7 +133,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Reference
                     reference={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -143,7 +143,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -153,7 +153,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.contentDerivative &&
+                resource.contentDerivative !== undefined && resource.contentDerivative !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.contentDerivative}
                     name='Content Derivative'
@@ -163,7 +163,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.issued &&
+                resource.issued !== undefined && resource.issued !== null &&
                 <Partials.DateTime
                     dateTime={resource.issued}
                     name='Issued'
@@ -173,7 +173,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.applies &&
+                resource.applies !== undefined && resource.applies !== null &&
                 <Partials.Period
                     period={resource.applies}
                     name='Applies'
@@ -183,7 +183,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.expirationType &&
+                resource.expirationType !== undefined && resource.expirationType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.expirationType}
                     name='Expiration Type'
@@ -193,7 +193,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -203,7 +203,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.authority &&
+                resource.authority !== undefined && resource.authority !== null &&
                 <Partials.Reference
                     reference={resource.authority}
                     name='Authority'
@@ -213,7 +213,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.domain &&
+                resource.domain !== undefined && resource.domain !== null &&
                 <Partials.Reference
                     reference={resource.domain}
                     name='Domain'
@@ -223,7 +223,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.site &&
+                resource.site !== undefined && resource.site !== null &&
                 <Partials.Reference
                     reference={resource.site}
                     name='Site'
@@ -233,7 +233,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -243,7 +243,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -253,7 +253,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.subtitle &&
+                resource.subtitle !== undefined && resource.subtitle !== null &&
                 <Partials.String
                     string={resource.subtitle}
                     name='Subtitle'
@@ -263,7 +263,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.alias &&
+                resource.alias !== undefined && resource.alias !== null &&
                 <Partials.String
                     string={resource.alias}
                     name='Alias'
@@ -273,7 +273,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -283,7 +283,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.scope &&
+                resource.scope !== undefined && resource.scope !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.scope}
                     name='Scope'
@@ -293,7 +293,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.topicCodeableConcept &&
+                resource.topicCodeableConcept !== undefined && resource.topicCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.topicCodeableConcept}
                     name='Topic Codeable Concept'
@@ -303,7 +303,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.topicReference &&
+                resource.topicReference !== undefined && resource.topicReference !== null &&
                 <Partials.Reference
                     reference={resource.topicReference}
                     name='Topic Reference'
@@ -313,7 +313,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -323,7 +323,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.subType &&
+                resource.subType !== undefined && resource.subType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subType}
                     name='Sub Type'
@@ -333,7 +333,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.term &&
+                resource.term !== undefined && resource.term !== null &&
                 <Partials.ContractTerm
                     term={resource.term}
                     name='Term'
@@ -344,7 +344,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.supportingInfo &&
+                resource.supportingInfo !== undefined && resource.supportingInfo !== null &&
                 <Partials.Reference
                     reference={resource.supportingInfo}
                     name='Supporting Info'
@@ -354,7 +354,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.relevantHistory &&
+                resource.relevantHistory !== undefined && resource.relevantHistory !== null &&
                 <Partials.Reference
                     reference={resource.relevantHistory}
                     name='Relevant History'
@@ -364,7 +364,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.signer &&
+                resource.signer !== undefined && resource.signer !== null &&
                 <Partials.Reference
                     reference={resource.signer}
                     name='Signer'
@@ -375,7 +375,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.legal &&
+                resource.legal !== undefined && resource.legal !== null &&
                 <Partials.ContractLegal
                     legal={resource.legal}
                     name='Legal'
@@ -386,7 +386,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.legallyBindingAttachment &&
+                resource.legallyBindingAttachment !== undefined && resource.legallyBindingAttachment !== null &&
                 <Partials.Attachment
                     attachment={resource.legallyBindingAttachment}
                     name='Legally Binding Attachment'
@@ -396,7 +396,7 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 />
             }
             {
-                resource.legallyBindingReference &&
+                resource.legallyBindingReference !== undefined && resource.legallyBindingReference !== null &&
                 <Partials.Reference
                     reference={resource.legallyBindingReference}
                     name='Legally Binding Reference'

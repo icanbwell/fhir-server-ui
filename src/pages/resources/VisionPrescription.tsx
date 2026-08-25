@@ -25,7 +25,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +103,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -113,7 +113,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -123,7 +123,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -133,7 +133,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.dateWritten &&
+                resource.dateWritten !== undefined && resource.dateWritten !== null &&
                 <Partials.DateTime
                     dateTime={resource.dateWritten}
                     name='Date Written'
@@ -143,7 +143,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.prescriber &&
+                resource.prescriber !== undefined && resource.prescriber !== null &&
                 <Partials.Reference
                     reference={resource.prescriber}
                     name='Prescriber'
@@ -153,7 +153,7 @@ const VisionPrescription = ({ resource }: { resource: TVisionPrescription }): Re
                 />
             }
             {
-                resource.lensSpecification &&
+                resource.lensSpecification !== undefined && resource.lensSpecification !== null &&
                 <Partials.VisionPrescriptionLensSpecification
                     lensSpecification={resource.lensSpecification}
                     name='Lens Specification'

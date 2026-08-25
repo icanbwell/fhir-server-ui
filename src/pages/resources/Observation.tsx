@@ -25,7 +25,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -109,7 +109,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -123,7 +123,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -133,7 +133,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -143,7 +143,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -153,7 +153,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.focus &&
+                resource.focus !== undefined && resource.focus !== null &&
                 <Partials.Reference
                     reference={resource.focus}
                     name='Focus'
@@ -163,7 +163,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -173,7 +173,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.effectiveDateTime &&
+                resource.effectiveDateTime !== undefined && resource.effectiveDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.effectiveDateTime}
                     name='Effective Date Time'
@@ -183,7 +183,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -193,7 +193,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.effectiveTiming &&
+                resource.effectiveTiming !== undefined && resource.effectiveTiming !== null &&
                 <Partials.Timing
                     timing={resource.effectiveTiming}
                     name='Effective Timing'
@@ -203,7 +203,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.effectiveInstant &&
+                resource.effectiveInstant !== undefined && resource.effectiveInstant !== null &&
                 <Partials.Instant
                     instant={resource.effectiveInstant}
                     name='Effective Instant'
@@ -213,7 +213,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.issued &&
+                resource.issued !== undefined && resource.issued !== null &&
                 <Partials.Instant
                     instant={resource.issued}
                     name='Issued'
@@ -223,7 +223,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -233,7 +233,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueQuantity &&
+                resource.valueQuantity !== undefined && resource.valueQuantity !== null &&
                 <Partials.Quantity
                     quantity={resource.valueQuantity}
                     name='Value Quantity'
@@ -243,7 +243,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueCodeableConcept &&
+                resource.valueCodeableConcept !== undefined && resource.valueCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.valueCodeableConcept}
                     name='Value Codeable Concept'
@@ -253,7 +253,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueString &&
+                resource.valueString !== undefined && resource.valueString !== null &&
                 <Partials.String
                     string={resource.valueString}
                     name='Value String'
@@ -263,7 +263,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueBoolean &&
+                resource.valueBoolean !== undefined && resource.valueBoolean !== null &&
                 <Partials.Boolean
                     boolean={resource.valueBoolean}
                     name='Value Boolean'
@@ -273,7 +273,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueInteger &&
+                resource.valueInteger !== undefined && resource.valueInteger !== null &&
                 <Partials.Int
                     int={resource.valueInteger}
                     name='Value Integer'
@@ -283,7 +283,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueRange &&
+                resource.valueRange !== undefined && resource.valueRange !== null &&
                 <Partials.Range
                     range={resource.valueRange}
                     name='Value Range'
@@ -293,7 +293,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueRatio &&
+                resource.valueRatio !== undefined && resource.valueRatio !== null &&
                 <Partials.Ratio
                     ratio={resource.valueRatio}
                     name='Value Ratio'
@@ -303,7 +303,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueSampledData &&
+                resource.valueSampledData !== undefined && resource.valueSampledData !== null &&
                 <Partials.SampledData
                     sampledData={resource.valueSampledData}
                     name='Value Sampled Data'
@@ -313,7 +313,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueTime &&
+                resource.valueTime !== undefined && resource.valueTime !== null &&
                 <Partials.Time
                     time={resource.valueTime}
                     name='Value Time'
@@ -323,7 +323,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valueDateTime &&
+                resource.valueDateTime !== undefined && resource.valueDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.valueDateTime}
                     name='Value Date Time'
@@ -333,7 +333,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.valuePeriod &&
+                resource.valuePeriod !== undefined && resource.valuePeriod !== null &&
                 <Partials.Period
                     period={resource.valuePeriod}
                     name='Value Period'
@@ -343,7 +343,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.dataAbsentReason &&
+                resource.dataAbsentReason !== undefined && resource.dataAbsentReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.dataAbsentReason}
                     name='Data Absent Reason'
@@ -353,7 +353,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.interpretation &&
+                resource.interpretation !== undefined && resource.interpretation !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.interpretation}
                     name='Interpretation'
@@ -363,7 +363,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -373,7 +373,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.bodySite &&
+                resource.bodySite !== undefined && resource.bodySite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodySite}
                     name='Body Site'
@@ -383,7 +383,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.method &&
+                resource.method !== undefined && resource.method !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.method}
                     name='Method'
@@ -393,7 +393,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.specimen &&
+                resource.specimen !== undefined && resource.specimen !== null &&
                 <Partials.Reference
                     reference={resource.specimen}
                     name='Specimen'
@@ -403,7 +403,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.device &&
+                resource.device !== undefined && resource.device !== null &&
                 <Partials.Reference
                     reference={resource.device}
                     name='Device'
@@ -413,7 +413,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.referenceRange &&
+                resource.referenceRange !== undefined && resource.referenceRange !== null &&
                 <Partials.ObservationReferenceRange
                     observationReferenceRange={resource.referenceRange}
                     name='Reference Range'
@@ -423,7 +423,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.hasMember &&
+                resource.hasMember !== undefined && resource.hasMember !== null &&
                 <Partials.Reference
                     reference={resource.hasMember}
                     name='Has Member'
@@ -433,7 +433,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.derivedFrom &&
+                resource.derivedFrom !== undefined && resource.derivedFrom !== null &&
                 <Partials.Reference
                     reference={resource.derivedFrom}
                     name='Derived From'
@@ -443,7 +443,7 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
-                resource.component &&
+                resource.component !== undefined && resource.component !== null &&
                 <Partials.ObservationComponent
                     component={resource.component}
                     name='Component'

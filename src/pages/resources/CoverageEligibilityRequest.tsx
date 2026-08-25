@@ -28,7 +28,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -38,7 +38,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -48,7 +48,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -62,7 +62,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -72,7 +72,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -82,7 +82,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -92,7 +92,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -106,7 +106,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.priority &&
+                resource.priority !== undefined && resource.priority !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.priority}
                     name='Priority'
@@ -120,7 +120,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 <Partials.Code code={resource.purpose} name='Purpose'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -130,7 +130,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.servicedDate &&
+                resource.servicedDate !== undefined && resource.servicedDate !== null &&
                 <Partials.Date
                     date={resource.servicedDate}
                     name='Serviced Date'
@@ -140,7 +140,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.servicedPeriod &&
+                resource.servicedPeriod !== undefined && resource.servicedPeriod !== null &&
                 <Partials.Period
                     period={resource.servicedPeriod}
                     name='Serviced Period'
@@ -150,7 +150,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -160,7 +160,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.enterer &&
+                resource.enterer !== undefined && resource.enterer !== null &&
                 <Partials.Reference
                     reference={resource.enterer}
                     name='Enterer'
@@ -170,7 +170,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.provider &&
+                resource.provider !== undefined && resource.provider !== null &&
                 <Partials.Reference
                     reference={resource.provider}
                     name='Provider'
@@ -180,7 +180,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.insurer &&
+                resource.insurer !== undefined && resource.insurer !== null &&
                 <Partials.Reference
                     reference={resource.insurer}
                     name='Insurer'
@@ -190,7 +190,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.facility &&
+                resource.facility !== undefined && resource.facility !== null &&
                 <Partials.Reference
                     reference={resource.facility}
                     name='Facility'
@@ -200,7 +200,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.supportingInfo &&
+                resource.supportingInfo !== undefined && resource.supportingInfo !== null &&
                 <Partials.Reference
                     reference={resource.supportingInfo}
                     name='Supporting Info'
@@ -211,7 +211,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -222,7 +222,7 @@ const CoverageEligibilityRequest = ({ resource }: { resource: TCoverageEligibili
                 />
             }
             {
-                resource.item &&
+                resource.item !== undefined && resource.item !== null &&
                 <Partials.CoverageEligibilityRequestItem
                     item={resource.item}
                     name='Item'

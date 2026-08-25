@@ -26,7 +26,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +100,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -110,7 +110,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -120,7 +120,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.questionnaire &&
+                resource.questionnaire !== undefined && resource.questionnaire !== null &&
                 <Partials.Canonical
                     canonical={resource.questionnaire}
                     name='Questionnaire'
@@ -134,7 +134,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -144,7 +144,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -154,7 +154,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.authored &&
+                resource.authored !== undefined && resource.authored !== null &&
                 <Partials.DateTime
                     dateTime={resource.authored}
                     name='Authored'
@@ -164,7 +164,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -174,7 +174,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.source &&
+                resource.source !== undefined && resource.source !== null &&
                 <Partials.Reference
                     reference={resource.source}
                     name='Source'
@@ -184,7 +184,7 @@ const QuestionnaireResponse = ({ resource }: { resource: TQuestionnaireResponse 
                 />
             }
             {
-                resource.item &&
+                resource.item !== undefined && resource.item !== null &&
                 <Partials.QuestionnaireResponseItem
                     questionnaireResponseItem={resource.item}
                     name='Item'

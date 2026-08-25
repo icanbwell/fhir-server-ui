@@ -26,7 +26,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +100,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -110,7 +110,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -120,7 +120,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.relationship &&
+                resource.relationship !== undefined && resource.relationship !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.relationship}
                     name='Relationship'
@@ -130,7 +130,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.HumanName
                     humanName={resource.name}
                     name='Name'
@@ -140,7 +140,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.telecom &&
+                resource.telecom !== undefined && resource.telecom !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.telecom}
                     name='Telecom'
@@ -154,7 +154,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 <Partials.Code code={resource.gender} name='Gender'/>
             }
             {
-                resource.birthDate &&
+                resource.birthDate !== undefined && resource.birthDate !== null &&
                 <Partials.Date
                     date={resource.birthDate}
                     name='Birth Date'
@@ -164,7 +164,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.address &&
+                resource.address !== undefined && resource.address !== null &&
                 <Partials.Address
                     address={resource.address}
                     name='Address'
@@ -174,7 +174,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.photo &&
+                resource.photo !== undefined && resource.photo !== null &&
                 <Partials.Attachment
                     attachment={resource.photo}
                     name='Photo'
@@ -184,7 +184,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -194,7 +194,7 @@ const RelatedPerson = ({ resource }: { resource: TRelatedPerson }): React.ReactE
                 />
             }
             {
-                resource.communication &&
+                resource.communication !== undefined && resource.communication !== null &&
                 <Partials.RelatedPersonCommunication
                     communication={resource.communication}
                     name='Communication'

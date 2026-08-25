@@ -25,7 +25,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -109,7 +109,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.unit &&
+                resource.unit !== undefined && resource.unit !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.unit}
                     name='Unit'
@@ -119,7 +119,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.source &&
+                resource.source !== undefined && resource.source !== null &&
                 <Partials.Reference
                     reference={resource.source}
                     name='Source'
@@ -129,7 +129,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.parent &&
+                resource.parent !== undefined && resource.parent !== null &&
                 <Partials.Reference
                     reference={resource.parent}
                     name='Parent'
@@ -151,7 +151,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 <Partials.Code code={resource.category} name='Category'/>
             }
             {
-                resource.measurementPeriod &&
+                resource.measurementPeriod !== undefined && resource.measurementPeriod !== null &&
                 <Partials.Timing
                     timing={resource.measurementPeriod}
                     name='Measurement Period'
@@ -161,7 +161,7 @@ const DeviceMetric = ({ resource }: { resource: TDeviceMetric }): React.ReactEle
                 />
             }
             {
-                resource.calibration &&
+                resource.calibration !== undefined && resource.calibration !== null &&
                 <Partials.DeviceMetricCalibration
                     calibration={resource.calibration}
                     name='Calibration'

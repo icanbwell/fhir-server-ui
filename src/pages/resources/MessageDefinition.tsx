@@ -26,7 +26,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -100,7 +100,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -110,7 +110,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -120,7 +120,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -130,7 +130,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -140,7 +140,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.replaces &&
+                resource.replaces !== undefined && resource.replaces !== null &&
                 <Partials.Canonical
                     canonical={resource.replaces}
                     name='Replaces'
@@ -154,7 +154,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -164,7 +164,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -174,7 +174,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -184,7 +184,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -194,7 +194,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -204,7 +204,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -214,7 +214,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -224,7 +224,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.base &&
+                resource.base !== undefined && resource.base !== null &&
                 <Partials.Canonical
                     canonical={resource.base}
                     name='Base'
@@ -234,7 +234,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.parent &&
+                resource.parent !== undefined && resource.parent !== null &&
                 <Partials.Canonical
                     canonical={resource.parent}
                     name='Parent'
@@ -244,7 +244,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.eventCoding &&
+                resource.eventCoding !== undefined && resource.eventCoding !== null &&
                 <Partials.Coding
                     coding={resource.eventCoding}
                     name='Event Coding'
@@ -254,7 +254,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 />
             }
             {
-                resource.eventUri &&
+                resource.eventUri !== undefined && resource.eventUri !== null &&
                 <Partials.Uri
                     uri={resource.eventUri}
                     name='Event Uri'
@@ -268,7 +268,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 <Partials.Code code={resource.category} name='Category'/>
             }
             {
-                resource.focus &&
+                resource.focus !== undefined && resource.focus !== null &&
                 <Partials.MessageDefinitionFocus
                     focus={resource.focus}
                     name='Focus'
@@ -283,7 +283,7 @@ const MessageDefinition = ({ resource }: { resource: TMessageDefinition }): Reac
                 <Partials.Code code={resource.responseRequired} name='Response Required'/>
             }
             {
-                resource.graph &&
+                resource.graph !== undefined && resource.graph !== null &&
                 <Partials.Canonical
                     canonical={resource.graph}
                     name='Graph'

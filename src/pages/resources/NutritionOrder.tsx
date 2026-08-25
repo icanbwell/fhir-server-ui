@@ -25,7 +25,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -109,7 +109,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -119,7 +119,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.instantiates &&
+                resource.instantiates !== undefined && resource.instantiates !== null &&
                 <Partials.Uri
                     uri={resource.instantiates}
                     name='Instantiates'
@@ -137,7 +137,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 <Partials.Code code={resource.intent} name='Intent'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -147,7 +147,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -157,7 +157,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.dateTime &&
+                resource.dateTime !== undefined && resource.dateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.dateTime}
                     name='Date Time'
@@ -167,7 +167,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.orderer &&
+                resource.orderer !== undefined && resource.orderer !== null &&
                 <Partials.Reference
                     reference={resource.orderer}
                     name='Orderer'
@@ -177,7 +177,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.allergyIntolerance &&
+                resource.allergyIntolerance !== undefined && resource.allergyIntolerance !== null &&
                 <Partials.Reference
                     reference={resource.allergyIntolerance}
                     name='Allergy Intolerance'
@@ -187,7 +187,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.foodPreferenceModifier &&
+                resource.foodPreferenceModifier !== undefined && resource.foodPreferenceModifier !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.foodPreferenceModifier}
                     name='Food Preference Modifier'
@@ -197,7 +197,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.excludeFoodModifier &&
+                resource.excludeFoodModifier !== undefined && resource.excludeFoodModifier !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.excludeFoodModifier}
                     name='Exclude Food Modifier'
@@ -207,7 +207,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.oralDiet &&
+                resource.oralDiet !== undefined && resource.oralDiet !== null &&
                 <Partials.NutritionOrderOralDiet
                     oralDiet={resource.oralDiet}
                     name='Oral Diet'
@@ -218,7 +218,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.supplement &&
+                resource.supplement !== undefined && resource.supplement !== null &&
                 <Partials.NutritionOrderSupplement
                     supplement={resource.supplement}
                     name='Supplement'
@@ -229,7 +229,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.enteralFormula &&
+                resource.enteralFormula !== undefined && resource.enteralFormula !== null &&
                 <Partials.NutritionOrderEnteralFormula
                     enteralFormula={resource.enteralFormula}
                     name='Enteral Formula'
@@ -240,7 +240,7 @@ const NutritionOrder = ({ resource }: { resource: TNutritionOrder }): React.Reac
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

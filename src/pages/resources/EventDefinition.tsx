@@ -25,7 +25,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -99,7 +99,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -109,7 +109,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -119,7 +119,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -129,7 +129,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -139,7 +139,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.subtitle &&
+                resource.subtitle !== undefined && resource.subtitle !== null &&
                 <Partials.String
                     string={resource.subtitle}
                     name='Subtitle'
@@ -153,7 +153,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -163,7 +163,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.subjectCodeableConcept &&
+                resource.subjectCodeableConcept !== undefined && resource.subjectCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subjectCodeableConcept}
                     name='Subject Codeable Concept'
@@ -173,7 +173,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.subjectReference &&
+                resource.subjectReference !== undefined && resource.subjectReference !== null &&
                 <Partials.Reference
                     reference={resource.subjectReference}
                     name='Subject Reference'
@@ -183,7 +183,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -193,7 +193,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -203,7 +203,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -213,7 +213,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -223,7 +223,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -233,7 +233,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.usage &&
+                resource.usage !== undefined && resource.usage !== null &&
                 <Partials.String
                     string={resource.usage}
                     name='Usage'
@@ -243,7 +243,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -253,7 +253,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.approvalDate &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
                 <Partials.Date
                     date={resource.approvalDate}
                     name='Approval Date'
@@ -263,7 +263,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.lastReviewDate &&
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
                 <Partials.Date
                     date={resource.lastReviewDate}
                     name='Last Review Date'
@@ -273,7 +273,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -283,7 +283,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.topic &&
+                resource.topic !== undefined && resource.topic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.topic}
                     name='Topic'
@@ -293,7 +293,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.relatedArtifact &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
                 <Partials.RelatedArtifact
                     relatedArtifact={resource.relatedArtifact}
                     name='Related Artifact'
@@ -303,7 +303,7 @@ const EventDefinition = ({ resource }: { resource: TEventDefinition }): React.Re
                 />
             }
             {
-                resource.trigger &&
+                resource.trigger !== undefined && resource.trigger !== null &&
                 <Partials.TriggerDefinition
                     triggerDefinition={resource.trigger}
                     name='Trigger'

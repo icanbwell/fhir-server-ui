@@ -28,7 +28,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 {resource.resourceType}/{uuid}{queryString}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -38,7 +38,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -48,7 +48,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -62,7 +62,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -72,7 +72,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -82,7 +82,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -92,7 +92,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.Coding
                     coding={resource.type}
                     name='Type'
@@ -102,7 +102,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.subtype &&
+                resource.subtype !== undefined && resource.subtype !== null &&
                 <Partials.Coding
                     coding={resource.subtype}
                     name='Subtype'
@@ -116,7 +116,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 <Partials.Code code={resource.action} name='Action'/>
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -126,7 +126,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.recorded &&
+                resource.recorded !== undefined && resource.recorded !== null &&
                 <Partials.Instant
                     instant={resource.recorded}
                     name='Recorded'
@@ -140,7 +140,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 <Partials.Code code={resource.outcome} name='Outcome'/>
             }
             {
-                resource.outcomeDesc &&
+                resource.outcomeDesc !== undefined && resource.outcomeDesc !== null &&
                 <Partials.String
                     string={resource.outcomeDesc}
                     name='Outcome Desc'
@@ -150,7 +150,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.purposeOfEvent &&
+                resource.purposeOfEvent !== undefined && resource.purposeOfEvent !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.purposeOfEvent}
                     name='Purpose Of Event'
@@ -160,7 +160,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.agent &&
+                resource.agent !== undefined && resource.agent !== null &&
                 <Partials.AuditEventAgent
                     agent={resource.agent}
                     name='Agent'
@@ -171,7 +171,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.source &&
+                resource.source !== undefined && resource.source !== null &&
                 <Partials.Reference
                     reference={resource.source}
                     name='Source'
@@ -182,7 +182,7 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 />
             }
             {
-                resource.entity &&
+                resource.entity !== undefined && resource.entity !== null &&
                 <Partials.AuditEventEntity
                     entity={resource.entity}
                     name='Entity'

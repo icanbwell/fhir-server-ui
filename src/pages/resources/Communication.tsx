@@ -26,7 +26,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +100,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -110,7 +110,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -120,7 +120,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -130,7 +130,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -140,7 +140,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.inResponseTo &&
+                resource.inResponseTo !== undefined && resource.inResponseTo !== null &&
                 <Partials.Reference
                     reference={resource.inResponseTo}
                     name='In Response To'
@@ -154,7 +154,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -164,7 +164,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -178,7 +178,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.medium &&
+                resource.medium !== undefined && resource.medium !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.medium}
                     name='Medium'
@@ -188,7 +188,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -198,7 +198,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.topic &&
+                resource.topic !== undefined && resource.topic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.topic}
                     name='Topic'
@@ -208,7 +208,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.about &&
+                resource.about !== undefined && resource.about !== null &&
                 <Partials.Reference
                     reference={resource.about}
                     name='About'
@@ -218,7 +218,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -228,7 +228,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.sent &&
+                resource.sent !== undefined && resource.sent !== null &&
                 <Partials.DateTime
                     dateTime={resource.sent}
                     name='Sent'
@@ -238,7 +238,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.received &&
+                resource.received !== undefined && resource.received !== null &&
                 <Partials.DateTime
                     dateTime={resource.received}
                     name='Received'
@@ -248,7 +248,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.recipient &&
+                resource.recipient !== undefined && resource.recipient !== null &&
                 <Partials.Reference
                     reference={resource.recipient}
                     name='Recipient'
@@ -258,7 +258,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.sender &&
+                resource.sender !== undefined && resource.sender !== null &&
                 <Partials.Reference
                     reference={resource.sender}
                     name='Sender'
@@ -268,7 +268,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -278,7 +278,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -288,7 +288,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.payload &&
+                resource.payload !== undefined && resource.payload !== null &&
                 <Partials.CommunicationPayload
                     payload={resource.payload}
                     name='Payload'
@@ -299,7 +299,7 @@ const Communication = ({ resource }: { resource: TCommunication }): React.ReactE
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

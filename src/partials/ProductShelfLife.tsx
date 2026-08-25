@@ -16,9 +16,9 @@ const ProductShelfLifeField = ({ productShelfLife, name, resourceType }: TProduc
 
   return (
     <Box>
+      <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
       {values.map((value, index) => (
         <Box key={index}>
-          <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
           <CodeableConcept codeableConcept={value.type} name="Type" resourceType={resourceType} />
           <Quantity quantity={value.period} name="Period" resourceType={resourceType} />
           <CodeableConcept

@@ -26,7 +26,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +100,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -110,7 +110,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -120,7 +120,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -130,7 +130,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.replaces &&
+                resource.replaces !== undefined && resource.replaces !== null &&
                 <Partials.Reference
                     reference={resource.replaces}
                     name='Replaces'
@@ -140,7 +140,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -158,7 +158,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 <Partials.Code code={resource.intent} name='Intent'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -168,7 +168,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -178,7 +178,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.String
                     string={resource.description}
                     name='Description'
@@ -188,7 +188,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -198,7 +198,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -208,7 +208,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -218,7 +218,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -228,7 +228,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -238,7 +238,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.contributor &&
+                resource.contributor !== undefined && resource.contributor !== null &&
                 <Partials.Reference
                     reference={resource.contributor}
                     name='Contributor'
@@ -248,7 +248,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.careTeam &&
+                resource.careTeam !== undefined && resource.careTeam !== null &&
                 <Partials.Reference
                     reference={resource.careTeam}
                     name='Care Team'
@@ -258,7 +258,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.addresses &&
+                resource.addresses !== undefined && resource.addresses !== null &&
                 <Partials.Reference
                     reference={resource.addresses}
                     name='Addresses'
@@ -268,7 +268,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.supportingInfo &&
+                resource.supportingInfo !== undefined && resource.supportingInfo !== null &&
                 <Partials.Reference
                     reference={resource.supportingInfo}
                     name='Supporting Info'
@@ -278,7 +278,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.goal &&
+                resource.goal !== undefined && resource.goal !== null &&
                 <Partials.Reference
                     reference={resource.goal}
                     name='Goal'
@@ -288,7 +288,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.activity &&
+                resource.activity !== undefined && resource.activity !== null &&
                 <Partials.CarePlanActivity
                     activity={resource.activity}
                     name='Activity'
@@ -299,7 +299,7 @@ const CarePlan = ({ resource }: { resource: TCarePlan }): React.ReactElement => 
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

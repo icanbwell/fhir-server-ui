@@ -15,9 +15,9 @@ const RangeField = ({ range, name, resourceType }: TRangeProps) => {
 
   return (
     <Box>
+      <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
       {values.map((value, index) => (
         <Box key={index}>
-          <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
           <Quantity quantity={value.low} name="Low" resourceType={resourceType} />
           <Quantity quantity={value.high} name="High" resourceType={resourceType} />
         </Box>

@@ -26,7 +26,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -104,7 +104,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.cancelationReason &&
+                resource.cancelationReason !== undefined && resource.cancelationReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.cancelationReason}
                     name='Cancelation Reason'
@@ -114,7 +114,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.serviceCategory &&
+                resource.serviceCategory !== undefined && resource.serviceCategory !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceCategory}
                     name='Service Category'
@@ -124,7 +124,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.serviceType &&
+                resource.serviceType !== undefined && resource.serviceType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceType}
                     name='Service Type'
@@ -134,7 +134,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.specialty &&
+                resource.specialty !== undefined && resource.specialty !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.specialty}
                     name='Specialty'
@@ -144,7 +144,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.appointmentType &&
+                resource.appointmentType !== undefined && resource.appointmentType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.appointmentType}
                     name='Appointment Type'
@@ -154,7 +154,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -164,7 +164,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -174,7 +174,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.priority &&
+                resource.priority !== undefined && resource.priority !== null &&
                 <Partials.UnsignedInt
                     unsignedInt={resource.priority}
                     name='Priority'
@@ -184,7 +184,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.String
                     string={resource.description}
                     name='Description'
@@ -194,7 +194,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.supportingInformation &&
+                resource.supportingInformation !== undefined && resource.supportingInformation !== null &&
                 <Partials.Reference
                     reference={resource.supportingInformation}
                     name='Supporting Information'
@@ -204,7 +204,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.start &&
+                resource.start !== undefined && resource.start !== null &&
                 <Partials.Instant
                     instant={resource.start}
                     name='Start'
@@ -214,7 +214,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.end &&
+                resource.end !== undefined && resource.end !== null &&
                 <Partials.Instant
                     instant={resource.end}
                     name='End'
@@ -224,7 +224,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.minutesDuration &&
+                resource.minutesDuration !== undefined && resource.minutesDuration !== null &&
                 <Partials.Int
                     int={resource.minutesDuration}
                     name='Minutes Duration'
@@ -234,7 +234,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.slot &&
+                resource.slot !== undefined && resource.slot !== null &&
                 <Partials.Reference
                     reference={resource.slot}
                     name='Slot'
@@ -244,7 +244,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -254,7 +254,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.comment &&
+                resource.comment !== undefined && resource.comment !== null &&
                 <Partials.String
                     string={resource.comment}
                     name='Comment'
@@ -264,7 +264,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.patientInstruction &&
+                resource.patientInstruction !== undefined && resource.patientInstruction !== null &&
                 <Partials.String
                     string={resource.patientInstruction}
                     name='Patient Instruction'
@@ -274,7 +274,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -284,7 +284,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.participant &&
+                resource.participant !== undefined && resource.participant !== null &&
                 <Partials.AppointmentParticipant
                     participant={resource.participant}
                     name='Participant'
@@ -295,7 +295,7 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
-                resource.requestedPeriod &&
+                resource.requestedPeriod !== undefined && resource.requestedPeriod !== null &&
                 <Partials.Period
                     period={resource.requestedPeriod}
                     name='Requested Period'

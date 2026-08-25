@@ -24,7 +24,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -98,7 +98,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -108,7 +108,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -118,7 +118,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -128,7 +128,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -138,7 +138,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.subtitle &&
+                resource.subtitle !== undefined && resource.subtitle !== null &&
                 <Partials.String
                     string={resource.subtitle}
                     name='Subtitle'
@@ -152,7 +152,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -162,7 +162,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.subjectCodeableConcept &&
+                resource.subjectCodeableConcept !== undefined && resource.subjectCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subjectCodeableConcept}
                     name='Subject Codeable Concept'
@@ -172,7 +172,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.subjectReference &&
+                resource.subjectReference !== undefined && resource.subjectReference !== null &&
                 <Partials.Reference
                     reference={resource.subjectReference}
                     name='Subject Reference'
@@ -182,7 +182,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -192,7 +192,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -202,7 +202,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -212,7 +212,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -222,7 +222,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -232,7 +232,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.usage &&
+                resource.usage !== undefined && resource.usage !== null &&
                 <Partials.String
                     string={resource.usage}
                     name='Usage'
@@ -242,7 +242,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -252,7 +252,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.approvalDate &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
                 <Partials.Date
                     date={resource.approvalDate}
                     name='Approval Date'
@@ -262,7 +262,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.lastReviewDate &&
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
                 <Partials.Date
                     date={resource.lastReviewDate}
                     name='Last Review Date'
@@ -272,7 +272,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -282,7 +282,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.topic &&
+                resource.topic !== undefined && resource.topic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.topic}
                     name='Topic'
@@ -292,7 +292,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.relatedArtifact &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
                 <Partials.RelatedArtifact
                     relatedArtifact={resource.relatedArtifact}
                     name='Related Artifact'
@@ -302,7 +302,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.library &&
+                resource.library !== undefined && resource.library !== null &&
                 <Partials.Canonical
                     canonical={resource.library}
                     name='Library'
@@ -312,7 +312,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.disclaimer &&
+                resource.disclaimer !== undefined && resource.disclaimer !== null &&
                 <Partials.Markdown
                     markdown={resource.disclaimer}
                     name='Disclaimer'
@@ -322,7 +322,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.scoring &&
+                resource.scoring !== undefined && resource.scoring !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.scoring}
                     name='Scoring'
@@ -332,7 +332,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.compositeScoring &&
+                resource.compositeScoring !== undefined && resource.compositeScoring !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.compositeScoring}
                     name='Composite Scoring'
@@ -342,7 +342,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -352,7 +352,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.riskAdjustment &&
+                resource.riskAdjustment !== undefined && resource.riskAdjustment !== null &&
                 <Partials.String
                     string={resource.riskAdjustment}
                     name='Risk Adjustment'
@@ -362,7 +362,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.rateAggregation &&
+                resource.rateAggregation !== undefined && resource.rateAggregation !== null &&
                 <Partials.String
                     string={resource.rateAggregation}
                     name='Rate Aggregation'
@@ -372,7 +372,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.rationale &&
+                resource.rationale !== undefined && resource.rationale !== null &&
                 <Partials.Markdown
                     markdown={resource.rationale}
                     name='Rationale'
@@ -382,7 +382,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.clinicalRecommendationStatement &&
+                resource.clinicalRecommendationStatement !== undefined && resource.clinicalRecommendationStatement !== null &&
                 <Partials.Markdown
                     markdown={resource.clinicalRecommendationStatement}
                     name='Clinical Recommendation Statement'
@@ -392,7 +392,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.improvementNotation &&
+                resource.improvementNotation !== undefined && resource.improvementNotation !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.improvementNotation}
                     name='Improvement Notation'
@@ -402,7 +402,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.definition &&
+                resource.definition !== undefined && resource.definition !== null &&
                 <Partials.Markdown
                     markdown={resource.definition}
                     name='Definition'
@@ -412,7 +412,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.guidance &&
+                resource.guidance !== undefined && resource.guidance !== null &&
                 <Partials.Markdown
                     markdown={resource.guidance}
                     name='Guidance'
@@ -422,7 +422,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.group &&
+                resource.group !== undefined && resource.group !== null &&
                 <Partials.MeasureGroup
                     group={resource.group}
                     name='Group'
@@ -433,7 +433,7 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
-                resource.supplementalData &&
+                resource.supplementalData !== undefined && resource.supplementalData !== null &&
                 <Partials.MeasureSupplementalData
                     supplementalData={resource.supplementalData}
                     name='Supplemental Data'

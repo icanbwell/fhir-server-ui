@@ -24,7 +24,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -102,7 +102,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -112,7 +112,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -122,7 +122,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.alias &&
+                resource.alias !== undefined && resource.alias !== null &&
                 <Partials.String
                     string={resource.alias}
                     name='Alias'
@@ -132,7 +132,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -142,7 +142,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.ownedBy &&
+                resource.ownedBy !== undefined && resource.ownedBy !== null &&
                 <Partials.Reference
                     reference={resource.ownedBy}
                     name='Owned By'
@@ -152,7 +152,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.administeredBy &&
+                resource.administeredBy !== undefined && resource.administeredBy !== null &&
                 <Partials.Reference
                     reference={resource.administeredBy}
                     name='Administered By'
@@ -162,7 +162,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.coverageArea &&
+                resource.coverageArea !== undefined && resource.coverageArea !== null &&
                 <Partials.Reference
                     reference={resource.coverageArea}
                     name='Coverage Area'
@@ -172,7 +172,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.endpoint &&
+                resource.endpoint !== undefined && resource.endpoint !== null &&
                 <Partials.Reference
                     reference={resource.endpoint}
                     name='Endpoint'
@@ -182,7 +182,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.network &&
+                resource.network !== undefined && resource.network !== null &&
                 <Partials.Reference
                     reference={resource.network}
                     name='Network'
@@ -192,7 +192,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.coverage &&
+                resource.coverage !== undefined && resource.coverage !== null &&
                 <Partials.InsurancePlanCoverage
                     coverage={resource.coverage}
                     name='Coverage'
@@ -203,7 +203,7 @@ const InsurancePlan = ({ resource }: { resource: TInsurancePlan }): React.ReactE
                 />
             }
             {
-                resource.plan &&
+                resource.plan !== undefined && resource.plan !== null &&
                 <Partials.InsurancePlanPlan
                     plan={resource.plan}
                     name='Plan'

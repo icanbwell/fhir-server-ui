@@ -27,7 +27,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -37,7 +37,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -47,7 +47,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -61,7 +61,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -71,7 +71,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -81,7 +81,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -91,7 +91,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -101,7 +101,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -111,7 +111,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -121,7 +121,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -131,7 +131,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.derivedFromUri &&
+                resource.derivedFromUri !== undefined && resource.derivedFromUri !== null &&
                 <Partials.Uri
                     uri={resource.derivedFromUri}
                     name='Derived From Uri'
@@ -141,7 +141,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Canonical
                     canonical={resource.partOf}
                     name='Part Of'
@@ -151,7 +151,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.replaces &&
+                resource.replaces !== undefined && resource.replaces !== null &&
                 <Partials.Canonical
                     canonical={resource.replaces}
                     name='Replaces'
@@ -165,7 +165,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -175,7 +175,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -185,7 +185,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -195,7 +195,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -205,7 +205,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -215,7 +215,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -225,7 +225,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.approvalDate &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
                 <Partials.Date
                     date={resource.approvalDate}
                     name='Approval Date'
@@ -235,7 +235,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.lastReviewDate &&
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
                 <Partials.Date
                     date={resource.lastReviewDate}
                     name='Last Review Date'
@@ -245,7 +245,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -255,7 +255,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -265,7 +265,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.instance &&
+                resource.instance !== undefined && resource.instance !== null &&
                 <Partials.Reference
                     reference={resource.instance}
                     name='Instance'
@@ -275,7 +275,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.applicability &&
+                resource.applicability !== undefined && resource.applicability !== null &&
                 <Partials.ChargeItemDefinitionApplicability
                     applicability={resource.applicability}
                     name='Applicability'
@@ -286,7 +286,7 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
-                resource.propertyGroup &&
+                resource.propertyGroup !== undefined && resource.propertyGroup !== null &&
                 <Partials.ChargeItemDefinitionPropertyGroup
                     propertyGroup={resource.propertyGroup}
                     name='Property Group'

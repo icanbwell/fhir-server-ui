@@ -25,7 +25,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +103,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -117,7 +117,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.itemCodeableConcept &&
+                resource.itemCodeableConcept !== undefined && resource.itemCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.itemCodeableConcept}
                     name='Item Codeable Concept'
@@ -127,7 +127,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.itemReference &&
+                resource.itemReference !== undefined && resource.itemReference !== null &&
                 <Partials.Reference
                     reference={resource.itemReference}
                     name='Item Reference'
@@ -137,7 +137,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.quantity &&
+                resource.quantity !== undefined && resource.quantity !== null &&
                 <Partials.Quantity
                     quantity={resource.quantity}
                     name='Quantity'
@@ -147,7 +147,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.parameter &&
+                resource.parameter !== undefined && resource.parameter !== null &&
                 <Partials.SupplyRequestParameter
                     parameter={resource.parameter}
                     name='Parameter'
@@ -158,7 +158,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -168,7 +168,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.occurrencePeriod &&
+                resource.occurrencePeriod !== undefined && resource.occurrencePeriod !== null &&
                 <Partials.Period
                     period={resource.occurrencePeriod}
                     name='Occurrence Period'
@@ -178,7 +178,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.occurrenceTiming &&
+                resource.occurrenceTiming !== undefined && resource.occurrenceTiming !== null &&
                 <Partials.Timing
                     timing={resource.occurrenceTiming}
                     name='Occurrence Timing'
@@ -188,7 +188,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.authoredOn &&
+                resource.authoredOn !== undefined && resource.authoredOn !== null &&
                 <Partials.DateTime
                     dateTime={resource.authoredOn}
                     name='Authored On'
@@ -198,7 +198,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.requester &&
+                resource.requester !== undefined && resource.requester !== null &&
                 <Partials.Reference
                     reference={resource.requester}
                     name='Requester'
@@ -208,7 +208,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.supplier &&
+                resource.supplier !== undefined && resource.supplier !== null &&
                 <Partials.Reference
                     reference={resource.supplier}
                     name='Supplier'
@@ -218,7 +218,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -228,7 +228,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -238,7 +238,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.deliverFrom &&
+                resource.deliverFrom !== undefined && resource.deliverFrom !== null &&
                 <Partials.Reference
                     reference={resource.deliverFrom}
                     name='Deliver From'
@@ -248,7 +248,7 @@ const SupplyRequest = ({ resource }: { resource: TSupplyRequest }): React.ReactE
                 />
             }
             {
-                resource.deliverTo &&
+                resource.deliverTo !== undefined && resource.deliverTo !== null &&
                 <Partials.Reference
                     reference={resource.deliverTo}
                     name='Deliver To'

@@ -27,7 +27,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -37,7 +37,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -47,7 +47,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -61,7 +61,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -71,7 +71,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -81,7 +81,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -91,7 +91,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -101,7 +101,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -111,7 +111,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.String
                     string={resource.name}
                     name='Name'
@@ -121,7 +121,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.title &&
+                resource.title !== undefined && resource.title !== null &&
                 <Partials.String
                     string={resource.title}
                     name='Title'
@@ -135,7 +135,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -145,7 +145,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -155,7 +155,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -165,7 +165,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -175,7 +175,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -185,7 +185,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -195,7 +195,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -209,7 +209,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 <Partials.Code code={resource.kind} name='Kind'/>
             }
             {
-                resource.instantiates &&
+                resource.instantiates !== undefined && resource.instantiates !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiates}
                     name='Instantiates'
@@ -219,7 +219,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.imports &&
+                resource.imports !== undefined && resource.imports !== null &&
                 <Partials.Canonical
                     canonical={resource.imports}
                     name='Imports'
@@ -229,7 +229,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.software &&
+                resource.software !== undefined && resource.software !== null &&
                 <Partials.CapabilityStatementSoftware
                     software={resource.software}
                     name='Software'
@@ -240,7 +240,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.implementation &&
+                resource.implementation !== undefined && resource.implementation !== null &&
                 <Partials.CapabilityStatementImplementation
                     implementation={resource.implementation}
                     name='Implementation'
@@ -263,7 +263,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 <Partials.Code code={resource.patchFormat} name='Patch Format'/>
             }
             {
-                resource.implementationGuide &&
+                resource.implementationGuide !== undefined && resource.implementationGuide !== null &&
                 <Partials.Canonical
                     canonical={resource.implementationGuide}
                     name='Implementation Guide'
@@ -273,7 +273,7 @@ const CapabilityStatement = ({ resource }: { resource: TCapabilityStatement }): 
                 />
             }
             {
-                resource.rest &&
+                resource.rest !== undefined && resource.rest !== null &&
                 <Partials.CapabilityStatementRest
                     rest={resource.rest}
                     name='Rest'

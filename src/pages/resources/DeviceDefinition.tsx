@@ -25,7 +25,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.udiDeviceIdentifier &&
+                resource.udiDeviceIdentifier !== undefined && resource.udiDeviceIdentifier !== null &&
                 <Partials.DeviceDefinitionUdiDeviceIdentifier
                     udiDeviceIdentifier={resource.udiDeviceIdentifier}
                     name='Udi Device Identifier'
@@ -110,7 +110,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.manufacturerString &&
+                resource.manufacturerString !== undefined && resource.manufacturerString !== null &&
                 <Partials.String
                     string={resource.manufacturerString}
                     name='Manufacturer String'
@@ -120,7 +120,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.manufacturerReference &&
+                resource.manufacturerReference !== undefined && resource.manufacturerReference !== null &&
                 <Partials.Reference
                     reference={resource.manufacturerReference}
                     name='Manufacturer Reference'
@@ -130,7 +130,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.modelNumber &&
+                resource.modelNumber !== undefined && resource.modelNumber !== null &&
                 <Partials.String
                     string={resource.modelNumber}
                     name='Model Number'
@@ -140,7 +140,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -150,7 +150,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.version &&
+                resource.version !== undefined && resource.version !== null &&
                 <Partials.String
                     string={resource.version}
                     name='Version'
@@ -160,7 +160,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.safety &&
+                resource.safety !== undefined && resource.safety !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.safety}
                     name='Safety'
@@ -170,7 +170,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.shelfLifeStorage &&
+                resource.shelfLifeStorage !== undefined && resource.shelfLifeStorage !== null &&
                 <Partials.ProductShelfLife
                     productShelfLife={resource.shelfLifeStorage}
                     name='Shelf Life Storage'
@@ -180,7 +180,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.physicalCharacteristics &&
+                resource.physicalCharacteristics !== undefined && resource.physicalCharacteristics !== null &&
                 <Partials.ProdCharacteristic
                     prodCharacteristic={resource.physicalCharacteristics}
                     name='Physical Characteristics'
@@ -190,7 +190,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.languageCode &&
+                resource.languageCode !== undefined && resource.languageCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.languageCode}
                     name='Language Code'
@@ -200,7 +200,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.owner &&
+                resource.owner !== undefined && resource.owner !== null &&
                 <Partials.Reference
                     reference={resource.owner}
                     name='Owner'
@@ -210,7 +210,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.contact &&
+                resource.contact !== undefined && resource.contact !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.contact}
                     name='Contact'
@@ -220,7 +220,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -230,7 +230,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.onlineInformation &&
+                resource.onlineInformation !== undefined && resource.onlineInformation !== null &&
                 <Partials.Uri
                     uri={resource.onlineInformation}
                     name='Online Information'
@@ -240,7 +240,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -250,7 +250,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.quantity &&
+                resource.quantity !== undefined && resource.quantity !== null &&
                 <Partials.Quantity
                     quantity={resource.quantity}
                     name='Quantity'
@@ -260,7 +260,7 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
-                resource.parentDevice &&
+                resource.parentDevice !== undefined && resource.parentDevice !== null &&
                 <Partials.Reference
                     reference={resource.parentDevice}
                     name='Parent Device'

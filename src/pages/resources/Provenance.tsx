@@ -32,7 +32,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -42,7 +42,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -52,7 +52,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -66,7 +66,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -76,7 +76,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -86,7 +86,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -96,7 +96,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.target &&
+                resource.target !== undefined && resource.target !== null &&
                 <Partials.Reference
                     reference={resource.target}
                     name='Target'
@@ -106,7 +106,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.occurredPeriod &&
+                resource.occurredPeriod !== undefined && resource.occurredPeriod !== null &&
                 <Partials.Period
                     period={resource.occurredPeriod}
                     name='Occurred Period'
@@ -116,7 +116,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.occurredDateTime &&
+                resource.occurredDateTime !== undefined && resource.occurredDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurredDateTime}
                     name='Occurred Date Time'
@@ -126,7 +126,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.recorded &&
+                resource.recorded !== undefined && resource.recorded !== null &&
                 <Partials.Instant
                     instant={resource.recorded}
                     name='Recorded'
@@ -136,7 +136,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.policy &&
+                resource.policy !== undefined && resource.policy !== null &&
                 <Partials.Uri
                     uri={resource.policy}
                     name='Policy'
@@ -146,7 +146,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -156,7 +156,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.reason &&
+                resource.reason !== undefined && resource.reason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reason}
                     name='Reason'
@@ -166,7 +166,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.activity &&
+                resource.activity !== undefined && resource.activity !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.activity}
                     name='Activity'
@@ -176,7 +176,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.agent &&
+                resource.agent !== undefined && resource.agent !== null &&
                 <Partials.Reference
                     reference={resource.agent}
                     name='Agent'
@@ -187,7 +187,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.entity &&
+                resource.entity !== undefined && resource.entity !== null &&
                 <Partials.Reference
                     reference={resource.entity}
                     name='Entity'
@@ -198,7 +198,7 @@ const Provenance = ({ resource }: { resource: TProvenance }): React.ReactElement
                 />
             }
             {
-                resource.signature &&
+                resource.signature !== undefined && resource.signature !== null &&
                 <Partials.Reference
                     reference={resource.signature}
                     name='Signature'

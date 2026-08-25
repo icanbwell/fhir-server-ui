@@ -28,7 +28,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -38,7 +38,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -48,7 +48,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -62,7 +62,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -72,7 +72,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -82,7 +82,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -92,7 +92,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -106,7 +106,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -120,7 +120,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 <Partials.Code code={resource.intent} name='Intent'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -134,7 +134,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.doNotPerform &&
+                resource.doNotPerform !== undefined && resource.doNotPerform !== null &&
                 <Partials.Boolean
                     boolean={resource.doNotPerform}
                     name='Do Not Perform'
@@ -144,7 +144,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.reportedBoolean &&
+                resource.reportedBoolean !== undefined && resource.reportedBoolean !== null &&
                 <Partials.Boolean
                     boolean={resource.reportedBoolean}
                     name='Reported Boolean'
@@ -154,7 +154,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.reportedReference &&
+                resource.reportedReference !== undefined && resource.reportedReference !== null &&
                 <Partials.Reference
                     reference={resource.reportedReference}
                     name='Reported Reference'
@@ -164,7 +164,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.medicationCodeableConcept &&
+                resource.medicationCodeableConcept !== undefined && resource.medicationCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.medicationCodeableConcept}
                     name='Medication Codeable Concept'
@@ -174,7 +174,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.medicationReference &&
+                resource.medicationReference !== undefined && resource.medicationReference !== null &&
                 <Partials.Reference
                     reference={resource.medicationReference}
                     name='Medication Reference'
@@ -184,7 +184,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -194,7 +194,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -204,7 +204,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.supportingInformation &&
+                resource.supportingInformation !== undefined && resource.supportingInformation !== null &&
                 <Partials.Reference
                     reference={resource.supportingInformation}
                     name='Supporting Information'
@@ -214,7 +214,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.authoredOn &&
+                resource.authoredOn !== undefined && resource.authoredOn !== null &&
                 <Partials.DateTime
                     dateTime={resource.authoredOn}
                     name='Authored On'
@@ -224,7 +224,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.requester &&
+                resource.requester !== undefined && resource.requester !== null &&
                 <Partials.Reference
                     reference={resource.requester}
                     name='Requester'
@@ -234,7 +234,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -244,7 +244,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.performerType &&
+                resource.performerType !== undefined && resource.performerType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.performerType}
                     name='Performer Type'
@@ -254,7 +254,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.recorder &&
+                resource.recorder !== undefined && resource.recorder !== null &&
                 <Partials.Reference
                     reference={resource.recorder}
                     name='Recorder'
@@ -264,7 +264,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -274,7 +274,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -284,7 +284,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -294,7 +294,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -304,7 +304,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -314,7 +314,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.groupIdentifier &&
+                resource.groupIdentifier !== undefined && resource.groupIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.groupIdentifier}
                     name='Group Identifier'
@@ -324,7 +324,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.courseOfTherapyType &&
+                resource.courseOfTherapyType !== undefined && resource.courseOfTherapyType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.courseOfTherapyType}
                     name='Course Of Therapy Type'
@@ -334,7 +334,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -344,7 +344,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -354,7 +354,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.dosageInstruction &&
+                resource.dosageInstruction !== undefined && resource.dosageInstruction !== null &&
                 <Partials.Dosage
                     dosage={resource.dosageInstruction}
                     name='Dosage Instruction'
@@ -364,7 +364,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.dispenseRequest &&
+                resource.dispenseRequest !== undefined && resource.dispenseRequest !== null &&
                 <Partials.MedicationRequestDispenseRequest
                     dispenseRequest={resource.dispenseRequest}
                     name='Dispense Request'
@@ -375,7 +375,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.substitution &&
+                resource.substitution !== undefined && resource.substitution !== null &&
                 <Partials.MedicationRequestSubstitution
                     substitution={resource.substitution}
                     name='Substitution'
@@ -386,7 +386,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.priorPrescription &&
+                resource.priorPrescription !== undefined && resource.priorPrescription !== null &&
                 <Partials.Reference
                     reference={resource.priorPrescription}
                     name='Prior Prescription'
@@ -396,7 +396,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.detectedIssue &&
+                resource.detectedIssue !== undefined && resource.detectedIssue !== null &&
                 <Partials.Reference
                     reference={resource.detectedIssue}
                     name='Detected Issue'
@@ -406,7 +406,7 @@ const MedicationRequest = ({ resource }: { resource: TMedicationRequest }): Reac
                 />
             }
             {
-                resource.eventHistory &&
+                resource.eventHistory !== undefined && resource.eventHistory !== null &&
                 <Partials.Reference
                     reference={resource.eventHistory}
                     name='Event History'

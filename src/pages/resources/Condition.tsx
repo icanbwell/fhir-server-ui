@@ -25,7 +25,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.clinicalStatus &&
+                resource.clinicalStatus !== undefined && resource.clinicalStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.clinicalStatus}
                     name='Clinical Status'
@@ -109,7 +109,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.verificationStatus &&
+                resource.verificationStatus !== undefined && resource.verificationStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.verificationStatus}
                     name='Verification Status'
@@ -119,7 +119,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -129,7 +129,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.severity &&
+                resource.severity !== undefined && resource.severity !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.severity}
                     name='Severity'
@@ -139,7 +139,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -149,7 +149,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.bodySite &&
+                resource.bodySite !== undefined && resource.bodySite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodySite}
                     name='Body Site'
@@ -159,7 +159,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -169,7 +169,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -179,7 +179,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.onsetDateTime &&
+                resource.onsetDateTime !== undefined && resource.onsetDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.onsetDateTime}
                     name='Onset Date Time'
@@ -189,7 +189,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.onsetAge &&
+                resource.onsetAge !== undefined && resource.onsetAge !== null &&
                 <Partials.Quantity
                     quantity={resource.onsetAge}
                     name='Onset Age'
@@ -199,7 +199,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.onsetPeriod &&
+                resource.onsetPeriod !== undefined && resource.onsetPeriod !== null &&
                 <Partials.Period
                     period={resource.onsetPeriod}
                     name='Onset Period'
@@ -209,7 +209,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.onsetRange &&
+                resource.onsetRange !== undefined && resource.onsetRange !== null &&
                 <Partials.Range
                     range={resource.onsetRange}
                     name='Onset Range'
@@ -219,7 +219,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.onsetString &&
+                resource.onsetString !== undefined && resource.onsetString !== null &&
                 <Partials.String
                     string={resource.onsetString}
                     name='Onset String'
@@ -229,7 +229,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.abatementDateTime &&
+                resource.abatementDateTime !== undefined && resource.abatementDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.abatementDateTime}
                     name='Abatement Date Time'
@@ -239,7 +239,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.abatementAge &&
+                resource.abatementAge !== undefined && resource.abatementAge !== null &&
                 <Partials.Quantity
                     quantity={resource.abatementAge}
                     name='Abatement Age'
@@ -249,7 +249,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.abatementPeriod &&
+                resource.abatementPeriod !== undefined && resource.abatementPeriod !== null &&
                 <Partials.Period
                     period={resource.abatementPeriod}
                     name='Abatement Period'
@@ -259,7 +259,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.abatementRange &&
+                resource.abatementRange !== undefined && resource.abatementRange !== null &&
                 <Partials.Range
                     range={resource.abatementRange}
                     name='Abatement Range'
@@ -269,7 +269,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.abatementString &&
+                resource.abatementString !== undefined && resource.abatementString !== null &&
                 <Partials.String
                     string={resource.abatementString}
                     name='Abatement String'
@@ -279,7 +279,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.recordedDate &&
+                resource.recordedDate !== undefined && resource.recordedDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.recordedDate}
                     name='Recorded Date'
@@ -289,7 +289,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.recorder &&
+                resource.recorder !== undefined && resource.recorder !== null &&
                 <Partials.Reference
                     reference={resource.recorder}
                     name='Recorder'
@@ -299,7 +299,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.asserter &&
+                resource.asserter !== undefined && resource.asserter !== null &&
                 <Partials.Reference
                     reference={resource.asserter}
                     name='Asserter'
@@ -309,7 +309,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.stage &&
+                resource.stage !== undefined && resource.stage !== null &&
                 <Partials.ConditionStage
                     stage={resource.stage}
                     name='Stage'
@@ -320,7 +320,7 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

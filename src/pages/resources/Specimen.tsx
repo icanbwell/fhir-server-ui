@@ -24,7 +24,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -34,7 +34,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -44,7 +44,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -58,7 +58,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -68,7 +68,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -78,7 +78,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -88,7 +88,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -98,7 +98,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.accessionIdentifier &&
+                resource.accessionIdentifier !== undefined && resource.accessionIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.accessionIdentifier}
                     name='Accession Identifier'
@@ -112,7 +112,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -122,7 +122,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -132,7 +132,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.receivedTime &&
+                resource.receivedTime !== undefined && resource.receivedTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.receivedTime}
                     name='Received Time'
@@ -142,7 +142,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.parent &&
+                resource.parent !== undefined && resource.parent !== null &&
                 <Partials.Reference
                     reference={resource.parent}
                     name='Parent'
@@ -152,7 +152,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.request &&
+                resource.request !== undefined && resource.request !== null &&
                 <Partials.Reference
                     reference={resource.request}
                     name='Request'
@@ -162,7 +162,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.collection &&
+                resource.collection !== undefined && resource.collection !== null &&
                 <Partials.SpecimenCollection
                     collection={resource.collection}
                     name='Collection'
@@ -173,7 +173,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.container &&
+                resource.container !== undefined && resource.container !== null &&
                 <Partials.SpecimenContainer
                     container={resource.container}
                     name='Container'
@@ -184,7 +184,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.condition &&
+                resource.condition !== undefined && resource.condition !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.condition}
                     name='Condition'
@@ -194,7 +194,7 @@ const Specimen = ({ resource }: { resource: TSpecimen }): React.ReactElement => 
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

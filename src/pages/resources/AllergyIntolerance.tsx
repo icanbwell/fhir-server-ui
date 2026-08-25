@@ -25,7 +25,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -35,7 +35,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -45,7 +45,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -59,7 +59,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -69,7 +69,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -79,7 +79,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +89,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -99,7 +99,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.clinicalStatus &&
+                resource.clinicalStatus !== undefined && resource.clinicalStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.clinicalStatus}
                     name='Clinical Status'
@@ -109,7 +109,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.verificationStatus &&
+                resource.verificationStatus !== undefined && resource.verificationStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.verificationStatus}
                     name='Verification Status'
@@ -131,7 +131,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 <Partials.Code code={resource.criticality} name='Criticality'/>
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -141,7 +141,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -151,7 +151,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -161,7 +161,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.onsetDateTime &&
+                resource.onsetDateTime !== undefined && resource.onsetDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.onsetDateTime}
                     name='Onset Date Time'
@@ -171,7 +171,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.onsetAge &&
+                resource.onsetAge !== undefined && resource.onsetAge !== null &&
                 <Partials.Quantity
                     quantity={resource.onsetAge}
                     name='Onset Age'
@@ -181,7 +181,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.onsetPeriod &&
+                resource.onsetPeriod !== undefined && resource.onsetPeriod !== null &&
                 <Partials.Period
                     period={resource.onsetPeriod}
                     name='Onset Period'
@@ -191,7 +191,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.onsetRange &&
+                resource.onsetRange !== undefined && resource.onsetRange !== null &&
                 <Partials.Range
                     range={resource.onsetRange}
                     name='Onset Range'
@@ -201,7 +201,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.onsetString &&
+                resource.onsetString !== undefined && resource.onsetString !== null &&
                 <Partials.String
                     string={resource.onsetString}
                     name='Onset String'
@@ -211,7 +211,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.recordedDate &&
+                resource.recordedDate !== undefined && resource.recordedDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.recordedDate}
                     name='Recorded Date'
@@ -221,7 +221,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.recorder &&
+                resource.recorder !== undefined && resource.recorder !== null &&
                 <Partials.Reference
                     reference={resource.recorder}
                     name='Recorder'
@@ -231,7 +231,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.asserter &&
+                resource.asserter !== undefined && resource.asserter !== null &&
                 <Partials.Reference
                     reference={resource.asserter}
                     name='Asserter'
@@ -241,7 +241,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.lastOccurrence &&
+                resource.lastOccurrence !== undefined && resource.lastOccurrence !== null &&
                 <Partials.DateTime
                     dateTime={resource.lastOccurrence}
                     name='Last Occurrence'
@@ -251,7 +251,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -261,7 +261,7 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 />
             }
             {
-                resource.reaction &&
+                resource.reaction !== undefined && resource.reaction !== null &&
                 <Partials.AllergyIntoleranceReaction
                     reaction={resource.reaction}
                     name='Reaction'

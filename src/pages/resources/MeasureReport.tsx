@@ -26,7 +26,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -108,7 +108,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
-                resource.measure &&
+                resource.measure !== undefined && resource.measure !== null &&
                 <Partials.Canonical
                     canonical={resource.measure}
                     name='Measure'
@@ -118,7 +118,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -128,7 +128,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -138,7 +138,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.reporter &&
+                resource.reporter !== undefined && resource.reporter !== null &&
                 <Partials.Reference
                     reference={resource.reporter}
                     name='Reporter'
@@ -148,7 +148,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -158,7 +158,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.improvementNotation &&
+                resource.improvementNotation !== undefined && resource.improvementNotation !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.improvementNotation}
                     name='Improvement Notation'
@@ -168,7 +168,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.group &&
+                resource.group !== undefined && resource.group !== null &&
                 <Partials.MeasureReportGroup
                     group={resource.group}
                     name='Group'
@@ -179,7 +179,7 @@ const MeasureReport = ({ resource }: { resource: TMeasureReport }): React.ReactE
                 />
             }
             {
-                resource.evaluatedResource &&
+                resource.evaluatedResource !== undefined && resource.evaluatedResource !== null &&
                 <Partials.Reference
                     reference={resource.evaluatedResource}
                     name='Evaluated Resource'

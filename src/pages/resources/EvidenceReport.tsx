@@ -26,7 +26,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.id &&
+                resource.id !== undefined && resource.id !== null &&
                 <Partials.String
                     string={resource.id}
                     name='Id'
@@ -36,7 +36,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.meta &&
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -46,7 +46,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -60,7 +60,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -70,7 +70,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -80,7 +80,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -90,7 +90,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -104,7 +104,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -114,7 +114,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.relatedIdentifier &&
+                resource.relatedIdentifier !== undefined && resource.relatedIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.relatedIdentifier}
                     name='Related Identifier'
@@ -124,7 +124,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.citeAsReference &&
+                resource.citeAsReference !== undefined && resource.citeAsReference !== null &&
                 <Partials.Reference
                     reference={resource.citeAsReference}
                     name='Cite As Reference'
@@ -134,7 +134,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.citeAsMarkdown &&
+                resource.citeAsMarkdown !== undefined && resource.citeAsMarkdown !== null &&
                 <Partials.Markdown
                     markdown={resource.citeAsMarkdown}
                     name='Cite As Markdown'
@@ -144,7 +144,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -154,7 +154,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -164,7 +164,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.relatedArtifact &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
                 <Partials.RelatedArtifact
                     relatedArtifact={resource.relatedArtifact}
                     name='Related Artifact'
@@ -174,7 +174,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.EvidenceReportSubject
                     subject={resource.subject}
                     name='Subject'
@@ -185,7 +185,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.publisher &&
+                resource.publisher !== undefined && resource.publisher !== null &&
                 <Partials.String
                     string={resource.publisher}
                     name='Publisher'
@@ -195,7 +195,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.relatesTo &&
+                resource.relatesTo !== undefined && resource.relatesTo !== null &&
                 <Partials.EvidenceReportRelatesTo
                     relatesTo={resource.relatesTo}
                     name='Relates To'
@@ -206,7 +206,7 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 />
             }
             {
-                resource.section &&
+                resource.section !== undefined && resource.section !== null &&
                 <Partials.EvidenceReportSection
                     section={resource.section}
                     name='Section'

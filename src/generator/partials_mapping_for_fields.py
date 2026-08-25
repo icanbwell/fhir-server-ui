@@ -234,4 +234,9 @@ partials_mapping = {
         'field': 'who',
         'prop_name': 'reference'
     },
+    'SubscriptionStatusNotificationEvent': {
+        'partial': 'SubscriptionStatusNotificationEvent',
+        'field': '',
+        'prop_name': 'notificationEvent'
+    },
 }

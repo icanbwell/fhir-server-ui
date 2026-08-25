@@ -87,6 +87,17 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
+                resource.notificationEvent &&
+                <Partials.SubscriptionStatusNotificationEvent
+                    notificationEvent={resource.notificationEvent}
+                    name='Notification Event'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='notification-event'
+                    field=''
+                />
+            }
+            {
                 resource.subscription &&
                 <Partials.Reference
                     reference={resource.subscription}

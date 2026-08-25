@@ -42,6 +42,7 @@ import QuestionnaireResponseItem from './QuestionnaireResponseItem';
 import Ratio from './Ratio';
 import Reference from './Reference';
 import ReverseReference from './ReverseReference';
+import SubscriptionStatusNotificationEvent from './SubscriptionStatusNotificationEvent';
 import Time from './Time';
 import Timing from './Timing';
 import Uri from './Uri';
@@ -91,6 +92,7 @@ export default {
   Ratio,
   Reference,
   ReverseReference,
+  SubscriptionStatusNotificationEvent,
   Time,
   Timing,
   Uri,

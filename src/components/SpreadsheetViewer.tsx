@@ -81,10 +81,19 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
     const DEFAULT_SPREADSHEET_COUNT = 1000;
     const MAX_SPREADSHEET_COUNT = 20000;
 
-    const [requestedCount, setRequestedCount] = useState<number>(DEFAULT_SPREADSHEET_COUNT);
-    const [truncatedSheetNames, setTruncatedSheetNames] = useState<Set<string>>(new Set());
     const navigate = useNavigate(); // Initialize navigate
     const location = useLocation(); // Initialize location
+
+    const countFromUrl = (search: string): number => {
+        const existingCount = parseInt(new URLSearchParams(search).get('_count') || '', 10);
+        return !isNaN(existingCount) && existingCount > 0 ? existingCount : DEFAULT_SPREADSHEET_COUNT;
+    };
+
+    // Initialized lazily from the URL (rather than always DEFAULT_SPREADSHEET_COUNT, synced
+    // afterwards by the effect below) so a URL that already carries an explicit _count doesn't
+    // trigger a first fetch with the wrong count before the sync effect runs.
+    const [requestedCount, setRequestedCount] = useState<number>(() => countFromUrl(location.search));
+    const [truncatedSheetNames, setTruncatedSheetNames] = useState<Set<string>>(new Set());
 
     const { isDarkMode } = useTheme(); // Get dark mode state
 
@@ -118,13 +127,11 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
     }, [relativeUrl, fhirUrl, format, location.search, requestedCount]);
 
     useEffect(() => {
-        const existingCount = parseInt(new URLSearchParams(location.search).get('_count') || '', 10);
-        if (!isNaN(existingCount) && existingCount > 0) {
-            setRequestedCount(existingCount);
-        }
-        // Deliberately runs only when the URL's search string itself changes (e.g. navigating to
-        // a different resource), not on every requestedCount update this component makes itself.
-    }, [location.search]);
+        setRequestedCount(countFromUrl(location.search));
+        // Also keyed on relativeUrl (not just location.search) so navigating to a different
+        // resource without an explicit _count in the URL resets a "Load more"-bumped count back
+        // to the default, instead of leaking an elevated count into the new resource's view.
+    }, [location.search, relativeUrl]);
 
     useEffect(() => {
         const fetchSpreadsheetData = async () => {

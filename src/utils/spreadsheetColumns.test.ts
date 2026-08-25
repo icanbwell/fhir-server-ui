@@ -45,4 +45,32 @@ describe('buildSheetColumnsAndRows', () => {
         const { columnDefs } = buildSheetColumnsAndRows(headers, dataRows, false);
         expect(columnDefs[0].sort).toBe('desc');
     });
+
+    it('does not mark a column of bare 4-digit numbers (e.g. a zip code or count) as a date column', () => {
+        const headers = ['zip'];
+        const dataRows = [['2026'], ['9021']];
+        const { columnDefs, rowData } = buildSheetColumnsAndRows(headers, dataRows, false);
+        expect(columnDefs[0].cellDataType).toBeUndefined();
+        expect(rowData[0].col0).toBe('2026');
+    });
+
+    it('formats a date-only column value without fabricating a time-of-day', () => {
+        const headers = ['birthDate'];
+        const dataRows = [['1990-05-15']];
+        const { columnDefs } = buildSheetColumnsAndRows(headers, dataRows, false);
+        const formatted = (columnDefs[0].valueFormatter as (params: { value?: Date | null }) => string)({
+            value: new Date('1990-05-15'),
+        });
+        expect(formatted).not.toMatch(/\d{1,2}:\d{2}/);
+    });
+
+    it('formats a date-time column value including the time-of-day', () => {
+        const headers = ['lastUpdated'];
+        const dataRows = [['2026-01-05T15:58:00Z']];
+        const { columnDefs } = buildSheetColumnsAndRows(headers, dataRows, false);
+        const formatted = (columnDefs[0].valueFormatter as (params: { value?: Date | null }) => string)({
+            value: new Date('2026-01-05T15:58:00Z'),
+        });
+        expect(formatted).toMatch(/\d{1,2}:\d{2}/);
+    });
 });

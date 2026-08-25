@@ -99,6 +99,14 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
+                resource.version &&
+                <Partials.NameValue name='Version' value={resource.version} searchParameter='version' />
+            }
+            {
+                resource.title &&
+                <Partials.NameValue name='Title' value={resource.title} searchParameter='title' />
+            }
+            {
                 resource.derivedFrom &&
                 <Partials.Canonical
                     canonical={resource.derivedFrom}
@@ -131,6 +139,10 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                     id={uuid}
                     searchParameter='date'
                 />
+            }
+            {
+                resource.publisher &&
+                <Partials.NameValue name='Publisher' value={resource.publisher} searchParameter='publisher' />
             }
             {
                 resource.description &&
@@ -171,6 +183,14 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                     id={uuid}
                     searchParameter='copyright'
                 />
+            }
+            {
+                resource.approvalDate &&
+                <Partials.NameValue name='Approval Date' value={resource.approvalDate} searchParameter='approval-date' />
+            }
+            {
+                resource.lastReviewDate &&
+                <Partials.NameValue name='Last Review Date' value={resource.lastReviewDate} searchParameter='last-review-date' />
             }
             {
                 resource.effectivePeriod &&

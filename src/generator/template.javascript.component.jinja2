@@ -113,6 +113,31 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                 resource.error &&
                 <Partials.NameValue name='Error' value={resource.error} searchParameter='error' />
             }
+        {% elif fhir_entity.cleaned_name == "SubscriptionTopic" and property.javascript_clean_name == "version" %}
+            {
+                resource.version &&
+                <Partials.NameValue name='Version' value={resource.version} searchParameter='version' />
+            }
+        {% elif fhir_entity.cleaned_name == "SubscriptionTopic" and property.javascript_clean_name == "title" %}
+            {
+                resource.title &&
+                <Partials.NameValue name='Title' value={resource.title} searchParameter='title' />
+            }
+        {% elif fhir_entity.cleaned_name == "SubscriptionTopic" and property.javascript_clean_name == "publisher" %}
+            {
+                resource.publisher &&
+                <Partials.NameValue name='Publisher' value={resource.publisher} searchParameter='publisher' />
+            }
+        {% elif fhir_entity.cleaned_name == "SubscriptionTopic" and property.javascript_clean_name == "approvalDate" %}
+            {
+                resource.approvalDate &&
+                <Partials.NameValue name='Approval Date' value={resource.approvalDate} searchParameter='approval-date' />
+            }
+        {% elif fhir_entity.cleaned_name == "SubscriptionTopic" and property.javascript_clean_name == "lastReviewDate" %}
+            {
+                resource.lastReviewDate &&
+                <Partials.NameValue name='Last Review Date' value={resource.lastReviewDate} searchParameter='last-review-date' />
+            }
         {% endif %}
     {% endif %}
     {%  endfor %}

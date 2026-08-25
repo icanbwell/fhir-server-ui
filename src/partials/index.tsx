@@ -44,6 +44,10 @@ import Reference from './Reference';
 import ReverseReference from './ReverseReference';
 import SubscriptionChannel from './SubscriptionChannel';
 import SubscriptionStatusNotificationEvent from './SubscriptionStatusNotificationEvent';
+import SubscriptionTopicCanFilterBy from './SubscriptionTopicCanFilterBy';
+import SubscriptionTopicEventTrigger from './SubscriptionTopicEventTrigger';
+import SubscriptionTopicNotificationShape from './SubscriptionTopicNotificationShape';
+import SubscriptionTopicResourceTrigger from './SubscriptionTopicResourceTrigger';
 import Time from './Time';
 import Timing from './Timing';
 import Uri from './Uri';
@@ -95,6 +99,10 @@ export default {
   ReverseReference,
   SubscriptionChannel,
   SubscriptionStatusNotificationEvent,
+  SubscriptionTopicCanFilterBy,
+  SubscriptionTopicEventTrigger,
+  SubscriptionTopicNotificationShape,
+  SubscriptionTopicResourceTrigger,
   Time,
   Timing,
   Uri,

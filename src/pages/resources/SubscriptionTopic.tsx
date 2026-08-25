@@ -202,6 +202,50 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                     searchParameter='effective-period'
                 />
             }
+            {
+                resource.resourceTrigger &&
+                <Partials.SubscriptionTopicResourceTrigger
+                    resourceTrigger={resource.resourceTrigger}
+                    name='Resource Trigger'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='resource-trigger'
+                    field=''
+                />
+            }
+            {
+                resource.eventTrigger &&
+                <Partials.SubscriptionTopicEventTrigger
+                    eventTrigger={resource.eventTrigger}
+                    name='Event Trigger'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='event-trigger'
+                    field=''
+                />
+            }
+            {
+                resource.canFilterBy &&
+                <Partials.SubscriptionTopicCanFilterBy
+                    canFilterBy={resource.canFilterBy}
+                    name='Can Filter By'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='can-filter-by'
+                    field=''
+                />
+            }
+            {
+                resource.notificationShape &&
+                <Partials.SubscriptionTopicNotificationShape
+                    notificationShape={resource.notificationShape}
+                    name='Notification Shape'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='notification-shape'
+                    field=''
+                />
+            }
         </>
     );
 };

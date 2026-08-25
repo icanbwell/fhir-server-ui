@@ -244,4 +244,24 @@ partials_mapping = {
         'field': '',
         'prop_name': 'notificationEvent'
     },
+    'SubscriptionTopicResourceTrigger': {
+        'partial': 'SubscriptionTopicResourceTrigger',
+        'field': '',
+        'prop_name': 'resourceTrigger'
+    },
+    'SubscriptionTopicEventTrigger': {
+        'partial': 'SubscriptionTopicEventTrigger',
+        'field': '',
+        'prop_name': 'eventTrigger'
+    },
+    'SubscriptionTopicCanFilterBy': {
+        'partial': 'SubscriptionTopicCanFilterBy',
+        'field': '',
+        'prop_name': 'canFilterBy'
+    },
+    'SubscriptionTopicNotificationShape': {
+        'partial': 'SubscriptionTopicNotificationShape',
+        'field': '',
+        'prop_name': 'notificationShape'
+    },
 }

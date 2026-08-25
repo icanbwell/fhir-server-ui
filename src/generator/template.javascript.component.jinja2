@@ -92,6 +92,21 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
             }
         {% elif fhir_entity.cleaned_name == "Binary" and property.javascript_clean_name == "data" %}
             <Partials.BinaryContent contentType={resource.contentType} id={uuid} />
+        {% elif fhir_entity.cleaned_name == "Subscription" and property.javascript_clean_name == "reason" %}
+            {
+                resource.reason &&
+                <Partials.NameValue name='Reason' value={resource.reason} searchParameter='reason' />
+            }
+        {% elif fhir_entity.cleaned_name == "Subscription" and property.javascript_clean_name == "criteria" %}
+            {
+                resource.criteria &&
+                <Partials.NameValue name='Criteria' value={resource.criteria} searchParameter='criteria' />
+            }
+        {% elif fhir_entity.cleaned_name == "Subscription" and property.javascript_clean_name == "error" %}
+            {
+                resource.error &&
+                <Partials.NameValue name='Error' value={resource.error} searchParameter='error' />
+            }
         {% endif %}
     {% endif %}
     {%  endfor %}

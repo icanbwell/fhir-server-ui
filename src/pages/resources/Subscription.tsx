@@ -106,6 +106,18 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 />
             }
             {
+                resource.reason &&
+                <Partials.NameValue name='Reason' value={resource.reason} searchParameter='reason' />
+            }
+            {
+                resource.criteria &&
+                <Partials.NameValue name='Criteria' value={resource.criteria} searchParameter='criteria' />
+            }
+            {
+                resource.error &&
+                <Partials.NameValue name='Error' value={resource.error} searchParameter='error' />
+            }
+            {
                 resource.channel &&
                 <Partials.SubscriptionChannel
                     channel={resource.channel}

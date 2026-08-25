@@ -12,6 +12,7 @@ Subscription
 
 import React from 'react';
 import { Link } from 'react-router';
+import { Typography } from '@mui/material';
 import { TSubscription } from '../../types/resources/Subscription';
 
 // Import all the partial resource
@@ -128,6 +129,15 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                     field=''
                 />
             }
+            <Typography variant="h6" color="text.secondary" sx={{ mt: 1 }}>
+                Related Resources
+            </Typography>
+            <Partials.ReverseReference
+                name="SubscriptionStatus"
+                id={uuid}
+                resourceType={resource.resourceType}
+                reverseReferences={[{'target': 'SubscriptionStatus', 'property': 'subscription'}]}
+            />
         </>
     );
 };

@@ -84,4 +84,7 @@ reverse_references = {
         {"reverseReferences": [{"target":'Patient', "property":'actor'}], "name": "Patient"},
         {"reverseReferences": [{"target":'PractitionerRole', "property":'actor'}], "name": "PractitionerRole"}
     ],
+    "Subscription": [
+        {"reverseReferences": [{"target":'SubscriptionStatus', "property":'subscription'}], "name": "SubscriptionStatus"}
+    ],
 }

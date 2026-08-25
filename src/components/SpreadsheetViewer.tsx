@@ -9,6 +9,7 @@ import {
     Tab,
     FormControlLabel,
     Checkbox,
+    Button,
 } from '@mui/material';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -72,6 +73,16 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
     const [sheets, setSheets] = useState<SheetData[]>([]);
     const [activeSheetName, setActiveSheetName] = useState<string>();
     const [hideEmptyColumns, setHideEmptyColumns] = useState<boolean>(true);
+
+    // The FHIR server's own default page size is much smaller (observed: 100 rows) when a
+    // request doesn't specify `_count` — bump the default so most exports need no follow-up,
+    // while still capping how far "Load more" can go so a single click can't request an
+    // unbounded export.
+    const DEFAULT_SPREADSHEET_COUNT = 1000;
+    const MAX_SPREADSHEET_COUNT = 20000;
+
+    const [requestedCount, setRequestedCount] = useState<number>(DEFAULT_SPREADSHEET_COUNT);
+    const [truncatedSheetNames, setTruncatedSheetNames] = useState<Set<string>>(new Set());
     const navigate = useNavigate(); // Initialize navigate
     const location = useLocation(); // Initialize location
 
@@ -98,12 +109,22 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
         uri.searchParams.set('_format', format);
         const queryString = new URLSearchParams(location.search);
         for (const [key, value] of queryString.entries()) {
-            if (key !== '_format') {
+            if (key !== '_format' && key !== '_count') {
                 uri.searchParams.set(key, value);
             }
         }
+        uri.searchParams.set('_count', String(requestedCount));
         return uri;
-    }, [relativeUrl, fhirUrl, format, location.search]);
+    }, [relativeUrl, fhirUrl, format, location.search, requestedCount]);
+
+    useEffect(() => {
+        const existingCount = parseInt(new URLSearchParams(location.search).get('_count') || '', 10);
+        if (!isNaN(existingCount) && existingCount > 0) {
+            setRequestedCount(existingCount);
+        }
+        // Deliberately runs only when the URL's search string itself changes (e.g. navigating to
+        // a different resource), not on every requestedCount update this component makes itself.
+    }, [location.search]);
 
     useEffect(() => {
         const fetchSpreadsheetData = async () => {
@@ -172,6 +193,9 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
                 );
 
                 setSheets(parsedSheets);
+                setTruncatedSheetNames(
+                    new Set(parsedSheets.filter((s) => s.rowData.length >= requestedCount).map((s) => s.name))
+                );
                 setIsLoading(false);
                 finish();
             } catch (error) {
@@ -182,7 +206,17 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
         };
 
         fetchSpreadsheetData().then((r) => r);
-    }, [relativeUrl, hideEmptyColumns, downloadUri, format, baseApi, start, onProgress, finish]);
+    }, [
+        relativeUrl,
+        hideEmptyColumns,
+        downloadUri,
+        requestedCount,
+        format,
+        baseApi,
+        start,
+        onProgress,
+        finish,
+    ]);
 
     const defaultColDef = useMemo(
         () => ({
@@ -315,6 +349,30 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
                     width: '100%',
                 }}
             >
+                {activeSheetName && truncatedSheetNames.has(activeSheetName) && (
+                    <Alert
+                        severity="warning"
+                        sx={{ mb: 1 }}
+                        action={
+                            requestedCount < MAX_SPREADSHEET_COUNT ? (
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() =>
+                                        setRequestedCount((count) => Math.min(count * 2, MAX_SPREADSHEET_COUNT))
+                                    }
+                                >
+                                    Load more
+                                </Button>
+                            ) : undefined
+                        }
+                    >
+                        Showing the first {requestedCount.toLocaleString()} rows for this sheet
+                        {requestedCount >= MAX_SPREADSHEET_COUNT
+                            ? ` (maximum). Narrow your query to see the rest.`
+                            : '.'}
+                    </Alert>
+                )}
                 <AgGridReact
                     theme={gridTheme}
                     columnDefs={sortedSheets.find((s) => s.name === activeSheetName)?.columnDefs || []}

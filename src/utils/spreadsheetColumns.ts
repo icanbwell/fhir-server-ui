@@ -15,11 +15,24 @@ const cellText = (value: unknown): string => (value === undefined || value === n
 // looksLikeIsoDate - so those cells must be recognized directly, not via their stringified form.
 // For text cells, also requires a '-' so a column of bare 4-digit numbers (counts, MRNs, zip
 // codes) isn't misclassified as dates via looksLikeIsoDate's year-only ISO date branch.
+//
+// Separately, some server-generated exports (e.g. SubscriptionStatus.lastUpdated via "Open
+// Search Results as Spreadsheet") stringify date values using JS's default
+// `Date.prototype.toString()` shape ("Mon May 18 2026 16:44:17 GMT+0000 (...)") rather than
+// ISO-8601 text or a native Excel date cell. That shape has no '-', so it fails the ISO check
+// above too - recognized separately via DATE_TO_STRING_REGEX, which is specific enough
+// (weekday + month abbreviation + GMT offset) not to collide with unrelated text/number columns.
+const DATE_TO_STRING_REGEX = /^[A-Za-z]{3} [A-Za-z]{3} \d{2} \d{4} \d{2}:\d{2}:\d{2} GMT[+-]\d{4}/;
+
 const parseCellDate = (cell: unknown): Date | null => {
     if (cell instanceof Date) {
         return isNaN(cell.getTime()) ? null : cell;
     }
     const text = cellText(cell);
+    if (DATE_TO_STRING_REGEX.test(text)) {
+        const parsed = new Date(text);
+        return isNaN(parsed.getTime()) ? null : parsed;
+    }
     return text.includes('-') && looksLikeIsoDate(text) ? new Date(text) : null;
 };
 

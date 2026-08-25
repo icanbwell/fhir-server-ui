@@ -99,6 +99,28 @@ describe('buildSheetColumnsAndRows', () => {
         expect(formatted).not.toMatch(/^Mon|Tue|Wed|Thu|Fri|Sat|Sun/);
     });
 
+    it('recognizes Date.prototype.toString()-shaped text cells (server-stringified dates, not ISO text or a native xlsx Date cell) as a date column', () => {
+        // Some server-generated exports stringify date values via JS's default Date.toString()
+        // shape instead of ISO-8601 text or a native Excel date cell. That shape has no '-', so
+        // it previously failed both parseCellDate branches and the column fell back to
+        // lexicographic text sort - which sorts by weekday abbreviation first ("Mon" < "Thu" <
+        // "Tue" < "Wed"), reproducing the exact out-of-order row sequence seen in production.
+        const headers = ['lastUpdated'];
+        const dataRows = [
+            ['Mon May 18 2026 16:44:17 GMT+0000 (Coordinated Universal Time)'],
+            ['Tue Jun 16 2026 16:18:10 GMT+0000 (Coordinated Universal Time)'],
+            ['Wed Jun 03 2026 02:17:56 GMT+0000 (Coordinated Universal Time)'],
+        ];
+        const { columnDefs, rowData } = buildSheetColumnsAndRows(headers, dataRows, false);
+
+        expect(columnDefs[0].cellDataType).toBe('date');
+        expect(rowData.map((row) => (row.col0 as Date).toISOString())).toEqual([
+            '2026-05-18T16:44:17.000Z',
+            '2026-06-16T16:18:10.000Z',
+            '2026-06-03T02:17:56.000Z',
+        ]);
+    });
+
     it('formats an already-parsed date-only Date cell without fabricating a time-of-day', () => {
         const headers = ['birthDate'];
         const dataRows = [[new Date('1990-05-15T00:00:00Z')]];

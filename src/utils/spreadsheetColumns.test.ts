@@ -73,4 +73,39 @@ describe('buildSheetColumnsAndRows', () => {
         });
         expect(formatted).toMatch(/\d{1,2}:\d{2}/);
     });
+
+    it('recognizes already-parsed Date cells (xlsx date-typed cells) as a date column and sorts them chronologically', () => {
+        // The xlsx viewer fetches application/vnd.ms-excel, not CSV - the xlsx library parses
+        // genuine Excel date cells into real Date instances rather than ISO-8601 text, unlike
+        // the CSV path. This reproduces that shape (out-of-order on purpose).
+        const headers = ['lastUpdated'];
+        const dataRows = [
+            [new Date('2026-06-16T16:18:10Z')],
+            [new Date('2026-05-18T16:44:17Z')],
+            [new Date('2026-06-03T02:17:56Z')],
+        ];
+        const { columnDefs, rowData } = buildSheetColumnsAndRows(headers, dataRows, false);
+
+        expect(columnDefs[0].cellDataType).toBe('date');
+        expect(rowData.map((row) => row.col0)).toEqual([
+            new Date('2026-06-16T16:18:10Z'),
+            new Date('2026-05-18T16:44:17Z'),
+            new Date('2026-06-03T02:17:56Z'),
+        ]);
+        const formatted = (columnDefs[0].valueFormatter as (params: { value?: Date | null }) => string)({
+            value: rowData[0].col0 as Date,
+        });
+        expect(formatted).toMatch(/\d{1,2}:\d{2}/);
+        expect(formatted).not.toMatch(/^Mon|Tue|Wed|Thu|Fri|Sat|Sun/);
+    });
+
+    it('formats an already-parsed date-only Date cell without fabricating a time-of-day', () => {
+        const headers = ['birthDate'];
+        const dataRows = [[new Date('1990-05-15T00:00:00Z')]];
+        const { columnDefs } = buildSheetColumnsAndRows(headers, dataRows, false);
+        const formatted = (columnDefs[0].valueFormatter as (params: { value?: Date | null }) => string)({
+            value: new Date('1990-05-15T00:00:00Z'),
+        });
+        expect(formatted).not.toMatch(/\d{1,2}:\d{2}/);
+    });
 });

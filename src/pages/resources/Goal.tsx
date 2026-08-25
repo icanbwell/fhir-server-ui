@@ -26,6 +26,16 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -144,6 +154,16 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                 />
             }
             {
+                resource.startDate &&
+                <Partials.Date
+                    date={resource.startDate}
+                    name='Start Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='start-date'
+                />
+            }
+            {
                 resource.startCodeableConcept &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.startCodeableConcept}
@@ -151,6 +171,26 @@ const Goal = ({ resource }: { resource: TGoal }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='start-codeable-concept'
+                />
+            }
+            {
+                resource.statusDate &&
+                <Partials.Date
+                    date={resource.statusDate}
+                    name='Status Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='status-date'
+                />
+            }
+            {
+                resource.statusReason &&
+                <Partials.String
+                    string={resource.statusReason}
+                    name='Status Reason'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='status-reason'
                 />
             }
             {

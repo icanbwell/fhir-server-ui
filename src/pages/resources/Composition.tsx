@@ -32,6 +32,16 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -157,6 +167,16 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='author'
+                />
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
                 />
             }
             {

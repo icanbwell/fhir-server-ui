@@ -28,6 +28,16 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -113,10 +123,22 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
             }
             {
                 resource.name &&
-                <Partials.NameValue
+                <Partials.String
+                    string={resource.name}
                     name='Name'
-                    value={resource.name}
+                    resourceType={resource.resourceType}
+                    id={uuid}
                     searchParameter='name'
+                />
+            }
+            {
+                resource.alias &&
+                <Partials.String
+                    string={resource.alias}
+                    name='Alias'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='alias'
                 />
             }
             {

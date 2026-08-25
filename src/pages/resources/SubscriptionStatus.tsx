@@ -27,6 +27,16 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
             </Link>
             <PatientReferenceFromExtension extension={resource.extension} />
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -87,6 +97,16 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
             {
                 resource.type &&
                 <Partials.Code code={resource.type} name='Type'/>
+            }
+            {
+                resource.eventsSinceSubscriptionStart &&
+                <Partials.String
+                    string={resource.eventsSinceSubscriptionStart}
+                    name='Events Since Subscription Start'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='events-since-subscription-start'
+                />
             }
             {
                 resource.notificationEvent &&

@@ -25,6 +25,16 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -178,6 +188,26 @@ const AllergyIntolerance = ({ resource }: { resource: TAllergyIntolerance }): Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='onset-period'
+                />
+            }
+            {
+                resource.onsetRange &&
+                <Partials.Range
+                    range={resource.onsetRange}
+                    name='Onset Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='onset-range'
+                />
+            }
+            {
+                resource.onsetString &&
+                <Partials.String
+                    string={resource.onsetString}
+                    name='Onset String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='onset-string'
                 />
             }
             {

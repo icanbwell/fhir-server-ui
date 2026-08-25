@@ -25,6 +25,16 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -143,6 +153,16 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                 />
             }
             {
+                resource.occurrenceString &&
+                <Partials.String
+                    string={resource.occurrenceString}
+                    name='Occurrence String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='occurrence-string'
+                />
+            }
+            {
                 resource.recorded &&
                 <Partials.DateTime
                     dateTime={resource.recorded}
@@ -190,6 +210,26 @@ const Immunization = ({ resource }: { resource: TImmunization }): React.ReactEle
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='manufacturer'
+                />
+            }
+            {
+                resource.lotNumber &&
+                <Partials.String
+                    string={resource.lotNumber}
+                    name='Lot Number'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='lot-number'
+                />
+            }
+            {
+                resource.expirationDate &&
+                <Partials.Date
+                    date={resource.expirationDate}
+                    name='Expiration Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='expiration-date'
                 />
             }
             {

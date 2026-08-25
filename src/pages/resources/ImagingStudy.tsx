@@ -28,6 +28,16 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -176,6 +186,26 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
+                resource.numberOfSeries &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.numberOfSeries}
+                    name='Number Of Series'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='number-of-series'
+                />
+            }
+            {
+                resource.numberOfInstances &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.numberOfInstances}
+                    name='Number Of Instances'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='number-of-instances'
+                />
+            }
+            {
                 resource.procedureReference &&
                 <Partials.Reference
                     reference={resource.procedureReference}
@@ -233,6 +263,16 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='note'
+                />
+            }
+            {
+                resource.description &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
                 />
             }
         </>

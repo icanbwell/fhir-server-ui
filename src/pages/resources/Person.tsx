@@ -28,6 +28,16 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -114,6 +124,16 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
             {
                 resource.gender &&
                 <Partials.Code code={resource.gender} name='Gender'/>
+            }
+            {
+                resource.birthDate &&
+                <Partials.Date
+                    date={resource.birthDate}
+                    name='Birth Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='birth-date'
+                />
             }
             {
                 resource.address &&

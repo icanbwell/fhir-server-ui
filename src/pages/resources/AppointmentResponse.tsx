@@ -25,6 +25,16 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -141,6 +151,16 @@ const AppointmentResponse = ({ resource }: { resource: TAppointmentResponse }): 
             {
                 resource.participantStatus &&
                 <Partials.Code code={resource.participantStatus} name='Participant Status'/>
+            }
+            {
+                resource.comment &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
+                />
             }
         </>
     );

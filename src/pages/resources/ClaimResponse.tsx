@@ -25,6 +25,16 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -169,6 +179,26 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
             {
                 resource.outcome &&
                 <Partials.Code code={resource.outcome} name='Outcome'/>
+            }
+            {
+                resource.disposition &&
+                <Partials.String
+                    string={resource.disposition}
+                    name='Disposition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='disposition'
+                />
+            }
+            {
+                resource.preAuthRef &&
+                <Partials.String
+                    string={resource.preAuthRef}
+                    name='Pre Auth Ref'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='pre-auth-ref'
+                />
             }
             {
                 resource.preAuthPeriod &&

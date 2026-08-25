@@ -25,6 +25,16 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -103,6 +113,16 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.subject &&
                 <Partials.Reference
                     reference={resource.subject}
@@ -141,6 +161,16 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='owner'
+                />
+            }
+            {
+                resource.description &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
                 />
             }
             {

@@ -28,6 +28,16 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -264,6 +274,16 @@ const ChargeItem = ({ resource }: { resource: TChargeItem }): React.ReactElement
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='price-override'
+                />
+            }
+            {
+                resource.overrideReason &&
+                <Partials.String
+                    string={resource.overrideReason}
+                    name='Override Reason'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='override-reason'
                 />
             }
             {

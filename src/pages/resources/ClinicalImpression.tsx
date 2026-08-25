@@ -30,6 +30,16 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -115,6 +125,16 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='code'
+                />
+            }
+            {
+                resource.description &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
                 />
             }
             {
@@ -205,6 +225,16 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='protocol'
+                />
+            }
+            {
+                resource.summary &&
+                <Partials.String
+                    string={resource.summary}
+                    name='Summary'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='summary'
                 />
             }
             {

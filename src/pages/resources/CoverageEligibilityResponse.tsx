@@ -25,6 +25,16 @@ const CoverageEligibilityResponse = ({ resource }: { resource: TCoverageEligibil
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -107,6 +117,16 @@ const CoverageEligibilityResponse = ({ resource }: { resource: TCoverageEligibil
                 />
             }
             {
+                resource.servicedDate &&
+                <Partials.Date
+                    date={resource.servicedDate}
+                    name='Serviced Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='serviced-date'
+                />
+            }
+            {
                 resource.servicedPeriod &&
                 <Partials.Period
                     period={resource.servicedPeriod}
@@ -151,6 +171,16 @@ const CoverageEligibilityResponse = ({ resource }: { resource: TCoverageEligibil
                 <Partials.Code code={resource.outcome} name='Outcome'/>
             }
             {
+                resource.disposition &&
+                <Partials.String
+                    string={resource.disposition}
+                    name='Disposition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='disposition'
+                />
+            }
+            {
                 resource.insurer &&
                 <Partials.Reference
                     reference={resource.insurer}
@@ -169,6 +199,16 @@ const CoverageEligibilityResponse = ({ resource }: { resource: TCoverageEligibil
                     id={uuid}
                     searchParameter='insurance'
                     field='coverage'
+                />
+            }
+            {
+                resource.preAuthRef &&
+                <Partials.String
+                    string={resource.preAuthRef}
+                    name='Pre Auth Ref'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='pre-auth-ref'
                 />
             }
             {

@@ -25,6 +25,16 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -89,6 +99,26 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.derivedFrom &&
                 <Partials.Canonical
                     canonical={resource.derivedFrom}
@@ -120,6 +150,16 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='date'
+                />
+            }
+            {
+                resource.publisher &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
                 />
             }
             {
@@ -165,6 +205,26 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
+                resource.expression &&
+                <Partials.String
+                    string={resource.expression}
+                    name='Expression'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='expression'
+                />
+            }
+            {
+                resource.xpath &&
+                <Partials.String
+                    string={resource.xpath}
+                    name='Xpath'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='xpath'
+                />
+            }
+            {
                 resource.xpathUsage &&
                 <Partials.Code code={resource.xpathUsage} name='Xpath Usage'/>
             }
@@ -199,6 +259,16 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
             {
                 resource.modifier &&
                 <Partials.Code code={resource.modifier} name='Modifier'/>
+            }
+            {
+                resource.chain &&
+                <Partials.String
+                    string={resource.chain}
+                    name='Chain'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='chain'
+                />
             }
         </>
     );

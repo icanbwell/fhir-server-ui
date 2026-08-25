@@ -25,6 +25,16 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -220,6 +230,16 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='basis'
+                />
+            }
+            {
+                resource.mitigation &&
+                <Partials.String
+                    string={resource.mitigation}
+                    name='Mitigation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='mitigation'
                 />
             }
             {

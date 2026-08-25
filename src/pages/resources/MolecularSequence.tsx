@@ -24,6 +24,16 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -92,6 +102,16 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
+                resource.coordinateSystem &&
+                <Partials.Int
+                    int={resource.coordinateSystem}
+                    name='Coordinate System'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='coordinate-system'
+                />
+            }
+            {
                 resource.patient &&
                 <Partials.Reference
                     reference={resource.patient}
@@ -139,6 +159,26 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='quantity'
+                />
+            }
+            {
+                resource.observedSeq &&
+                <Partials.String
+                    string={resource.observedSeq}
+                    name='Observed Seq'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='observed-seq'
+                />
+            }
+            {
+                resource.readCoverage &&
+                <Partials.Int
+                    int={resource.readCoverage}
+                    name='Read Coverage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='read-coverage'
                 />
             }
             {

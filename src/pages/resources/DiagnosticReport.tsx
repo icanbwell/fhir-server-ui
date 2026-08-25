@@ -28,6 +28,16 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -234,6 +244,16 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                     id={uuid}
                     searchParameter='media'
                     field='link'
+                />
+            }
+            {
+                resource.conclusion &&
+                <Partials.String
+                    string={resource.conclusion}
+                    name='Conclusion'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='conclusion'
                 />
             }
             {

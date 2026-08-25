@@ -29,6 +29,16 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -110,6 +120,16 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='domain'
+                />
+            }
+            {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
                 />
             }
             {
@@ -223,6 +243,16 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
+                resource.marketingStatus &&
+                <Partials.MarketingStatus
+                    marketingStatus={resource.marketingStatus}
+                    name='Marketing Status'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='marketing-status'
+                />
+            }
+            {
                 resource.packagedMedicinalProduct &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.packagedMedicinalProduct}
@@ -240,6 +270,16 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='ingredient'
+                />
+            }
+            {
+                resource.impurity &&
+                <Partials.CodeableReference
+                    codeableReference={resource.impurity}
+                    name='Impurity'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='impurity'
                 />
             }
             {

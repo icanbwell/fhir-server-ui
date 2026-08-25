@@ -24,6 +24,16 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -109,6 +119,16 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='manufacturer'
+                />
+            }
+            {
+                resource.knownAllergen &&
+                <Partials.CodeableReference
+                    codeableReference={resource.knownAllergen}
+                    name='Known Allergen'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='known-allergen'
                 />
             }
             {

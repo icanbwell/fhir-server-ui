@@ -25,6 +25,16 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -100,11 +110,23 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
             }
             {
                 resource.version &&
-                <Partials.NameValue name='Version' value={resource.version} searchParameter='version' />
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
             }
             {
                 resource.title &&
-                <Partials.NameValue name='Title' value={resource.title} searchParameter='title' />
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
             }
             {
                 resource.derivedFrom &&
@@ -142,7 +164,13 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
             }
             {
                 resource.publisher &&
-                <Partials.NameValue name='Publisher' value={resource.publisher} searchParameter='publisher' />
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
             }
             {
                 resource.description &&
@@ -186,11 +214,23 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
             }
             {
                 resource.approvalDate &&
-                <Partials.NameValue name='Approval Date' value={resource.approvalDate} searchParameter='approval-date' />
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
             }
             {
                 resource.lastReviewDate &&
-                <Partials.NameValue name='Last Review Date' value={resource.lastReviewDate} searchParameter='last-review-date' />
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
+                />
             }
             {
                 resource.effectivePeriod &&

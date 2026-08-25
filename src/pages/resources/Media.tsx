@@ -25,6 +25,16 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -223,6 +233,16 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                 />
             }
             {
+                resource.deviceName &&
+                <Partials.String
+                    string={resource.deviceName}
+                    name='Device Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='device-name'
+                />
+            }
+            {
                 resource.device &&
                 <Partials.Reference
                     reference={resource.device}
@@ -230,6 +250,36 @@ const Media = ({ resource }: { resource: TMedia }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='device'
+                />
+            }
+            {
+                resource.height &&
+                <Partials.Int
+                    int={resource.height}
+                    name='Height'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='height'
+                />
+            }
+            {
+                resource.width &&
+                <Partials.Int
+                    int={resource.width}
+                    name='Width'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='width'
+                />
+            }
+            {
+                resource.frames &&
+                <Partials.Int
+                    int={resource.frames}
+                    name='Frames'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='frames'
                 />
             }
             {

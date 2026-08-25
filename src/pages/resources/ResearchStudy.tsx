@@ -29,6 +29,16 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -90,6 +100,16 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='identifier'
+                />
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
                 />
             }
             {
@@ -164,6 +184,16 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='condition'
+                />
+            }
+            {
+                resource.relatedArtifact &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
                 />
             }
             {

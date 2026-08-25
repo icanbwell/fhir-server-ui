@@ -25,6 +25,16 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -243,6 +253,16 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
+                resource.valueString &&
+                <Partials.String
+                    string={resource.valueString}
+                    name='Value String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='value-string'
+                />
+            }
+            {
                 resource.valueBoolean &&
                 <Partials.Boolean
                     boolean={resource.valueBoolean}
@@ -253,6 +273,26 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                 />
             }
             {
+                resource.valueInteger &&
+                <Partials.Int
+                    int={resource.valueInteger}
+                    name='Value Integer'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='value-integer'
+                />
+            }
+            {
+                resource.valueRange &&
+                <Partials.Range
+                    range={resource.valueRange}
+                    name='Value Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='value-range'
+                />
+            }
+            {
                 resource.valueRatio &&
                 <Partials.Ratio
                     ratio={resource.valueRatio}
@@ -260,6 +300,16 @@ const Observation = ({ resource }: { resource: TObservation }): React.ReactEleme
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='value-ratio'
+                />
+            }
+            {
+                resource.valueSampledData &&
+                <Partials.SampledData
+                    sampledData={resource.valueSampledData}
+                    name='Value Sampled Data'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='value-sampled-data'
                 />
             }
             {

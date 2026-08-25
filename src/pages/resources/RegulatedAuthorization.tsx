@@ -27,6 +27,16 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -158,6 +168,16 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='validity-period'
+                />
+            }
+            {
+                resource.indication &&
+                <Partials.CodeableReference
+                    codeableReference={resource.indication}
+                    name='Indication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='indication'
                 />
             }
             {

@@ -25,6 +25,16 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -89,6 +99,16 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
+                resource.manufacturerString &&
+                <Partials.String
+                    string={resource.manufacturerString}
+                    name='Manufacturer String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='manufacturer-string'
+                />
+            }
+            {
                 resource.manufacturerReference &&
                 <Partials.Reference
                     reference={resource.manufacturerReference}
@@ -96,6 +116,16 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='manufacturer-reference'
+                />
+            }
+            {
+                resource.modelNumber &&
+                <Partials.String
+                    string={resource.modelNumber}
+                    name='Model Number'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='model-number'
                 />
             }
             {
@@ -109,6 +139,16 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                 />
             }
             {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
                 resource.safety &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.safety}
@@ -116,6 +156,26 @@ const DeviceDefinition = ({ resource }: { resource: TDeviceDefinition }): React.
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='safety'
+                />
+            }
+            {
+                resource.shelfLifeStorage &&
+                <Partials.ProductShelfLife
+                    productShelfLife={resource.shelfLifeStorage}
+                    name='Shelf Life Storage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='shelf-life-storage'
+                />
+            }
+            {
+                resource.physicalCharacteristics &&
+                <Partials.ProdCharacteristic
+                    prodCharacteristic={resource.physicalCharacteristics}
+                    name='Physical Characteristics'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='physical-characteristics'
                 />
             }
             {

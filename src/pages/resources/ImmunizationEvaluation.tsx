@@ -26,6 +26,16 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -161,6 +171,66 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='dose-status-reason'
+                />
+            }
+            {
+                resource.description &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
+                resource.series &&
+                <Partials.String
+                    string={resource.series}
+                    name='Series'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series'
+                />
+            }
+            {
+                resource.doseNumberPositiveInt &&
+                <Partials.Int
+                    int={resource.doseNumberPositiveInt}
+                    name='Dose Number Positive Int'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dose-number-positive-int'
+                />
+            }
+            {
+                resource.doseNumberString &&
+                <Partials.String
+                    string={resource.doseNumberString}
+                    name='Dose Number String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dose-number-string'
+                />
+            }
+            {
+                resource.seriesDosesPositiveInt &&
+                <Partials.Int
+                    int={resource.seriesDosesPositiveInt}
+                    name='Series Doses Positive Int'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series-doses-positive-int'
+                />
+            }
+            {
+                resource.seriesDosesString &&
+                <Partials.String
+                    string={resource.seriesDosesString}
+                    name='Series Doses String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series-doses-string'
                 />
             }
         </>

@@ -25,6 +25,16 @@ const Coverage = ({ resource }: { resource: TCoverage }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -123,6 +133,16 @@ const Coverage = ({ resource }: { resource: TCoverage }): React.ReactElement => 
                 />
             }
             {
+                resource.subscriberId &&
+                <Partials.String
+                    string={resource.subscriberId}
+                    name='Subscriber Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='subscriber-id'
+                />
+            }
+            {
                 resource.beneficiary &&
                 <Partials.Reference
                     reference={resource.beneficiary}
@@ -130,6 +150,16 @@ const Coverage = ({ resource }: { resource: TCoverage }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='beneficiary'
+                />
+            }
+            {
+                resource.dependent &&
+                <Partials.String
+                    string={resource.dependent}
+                    name='Dependent'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dependent'
                 />
             }
             {
@@ -160,6 +190,26 @@ const Coverage = ({ resource }: { resource: TCoverage }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='payor'
+                />
+            }
+            {
+                resource.order &&
+                <Partials.Int
+                    int={resource.order}
+                    name='Order'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='order'
+                />
+            }
+            {
+                resource.network &&
+                <Partials.String
+                    string={resource.network}
+                    name='Network'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='network'
                 />
             }
             {

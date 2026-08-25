@@ -25,6 +25,16 @@ const EnrollmentResponse = ({ resource }: { resource: TEnrollmentResponse }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -105,6 +115,16 @@ const EnrollmentResponse = ({ resource }: { resource: TEnrollmentResponse }): Re
             {
                 resource.outcome &&
                 <Partials.Code code={resource.outcome} name='Outcome'/>
+            }
+            {
+                resource.disposition &&
+                <Partials.String
+                    string={resource.disposition}
+                    name='Disposition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='disposition'
+                />
             }
             {
                 resource.created &&

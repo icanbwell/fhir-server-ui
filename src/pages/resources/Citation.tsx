@@ -28,6 +28,16 @@ const Citation = ({ resource }: { resource: TCitation }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -102,6 +112,36 @@ const Citation = ({ resource }: { resource: TCitation }): React.ReactElement => 
                 />
             }
             {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
@@ -123,6 +163,16 @@ const Citation = ({ resource }: { resource: TCitation }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='date'
+                />
+            }
+            {
+                resource.publisher &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
                 />
             }
             {
@@ -163,6 +213,26 @@ const Citation = ({ resource }: { resource: TCitation }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='copyright'
+                />
+            }
+            {
+                resource.approvalDate &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
                 />
             }
             {

@@ -25,6 +25,16 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -120,6 +130,26 @@ const ResearchSubject = ({ resource }: { resource: TResearchSubject }): React.Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='individual'
+                />
+            }
+            {
+                resource.assignedArm &&
+                <Partials.String
+                    string={resource.assignedArm}
+                    name='Assigned Arm'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='assigned-arm'
+                />
+            }
+            {
+                resource.actualArm &&
+                <Partials.String
+                    string={resource.actualArm}
+                    name='Actual Arm'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='actual-arm'
                 />
             }
             {

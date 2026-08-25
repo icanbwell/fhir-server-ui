@@ -25,6 +25,16 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -89,6 +99,16 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
+                resource.targetLocation &&
+                <Partials.String
+                    string={resource.targetLocation}
+                    name='Target Location'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='target-location'
+                />
+            }
+            {
                 resource.need &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.need}
@@ -150,6 +170,16 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='last-performed'
+                />
+            }
+            {
+                resource.nextScheduled &&
+                <Partials.Date
+                    date={resource.nextScheduled}
+                    name='Next Scheduled'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='next-scheduled'
                 />
             }
             {

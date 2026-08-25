@@ -25,6 +25,16 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -199,6 +209,26 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                 />
             }
             {
+                resource.onsetRange &&
+                <Partials.Range
+                    range={resource.onsetRange}
+                    name='Onset Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='onset-range'
+                />
+            }
+            {
+                resource.onsetString &&
+                <Partials.String
+                    string={resource.onsetString}
+                    name='Onset String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='onset-string'
+                />
+            }
+            {
                 resource.abatementDateTime &&
                 <Partials.DateTime
                     dateTime={resource.abatementDateTime}
@@ -226,6 +256,26 @@ const Condition = ({ resource }: { resource: TCondition }): React.ReactElement =
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='abatement-period'
+                />
+            }
+            {
+                resource.abatementRange &&
+                <Partials.Range
+                    range={resource.abatementRange}
+                    name='Abatement Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='abatement-range'
+                />
+            }
+            {
+                resource.abatementString &&
+                <Partials.String
+                    string={resource.abatementString}
+                    name='Abatement String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='abatement-string'
                 />
             }
             {

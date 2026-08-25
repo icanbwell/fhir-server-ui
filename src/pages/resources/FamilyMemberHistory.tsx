@@ -25,6 +25,16 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -143,6 +153,16 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.relationship &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.relationship}
@@ -173,6 +193,26 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
+                resource.bornDate &&
+                <Partials.Date
+                    date={resource.bornDate}
+                    name='Born Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='born-date'
+                />
+            }
+            {
+                resource.bornString &&
+                <Partials.String
+                    string={resource.bornString}
+                    name='Born String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='born-string'
+                />
+            }
+            {
                 resource.ageAge &&
                 <Partials.Quantity
                     quantity={resource.ageAge}
@@ -180,6 +220,26 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='age-age'
+                />
+            }
+            {
+                resource.ageRange &&
+                <Partials.Range
+                    range={resource.ageRange}
+                    name='Age Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='age-range'
+                />
+            }
+            {
+                resource.ageString &&
+                <Partials.String
+                    string={resource.ageString}
+                    name='Age String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='age-string'
                 />
             }
             {
@@ -210,6 +270,36 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='deceased-age'
+                />
+            }
+            {
+                resource.deceasedRange &&
+                <Partials.Range
+                    range={resource.deceasedRange}
+                    name='Deceased Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='deceased-range'
+                />
+            }
+            {
+                resource.deceasedDate &&
+                <Partials.Date
+                    date={resource.deceasedDate}
+                    name='Deceased Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='deceased-date'
+                />
+            }
+            {
+                resource.deceasedString &&
+                <Partials.String
+                    string={resource.deceasedString}
+                    name='Deceased String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='deceased-string'
                 />
             }
             {

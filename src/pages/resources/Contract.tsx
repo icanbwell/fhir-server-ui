@@ -25,6 +25,16 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -96,6 +106,16 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='url'
+                />
+            }
+            {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
                 />
             }
             {
@@ -210,6 +230,46 @@ const Contract = ({ resource }: { resource: TContract }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='site'
+                />
+            }
+            {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.subtitle &&
+                <Partials.String
+                    string={resource.subtitle}
+                    name='Subtitle'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='subtitle'
+                />
+            }
+            {
+                resource.alias &&
+                <Partials.String
+                    string={resource.alias}
+                    name='Alias'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='alias'
                 />
             }
             {

@@ -25,6 +25,16 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -86,6 +96,16 @@ const SubstanceDefinition = ({ resource }: { resource: TSubstanceDefinition }): 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='identifier'
+                />
+            }
+            {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
                 />
             }
             {

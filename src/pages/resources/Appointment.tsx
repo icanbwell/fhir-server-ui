@@ -26,6 +26,16 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -164,6 +174,26 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
+                resource.priority &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.priority}
+                    name='Priority'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='priority'
+                />
+            }
+            {
+                resource.description &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
                 resource.supportingInformation &&
                 <Partials.Reference
                     reference={resource.supportingInformation}
@@ -194,6 +224,16 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                 />
             }
             {
+                resource.minutesDuration &&
+                <Partials.Int
+                    int={resource.minutesDuration}
+                    name='Minutes Duration'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='minutes-duration'
+                />
+            }
+            {
                 resource.slot &&
                 <Partials.Reference
                     reference={resource.slot}
@@ -211,6 +251,26 @@ const Appointment = ({ resource }: { resource: TAppointment }): React.ReactEleme
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='created'
+                />
+            }
+            {
+                resource.comment &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
+                />
+            }
+            {
+                resource.patientInstruction &&
+                <Partials.String
+                    string={resource.patientInstruction}
+                    name='Patient Instruction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='patient-instruction'
                 />
             }
             {

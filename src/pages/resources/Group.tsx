@@ -27,6 +27,16 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -122,6 +132,26 @@ const Group = ({ resource }: { resource: TGroup }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='code'
+                />
+            }
+            {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.quantity &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.quantity}
+                    name='Quantity'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='quantity'
                 />
             }
             {

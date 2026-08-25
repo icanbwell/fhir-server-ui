@@ -31,6 +31,16 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
             </Link>
             <PatientReferenceFromExtension extension={resource.extension} />
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -110,15 +120,33 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
             }
             {
                 resource.reason &&
-                <Partials.NameValue name='Reason' value={resource.reason} searchParameter='reason' />
+                <Partials.String
+                    string={resource.reason}
+                    name='Reason'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='reason'
+                />
             }
             {
                 resource.criteria &&
-                <Partials.NameValue name='Criteria' value={resource.criteria} searchParameter='criteria' />
+                <Partials.String
+                    string={resource.criteria}
+                    name='Criteria'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='criteria'
+                />
             }
             {
                 resource.error &&
-                <Partials.NameValue name='Error' value={resource.error} searchParameter='error' />
+                <Partials.String
+                    string={resource.error}
+                    name='Error'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='error'
+                />
             }
             {
                 resource.channel &&

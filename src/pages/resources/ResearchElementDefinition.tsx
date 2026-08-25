@@ -25,6 +25,16 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -99,6 +109,56 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                 />
             }
             {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.shortTitle &&
+                <Partials.String
+                    string={resource.shortTitle}
+                    name='Short Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='short-title'
+                />
+            }
+            {
+                resource.subtitle &&
+                <Partials.String
+                    string={resource.subtitle}
+                    name='Subtitle'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='subtitle'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
@@ -143,6 +203,16 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                 />
             }
             {
+                resource.publisher &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
                 resource.description &&
                 <Partials.Markdown
                     markdown={resource.description}
@@ -150,6 +220,16 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='description'
+                />
+            }
+            {
+                resource.comment &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
                 />
             }
             {
@@ -173,6 +253,16 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                 />
             }
             {
+                resource.usage &&
+                <Partials.String
+                    string={resource.usage}
+                    name='Usage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='usage'
+                />
+            }
+            {
                 resource.copyright &&
                 <Partials.Markdown
                     markdown={resource.copyright}
@@ -180,6 +270,26 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='copyright'
+                />
+            }
+            {
+                resource.approvalDate &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
                 />
             }
             {
@@ -200,6 +310,16 @@ const ResearchElementDefinition = ({ resource }: { resource: TResearchElementDef
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='topic'
+                />
+            }
+            {
+                resource.relatedArtifact &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
                 />
             }
             {

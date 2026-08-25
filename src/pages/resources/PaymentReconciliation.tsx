@@ -25,6 +25,16 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -145,6 +155,26 @@ const PaymentReconciliation = ({ resource }: { resource: TPaymentReconciliation 
             {
                 resource.outcome &&
                 <Partials.Code code={resource.outcome} name='Outcome'/>
+            }
+            {
+                resource.disposition &&
+                <Partials.String
+                    string={resource.disposition}
+                    name='Disposition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='disposition'
+                />
+            }
+            {
+                resource.paymentDate &&
+                <Partials.Date
+                    date={resource.paymentDate}
+                    name='Payment Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payment-date'
+                />
             }
             {
                 resource.paymentAmount &&

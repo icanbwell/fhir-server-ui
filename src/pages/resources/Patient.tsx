@@ -26,6 +26,16 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -124,6 +134,16 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 <Partials.Code code={resource.gender} name='Gender'/>
             }
             {
+                resource.birthDate &&
+                <Partials.Date
+                    date={resource.birthDate}
+                    name='Birth Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='birth-date'
+                />
+            }
+            {
                 resource.deceasedBoolean &&
                 <Partials.Boolean
                     boolean={resource.deceasedBoolean}
@@ -171,6 +191,16 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='multiple-birth-boolean'
+                />
+            }
+            {
+                resource.multipleBirthInteger &&
+                <Partials.Int
+                    int={resource.multipleBirthInteger}
+                    name='Multiple Birth Integer'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='multiple-birth-integer'
                 />
             }
             {

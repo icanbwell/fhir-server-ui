@@ -26,6 +26,16 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -231,6 +241,16 @@ const GuidanceResponse = ({ resource }: { resource: TGuidanceResponse }): React.
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='result'
+                />
+            }
+            {
+                resource.dataRequirement &&
+                <Partials.DataRequirement
+                    dataRequirement={resource.dataRequirement}
+                    name='Data Requirement'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='data-requirement'
                 />
             }
         </>

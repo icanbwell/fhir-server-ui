@@ -25,6 +25,16 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -140,6 +150,16 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='payment'
+                />
+            }
+            {
+                resource.paymentDate &&
+                <Partials.Date
+                    date={resource.paymentDate}
+                    name='Payment Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payment-date'
                 />
             }
             {

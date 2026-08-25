@@ -26,6 +26,16 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -104,6 +114,16 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.managingOrganization &&
                 <Partials.Reference
                     reference={resource.managingOrganization}
@@ -146,6 +166,26 @@ const Endpoint = ({ resource }: { resource: TEndpoint }): React.ReactElement => 
             {
                 resource.payloadMimeType &&
                 <Partials.Code code={resource.payloadMimeType} name='Payload Mime Type'/>
+            }
+            {
+                resource.address &&
+                <Partials.Url
+                    url={resource.address}
+                    name='Address'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='address'
+                />
+            }
+            {
+                resource.header &&
+                <Partials.String
+                    string={resource.header}
+                    name='Header'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='header'
+                />
             }
         </>
     );

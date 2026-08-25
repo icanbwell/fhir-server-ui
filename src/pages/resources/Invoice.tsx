@@ -25,6 +25,16 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -91,6 +101,16 @@ const Invoice = ({ resource }: { resource: TInvoice }): React.ReactElement => {
             {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
+            }
+            {
+                resource.cancelledReason &&
+                <Partials.String
+                    string={resource.cancelledReason}
+                    name='Cancelled Reason'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='cancelled-reason'
+                />
             }
             {
                 resource.type &&

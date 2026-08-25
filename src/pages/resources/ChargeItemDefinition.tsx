@@ -27,6 +27,16 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -101,6 +111,26 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
                 resource.derivedFromUri &&
                 <Partials.Uri
                     uri={resource.derivedFromUri}
@@ -155,6 +185,16 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                 />
             }
             {
+                resource.publisher &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
                 resource.description &&
                 <Partials.Markdown
                     markdown={resource.description}
@@ -182,6 +222,26 @@ const ChargeItemDefinition = ({ resource }: { resource: TChargeItemDefinition })
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='copyright'
+                />
+            }
+            {
+                resource.approvalDate &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
                 />
             }
             {

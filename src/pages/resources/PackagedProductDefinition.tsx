@@ -24,6 +24,16 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -88,6 +98,16 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.type &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
@@ -145,6 +165,16 @@ const PackagedProductDefinition = ({ resource }: { resource: TPackagedProductDef
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='description'
+                />
+            }
+            {
+                resource.marketingStatus &&
+                <Partials.MarketingStatus
+                    marketingStatus={resource.marketingStatus}
+                    name='Marketing Status'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='marketing-status'
                 />
             }
             {

@@ -25,6 +25,16 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -146,6 +156,16 @@ const Schedule = ({ resource }: { resource: TSchedule }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='planning-horizon'
+                />
+            }
+            {
+                resource.comment &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
                 />
             }
             <Typography variant="h6" color="text.secondary" sx={{ mt: 1 }}>

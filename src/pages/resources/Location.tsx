@@ -27,6 +27,16 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -105,6 +115,36 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.alias &&
+                <Partials.String
+                    string={resource.alias}
+                    name='Alias'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='alias'
+                />
+            }
+            {
+                resource.description &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
                 resource.mode &&
                 <Partials.Code code={resource.mode} name='Mode'/>
             }
@@ -166,6 +206,16 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='part-of'
+                />
+            }
+            {
+                resource.availabilityExceptions &&
+                <Partials.String
+                    string={resource.availabilityExceptions}
+                    name='Availability Exceptions'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='availability-exceptions'
                 />
             }
             {

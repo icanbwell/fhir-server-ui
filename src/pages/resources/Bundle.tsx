@@ -24,6 +24,16 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -69,6 +79,16 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='timestamp'
+                />
+            }
+            {
+                resource.total &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.total}
+                    name='Total'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='total'
                 />
             }
             {

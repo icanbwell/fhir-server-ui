@@ -26,6 +26,16 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -107,6 +117,16 @@ const Basic = ({ resource }: { resource: TBasic }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='subject'
+                />
+            }
+            {
+                resource.created &&
+                <Partials.Date
+                    date={resource.created}
+                    name='Created'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='created'
                 />
             }
             {

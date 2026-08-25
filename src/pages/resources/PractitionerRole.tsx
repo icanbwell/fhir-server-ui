@@ -26,6 +26,16 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -177,6 +187,16 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='telecom'
+                />
+            }
+            {
+                resource.availabilityExceptions &&
+                <Partials.String
+                    string={resource.availabilityExceptions}
+                    name='Availability Exceptions'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='availability-exceptions'
                 />
             }
             {

@@ -26,6 +26,16 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -151,6 +161,26 @@ const EvidenceReport = ({ resource }: { resource: TEvidenceReport }): React.Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='note'
+                />
+            }
+            {
+                resource.relatedArtifact &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
+                />
+            }
+            {
+                resource.publisher &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
                 />
             }
         </>

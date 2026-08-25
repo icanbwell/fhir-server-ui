@@ -26,6 +26,16 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -204,6 +214,16 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                 />
             }
             {
+                resource.performedString &&
+                <Partials.String
+                    string={resource.performedString}
+                    name='Performed String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='performed-string'
+                />
+            }
+            {
                 resource.performedAge &&
                 <Partials.Quantity
                     quantity={resource.performedAge}
@@ -211,6 +231,16 @@ const Procedure = ({ resource }: { resource: TProcedure }): React.ReactElement =
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='performed-age'
+                />
+            }
+            {
+                resource.performedRange &&
+                <Partials.Range
+                    range={resource.performedRange}
+                    name='Performed Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='performed-range'
                 />
             }
             {

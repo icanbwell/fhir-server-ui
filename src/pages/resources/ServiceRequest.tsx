@@ -25,6 +25,16 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -208,6 +218,16 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='quantity-ratio'
+                />
+            }
+            {
+                resource.quantityRange &&
+                <Partials.Range
+                    range={resource.quantityRange}
+                    name='Quantity Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='quantity-range'
                 />
             }
             {
@@ -408,6 +428,16 @@ const ServiceRequest = ({ resource }: { resource: TServiceRequest }): React.Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='note'
+                />
+            }
+            {
+                resource.patientInstruction &&
+                <Partials.String
+                    string={resource.patientInstruction}
+                    name='Patient Instruction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='patient-instruction'
                 />
             }
             {

@@ -24,6 +24,16 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -88,6 +98,16 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
@@ -113,6 +133,16 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='score'
+                />
+            }
+            {
+                resource.tester &&
+                <Partials.String
+                    string={resource.tester}
+                    name='Tester'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='tester'
                 />
             }
             {

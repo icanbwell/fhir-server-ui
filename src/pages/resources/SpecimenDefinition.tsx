@@ -24,6 +24,16 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -105,6 +115,16 @@ const SpecimenDefinition = ({ resource }: { resource: TSpecimenDefinition }): Re
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='patient-preparation'
+                />
+            }
+            {
+                resource.timeAspect &&
+                <Partials.String
+                    string={resource.timeAspect}
+                    name='Time Aspect'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='time-aspect'
                 />
             }
             {

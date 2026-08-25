@@ -25,6 +25,16 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -130,6 +140,16 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='method'
+                />
+            }
+            {
+                resource.preferredReportName &&
+                <Partials.String
+                    string={resource.preferredReportName}
+                    name='Preferred Report Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='preferred-report-name'
                 />
             }
             {

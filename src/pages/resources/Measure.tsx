@@ -24,6 +24,16 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -98,6 +108,46 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
+                resource.version &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.subtitle &&
+                <Partials.String
+                    string={resource.subtitle}
+                    name='Subtitle'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='subtitle'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
@@ -142,6 +192,16 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
+                resource.publisher &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
                 resource.description &&
                 <Partials.Markdown
                     markdown={resource.description}
@@ -172,6 +232,16 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                 />
             }
             {
+                resource.usage &&
+                <Partials.String
+                    string={resource.usage}
+                    name='Usage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='usage'
+                />
+            }
+            {
                 resource.copyright &&
                 <Partials.Markdown
                     markdown={resource.copyright}
@@ -179,6 +249,26 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='copyright'
+                />
+            }
+            {
+                resource.approvalDate &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
                 />
             }
             {
@@ -199,6 +289,16 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='topic'
+                />
+            }
+            {
+                resource.relatedArtifact &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
                 />
             }
             {
@@ -249,6 +349,26 @@ const Measure = ({ resource }: { resource: TMeasure }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='type'
+                />
+            }
+            {
+                resource.riskAdjustment &&
+                <Partials.String
+                    string={resource.riskAdjustment}
+                    name='Risk Adjustment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='risk-adjustment'
+                />
+            }
+            {
+                resource.rateAggregation &&
+                <Partials.String
+                    string={resource.rateAggregation}
+                    name='Rate Aggregation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='rate-aggregation'
                 />
             }
             {

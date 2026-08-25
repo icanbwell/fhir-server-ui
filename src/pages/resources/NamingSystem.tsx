@@ -26,6 +26,16 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -80,6 +90,16 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
@@ -95,6 +115,26 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='date'
+                />
+            }
+            {
+                resource.publisher &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.responsible &&
+                <Partials.String
+                    string={resource.responsible}
+                    name='Responsible'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='responsible'
                 />
             }
             {
@@ -125,6 +165,16 @@ const NamingSystem = ({ resource }: { resource: TNamingSystem }): React.ReactEle
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='jurisdiction'
+                />
+            }
+            {
+                resource.usage &&
+                <Partials.String
+                    string={resource.usage}
+                    name='Usage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='usage'
                 />
             }
         </>

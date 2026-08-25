@@ -25,6 +25,16 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -149,6 +159,26 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
+                resource.name &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.comment &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
+                />
+            }
+            {
                 resource.extraDetails &&
                 <Partials.Markdown
                     markdown={resource.extraDetails}
@@ -246,6 +276,16 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='appointment-required'
+                />
+            }
+            {
+                resource.availabilityExceptions &&
+                <Partials.String
+                    string={resource.availabilityExceptions}
+                    name='Availability Exceptions'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='availability-exceptions'
                 />
             }
             {

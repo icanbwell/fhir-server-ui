@@ -26,6 +26,16 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -114,6 +124,26 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                 />
             }
             {
+                resource.distinctIdentifier &&
+                <Partials.String
+                    string={resource.distinctIdentifier}
+                    name='Distinct Identifier'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='distinct-identifier'
+                />
+            }
+            {
+                resource.manufacturer &&
+                <Partials.String
+                    string={resource.manufacturer}
+                    name='Manufacturer'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='manufacturer'
+                />
+            }
+            {
                 resource.manufactureDate &&
                 <Partials.DateTime
                     dateTime={resource.manufactureDate}
@@ -131,6 +161,46 @@ const Device = ({ resource }: { resource: TDevice }): React.ReactElement => {
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='expiration-date'
+                />
+            }
+            {
+                resource.lotNumber &&
+                <Partials.String
+                    string={resource.lotNumber}
+                    name='Lot Number'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='lot-number'
+                />
+            }
+            {
+                resource.serialNumber &&
+                <Partials.String
+                    string={resource.serialNumber}
+                    name='Serial Number'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='serial-number'
+                />
+            }
+            {
+                resource.modelNumber &&
+                <Partials.String
+                    string={resource.modelNumber}
+                    name='Model Number'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='model-number'
+                />
+            }
+            {
+                resource.partNumber &&
+                <Partials.String
+                    string={resource.partNumber}
+                    name='Part Number'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='part-number'
                 />
             }
             {

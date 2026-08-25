@@ -24,6 +24,16 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -94,6 +104,16 @@ const List = ({ resource }: { resource: TList }): React.ReactElement => {
             {
                 resource.mode &&
                 <Partials.Code code={resource.mode} name='Mode'/>
+            }
+            {
+                resource.title &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
             }
             {
                 resource.code &&

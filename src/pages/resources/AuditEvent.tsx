@@ -28,6 +28,16 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
                 {resource.resourceType}/{uuid}{queryString}
             </Link>
             {
+                resource.id &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
                 resource.meta &&
                 <Partials.Meta
                     meta={resource.meta}
@@ -128,6 +138,16 @@ const AuditEvent = ({ resource }: { resource: TAuditEvent }): React.ReactElement
             {
                 resource.outcome &&
                 <Partials.Code code={resource.outcome} name='Outcome'/>
+            }
+            {
+                resource.outcomeDesc &&
+                <Partials.String
+                    string={resource.outcomeDesc}
+                    name='Outcome Desc'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='outcome-desc'
+                />
             }
             {
                 resource.purposeOfEvent &&

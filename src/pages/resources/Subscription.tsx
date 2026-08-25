@@ -18,6 +18,7 @@ import { TSubscription } from '../../types/resources/Subscription';
 // Import all the partial resource
 import Partials from '../../partials';
 import { IdentifierSystem } from '../../utils/identifierSystem';
+import PatientReferenceFromExtension from '../../partials/PatientReferenceFromExtension';
 
 const Subscription = ({ resource }: { resource: TSubscription }): React.ReactElement => {
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
@@ -28,6 +29,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
             <Link title="Direct link to Resource" to={`/4_0_0/${resource.resourceType}/${uuid}`}>
                 {resource.resourceType}/{uuid}
             </Link>
+            <PatientReferenceFromExtension extension={resource.extension} />
             {
                 resource.meta &&
                 <Partials.Meta

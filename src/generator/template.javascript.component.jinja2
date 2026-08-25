@@ -20,6 +20,9 @@ import Partials from '../../partials';
 import UserContext from '../../context/UserContext';
 {% endif %}
 import { IdentifierSystem } from '../../utils/identifierSystem';
+{% if fhir_entity.cleaned_name in ['Subscription', 'SubscriptionStatus'] %}
+import PatientReferenceFromExtension from '../../partials/PatientReferenceFromExtension';
+{% endif %}
 
 const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_entity.cleaned_name + ' ' -}}}): React.ReactElement => {
 {% if fhir_entity.cleaned_name == 'Person' %}
@@ -42,6 +45,9 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                 {resource.resourceType}/{uuid}
         {% endif %}
             </Link>
+    {% if fhir_entity.cleaned_name in ['Subscription', 'SubscriptionStatus'] %}
+            <PatientReferenceFromExtension extension={resource.extension} />
+    {% endif %}
     {% for property in fhir_entity.properties %}
     {% if not property.is_v2_supported %}
         {% if property.is_code and 'Code' in available_partial_resources %}

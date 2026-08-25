@@ -342,7 +342,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
                         // noinspection JSCheckFunctionSignatures
                         setResources(json ? [json] : []);
                         if (json.id) {
-                            document.title = `${json.id} (${resourceType})`;
+                            document.title = `${resourceType}/${json.id}`;
                         } else {
                             document.title = 'FHIR Server';
                         }

@@ -105,6 +105,17 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                     searchParameter='end'
                 />
             }
+            {
+                resource.channel &&
+                <Partials.SubscriptionChannel
+                    channel={resource.channel}
+                    name='Channel'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='channel'
+                    field=''
+                />
+            }
         </>
     );
 };

@@ -234,6 +234,11 @@ partials_mapping = {
         'field': 'who',
         'prop_name': 'reference'
     },
+    'SubscriptionChannel': {
+        'partial': 'SubscriptionChannel',
+        'field': '',
+        'prop_name': 'channel'
+    },
     'SubscriptionStatusNotificationEvent': {
         'partial': 'SubscriptionStatusNotificationEvent',
         'field': '',

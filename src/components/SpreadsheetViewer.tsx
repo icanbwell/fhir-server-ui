@@ -30,9 +30,10 @@ import {
     ClientSideRowModelModule,
 } from 'ag-grid-community';
 import FileDownload from './FileDownload';
-import type { ColDef, ColGroupDef, ICellRendererParams } from 'ag-grid-community';
+import type { ICellRendererParams } from 'ag-grid-community';
 import { useNavigate, useLocation } from 'react-router';
 import { useTheme } from '../context/ThemeContext';
+import { buildSheetColumnsAndRows } from '../utils/spreadsheetColumns';
 
 ModuleRegistry.registerModules([
     ColumnAutoSizeModule,
@@ -138,26 +139,10 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
 
                         const [headers, ...dataRows] = rawData;
 
-                        const columnDefs: (ColDef<any> | ColGroupDef<any>)[] = headers.map(
-                            (header, index) => {
-                                const hasData = dataRows.some(
-                                    (row) =>
-                                        row[`${index}`] !== undefined &&
-                                        row[`${index}`] !== null &&
-                                        String(row[`${index}`]).trim() !== ''
-                                );
-
-                                return {
-                                    headerName: String(header),
-                                    field: `col${index}`,
-                                    editable: false,
-                                    filter: true,
-                                    floatingFilter: true,
-                                    hide: hideEmptyColumns && !hasData,
-                                    tooltipField: `col${index}`, // Add tooltip to show full value
-                                    sort: header === 'lastUpdated' ? 'desc' : undefined, // Sort by lastUpdated column
-                                };
-                            }
+                        const { columnDefs, rowData } = buildSheetColumnsAndRows(
+                            headers,
+                            dataRows,
+                            hideEmptyColumns
                         );
 
                         // Add a new column for the FHIR resource link
@@ -176,12 +161,6 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
                             editable: false,
                             filter: false,
                         });
-                        const rowData = dataRows.map((row) =>
-                            row.reduce((acc, cell, index) => {
-                                acc[`col${index}`] = cell !== undefined ? String(cell) : '';
-                                return acc;
-                            }, {})
-                        );
 
                         return {
                             id: sheetIndex,

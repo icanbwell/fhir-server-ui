@@ -1,4 +1,4 @@
-import { BAILEY_CHART_PROMPT_FRAGMENT, joinInstructions } from '@icanbwell/baileyai-chat-ui';
+import { BAILEY_CHART_PROMPT_FRAGMENT, joinInstructions, type BaileySuggestion } from '@icanbwell/baileyai-chat-ui';
 
 const FHIR_DOMAIN_PROMPT =
     'You are Bailey, an AI assistant embedded in the FHIR Server admin UI. You can search FHIR ' +
@@ -26,3 +26,14 @@ export const BAILEY_SYSTEM_INSTRUCTIONS = joinInstructions(
 );
 
 export const BAILEY_MCP_SERVER_LABEL = 'fhir-server';
+
+// Shown as clickable cards in the empty chat state, before any message is sent. Each one must be
+// answerable by the fhir-server MCP endpoint's own tool registry (see BAILEY_SYSTEM_INSTRUCTIONS
+// above) — allergies is grounded in the allergy/allergyintolerance Composition category this
+// server actually produces (see docs/composition-index.md, CATEGORY_SYNONYMS in
+// src/utils/compositionIndex.ts), not an invented capability.
+export const BAILEY_SUGGESTIONS: BaileySuggestion[] = [
+    { label: "How do this patient's vitals look?" },
+    { label: 'Can you help me find a patient by name and address?' },
+    { label: 'Does this patient have any known allergies?' },
+];

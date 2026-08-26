@@ -68,6 +68,8 @@ reverse_references = {
         {"reverseReferences": [{"target":'Procedure', "property":'patient'}], "name": "Procedure" },
         {"reverseReferences": [{"target":'Schedule', "property":'patient'}], "name": "Schedule" },
         {"reverseReferences": [{"target":'ServiceRequest', "property":'patient'}], "name": "ServiceRequest" },
+        {"reverseReferences": [{"target":'Subscription', "property":'patient'}], "name": "Subscription" },
+        {"reverseReferences": [{"target":'SubscriptionStatus', "property":'patient'}], "name": "SubscriptionStatus" },
         {"reverseReferences": [{"target":'Task', "property":'patient'}], "name": "Task" }
     ],
     "Practitioner": [
@@ -83,5 +85,8 @@ reverse_references = {
         {"reverseReferences": [{"target":'Location', "property":'actor'}], "name": "Location"},
         {"reverseReferences": [{"target":'Patient', "property":'actor'}], "name": "Patient"},
         {"reverseReferences": [{"target":'PractitionerRole', "property":'actor'}], "name": "PractitionerRole"}
+    ],
+    "Subscription": [
+        {"reverseReferences": [{"target":'SubscriptionStatus', "property":'subscription'}], "name": "SubscriptionStatus"}
     ],
 }

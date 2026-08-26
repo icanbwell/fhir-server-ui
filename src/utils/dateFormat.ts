@@ -37,3 +37,36 @@ const DATE_TIME_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\
 
 export const looksLikeIsoDate = (value: string): boolean =>
     DATE_ONLY_REGEX.test(value) || DATE_TIME_REGEX.test(value);
+
+// Used for the SubscriptionStatus notificationEvent table's "time since previous" column.
+// Rounds down to whole seconds and omits zero-valued larger units (e.g. "39s", not "0d 0h 0m 39s").
+export const formatDurationBetween = (earlier?: TDateTime, later?: TDateTime): string | null => {
+    if (!earlier || !later) {
+        return null;
+    }
+    const earlierMs = new Date(String(earlier)).getTime();
+    const laterMs = new Date(String(later)).getTime();
+    if (isNaN(earlierMs) || isNaN(laterMs)) {
+        return null;
+    }
+    const sign = laterMs < earlierMs ? '-' : '';
+    const totalSeconds = Math.floor(Math.abs(laterMs - earlierMs) / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const parts: string[] = [];
+    if (days) {
+        parts.push(`${days}d`);
+    }
+    if (hours) {
+        parts.push(`${hours}h`);
+    }
+    if (minutes) {
+        parts.push(`${minutes}m`);
+    }
+    if (seconds || parts.length === 0) {
+        parts.push(`${seconds}s`);
+    }
+    return `${sign}${parts.join(' ')}`;
+};

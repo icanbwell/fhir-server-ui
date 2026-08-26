@@ -12,11 +12,13 @@ Subscription
 
 import React from 'react';
 import { Link } from 'react-router';
+import { Typography } from '@mui/material';
 import { TSubscription } from '../../types/resources/Subscription';
 
 // Import all the partial resource
 import Partials from '../../partials';
 import { IdentifierSystem } from '../../utils/identifierSystem';
+import PatientReferenceFromExtension from '../../partials/PatientReferenceFromExtension';
 
 const Subscription = ({ resource }: { resource: TSubscription }): React.ReactElement => {
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
@@ -27,6 +29,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
             <Link title="Direct link to Resource" to={`/4_0_0/${resource.resourceType}/${uuid}`}>
                 {resource.resourceType}/{uuid}
             </Link>
+            <PatientReferenceFromExtension extension={resource.extension} />
             {
                 resource.meta &&
                 <Partials.Meta
@@ -105,6 +108,38 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                     searchParameter='end'
                 />
             }
+            {
+                resource.reason &&
+                <Partials.NameValue name='Reason' value={resource.reason} searchParameter='reason' />
+            }
+            {
+                resource.criteria &&
+                <Partials.NameValue name='Criteria' value={resource.criteria} searchParameter='criteria' />
+            }
+            {
+                resource.error &&
+                <Partials.NameValue name='Error' value={resource.error} searchParameter='error' />
+            }
+            {
+                resource.channel &&
+                <Partials.SubscriptionChannel
+                    channel={resource.channel}
+                    name='Channel'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='channel'
+                    field=''
+                />
+            }
+            <Typography variant="h6" color="text.secondary" sx={{ mt: 1 }}>
+                Related Resources
+            </Typography>
+            <Partials.ReverseReference
+                name="SubscriptionStatus"
+                id={uuid}
+                resourceType={resource.resourceType}
+                reverseReferences={[{'target': 'SubscriptionStatus', 'property': 'subscription'}]}
+            />
         </>
     );
 };

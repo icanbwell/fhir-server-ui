@@ -9,6 +9,7 @@ import {
     Tab,
     FormControlLabel,
     Checkbox,
+    Button,
 } from '@mui/material';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -30,9 +31,10 @@ import {
     ClientSideRowModelModule,
 } from 'ag-grid-community';
 import FileDownload from './FileDownload';
-import type { ColDef, ColGroupDef, ICellRendererParams } from 'ag-grid-community';
+import type { ICellRendererParams } from 'ag-grid-community';
 import { useNavigate, useLocation } from 'react-router';
 import { useTheme } from '../context/ThemeContext';
+import { buildSheetColumnsAndRows } from '../utils/spreadsheetColumns';
 
 ModuleRegistry.registerModules([
     ColumnAutoSizeModule,
@@ -71,8 +73,27 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
     const [sheets, setSheets] = useState<SheetData[]>([]);
     const [activeSheetName, setActiveSheetName] = useState<string>();
     const [hideEmptyColumns, setHideEmptyColumns] = useState<boolean>(true);
+
+    // The FHIR server's own default page size is much smaller (observed: 100 rows) when a
+    // request doesn't specify `_count` — bump the default so most exports need no follow-up,
+    // while still capping how far "Load more" can go so a single click can't request an
+    // unbounded export.
+    const DEFAULT_SPREADSHEET_COUNT = 1000;
+    const MAX_SPREADSHEET_COUNT = 20000;
+
     const navigate = useNavigate(); // Initialize navigate
     const location = useLocation(); // Initialize location
+
+    const countFromUrl = (search: string): number => {
+        const existingCount = parseInt(new URLSearchParams(search).get('_count') || '', 10);
+        return !isNaN(existingCount) && existingCount > 0 ? existingCount : DEFAULT_SPREADSHEET_COUNT;
+    };
+
+    // Initialized lazily from the URL (rather than always DEFAULT_SPREADSHEET_COUNT, synced
+    // afterwards by the effect below) so a URL that already carries an explicit _count doesn't
+    // trigger a first fetch with the wrong count before the sync effect runs.
+    const [requestedCount, setRequestedCount] = useState<number>(() => countFromUrl(location.search));
+    const [truncatedSheetNames, setTruncatedSheetNames] = useState<Set<string>>(new Set());
 
     const { isDarkMode } = useTheme(); // Get dark mode state
 
@@ -97,12 +118,20 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
         uri.searchParams.set('_format', format);
         const queryString = new URLSearchParams(location.search);
         for (const [key, value] of queryString.entries()) {
-            if (key !== '_format') {
+            if (key !== '_format' && key !== '_count') {
                 uri.searchParams.set(key, value);
             }
         }
+        uri.searchParams.set('_count', String(requestedCount));
         return uri;
-    }, [relativeUrl, fhirUrl, format, location.search]);
+    }, [relativeUrl, fhirUrl, format, location.search, requestedCount]);
+
+    useEffect(() => {
+        setRequestedCount(countFromUrl(location.search));
+        // Also keyed on relativeUrl (not just location.search) so navigating to a different
+        // resource without an explicit _count in the URL resets a "Load more"-bumped count back
+        // to the default, instead of leaking an elevated count into the new resource's view.
+    }, [location.search, relativeUrl]);
 
     useEffect(() => {
         const fetchSpreadsheetData = async () => {
@@ -138,26 +167,10 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
 
                         const [headers, ...dataRows] = rawData;
 
-                        const columnDefs: (ColDef<any> | ColGroupDef<any>)[] = headers.map(
-                            (header, index) => {
-                                const hasData = dataRows.some(
-                                    (row) =>
-                                        row[`${index}`] !== undefined &&
-                                        row[`${index}`] !== null &&
-                                        String(row[`${index}`]).trim() !== ''
-                                );
-
-                                return {
-                                    headerName: String(header),
-                                    field: `col${index}`,
-                                    editable: false,
-                                    filter: true,
-                                    floatingFilter: true,
-                                    hide: hideEmptyColumns && !hasData,
-                                    tooltipField: `col${index}`, // Add tooltip to show full value
-                                    sort: header === 'lastUpdated' ? 'desc' : undefined, // Sort by lastUpdated column
-                                };
-                            }
+                        const { columnDefs, rowData } = buildSheetColumnsAndRows(
+                            headers,
+                            dataRows,
+                            hideEmptyColumns
                         );
 
                         // Add a new column for the FHIR resource link
@@ -176,12 +189,6 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
                             editable: false,
                             filter: false,
                         });
-                        const rowData = dataRows.map((row) =>
-                            row.reduce((acc, cell, index) => {
-                                acc[`col${index}`] = cell !== undefined ? String(cell) : '';
-                                return acc;
-                            }, {})
-                        );
 
                         return {
                             id: sheetIndex,
@@ -193,6 +200,9 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
                 );
 
                 setSheets(parsedSheets);
+                setTruncatedSheetNames(
+                    new Set(parsedSheets.filter((s) => s.rowData.length >= requestedCount).map((s) => s.name))
+                );
                 setIsLoading(false);
                 finish();
             } catch (error) {
@@ -203,7 +213,17 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
         };
 
         fetchSpreadsheetData().then((r) => r);
-    }, [relativeUrl, hideEmptyColumns, downloadUri, format, baseApi, start, onProgress, finish]);
+    }, [
+        relativeUrl,
+        hideEmptyColumns,
+        downloadUri,
+        requestedCount,
+        format,
+        baseApi,
+        start,
+        onProgress,
+        finish,
+    ]);
 
     const defaultColDef = useMemo(
         () => ({
@@ -336,6 +356,30 @@ const SpreadsheetViewer: React.FC<SpreadsheetViewerProps> = ({ relativeUrl, form
                     width: '100%',
                 }}
             >
+                {activeSheetName && truncatedSheetNames.has(activeSheetName) && (
+                    <Alert
+                        severity="warning"
+                        sx={{ mb: 1 }}
+                        action={
+                            requestedCount < MAX_SPREADSHEET_COUNT ? (
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() =>
+                                        setRequestedCount((count) => Math.min(count * 2, MAX_SPREADSHEET_COUNT))
+                                    }
+                                >
+                                    Load more
+                                </Button>
+                            ) : undefined
+                        }
+                    >
+                        Showing the first {requestedCount.toLocaleString()} rows for this sheet
+                        {requestedCount >= MAX_SPREADSHEET_COUNT
+                            ? ` (maximum). Narrow your query to see the rest.`
+                            : '.'}
+                    </Alert>
+                )}
                 <AgGridReact
                     theme={gridTheme}
                     columnDefs={sortedSheets.find((s) => s.name === activeSheetName)?.columnDefs || []}

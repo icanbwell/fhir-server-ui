@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatHumanDate, looksLikeIsoDate } from './dateFormat';
+import { formatHumanDate, formatDurationBetween, looksLikeIsoDate } from './dateFormat';
 
 describe('looksLikeIsoDate', () => {
     it('matches a date-only value', () => {
@@ -38,5 +38,33 @@ describe('formatHumanDate', () => {
 
     it('returns null for an undefined value', () => {
         expect(formatHumanDate(undefined)).toBeNull();
+    });
+});
+
+describe('formatDurationBetween', () => {
+    it('formats a gap of just over a day as days/hours/minutes', () => {
+        expect(formatDurationBetween('2026-08-24T15:01:36.867Z', '2026-08-25T16:07:28.652Z')).toBe(
+            '1d 1h 5m 51s'
+        );
+    });
+
+    it('formats a sub-minute gap as seconds only', () => {
+        expect(formatDurationBetween('2026-08-25T16:07:28.652Z', '2026-08-25T16:08:07.737Z')).toBe('39s');
+    });
+
+    it('returns "0s" when the two timestamps are identical', () => {
+        expect(formatDurationBetween('2026-08-25T16:08:07.737Z', '2026-08-25T16:08:07.737Z')).toBe('0s');
+    });
+
+    it('prefixes a minus sign when later is actually earlier than the first argument', () => {
+        expect(formatDurationBetween('2026-08-25T16:08:07.737Z', '2026-08-24T15:01:36.867Z')).toBe(
+            '-1d 1h 6m 30s'
+        );
+    });
+
+    it('returns null when either timestamp is missing or unparseable', () => {
+        expect(formatDurationBetween(undefined, '2026-08-25T16:08:07.737Z')).toBeNull();
+        expect(formatDurationBetween('2026-08-25T16:08:07.737Z', undefined)).toBeNull();
+        expect(formatDurationBetween('not-a-date', '2026-08-25T16:08:07.737Z')).toBeNull();
     });
 });

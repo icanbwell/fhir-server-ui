@@ -320,6 +320,18 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                 reverseReferences={[{'target': 'ServiceRequest', 'property': 'patient'}]}
             />
             <Partials.ReverseReference
+                name="Subscription"
+                id={uuid}
+                resourceType={resource.resourceType}
+                reverseReferences={[{'target': 'Subscription', 'property': 'patient'}]}
+            />
+            <Partials.ReverseReference
+                name="SubscriptionStatus"
+                id={uuid}
+                resourceType={resource.resourceType}
+                reverseReferences={[{'target': 'SubscriptionStatus', 'property': 'patient'}]}
+            />
+            <Partials.ReverseReference
                 name="Task"
                 id={uuid}
                 resourceType={resource.resourceType}

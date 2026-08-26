@@ -99,6 +99,14 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
+                resource.version &&
+                <Partials.NameValue name='Version' value={resource.version} searchParameter='version' />
+            }
+            {
+                resource.title &&
+                <Partials.NameValue name='Title' value={resource.title} searchParameter='title' />
+            }
+            {
                 resource.derivedFrom &&
                 <Partials.Canonical
                     canonical={resource.derivedFrom}
@@ -131,6 +139,10 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                     id={uuid}
                     searchParameter='date'
                 />
+            }
+            {
+                resource.publisher &&
+                <Partials.NameValue name='Publisher' value={resource.publisher} searchParameter='publisher' />
             }
             {
                 resource.description &&
@@ -173,6 +185,14 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                 />
             }
             {
+                resource.approvalDate &&
+                <Partials.NameValue name='Approval Date' value={resource.approvalDate} searchParameter='approval-date' />
+            }
+            {
+                resource.lastReviewDate &&
+                <Partials.NameValue name='Last Review Date' value={resource.lastReviewDate} searchParameter='last-review-date' />
+            }
+            {
                 resource.effectivePeriod &&
                 <Partials.Period
                     period={resource.effectivePeriod}
@@ -180,6 +200,50 @@ const SubscriptionTopic = ({ resource }: { resource: TSubscriptionTopic }): Reac
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='effective-period'
+                />
+            }
+            {
+                resource.resourceTrigger &&
+                <Partials.SubscriptionTopicResourceTrigger
+                    resourceTrigger={resource.resourceTrigger}
+                    name='Resource Trigger'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='resource-trigger'
+                    field=''
+                />
+            }
+            {
+                resource.eventTrigger &&
+                <Partials.SubscriptionTopicEventTrigger
+                    eventTrigger={resource.eventTrigger}
+                    name='Event Trigger'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='event-trigger'
+                    field=''
+                />
+            }
+            {
+                resource.canFilterBy &&
+                <Partials.SubscriptionTopicCanFilterBy
+                    canFilterBy={resource.canFilterBy}
+                    name='Can Filter By'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='can-filter-by'
+                    field=''
+                />
+            }
+            {
+                resource.notificationShape &&
+                <Partials.SubscriptionTopicNotificationShape
+                    notificationShape={resource.notificationShape}
+                    name='Notification Shape'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='notification-shape'
+                    field=''
                 />
             }
         </>

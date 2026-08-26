@@ -30,7 +30,17 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -40,7 +50,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -54,7 +64,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -64,7 +74,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -74,7 +84,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -84,7 +94,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -98,7 +108,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -108,7 +118,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -118,7 +128,17 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.subject &&
+                resource.description !== undefined && resource.description !== null &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -128,7 +148,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -138,7 +158,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.effectiveDateTime &&
+                resource.effectiveDateTime !== undefined && resource.effectiveDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.effectiveDateTime}
                     name='Effective Date Time'
@@ -148,7 +168,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -158,7 +178,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -168,7 +188,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.assessor &&
+                resource.assessor !== undefined && resource.assessor !== null &&
                 <Partials.Reference
                     reference={resource.assessor}
                     name='Assessor'
@@ -178,7 +198,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.previous &&
+                resource.previous !== undefined && resource.previous !== null &&
                 <Partials.Reference
                     reference={resource.previous}
                     name='Previous'
@@ -188,7 +208,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.problem &&
+                resource.problem !== undefined && resource.problem !== null &&
                 <Partials.Reference
                     reference={resource.problem}
                     name='Problem'
@@ -198,7 +218,18 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.protocol &&
+                resource.investigation !== undefined && resource.investigation !== null &&
+                <Partials.ClinicalImpressionInvestigation
+                    investigation={resource.investigation}
+                    name='Investigation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='investigation'
+                    field=''
+                />
+            }
+            {
+                resource.protocol !== undefined && resource.protocol !== null &&
                 <Partials.Uri
                     uri={resource.protocol}
                     name='Protocol'
@@ -208,7 +239,28 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.prognosisCodeableConcept &&
+                resource.summary !== undefined && resource.summary !== null &&
+                <Partials.String
+                    string={resource.summary}
+                    name='Summary'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='summary'
+                />
+            }
+            {
+                resource.finding !== undefined && resource.finding !== null &&
+                <Partials.ClinicalImpressionFinding
+                    finding={resource.finding}
+                    name='Finding'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='finding'
+                    field=''
+                />
+            }
+            {
+                resource.prognosisCodeableConcept !== undefined && resource.prognosisCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.prognosisCodeableConcept}
                     name='Prognosis Codeable Concept'
@@ -218,7 +270,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.prognosisReference &&
+                resource.prognosisReference !== undefined && resource.prognosisReference !== null &&
                 <Partials.Reference
                     reference={resource.prognosisReference}
                     name='Prognosis Reference'
@@ -228,7 +280,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.supportingInfo &&
+                resource.supportingInfo !== undefined && resource.supportingInfo !== null &&
                 <Partials.Reference
                     reference={resource.supportingInfo}
                     name='Supporting Info'
@@ -238,7 +290,7 @@ const ClinicalImpression = ({ resource }: { resource: TClinicalImpression }): Re
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

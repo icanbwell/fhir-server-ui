@@ -24,7 +24,17 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -82,7 +92,7 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -92,7 +102,7 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -102,7 +112,7 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 />
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.Reference
                     reference={resource.manufacturer}
                     name='Manufacturer'
@@ -112,7 +122,39 @@ const NutritionProduct = ({ resource }: { resource: TNutritionProduct }): React.
                 />
             }
             {
-                resource.note &&
+                resource.nutrient !== undefined && resource.nutrient !== null &&
+                <Partials.NutritionProductNutrient
+                    nutrient={resource.nutrient}
+                    name='Nutrient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='nutrient'
+                    field=''
+                />
+            }
+            {
+                resource.ingredient !== undefined && resource.ingredient !== null &&
+                <Partials.NutritionProductIngredient
+                    ingredient={resource.ingredient}
+                    name='Ingredient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='ingredient'
+                    field=''
+                />
+            }
+            {
+                resource.knownAllergen !== undefined && resource.knownAllergen !== null &&
+                <Partials.CodeableReference
+                    codeableReference={resource.knownAllergen}
+                    name='Known Allergen'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='known-allergen'
+                />
+            }
+            {
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

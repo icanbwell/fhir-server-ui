@@ -25,7 +25,17 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -89,7 +99,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -99,7 +109,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.parent &&
+                resource.parent !== undefined && resource.parent !== null &&
                 <Partials.Reference
                     reference={resource.parent}
                     name='Parent'
@@ -113,7 +123,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.method &&
+                resource.method !== undefined && resource.method !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.method}
                     name='Method'
@@ -123,7 +133,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -133,7 +143,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -143,7 +153,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -153,7 +163,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -163,7 +173,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.occurrencePeriod &&
+                resource.occurrencePeriod !== undefined && resource.occurrencePeriod !== null &&
                 <Partials.Period
                     period={resource.occurrencePeriod}
                     name='Occurrence Period'
@@ -173,7 +183,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.condition &&
+                resource.condition !== undefined && resource.condition !== null &&
                 <Partials.Reference
                     reference={resource.condition}
                     name='Condition'
@@ -183,7 +193,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -193,7 +203,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -203,7 +213,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -213,7 +223,7 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.basis &&
+                resource.basis !== undefined && resource.basis !== null &&
                 <Partials.Reference
                     reference={resource.basis}
                     name='Basis'
@@ -223,7 +233,28 @@ const RiskAssessment = ({ resource }: { resource: TRiskAssessment }): React.Reac
                 />
             }
             {
-                resource.note &&
+                resource.prediction !== undefined && resource.prediction !== null &&
+                <Partials.RiskAssessmentPrediction
+                    prediction={resource.prediction}
+                    name='Prediction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='prediction'
+                    field=''
+                />
+            }
+            {
+                resource.mitigation !== undefined && resource.mitigation !== null &&
+                <Partials.String
+                    string={resource.mitigation}
+                    name='Mitigation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='mitigation'
+                />
+            }
+            {
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

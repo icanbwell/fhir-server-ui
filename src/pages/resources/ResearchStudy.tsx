@@ -29,7 +29,17 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -39,7 +49,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -53,7 +63,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -63,7 +73,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -73,7 +83,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -83,7 +93,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -93,7 +103,17 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.protocol &&
+                resource.title !== undefined && resource.title !== null &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.protocol !== undefined && resource.protocol !== null &&
                 <Partials.Reference
                     reference={resource.protocol}
                     name='Protocol'
@@ -103,7 +123,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -117,7 +137,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.primaryPurposeType &&
+                resource.primaryPurposeType !== undefined && resource.primaryPurposeType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.primaryPurposeType}
                     name='Primary Purpose Type'
@@ -127,7 +147,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.phase &&
+                resource.phase !== undefined && resource.phase !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.phase}
                     name='Phase'
@@ -137,7 +157,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -147,7 +167,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.focus &&
+                resource.focus !== undefined && resource.focus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.focus}
                     name='Focus'
@@ -157,7 +177,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.condition &&
+                resource.condition !== undefined && resource.condition !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.condition}
                     name='Condition'
@@ -167,7 +187,17 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.keyword &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
+                />
+            }
+            {
+                resource.keyword !== undefined && resource.keyword !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.keyword}
                     name='Keyword'
@@ -177,7 +207,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.location}
                     name='Location'
@@ -187,7 +217,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -197,7 +227,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.enrollment &&
+                resource.enrollment !== undefined && resource.enrollment !== null &&
                 <Partials.Reference
                     reference={resource.enrollment}
                     name='Enrollment'
@@ -207,7 +237,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -217,7 +247,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.sponsor &&
+                resource.sponsor !== undefined && resource.sponsor !== null &&
                 <Partials.Reference
                     reference={resource.sponsor}
                     name='Sponsor'
@@ -227,7 +257,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.principalInvestigator &&
+                resource.principalInvestigator !== undefined && resource.principalInvestigator !== null &&
                 <Partials.Reference
                     reference={resource.principalInvestigator}
                     name='Principal Investigator'
@@ -237,7 +267,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.site &&
+                resource.site !== undefined && resource.site !== null &&
                 <Partials.Reference
                     reference={resource.site}
                     name='Site'
@@ -247,7 +277,7 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.reasonStopped &&
+                resource.reasonStopped !== undefined && resource.reasonStopped !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonStopped}
                     name='Reason Stopped'
@@ -257,13 +287,35 @@ const ResearchStudy = ({ resource }: { resource: TResearchStudy }): React.ReactE
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='note'
+                />
+            }
+            {
+                resource.arm !== undefined && resource.arm !== null &&
+                <Partials.ResearchStudyArm
+                    arm={resource.arm}
+                    name='Arm'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='arm'
+                    field=''
+                />
+            }
+            {
+                resource.objective !== undefined && resource.objective !== null &&
+                <Partials.ResearchStudyObjective
+                    objective={resource.objective}
+                    name='Objective'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='objective'
+                    field=''
                 />
             }
         </>

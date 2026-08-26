@@ -24,7 +24,17 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -92,7 +102,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.Reference
                     reference={resource.manufacturer}
                     name='Manufacturer'
@@ -102,7 +112,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.doseForm &&
+                resource.doseForm !== undefined && resource.doseForm !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.doseForm}
                     name='Dose Form'
@@ -112,7 +122,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.amount &&
+                resource.amount !== undefined && resource.amount !== null &&
                 <Partials.Quantity
                     quantity={resource.amount}
                     name='Amount'
@@ -122,7 +132,17 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.associatedMedication &&
+                resource.synonym !== undefined && resource.synonym !== null &&
+                <Partials.String
+                    string={resource.synonym}
+                    name='Synonym'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='synonym'
+                />
+            }
+            {
+                resource.associatedMedication !== undefined && resource.associatedMedication !== null &&
                 <Partials.Reference
                     reference={resource.associatedMedication}
                     name='Associated Medication'
@@ -132,7 +152,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.productType &&
+                resource.productType !== undefined && resource.productType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.productType}
                     name='Product Type'
@@ -142,7 +162,18 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.preparationInstruction &&
+                resource.ingredient !== undefined && resource.ingredient !== null &&
+                <Partials.MedicationKnowledgeIngredient
+                    ingredient={resource.ingredient}
+                    name='Ingredient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='ingredient'
+                    field=''
+                />
+            }
+            {
+                resource.preparationInstruction !== undefined && resource.preparationInstruction !== null &&
                 <Partials.Markdown
                     markdown={resource.preparationInstruction}
                     name='Preparation Instruction'
@@ -152,7 +183,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.intendedRoute &&
+                resource.intendedRoute !== undefined && resource.intendedRoute !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.intendedRoute}
                     name='Intended Route'
@@ -162,7 +193,29 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.contraindication &&
+                resource.administrationGuidelines !== undefined && resource.administrationGuidelines !== null &&
+                <Partials.MedicationKnowledgeAdministrationGuidelines
+                    administrationGuidelines={resource.administrationGuidelines}
+                    name='Administration Guidelines'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='administration-guidelines'
+                    field=''
+                />
+            }
+            {
+                resource.drugCharacteristic !== undefined && resource.drugCharacteristic !== null &&
+                <Partials.MedicationKnowledgeDrugCharacteristic
+                    drugCharacteristic={resource.drugCharacteristic}
+                    name='Drug Characteristic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='drug-characteristic'
+                    field=''
+                />
+            }
+            {
+                resource.contraindication !== undefined && resource.contraindication !== null &&
                 <Partials.Reference
                     reference={resource.contraindication}
                     name='Contraindication'
@@ -172,7 +225,7 @@ const MedicationKnowledge = ({ resource }: { resource: TMedicationKnowledge }): 
                 />
             }
             {
-                resource.regulatory &&
+                resource.regulatory !== undefined && resource.regulatory !== null &&
                 <Partials.Reference
                     reference={resource.regulatory}
                     name='Regulatory'

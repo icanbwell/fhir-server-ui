@@ -25,7 +25,17 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -93,7 +103,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -103,7 +113,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -113,7 +123,7 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
-                resource.status &&
+                resource.status !== undefined && resource.status !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.status}
                     name='Status'
@@ -123,13 +133,68 @@ const ClinicalUseDefinition = ({ resource }: { resource: TClinicalUseDefinition 
                 />
             }
             {
-                resource.population &&
+                resource.contraindication !== undefined && resource.contraindication !== null &&
+                <Partials.ClinicalUseDefinitionContraindication
+                    contraindication={resource.contraindication}
+                    name='Contraindication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='contraindication'
+                    field=''
+                />
+            }
+            {
+                resource.indication !== undefined && resource.indication !== null &&
+                <Partials.ClinicalUseDefinitionIndication
+                    indication={resource.indication}
+                    name='Indication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='indication'
+                    field=''
+                />
+            }
+            {
+                resource.interaction !== undefined && resource.interaction !== null &&
+                <Partials.ClinicalUseDefinitionInteraction
+                    interaction={resource.interaction}
+                    name='Interaction'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='interaction'
+                    field=''
+                />
+            }
+            {
+                resource.population !== undefined && resource.population !== null &&
                 <Partials.Reference
                     reference={resource.population}
                     name='Population'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='population'
+                />
+            }
+            {
+                resource.undesirableEffect !== undefined && resource.undesirableEffect !== null &&
+                <Partials.ClinicalUseDefinitionUndesirableEffect
+                    undesirableEffect={resource.undesirableEffect}
+                    name='Undesirable Effect'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='undesirable-effect'
+                    field=''
+                />
+            }
+            {
+                resource.warning !== undefined && resource.warning !== null &&
+                <Partials.ClinicalUseDefinitionWarning
+                    warning={resource.warning}
+                    name='Warning'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='warning'
+                    field=''
                 />
             }
         </>

@@ -24,7 +24,17 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -92,7 +102,17 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
-                resource.patient &&
+                resource.coordinateSystem !== undefined && resource.coordinateSystem !== null &&
+                <Partials.Int
+                    int={resource.coordinateSystem}
+                    name='Coordinate System'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='coordinate-system'
+                />
+            }
+            {
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -102,7 +122,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.specimen &&
+                resource.specimen !== undefined && resource.specimen !== null &&
                 <Partials.Reference
                     reference={resource.specimen}
                     name='Specimen'
@@ -112,7 +132,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.device &&
+                resource.device !== undefined && resource.device !== null &&
                 <Partials.Reference
                     reference={resource.device}
                     name='Device'
@@ -122,7 +142,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -132,7 +152,7 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.quantity &&
+                resource.quantity !== undefined && resource.quantity !== null &&
                 <Partials.Quantity
                     quantity={resource.quantity}
                     name='Quantity'
@@ -142,13 +162,77 @@ const MolecularSequence = ({ resource }: { resource: TMolecularSequence }): Reac
                 />
             }
             {
-                resource.pointer &&
+                resource.referenceSeq !== undefined && resource.referenceSeq !== null &&
+                <Partials.MolecularSequenceReferenceSeq
+                    referenceSeq={resource.referenceSeq}
+                    name='Reference Seq'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='reference-seq'
+                    field=''
+                />
+            }
+            {
+                resource.variant !== undefined && resource.variant !== null &&
+                <Partials.MolecularSequenceVariant
+                    variant={resource.variant}
+                    name='Variant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='variant'
+                    field=''
+                />
+            }
+            {
+                resource.observedSeq !== undefined && resource.observedSeq !== null &&
+                <Partials.String
+                    string={resource.observedSeq}
+                    name='Observed Seq'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='observed-seq'
+                />
+            }
+            {
+                resource.quality !== undefined && resource.quality !== null &&
+                <Partials.MolecularSequenceQuality
+                    quality={resource.quality}
+                    name='Quality'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='quality'
+                    field=''
+                />
+            }
+            {
+                resource.readCoverage !== undefined && resource.readCoverage !== null &&
+                <Partials.Int
+                    int={resource.readCoverage}
+                    name='Read Coverage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='read-coverage'
+                />
+            }
+            {
+                resource.pointer !== undefined && resource.pointer !== null &&
                 <Partials.Reference
                     reference={resource.pointer}
                     name='Pointer'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='pointer'
+                />
+            }
+            {
+                resource.structureVariant !== undefined && resource.structureVariant !== null &&
+                <Partials.MolecularSequenceStructureVariant
+                    structureVariant={resource.structureVariant}
+                    name='Structure Variant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='structure-variant'
+                    field=''
                 />
             }
         </>

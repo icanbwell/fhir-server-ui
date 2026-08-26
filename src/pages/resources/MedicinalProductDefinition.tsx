@@ -29,7 +29,17 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -39,7 +49,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -53,7 +63,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -63,7 +73,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -73,7 +83,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -83,7 +93,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -93,7 +103,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -103,7 +113,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.domain &&
+                resource.domain !== undefined && resource.domain !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.domain}
                     name='Domain'
@@ -113,7 +123,17 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.status &&
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.status !== undefined && resource.status !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.status}
                     name='Status'
@@ -123,7 +143,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.statusDate &&
+                resource.statusDate !== undefined && resource.statusDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.statusDate}
                     name='Status Date'
@@ -133,7 +153,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -143,7 +163,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.combinedPharmaceuticalDoseForm &&
+                resource.combinedPharmaceuticalDoseForm !== undefined && resource.combinedPharmaceuticalDoseForm !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.combinedPharmaceuticalDoseForm}
                     name='Combined Pharmaceutical Dose Form'
@@ -153,7 +173,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.route &&
+                resource.route !== undefined && resource.route !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.route}
                     name='Route'
@@ -163,7 +183,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.indication &&
+                resource.indication !== undefined && resource.indication !== null &&
                 <Partials.Markdown
                     markdown={resource.indication}
                     name='Indication'
@@ -173,7 +193,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.legalStatusOfSupply &&
+                resource.legalStatusOfSupply !== undefined && resource.legalStatusOfSupply !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.legalStatusOfSupply}
                     name='Legal Status Of Supply'
@@ -183,7 +203,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.additionalMonitoringIndicator &&
+                resource.additionalMonitoringIndicator !== undefined && resource.additionalMonitoringIndicator !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.additionalMonitoringIndicator}
                     name='Additional Monitoring Indicator'
@@ -193,7 +213,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.specialMeasures &&
+                resource.specialMeasures !== undefined && resource.specialMeasures !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.specialMeasures}
                     name='Special Measures'
@@ -203,7 +223,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.pediatricUseIndicator &&
+                resource.pediatricUseIndicator !== undefined && resource.pediatricUseIndicator !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.pediatricUseIndicator}
                     name='Pediatric Use Indicator'
@@ -213,7 +233,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.classification &&
+                resource.classification !== undefined && resource.classification !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.classification}
                     name='Classification'
@@ -223,7 +243,17 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.packagedMedicinalProduct &&
+                resource.marketingStatus !== undefined && resource.marketingStatus !== null &&
+                <Partials.MarketingStatus
+                    marketingStatus={resource.marketingStatus}
+                    name='Marketing Status'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='marketing-status'
+                />
+            }
+            {
+                resource.packagedMedicinalProduct !== undefined && resource.packagedMedicinalProduct !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.packagedMedicinalProduct}
                     name='Packaged Medicinal Product'
@@ -233,7 +263,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.ingredient &&
+                resource.ingredient !== undefined && resource.ingredient !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.ingredient}
                     name='Ingredient'
@@ -243,7 +273,17 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.attachedDocument &&
+                resource.impurity !== undefined && resource.impurity !== null &&
+                <Partials.CodeableReference
+                    codeableReference={resource.impurity}
+                    name='Impurity'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='impurity'
+                />
+            }
+            {
+                resource.attachedDocument !== undefined && resource.attachedDocument !== null &&
                 <Partials.Reference
                     reference={resource.attachedDocument}
                     name='Attached Document'
@@ -253,7 +293,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.masterFile &&
+                resource.masterFile !== undefined && resource.masterFile !== null &&
                 <Partials.Reference
                     reference={resource.masterFile}
                     name='Master File'
@@ -263,7 +303,7 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.clinicalTrial &&
+                resource.clinicalTrial !== undefined && resource.clinicalTrial !== null &&
                 <Partials.Reference
                     reference={resource.clinicalTrial}
                     name='Clinical Trial'
@@ -273,13 +313,35 @@ const MedicinalProductDefinition = ({ resource }: { resource: TMedicinalProductD
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.Coding
                     coding={resource.code}
                     name='Code'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='code'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.MedicinalProductDefinitionName
+                    name_={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                    field=''
+                />
+            }
+            {
+                resource.characteristic !== undefined && resource.characteristic !== null &&
+                <Partials.MedicinalProductDefinitionCharacteristic
+                    characteristic={resource.characteristic}
+                    name='Characteristic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='characteristic'
+                    field=''
                 />
             }
         </>

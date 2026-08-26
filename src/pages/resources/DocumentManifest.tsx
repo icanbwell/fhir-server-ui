@@ -25,7 +25,17 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.masterIdentifier &&
+                resource.masterIdentifier !== undefined && resource.masterIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.masterIdentifier}
                     name='Master Identifier'
@@ -89,7 +99,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -103,7 +113,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -113,7 +123,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -123,7 +133,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -133,7 +143,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -143,7 +153,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.recipient &&
+                resource.recipient !== undefined && resource.recipient !== null &&
                 <Partials.Reference
                     reference={resource.recipient}
                     name='Recipient'
@@ -153,7 +163,7 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.source &&
+                resource.source !== undefined && resource.source !== null &&
                 <Partials.Uri
                     uri={resource.source}
                     name='Source'
@@ -163,7 +173,17 @@ const DocumentManifest = ({ resource }: { resource: TDocumentManifest }): React.
                 />
             }
             {
-                resource.content &&
+                resource.description !== undefined && resource.description !== null &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
+                resource.content !== undefined && resource.content !== null &&
                 <Partials.Reference
                     reference={resource.content}
                     name='Content'

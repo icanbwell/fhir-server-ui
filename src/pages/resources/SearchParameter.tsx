@@ -25,7 +25,17 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -89,7 +99,27 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.derivedFrom &&
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.derivedFrom !== undefined && resource.derivedFrom !== null &&
                 <Partials.Canonical
                     canonical={resource.derivedFrom}
                     name='Derived From'
@@ -103,7 +133,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -113,7 +143,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -123,7 +153,17 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.description &&
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -133,7 +173,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -143,7 +183,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -165,6 +205,26 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
+                resource.expression !== undefined && resource.expression !== null &&
+                <Partials.String
+                    string={resource.expression}
+                    name='Expression'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='expression'
+                />
+            }
+            {
+                resource.xpath !== undefined && resource.xpath !== null &&
+                <Partials.String
+                    string={resource.xpath}
+                    name='Xpath'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='xpath'
+                />
+            }
+            {
                 resource.xpathUsage &&
                 <Partials.Code code={resource.xpathUsage} name='Xpath Usage'/>
             }
@@ -173,7 +233,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 <Partials.Code code={resource.target} name='Target'/>
             }
             {
-                resource.multipleOr &&
+                resource.multipleOr !== undefined && resource.multipleOr !== null &&
                 <Partials.Boolean
                     boolean={resource.multipleOr}
                     name='Multiple Or'
@@ -183,7 +243,7 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
                 />
             }
             {
-                resource.multipleAnd &&
+                resource.multipleAnd !== undefined && resource.multipleAnd !== null &&
                 <Partials.Boolean
                     boolean={resource.multipleAnd}
                     name='Multiple And'
@@ -199,6 +259,27 @@ const SearchParameter = ({ resource }: { resource: TSearchParameter }): React.Re
             {
                 resource.modifier &&
                 <Partials.Code code={resource.modifier} name='Modifier'/>
+            }
+            {
+                resource.chain !== undefined && resource.chain !== null &&
+                <Partials.String
+                    string={resource.chain}
+                    name='Chain'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='chain'
+                />
+            }
+            {
+                resource.component !== undefined && resource.component !== null &&
+                <Partials.SearchParameterComponent
+                    component={resource.component}
+                    name='Component'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='component'
+                    field=''
+                />
             }
         </>
     );

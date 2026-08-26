@@ -24,7 +24,17 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -88,11 +98,21 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 />
             }
             {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.testScript &&
+                resource.testScript !== undefined && resource.testScript !== null &&
                 <Partials.Reference
                     reference={resource.testScript}
                     name='Test Script'
@@ -106,7 +126,7 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 <Partials.Code code={resource.result} name='Result'/>
             }
             {
-                resource.score &&
+                resource.score !== undefined && resource.score !== null &&
                 <Partials.Decimal
                     decimal={resource.score}
                     name='Score'
@@ -116,13 +136,56 @@ const TestReport = ({ resource }: { resource: TTestReport }): React.ReactElement
                 />
             }
             {
-                resource.issued &&
+                resource.tester !== undefined && resource.tester !== null &&
+                <Partials.String
+                    string={resource.tester}
+                    name='Tester'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='tester'
+                />
+            }
+            {
+                resource.issued !== undefined && resource.issued !== null &&
                 <Partials.DateTime
                     dateTime={resource.issued}
                     name='Issued'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='issued'
+                />
+            }
+            {
+                resource.participant !== undefined && resource.participant !== null &&
+                <Partials.TestReportParticipant
+                    participant={resource.participant}
+                    name='Participant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='participant'
+                    field=''
+                />
+            }
+            {
+                resource.setup !== undefined && resource.setup !== null &&
+                <Partials.TestReportSetup
+                    setup={resource.setup}
+                    name='Setup'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='setup'
+                    field=''
+                />
+            }
+            {
+                resource.test !== undefined && resource.test !== null &&
+                <Partials.TestReportTest
+                    test={resource.test}
+                    name='Test'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='test'
+                    field=''
                 />
             }
         </>

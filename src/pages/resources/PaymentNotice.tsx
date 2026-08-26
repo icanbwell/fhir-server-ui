@@ -25,7 +25,17 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -93,7 +103,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.request &&
+                resource.request !== undefined && resource.request !== null &&
                 <Partials.Reference
                     reference={resource.request}
                     name='Request'
@@ -103,7 +113,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.response &&
+                resource.response !== undefined && resource.response !== null &&
                 <Partials.Reference
                     reference={resource.response}
                     name='Response'
@@ -113,7 +123,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -123,7 +133,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.provider &&
+                resource.provider !== undefined && resource.provider !== null &&
                 <Partials.Reference
                     reference={resource.provider}
                     name='Provider'
@@ -133,7 +143,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.payment &&
+                resource.payment !== undefined && resource.payment !== null &&
                 <Partials.Reference
                     reference={resource.payment}
                     name='Payment'
@@ -143,7 +153,17 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.payee &&
+                resource.paymentDate !== undefined && resource.paymentDate !== null &&
+                <Partials.Date
+                    date={resource.paymentDate}
+                    name='Payment Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payment-date'
+                />
+            }
+            {
+                resource.payee !== undefined && resource.payee !== null &&
                 <Partials.Reference
                     reference={resource.payee}
                     name='Payee'
@@ -153,7 +173,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.recipient &&
+                resource.recipient !== undefined && resource.recipient !== null &&
                 <Partials.Reference
                     reference={resource.recipient}
                     name='Recipient'
@@ -163,7 +183,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.amount &&
+                resource.amount !== undefined && resource.amount !== null &&
                 <Partials.Money
                     money={resource.amount}
                     name='Amount'
@@ -173,7 +193,7 @@ const PaymentNotice = ({ resource }: { resource: TPaymentNotice }): React.ReactE
                 />
             }
             {
-                resource.paymentStatus &&
+                resource.paymentStatus !== undefined && resource.paymentStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.paymentStatus}
                     name='Payment Status'

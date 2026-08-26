@@ -25,7 +25,17 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -93,7 +103,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -103,7 +113,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.subType &&
+                resource.subType !== undefined && resource.subType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subType}
                     name='Sub Type'
@@ -117,7 +127,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 <Partials.Code code={resource.use} name='Use'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -127,7 +137,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -137,7 +147,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.insurer &&
+                resource.insurer !== undefined && resource.insurer !== null &&
                 <Partials.Reference
                     reference={resource.insurer}
                     name='Insurer'
@@ -147,7 +157,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.requestor &&
+                resource.requestor !== undefined && resource.requestor !== null &&
                 <Partials.Reference
                     reference={resource.requestor}
                     name='Requestor'
@@ -157,7 +167,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.request &&
+                resource.request !== undefined && resource.request !== null &&
                 <Partials.Reference
                     reference={resource.request}
                     name='Request'
@@ -171,7 +181,27 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 <Partials.Code code={resource.outcome} name='Outcome'/>
             }
             {
-                resource.preAuthPeriod &&
+                resource.disposition !== undefined && resource.disposition !== null &&
+                <Partials.String
+                    string={resource.disposition}
+                    name='Disposition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='disposition'
+                />
+            }
+            {
+                resource.preAuthRef !== undefined && resource.preAuthRef !== null &&
+                <Partials.String
+                    string={resource.preAuthRef}
+                    name='Pre Auth Ref'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='pre-auth-ref'
+                />
+            }
+            {
+                resource.preAuthPeriod !== undefined && resource.preAuthPeriod !== null &&
                 <Partials.Period
                     period={resource.preAuthPeriod}
                     name='Pre Auth Period'
@@ -181,7 +211,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.payeeType &&
+                resource.payeeType !== undefined && resource.payeeType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.payeeType}
                     name='Payee Type'
@@ -191,7 +221,51 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.fundsReserve &&
+                resource.item !== undefined && resource.item !== null &&
+                <Partials.ClaimResponseItem
+                    item={resource.item}
+                    name='Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='item'
+                    field=''
+                />
+            }
+            {
+                resource.adjudication !== undefined && resource.adjudication !== null &&
+                <Partials.ClaimResponseAdjudication
+                    adjudication={resource.adjudication}
+                    name='Adjudication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='adjudication'
+                    field=''
+                />
+            }
+            {
+                resource.total !== undefined && resource.total !== null &&
+                <Partials.ClaimResponseTotal
+                    total={resource.total}
+                    name='Total'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='total'
+                    field=''
+                />
+            }
+            {
+                resource.payment !== undefined && resource.payment !== null &&
+                <Partials.ClaimResponsePayment
+                    payment={resource.payment}
+                    name='Payment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payment'
+                    field=''
+                />
+            }
+            {
+                resource.fundsReserve !== undefined && resource.fundsReserve !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.fundsReserve}
                     name='Funds Reserve'
@@ -201,7 +275,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.formCode &&
+                resource.formCode !== undefined && resource.formCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.formCode}
                     name='Form Code'
@@ -211,7 +285,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.form &&
+                resource.form !== undefined && resource.form !== null &&
                 <Partials.Attachment
                     attachment={resource.form}
                     name='Form'
@@ -221,7 +295,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.communicationRequest &&
+                resource.communicationRequest !== undefined && resource.communicationRequest !== null &&
                 <Partials.Reference
                     reference={resource.communicationRequest}
                     name='Communication Request'
@@ -231,7 +305,7 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                 />
             }
             {
-                resource.insurance &&
+                resource.insurance !== undefined && resource.insurance !== null &&
                 <Partials.Reference
                     reference={resource.insurance}
                     name='Insurance'
@@ -239,6 +313,17 @@ const ClaimResponse = ({ resource }: { resource: TClaimResponse }): React.ReactE
                     id={uuid}
                     searchParameter='insurance'
                     field='coverage'
+                />
+            }
+            {
+                resource.error !== undefined && resource.error !== null &&
+                <Partials.ClaimResponseError
+                    error={resource.error}
+                    name='Error'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='error'
+                    field=''
                 />
             }
         </>

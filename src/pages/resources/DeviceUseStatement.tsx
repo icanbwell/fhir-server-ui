@@ -25,7 +25,17 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -89,7 +99,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -103,7 +113,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -113,7 +123,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.derivedFrom &&
+                resource.derivedFrom !== undefined && resource.derivedFrom !== null &&
                 <Partials.Reference
                     reference={resource.derivedFrom}
                     name='Derived From'
@@ -123,7 +133,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.timingTiming &&
+                resource.timingTiming !== undefined && resource.timingTiming !== null &&
                 <Partials.Timing
                     timing={resource.timingTiming}
                     name='Timing Timing'
@@ -133,7 +143,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.timingPeriod &&
+                resource.timingPeriod !== undefined && resource.timingPeriod !== null &&
                 <Partials.Period
                     period={resource.timingPeriod}
                     name='Timing Period'
@@ -143,7 +153,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.timingDateTime &&
+                resource.timingDateTime !== undefined && resource.timingDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.timingDateTime}
                     name='Timing Date Time'
@@ -153,7 +163,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.recordedOn &&
+                resource.recordedOn !== undefined && resource.recordedOn !== null &&
                 <Partials.DateTime
                     dateTime={resource.recordedOn}
                     name='Recorded On'
@@ -163,7 +173,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.source &&
+                resource.source !== undefined && resource.source !== null &&
                 <Partials.Reference
                     reference={resource.source}
                     name='Source'
@@ -173,7 +183,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.device &&
+                resource.device !== undefined && resource.device !== null &&
                 <Partials.Reference
                     reference={resource.device}
                     name='Device'
@@ -183,7 +193,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -193,7 +203,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -203,7 +213,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.bodySite &&
+                resource.bodySite !== undefined && resource.bodySite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodySite}
                     name='Body Site'
@@ -213,7 +223,7 @@ const DeviceUseStatement = ({ resource }: { resource: TDeviceUseStatement }): Re
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

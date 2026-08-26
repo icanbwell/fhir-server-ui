@@ -25,7 +25,17 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -89,7 +99,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -99,7 +109,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.providedBy &&
+                resource.providedBy !== undefined && resource.providedBy !== null &&
                 <Partials.Reference
                     reference={resource.providedBy}
                     name='Provided By'
@@ -109,7 +119,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -119,7 +129,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -129,7 +139,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.specialty &&
+                resource.specialty !== undefined && resource.specialty !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.specialty}
                     name='Specialty'
@@ -139,7 +149,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -149,7 +159,27 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.extraDetails &&
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.comment !== undefined && resource.comment !== null &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
+                />
+            }
+            {
+                resource.extraDetails !== undefined && resource.extraDetails !== null &&
                 <Partials.Markdown
                     markdown={resource.extraDetails}
                     name='Extra Details'
@@ -159,7 +189,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.photo &&
+                resource.photo !== undefined && resource.photo !== null &&
                 <Partials.Attachment
                     attachment={resource.photo}
                     name='Photo'
@@ -169,7 +199,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.telecom &&
+                resource.telecom !== undefined && resource.telecom !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.telecom}
                     name='Telecom'
@@ -179,7 +209,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.coverageArea &&
+                resource.coverageArea !== undefined && resource.coverageArea !== null &&
                 <Partials.Reference
                     reference={resource.coverageArea}
                     name='Coverage Area'
@@ -189,7 +219,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.serviceProvisionCode &&
+                resource.serviceProvisionCode !== undefined && resource.serviceProvisionCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceProvisionCode}
                     name='Service Provision Code'
@@ -199,7 +229,18 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.program &&
+                resource.eligibility !== undefined && resource.eligibility !== null &&
+                <Partials.HealthcareServiceEligibility
+                    eligibility={resource.eligibility}
+                    name='Eligibility'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='eligibility'
+                    field=''
+                />
+            }
+            {
+                resource.program !== undefined && resource.program !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.program}
                     name='Program'
@@ -209,7 +250,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.characteristic &&
+                resource.characteristic !== undefined && resource.characteristic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.characteristic}
                     name='Characteristic'
@@ -219,7 +260,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.communication &&
+                resource.communication !== undefined && resource.communication !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.communication}
                     name='Communication'
@@ -229,7 +270,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.referralMethod &&
+                resource.referralMethod !== undefined && resource.referralMethod !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.referralMethod}
                     name='Referral Method'
@@ -239,7 +280,7 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.appointmentRequired &&
+                resource.appointmentRequired !== undefined && resource.appointmentRequired !== null &&
                 <Partials.Boolean
                     boolean={resource.appointmentRequired}
                     name='Appointment Required'
@@ -249,7 +290,28 @@ const HealthcareService = ({ resource }: { resource: THealthcareService }): Reac
                 />
             }
             {
-                resource.endpoint &&
+                resource.availableTime !== undefined && resource.availableTime !== null &&
+                <Partials.HealthcareServiceAvailableTime
+                    availableTime={resource.availableTime}
+                    name='Available Time'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='available-time'
+                    field=''
+                />
+            }
+            {
+                resource.availabilityExceptions !== undefined && resource.availabilityExceptions !== null &&
+                <Partials.String
+                    string={resource.availabilityExceptions}
+                    name='Availability Exceptions'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='availability-exceptions'
+                />
+            }
+            {
+                resource.endpoint !== undefined && resource.endpoint !== null &&
                 <Partials.Reference
                     reference={resource.endpoint}
                     name='Endpoint'

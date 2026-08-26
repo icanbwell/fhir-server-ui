@@ -28,7 +28,17 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -38,7 +48,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -52,7 +62,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -62,7 +72,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -72,7 +82,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -82,7 +92,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -96,7 +106,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.modality &&
+                resource.modality !== undefined && resource.modality !== null &&
                 <Partials.Coding
                     coding={resource.modality}
                     name='Modality'
@@ -106,7 +116,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -116,7 +126,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -126,7 +136,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.started &&
+                resource.started !== undefined && resource.started !== null &&
                 <Partials.DateTime
                     dateTime={resource.started}
                     name='Started'
@@ -136,7 +146,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -146,7 +156,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.referrer &&
+                resource.referrer !== undefined && resource.referrer !== null &&
                 <Partials.Reference
                     reference={resource.referrer}
                     name='Referrer'
@@ -156,7 +166,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.interpreter &&
+                resource.interpreter !== undefined && resource.interpreter !== null &&
                 <Partials.Reference
                     reference={resource.interpreter}
                     name='Interpreter'
@@ -166,7 +176,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.endpoint &&
+                resource.endpoint !== undefined && resource.endpoint !== null &&
                 <Partials.Reference
                     reference={resource.endpoint}
                     name='Endpoint'
@@ -176,7 +186,27 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.procedureReference &&
+                resource.numberOfSeries !== undefined && resource.numberOfSeries !== null &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.numberOfSeries}
+                    name='Number Of Series'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='number-of-series'
+                />
+            }
+            {
+                resource.numberOfInstances !== undefined && resource.numberOfInstances !== null &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.numberOfInstances}
+                    name='Number Of Instances'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='number-of-instances'
+                />
+            }
+            {
+                resource.procedureReference !== undefined && resource.procedureReference !== null &&
                 <Partials.Reference
                     reference={resource.procedureReference}
                     name='Procedure Reference'
@@ -186,7 +216,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.procedureCode &&
+                resource.procedureCode !== undefined && resource.procedureCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.procedureCode}
                     name='Procedure Code'
@@ -196,7 +226,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -206,7 +236,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -216,7 +246,7 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -226,13 +256,34 @@ const ImagingStudy = ({ resource }: { resource: TImagingStudy }): React.ReactEle
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='note'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
+                resource.series !== undefined && resource.series !== null &&
+                <Partials.ImagingStudySeries
+                    series={resource.series}
+                    name='Series'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series'
+                    field=''
                 />
             }
         </>

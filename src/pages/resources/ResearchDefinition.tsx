@@ -26,7 +26,17 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -90,7 +100,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,11 +110,61 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title !== undefined && resource.title !== null &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.shortTitle !== undefined && resource.shortTitle !== null &&
+                <Partials.String
+                    string={resource.shortTitle}
+                    name='Short Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='short-title'
+                />
+            }
+            {
+                resource.subtitle !== undefined && resource.subtitle !== null &&
+                <Partials.String
+                    string={resource.subtitle}
+                    name='Subtitle'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='subtitle'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -114,7 +174,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.subjectCodeableConcept &&
+                resource.subjectCodeableConcept !== undefined && resource.subjectCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subjectCodeableConcept}
                     name='Subject Codeable Concept'
@@ -124,7 +184,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.subjectReference &&
+                resource.subjectReference !== undefined && resource.subjectReference !== null &&
                 <Partials.Reference
                     reference={resource.subjectReference}
                     name='Subject Reference'
@@ -134,7 +194,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -144,7 +204,17 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.description &&
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -154,7 +224,17 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.comment !== undefined && resource.comment !== null &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
+                />
+            }
+            {
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -164,7 +244,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -174,7 +254,17 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.copyright &&
+                resource.usage !== undefined && resource.usage !== null &&
+                <Partials.String
+                    string={resource.usage}
+                    name='Usage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='usage'
+                />
+            }
+            {
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -184,7 +274,27 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
+                />
+            }
+            {
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -194,7 +304,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.topic &&
+                resource.topic !== undefined && resource.topic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.topic}
                     name='Topic'
@@ -204,7 +314,17 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.library &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
+                />
+            }
+            {
+                resource.library !== undefined && resource.library !== null &&
                 <Partials.Canonical
                     canonical={resource.library}
                     name='Library'
@@ -214,7 +334,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.population &&
+                resource.population !== undefined && resource.population !== null &&
                 <Partials.Reference
                     reference={resource.population}
                     name='Population'
@@ -224,7 +344,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.exposure &&
+                resource.exposure !== undefined && resource.exposure !== null &&
                 <Partials.Reference
                     reference={resource.exposure}
                     name='Exposure'
@@ -234,7 +354,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.exposureAlternative &&
+                resource.exposureAlternative !== undefined && resource.exposureAlternative !== null &&
                 <Partials.Reference
                     reference={resource.exposureAlternative}
                     name='Exposure Alternative'
@@ -244,7 +364,7 @@ const ResearchDefinition = ({ resource }: { resource: TResearchDefinition }): Re
                 />
             }
             {
-                resource.outcome &&
+                resource.outcome !== undefined && resource.outcome !== null &&
                 <Partials.Reference
                     reference={resource.outcome}
                     name='Outcome'

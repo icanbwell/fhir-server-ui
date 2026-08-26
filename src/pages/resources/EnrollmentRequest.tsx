@@ -25,7 +25,17 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -93,7 +103,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.created &&
+                resource.created !== undefined && resource.created !== null &&
                 <Partials.DateTime
                     dateTime={resource.created}
                     name='Created'
@@ -103,7 +113,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.insurer &&
+                resource.insurer !== undefined && resource.insurer !== null &&
                 <Partials.Reference
                     reference={resource.insurer}
                     name='Insurer'
@@ -113,7 +123,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.provider &&
+                resource.provider !== undefined && resource.provider !== null &&
                 <Partials.Reference
                     reference={resource.provider}
                     name='Provider'
@@ -123,7 +133,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.candidate &&
+                resource.candidate !== undefined && resource.candidate !== null &&
                 <Partials.Reference
                     reference={resource.candidate}
                     name='Candidate'
@@ -133,7 +143,7 @@ const EnrollmentRequest = ({ resource }: { resource: TEnrollmentRequest }): Reac
                 />
             }
             {
-                resource.coverage &&
+                resource.coverage !== undefined && resource.coverage !== null &&
                 <Partials.Reference
                     reference={resource.coverage}
                     name='Coverage'

@@ -27,7 +27,17 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -37,7 +47,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -51,7 +61,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -61,7 +71,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -71,7 +81,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -81,7 +91,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -95,7 +105,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 <Partials.Code code={resource.actuality} name='Actuality'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -105,7 +115,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.event &&
+                resource.event !== undefined && resource.event !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.event}
                     name='Event'
@@ -115,7 +125,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -125,7 +135,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -135,7 +145,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -145,7 +155,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.detected &&
+                resource.detected !== undefined && resource.detected !== null &&
                 <Partials.DateTime
                     dateTime={resource.detected}
                     name='Detected'
@@ -155,7 +165,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.recordedDate &&
+                resource.recordedDate !== undefined && resource.recordedDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.recordedDate}
                     name='Recorded Date'
@@ -165,7 +175,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.resultingCondition &&
+                resource.resultingCondition !== undefined && resource.resultingCondition !== null &&
                 <Partials.Reference
                     reference={resource.resultingCondition}
                     name='Resulting Condition'
@@ -175,7 +185,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -185,7 +195,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.seriousness &&
+                resource.seriousness !== undefined && resource.seriousness !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.seriousness}
                     name='Seriousness'
@@ -195,7 +205,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.severity &&
+                resource.severity !== undefined && resource.severity !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.severity}
                     name='Severity'
@@ -205,7 +215,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.outcome &&
+                resource.outcome !== undefined && resource.outcome !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.outcome}
                     name='Outcome'
@@ -215,7 +225,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.recorder &&
+                resource.recorder !== undefined && resource.recorder !== null &&
                 <Partials.Reference
                     reference={resource.recorder}
                     name='Recorder'
@@ -225,7 +235,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.contributor &&
+                resource.contributor !== undefined && resource.contributor !== null &&
                 <Partials.Reference
                     reference={resource.contributor}
                     name='Contributor'
@@ -235,7 +245,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.suspectEntity &&
+                resource.suspectEntity !== undefined && resource.suspectEntity !== null &&
                 <Partials.Reference
                     reference={resource.suspectEntity}
                     name='Suspect Entity'
@@ -246,7 +256,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.subjectMedicalHistory &&
+                resource.subjectMedicalHistory !== undefined && resource.subjectMedicalHistory !== null &&
                 <Partials.Reference
                     reference={resource.subjectMedicalHistory}
                     name='Subject Medical History'
@@ -256,7 +266,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.referenceDocument &&
+                resource.referenceDocument !== undefined && resource.referenceDocument !== null &&
                 <Partials.Reference
                     reference={resource.referenceDocument}
                     name='Reference Document'
@@ -266,7 +276,7 @@ const AdverseEvent = ({ resource }: { resource: TAdverseEvent }): React.ReactEle
                 />
             }
             {
-                resource.study &&
+                resource.study !== undefined && resource.study !== null &&
                 <Partials.Reference
                     reference={resource.study}
                     name='Study'

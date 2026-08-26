@@ -26,7 +26,17 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -94,7 +104,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -104,7 +114,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -114,7 +124,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.authority &&
+                resource.authority !== undefined && resource.authority !== null &&
                 <Partials.Reference
                     reference={resource.authority}
                     name='Authority'
@@ -124,7 +134,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.targetDisease &&
+                resource.targetDisease !== undefined && resource.targetDisease !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.targetDisease}
                     name='Target Disease'
@@ -134,7 +144,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.immunizationEvent &&
+                resource.immunizationEvent !== undefined && resource.immunizationEvent !== null &&
                 <Partials.Reference
                     reference={resource.immunizationEvent}
                     name='Immunization Event'
@@ -144,7 +154,7 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.doseStatus &&
+                resource.doseStatus !== undefined && resource.doseStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.doseStatus}
                     name='Dose Status'
@@ -154,13 +164,73 @@ const ImmunizationEvaluation = ({ resource }: { resource: TImmunizationEvaluatio
                 />
             }
             {
-                resource.doseStatusReason &&
+                resource.doseStatusReason !== undefined && resource.doseStatusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.doseStatusReason}
                     name='Dose Status Reason'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='dose-status-reason'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
+                resource.series !== undefined && resource.series !== null &&
+                <Partials.String
+                    string={resource.series}
+                    name='Series'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series'
+                />
+            }
+            {
+                resource.doseNumberPositiveInt !== undefined && resource.doseNumberPositiveInt !== null &&
+                <Partials.Int
+                    int={resource.doseNumberPositiveInt}
+                    name='Dose Number Positive Int'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dose-number-positive-int'
+                />
+            }
+            {
+                resource.doseNumberString !== undefined && resource.doseNumberString !== null &&
+                <Partials.String
+                    string={resource.doseNumberString}
+                    name='Dose Number String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dose-number-string'
+                />
+            }
+            {
+                resource.seriesDosesPositiveInt !== undefined && resource.seriesDosesPositiveInt !== null &&
+                <Partials.Int
+                    int={resource.seriesDosesPositiveInt}
+                    name='Series Doses Positive Int'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series-doses-positive-int'
+                />
+            }
+            {
+                resource.seriesDosesString !== undefined && resource.seriesDosesString !== null &&
+                <Partials.String
+                    string={resource.seriesDosesString}
+                    name='Series Doses String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='series-doses-string'
                 />
             }
         </>

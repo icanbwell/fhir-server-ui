@@ -28,7 +28,17 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -38,7 +48,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -52,7 +62,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -62,7 +72,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -72,7 +82,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -82,7 +92,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -92,7 +102,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.instantiates &&
+                resource.instantiates !== undefined && resource.instantiates !== null &&
                 <Partials.Uri
                     uri={resource.instantiates}
                     name='Instantiates'
@@ -102,7 +112,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -116,7 +126,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -126,7 +136,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -136,7 +146,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.medicationCodeableConcept &&
+                resource.medicationCodeableConcept !== undefined && resource.medicationCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.medicationCodeableConcept}
                     name='Medication Codeable Concept'
@@ -146,7 +156,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.medicationReference &&
+                resource.medicationReference !== undefined && resource.medicationReference !== null &&
                 <Partials.Reference
                     reference={resource.medicationReference}
                     name='Medication Reference'
@@ -156,7 +166,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -166,7 +176,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.context &&
+                resource.context !== undefined && resource.context !== null &&
                 <Partials.Reference
                     reference={resource.context}
                     name='Context'
@@ -176,7 +186,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.supportingInformation &&
+                resource.supportingInformation !== undefined && resource.supportingInformation !== null &&
                 <Partials.Reference
                     reference={resource.supportingInformation}
                     name='Supporting Information'
@@ -186,7 +196,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.effectiveDateTime &&
+                resource.effectiveDateTime !== undefined && resource.effectiveDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.effectiveDateTime}
                     name='Effective Date Time'
@@ -196,7 +206,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -206,7 +216,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -217,7 +227,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -227,7 +237,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -237,7 +247,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.request &&
+                resource.request !== undefined && resource.request !== null &&
                 <Partials.Reference
                     reference={resource.request}
                     name='Request'
@@ -247,7 +257,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.device &&
+                resource.device !== undefined && resource.device !== null &&
                 <Partials.Reference
                     reference={resource.device}
                     name='Device'
@@ -257,7 +267,7 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -267,7 +277,18 @@ const MedicationAdministration = ({ resource }: { resource: TMedicationAdministr
                 />
             }
             {
-                resource.eventHistory &&
+                resource.dosage !== undefined && resource.dosage !== null &&
+                <Partials.MedicationAdministrationDosage
+                    dosage={resource.dosage}
+                    name='Dosage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dosage'
+                    field=''
+                />
+            }
+            {
+                resource.eventHistory !== undefined && resource.eventHistory !== null &&
                 <Partials.Reference
                     reference={resource.eventHistory}
                     name='Event History'

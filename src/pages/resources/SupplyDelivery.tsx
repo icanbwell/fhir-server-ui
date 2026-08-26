@@ -24,7 +24,17 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -88,7 +98,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -98,7 +108,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -112,7 +122,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -122,7 +132,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -132,7 +142,18 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.suppliedItem !== undefined && resource.suppliedItem !== null &&
+                <Partials.SupplyDeliverySuppliedItem
+                    suppliedItem={resource.suppliedItem}
+                    name='Supplied Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='supplied-item'
+                    field=''
+                />
+            }
+            {
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -142,7 +163,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.occurrencePeriod &&
+                resource.occurrencePeriod !== undefined && resource.occurrencePeriod !== null &&
                 <Partials.Period
                     period={resource.occurrencePeriod}
                     name='Occurrence Period'
@@ -152,7 +173,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.occurrenceTiming &&
+                resource.occurrenceTiming !== undefined && resource.occurrenceTiming !== null &&
                 <Partials.Timing
                     timing={resource.occurrenceTiming}
                     name='Occurrence Timing'
@@ -162,7 +183,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.supplier &&
+                resource.supplier !== undefined && resource.supplier !== null &&
                 <Partials.Reference
                     reference={resource.supplier}
                     name='Supplier'
@@ -172,7 +193,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.destination &&
+                resource.destination !== undefined && resource.destination !== null &&
                 <Partials.Reference
                     reference={resource.destination}
                     name='Destination'
@@ -182,7 +203,7 @@ const SupplyDelivery = ({ resource }: { resource: TSupplyDelivery }): React.Reac
                 />
             }
             {
-                resource.receiver &&
+                resource.receiver !== undefined && resource.receiver !== null &&
                 <Partials.Reference
                     reference={resource.receiver}
                     name='Receiver'

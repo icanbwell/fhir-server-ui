@@ -26,7 +26,17 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -90,7 +100,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -104,7 +114,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.manufacturer &&
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
                 <Partials.Reference
                     reference={resource.manufacturer}
                     name='Manufacturer'
@@ -114,7 +124,7 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 />
             }
             {
-                resource.form &&
+                resource.form !== undefined && resource.form !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.form}
                     name='Form'
@@ -124,13 +134,35 @@ const Medication = ({ resource }: { resource: TMedication }): React.ReactElement
                 />
             }
             {
-                resource.amount &&
+                resource.amount !== undefined && resource.amount !== null &&
                 <Partials.Ratio
                     ratio={resource.amount}
                     name='Amount'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='amount'
+                />
+            }
+            {
+                resource.ingredient !== undefined && resource.ingredient !== null &&
+                <Partials.MedicationIngredient
+                    ingredient={resource.ingredient}
+                    name='Ingredient'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='ingredient'
+                    field=''
+                />
+            }
+            {
+                resource.batch !== undefined && resource.batch !== null &&
+                <Partials.MedicationBatch
+                    batch={resource.batch}
+                    name='Batch'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='batch'
+                    field=''
                 />
             }
         </>

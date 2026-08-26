@@ -27,7 +27,17 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -37,7 +47,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -51,7 +61,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -61,7 +71,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -71,7 +81,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -81,7 +91,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -95,7 +105,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.operationalStatus &&
+                resource.operationalStatus !== undefined && resource.operationalStatus !== null &&
                 <Partials.Coding
                     coding={resource.operationalStatus}
                     name='Operational Status'
@@ -105,11 +115,41 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.alias !== undefined && resource.alias !== null &&
+                <Partials.String
+                    string={resource.alias}
+                    name='Alias'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='alias'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
                 resource.mode &&
                 <Partials.Code code={resource.mode} name='Mode'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -119,7 +159,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.telecom &&
+                resource.telecom !== undefined && resource.telecom !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.telecom}
                     name='Telecom'
@@ -129,7 +169,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.address &&
+                resource.address !== undefined && resource.address !== null &&
                 <Partials.Address
                     address={resource.address}
                     name='Address'
@@ -139,7 +179,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.physicalType &&
+                resource.physicalType !== undefined && resource.physicalType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.physicalType}
                     name='Physical Type'
@@ -149,7 +189,18 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.managingOrganization &&
+                resource.position !== undefined && resource.position !== null &&
+                <Partials.LocationPosition
+                    position={resource.position}
+                    name='Position'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='position'
+                    field=''
+                />
+            }
+            {
+                resource.managingOrganization !== undefined && resource.managingOrganization !== null &&
                 <Partials.Reference
                     reference={resource.managingOrganization}
                     name='Managing Organization'
@@ -159,7 +210,7 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -169,7 +220,28 @@ const Location = ({ resource }: { resource: TLocation }): React.ReactElement => 
                 />
             }
             {
-                resource.endpoint &&
+                resource.hoursOfOperation !== undefined && resource.hoursOfOperation !== null &&
+                <Partials.LocationHoursOfOperation
+                    hoursOfOperation={resource.hoursOfOperation}
+                    name='Hours Of Operation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='hours-of-operation'
+                    field=''
+                />
+            }
+            {
+                resource.availabilityExceptions !== undefined && resource.availabilityExceptions !== null &&
+                <Partials.String
+                    string={resource.availabilityExceptions}
+                    name='Availability Exceptions'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='availability-exceptions'
+                />
+            }
+            {
+                resource.endpoint !== undefined && resource.endpoint !== null &&
                 <Partials.Reference
                     reference={resource.endpoint}
                     name='Endpoint'

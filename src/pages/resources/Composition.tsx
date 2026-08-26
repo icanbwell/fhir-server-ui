@@ -32,7 +32,17 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -42,7 +52,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -56,7 +66,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -66,7 +76,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -76,7 +86,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -86,7 +96,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +110,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -110,7 +120,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -120,7 +130,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -130,7 +140,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -140,7 +150,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -150,7 +160,7 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -160,17 +170,60 @@ const Composition = ({ resource }: { resource: TComposition }): React.ReactEleme
                 />
             }
             {
+                resource.title !== undefined && resource.title !== null &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
                 resource.confidentiality &&
                 <Partials.Code code={resource.confidentiality} name='Confidentiality'/>
             }
             {
-                resource.custodian &&
+                resource.attester !== undefined && resource.attester !== null &&
+                <Partials.CompositionAttester
+                    attester={resource.attester}
+                    name='Attester'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='attester'
+                    field=''
+                />
+            }
+            {
+                resource.custodian !== undefined && resource.custodian !== null &&
                 <Partials.Reference
                     reference={resource.custodian}
                     name='Custodian'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='custodian'
+                />
+            }
+            {
+                resource.event !== undefined && resource.event !== null &&
+                <Partials.CompositionEvent
+                    event={resource.event}
+                    name='Event'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='event'
+                    field=''
+                />
+            }
+            {
+                resource.section !== undefined && resource.section !== null &&
+                <Partials.CompositionSection
+                    section={resource.section}
+                    name='Section'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='section'
+                    field=''
                 />
             }
         </>

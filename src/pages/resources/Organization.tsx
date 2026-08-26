@@ -28,7 +28,17 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -38,7 +48,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -52,7 +62,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -62,7 +72,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -72,7 +82,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -82,7 +92,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -92,7 +102,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -102,7 +112,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -112,15 +122,27 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.name &&
-                <Partials.NameValue
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
                     name='Name'
-                    value={resource.name}
+                    resourceType={resource.resourceType}
+                    id={uuid}
                     searchParameter='name'
                 />
             }
             {
-                resource.telecom &&
+                resource.alias !== undefined && resource.alias !== null &&
+                <Partials.String
+                    string={resource.alias}
+                    name='Alias'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='alias'
+                />
+            }
+            {
+                resource.telecom !== undefined && resource.telecom !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.telecom}
                     name='Telecom'
@@ -130,7 +152,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.address &&
+                resource.address !== undefined && resource.address !== null &&
                 <Partials.Address
                     address={resource.address}
                     name='Address'
@@ -140,7 +162,7 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'
@@ -150,7 +172,18 @@ const Organization = ({ resource }: { resource: TOrganization }): React.ReactEle
                 />
             }
             {
-                resource.endpoint &&
+                resource.contact !== undefined && resource.contact !== null &&
+                <Partials.OrganizationContact
+                    contact={resource.contact}
+                    name='Contact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='contact'
+                    field=''
+                />
+            }
+            {
+                resource.endpoint !== undefined && resource.endpoint !== null &&
                 <Partials.Reference
                     reference={resource.endpoint}
                     name='Endpoint'

@@ -26,7 +26,17 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -94,7 +104,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.formOf &&
+                resource.formOf !== undefined && resource.formOf !== null &&
                 <Partials.Reference
                     reference={resource.formOf}
                     name='Form Of'
@@ -104,7 +114,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.administrableDoseForm &&
+                resource.administrableDoseForm !== undefined && resource.administrableDoseForm !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.administrableDoseForm}
                     name='Administrable Dose Form'
@@ -114,7 +124,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.unitOfPresentation &&
+                resource.unitOfPresentation !== undefined && resource.unitOfPresentation !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.unitOfPresentation}
                     name='Unit Of Presentation'
@@ -124,7 +134,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.producedFrom &&
+                resource.producedFrom !== undefined && resource.producedFrom !== null &&
                 <Partials.Reference
                     reference={resource.producedFrom}
                     name='Produced From'
@@ -134,7 +144,7 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.ingredient &&
+                resource.ingredient !== undefined && resource.ingredient !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.ingredient}
                     name='Ingredient'
@@ -144,13 +154,35 @@ const AdministrableProductDefinition = ({ resource }: { resource: TAdministrable
                 />
             }
             {
-                resource.device &&
+                resource.device !== undefined && resource.device !== null &&
                 <Partials.Reference
                     reference={resource.device}
                     name='Device'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='device'
+                />
+            }
+            {
+                resource.property !== undefined && resource.property !== null &&
+                <Partials.AdministrableProductDefinitionProperty
+                    property={resource.property}
+                    name='Property'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='property'
+                    field=''
+                />
+            }
+            {
+                resource.routeOfAdministration !== undefined && resource.routeOfAdministration !== null &&
+                <Partials.AdministrableProductDefinitionRouteOfAdministration
+                    routeOfAdministration={resource.routeOfAdministration}
+                    name='Route Of Administration'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='route-of-administration'
+                    field=''
                 />
             }
         </>

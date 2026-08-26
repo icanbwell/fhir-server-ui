@@ -27,7 +27,17 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -37,7 +47,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -51,7 +61,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -61,7 +71,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -71,7 +81,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -81,7 +91,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -91,7 +101,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -101,7 +111,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -111,7 +121,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.description &&
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -121,7 +131,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.region &&
+                resource.region !== undefined && resource.region !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.region}
                     name='Region'
@@ -131,7 +141,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.status &&
+                resource.status !== undefined && resource.status !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.status}
                     name='Status'
@@ -141,7 +151,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.statusDate &&
+                resource.statusDate !== undefined && resource.statusDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.statusDate}
                     name='Status Date'
@@ -151,7 +161,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.validityPeriod &&
+                resource.validityPeriod !== undefined && resource.validityPeriod !== null &&
                 <Partials.Period
                     period={resource.validityPeriod}
                     name='Validity Period'
@@ -161,7 +171,17 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.intendedUse &&
+                resource.indication !== undefined && resource.indication !== null &&
+                <Partials.CodeableReference
+                    codeableReference={resource.indication}
+                    name='Indication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='indication'
+                />
+            }
+            {
+                resource.intendedUse !== undefined && resource.intendedUse !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.intendedUse}
                     name='Intended Use'
@@ -171,7 +191,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.basis &&
+                resource.basis !== undefined && resource.basis !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.basis}
                     name='Basis'
@@ -181,7 +201,7 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.holder &&
+                resource.holder !== undefined && resource.holder !== null &&
                 <Partials.Reference
                     reference={resource.holder}
                     name='Holder'
@@ -191,13 +211,24 @@ const RegulatedAuthorization = ({ resource }: { resource: TRegulatedAuthorizatio
                 />
             }
             {
-                resource.regulator &&
+                resource.regulator !== undefined && resource.regulator !== null &&
                 <Partials.Reference
                     reference={resource.regulator}
                     name='Regulator'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='regulator'
+                />
+            }
+            {
+                resource.case !== undefined && resource.case !== null &&
+                <Partials.RegulatedAuthorizationCase
+                    case={resource.case}
+                    name='Case'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='case'
+                    field=''
                 />
             }
         </>

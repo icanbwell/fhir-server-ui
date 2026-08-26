@@ -26,7 +26,17 @@ const Parameters = ({ resource }: { resource: TParameters }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const Parameters = ({ resource }: { resource: TParameters }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,6 +58,17 @@ const Parameters = ({ resource }: { resource: TParameters }): React.ReactElement
             {
                 resource.language &&
                 <Partials.Code code={resource.language} name='Language'/>
+            }
+            {
+                resource.parameter !== undefined && resource.parameter !== null &&
+                <Partials.ParametersParameter
+                    parameter={resource.parameter}
+                    name='Parameter'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='parameter'
+                    field=''
+                />
             }
         </>
     );

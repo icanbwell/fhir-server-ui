@@ -25,7 +25,17 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -89,7 +99,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -99,7 +109,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -113,7 +123,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 <Partials.Code code={resource.permittedDataType} name='Permitted Data Type'/>
             }
             {
-                resource.multipleResultsAllowed &&
+                resource.multipleResultsAllowed !== undefined && resource.multipleResultsAllowed !== null &&
                 <Partials.Boolean
                     boolean={resource.multipleResultsAllowed}
                     name='Multiple Results Allowed'
@@ -123,7 +133,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.method &&
+                resource.method !== undefined && resource.method !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.method}
                     name='Method'
@@ -133,7 +143,17 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.validCodedValueSet &&
+                resource.preferredReportName !== undefined && resource.preferredReportName !== null &&
+                <Partials.String
+                    string={resource.preferredReportName}
+                    name='Preferred Report Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='preferred-report-name'
+                />
+            }
+            {
+                resource.validCodedValueSet !== undefined && resource.validCodedValueSet !== null &&
                 <Partials.Reference
                     reference={resource.validCodedValueSet}
                     name='Valid Coded Value Set'
@@ -143,7 +163,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.normalCodedValueSet &&
+                resource.normalCodedValueSet !== undefined && resource.normalCodedValueSet !== null &&
                 <Partials.Reference
                     reference={resource.normalCodedValueSet}
                     name='Normal Coded Value Set'
@@ -153,7 +173,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.abnormalCodedValueSet &&
+                resource.abnormalCodedValueSet !== undefined && resource.abnormalCodedValueSet !== null &&
                 <Partials.Reference
                     reference={resource.abnormalCodedValueSet}
                     name='Abnormal Coded Value Set'
@@ -163,7 +183,7 @@ const ObservationDefinition = ({ resource }: { resource: TObservationDefinition 
                 />
             }
             {
-                resource.criticalCodedValueSet &&
+                resource.criticalCodedValueSet !== undefined && resource.criticalCodedValueSet !== null &&
                 <Partials.Reference
                     reference={resource.criticalCodedValueSet}
                     name='Critical Coded Value Set'

@@ -27,7 +27,17 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
             </Link>
             <PatientReferenceFromExtension extension={resource.extension} />
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -37,7 +47,7 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -51,7 +61,7 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -61,7 +71,7 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -71,7 +81,7 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +99,17 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
-                resource.notificationEvent &&
+                resource.eventsSinceSubscriptionStart !== undefined && resource.eventsSinceSubscriptionStart !== null &&
+                <Partials.String
+                    string={resource.eventsSinceSubscriptionStart}
+                    name='Events Since Subscription Start'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='events-since-subscription-start'
+                />
+            }
+            {
+                resource.notificationEvent !== undefined && resource.notificationEvent !== null &&
                 <Partials.SubscriptionStatusNotificationEvent
                     notificationEvent={resource.notificationEvent}
                     name='Notification Event'
@@ -100,7 +120,7 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 />
             }
             {
-                resource.subscription &&
+                resource.subscription !== undefined && resource.subscription !== null &&
                 <Partials.Reference
                     reference={resource.subscription}
                     name='Subscription'
@@ -110,7 +130,7 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 />
             }
             {
-                resource.topic &&
+                resource.topic !== undefined && resource.topic !== null &&
                 <Partials.Canonical
                     canonical={resource.topic}
                     name='Topic'
@@ -120,7 +140,7 @@ const SubscriptionStatus = ({ resource }: { resource: TSubscriptionStatus }): Re
                 />
             }
             {
-                resource.error &&
+                resource.error !== undefined && resource.error !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.error}
                     name='Error'

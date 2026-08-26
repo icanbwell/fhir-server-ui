@@ -26,7 +26,17 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -90,7 +100,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -100,7 +110,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.name &&
+                resource.name !== undefined && resource.name !== null &&
                 <Partials.HumanName
                     humanName={resource.name}
                     name='Name'
@@ -110,7 +120,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.telecom &&
+                resource.telecom !== undefined && resource.telecom !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.telecom}
                     name='Telecom'
@@ -124,7 +134,17 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 <Partials.Code code={resource.gender} name='Gender'/>
             }
             {
-                resource.deceasedBoolean &&
+                resource.birthDate !== undefined && resource.birthDate !== null &&
+                <Partials.Date
+                    date={resource.birthDate}
+                    name='Birth Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='birth-date'
+                />
+            }
+            {
+                resource.deceasedBoolean !== undefined && resource.deceasedBoolean !== null &&
                 <Partials.Boolean
                     boolean={resource.deceasedBoolean}
                     name='Deceased Boolean'
@@ -134,7 +154,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.deceasedDateTime &&
+                resource.deceasedDateTime !== undefined && resource.deceasedDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.deceasedDateTime}
                     name='Deceased Date Time'
@@ -144,7 +164,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.address &&
+                resource.address !== undefined && resource.address !== null &&
                 <Partials.Address
                     address={resource.address}
                     name='Address'
@@ -154,7 +174,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.maritalStatus &&
+                resource.maritalStatus !== undefined && resource.maritalStatus !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.maritalStatus}
                     name='Marital Status'
@@ -164,7 +184,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.multipleBirthBoolean &&
+                resource.multipleBirthBoolean !== undefined && resource.multipleBirthBoolean !== null &&
                 <Partials.Boolean
                     boolean={resource.multipleBirthBoolean}
                     name='Multiple Birth Boolean'
@@ -174,7 +194,17 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.photo &&
+                resource.multipleBirthInteger !== undefined && resource.multipleBirthInteger !== null &&
+                <Partials.Int
+                    int={resource.multipleBirthInteger}
+                    name='Multiple Birth Integer'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='multiple-birth-integer'
+                />
+            }
+            {
+                resource.photo !== undefined && resource.photo !== null &&
                 <Partials.Attachment
                     attachment={resource.photo}
                     name='Photo'
@@ -184,7 +214,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.contact &&
+                resource.contact !== undefined && resource.contact !== null &&
                 <Partials.PatientContact
                     patientContact={resource.contact}
                     name='Contact'
@@ -194,7 +224,18 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.generalPractitioner &&
+                resource.communication !== undefined && resource.communication !== null &&
+                <Partials.PatientCommunication
+                    communication={resource.communication}
+                    name='Communication'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='communication'
+                    field=''
+                />
+            }
+            {
+                resource.generalPractitioner !== undefined && resource.generalPractitioner !== null &&
                 <Partials.Reference
                     reference={resource.generalPractitioner}
                     name='General Practitioner'
@@ -204,7 +245,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.managingOrganization &&
+                resource.managingOrganization !== undefined && resource.managingOrganization !== null &&
                 <Partials.Reference
                     reference={resource.managingOrganization}
                     name='Managing Organization'
@@ -214,7 +255,7 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 />
             }
             {
-                resource.link &&
+                resource.link !== undefined && resource.link !== null &&
                 <Partials.Reference
                     reference={resource.link}
                     name='Link'

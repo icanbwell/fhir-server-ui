@@ -31,7 +31,17 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
             </Link>
             <PatientReferenceFromExtension extension={resource.extension} />
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -41,7 +51,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -55,7 +65,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -65,7 +75,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -75,7 +85,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -89,7 +99,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.contact &&
+                resource.contact !== undefined && resource.contact !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.contact}
                     name='Contact'
@@ -99,7 +109,7 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 />
             }
             {
-                resource.end &&
+                resource.end !== undefined && resource.end !== null &&
                 <Partials.Instant
                     instant={resource.end}
                     name='End'
@@ -109,19 +119,37 @@ const Subscription = ({ resource }: { resource: TSubscription }): React.ReactEle
                 />
             }
             {
-                resource.reason &&
-                <Partials.NameValue name='Reason' value={resource.reason} searchParameter='reason' />
+                resource.reason !== undefined && resource.reason !== null &&
+                <Partials.String
+                    string={resource.reason}
+                    name='Reason'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='reason'
+                />
             }
             {
-                resource.criteria &&
-                <Partials.NameValue name='Criteria' value={resource.criteria} searchParameter='criteria' />
+                resource.criteria !== undefined && resource.criteria !== null &&
+                <Partials.String
+                    string={resource.criteria}
+                    name='Criteria'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='criteria'
+                />
             }
             {
-                resource.error &&
-                <Partials.NameValue name='Error' value={resource.error} searchParameter='error' />
+                resource.error !== undefined && resource.error !== null &&
+                <Partials.String
+                    string={resource.error}
+                    name='Error'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='error'
+                />
             }
             {
-                resource.channel &&
+                resource.channel !== undefined && resource.channel !== null &&
                 <Partials.SubscriptionChannel
                     channel={resource.channel}
                     name='Channel'

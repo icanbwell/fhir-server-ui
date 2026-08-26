@@ -26,7 +26,17 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -94,7 +104,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusHistory &&
+                resource.statusHistory !== undefined && resource.statusHistory !== null &&
                 <Partials.EncounterStatusHistory
                     statusHistory={resource.statusHistory}
                     name='Status History'
@@ -105,7 +115,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.class_ &&
+                resource.class_ !== undefined && resource.class_ !== null &&
                 <Partials.Coding
                     coding={resource.class_}
                     name='Class_'
@@ -115,7 +125,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.classHistory &&
+                resource.classHistory !== undefined && resource.classHistory !== null &&
                 <Partials.EncounterClassHistory
                     classHistory={resource.classHistory}
                     name='Class History'
@@ -126,7 +136,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -136,7 +146,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.serviceType &&
+                resource.serviceType !== undefined && resource.serviceType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceType}
                     name='Service Type'
@@ -146,7 +156,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.priority &&
+                resource.priority !== undefined && resource.priority !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.priority}
                     name='Priority'
@@ -156,7 +166,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -166,7 +176,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.episodeOfCare &&
+                resource.episodeOfCare !== undefined && resource.episodeOfCare !== null &&
                 <Partials.Reference
                     reference={resource.episodeOfCare}
                     name='Episode Of Care'
@@ -176,7 +186,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -186,7 +196,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.participant &&
+                resource.participant !== undefined && resource.participant !== null &&
                 <Partials.EncounterParticipant
                     participant={resource.participant}
                     name='Participant'
@@ -197,7 +207,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.appointment &&
+                resource.appointment !== undefined && resource.appointment !== null &&
                 <Partials.Reference
                     reference={resource.appointment}
                     name='Appointment'
@@ -207,7 +217,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -217,7 +227,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.length &&
+                resource.length !== undefined && resource.length !== null &&
                 <Partials.Quantity
                     quantity={resource.length}
                     name='Length'
@@ -227,7 +237,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -237,7 +247,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -247,7 +257,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.diagnosis &&
+                resource.diagnosis !== undefined && resource.diagnosis !== null &&
                 <Partials.EncounterDiagnosis
                     diagnosis={resource.diagnosis}
                     name='Diagnosis'
@@ -258,7 +268,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.account &&
+                resource.account !== undefined && resource.account !== null &&
                 <Partials.Reference
                     reference={resource.account}
                     name='Account'
@@ -268,7 +278,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.hospitalization &&
+                resource.hospitalization !== undefined && resource.hospitalization !== null &&
                 <Partials.EncounterHospitalization
                     hospitalization={resource.hospitalization}
                     name='Hospitalization'
@@ -279,7 +289,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.EncounterLocation
                     location={resource.location}
                     name='Location'
@@ -290,7 +300,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.serviceProvider &&
+                resource.serviceProvider !== undefined && resource.serviceProvider !== null &&
                 <Partials.Reference
                     reference={resource.serviceProvider}
                     name='Service Provider'
@@ -300,7 +310,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'

@@ -26,7 +26,17 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -90,7 +100,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -100,7 +110,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.replaces &&
+                resource.replaces !== undefined && resource.replaces !== null &&
                 <Partials.Reference
                     reference={resource.replaces}
                     name='Replaces'
@@ -110,7 +120,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.groupIdentifier &&
+                resource.groupIdentifier !== undefined && resource.groupIdentifier !== null &&
                 <Partials.Identifier
                     identifier={resource.groupIdentifier}
                     name='Group Identifier'
@@ -124,7 +134,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusReason &&
+                resource.statusReason !== undefined && resource.statusReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.statusReason}
                     name='Status Reason'
@@ -134,7 +144,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -148,7 +158,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.doNotPerform &&
+                resource.doNotPerform !== undefined && resource.doNotPerform !== null &&
                 <Partials.Boolean
                     boolean={resource.doNotPerform}
                     name='Do Not Perform'
@@ -158,7 +168,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.medium &&
+                resource.medium !== undefined && resource.medium !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.medium}
                     name='Medium'
@@ -168,7 +178,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -178,7 +188,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.about &&
+                resource.about !== undefined && resource.about !== null &&
                 <Partials.Reference
                     reference={resource.about}
                     name='About'
@@ -188,7 +198,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -198,7 +208,18 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.occurrenceDateTime &&
+                resource.payload !== undefined && resource.payload !== null &&
+                <Partials.CommunicationRequestPayload
+                    payload={resource.payload}
+                    name='Payload'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='payload'
+                    field=''
+                />
+            }
+            {
+                resource.occurrenceDateTime !== undefined && resource.occurrenceDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.occurrenceDateTime}
                     name='Occurrence Date Time'
@@ -208,7 +229,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.occurrencePeriod &&
+                resource.occurrencePeriod !== undefined && resource.occurrencePeriod !== null &&
                 <Partials.Period
                     period={resource.occurrencePeriod}
                     name='Occurrence Period'
@@ -218,7 +239,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.authoredOn &&
+                resource.authoredOn !== undefined && resource.authoredOn !== null &&
                 <Partials.DateTime
                     dateTime={resource.authoredOn}
                     name='Authored On'
@@ -228,7 +249,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.requester &&
+                resource.requester !== undefined && resource.requester !== null &&
                 <Partials.Reference
                     reference={resource.requester}
                     name='Requester'
@@ -238,7 +259,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.recipient &&
+                resource.recipient !== undefined && resource.recipient !== null &&
                 <Partials.Reference
                     reference={resource.recipient}
                     name='Recipient'
@@ -248,7 +269,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.sender &&
+                resource.sender !== undefined && resource.sender !== null &&
                 <Partials.Reference
                     reference={resource.sender}
                     name='Sender'
@@ -258,7 +279,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.reasonCode &&
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -268,7 +289,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -278,7 +299,7 @@ const CommunicationRequest = ({ resource }: { resource: TCommunicationRequest })
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'

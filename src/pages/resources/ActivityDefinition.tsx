@@ -26,7 +26,17 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -90,7 +100,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,11 +110,51 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title !== undefined && resource.title !== null &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.subtitle !== undefined && resource.subtitle !== null &&
+                <Partials.String
+                    string={resource.subtitle}
+                    name='Subtitle'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='subtitle'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -114,7 +164,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.subjectCodeableConcept &&
+                resource.subjectCodeableConcept !== undefined && resource.subjectCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.subjectCodeableConcept}
                     name='Subject Codeable Concept'
@@ -124,7 +174,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.subjectReference &&
+                resource.subjectReference !== undefined && resource.subjectReference !== null &&
                 <Partials.Reference
                     reference={resource.subjectReference}
                     name='Subject Reference'
@@ -134,7 +184,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.subjectCanonical &&
+                resource.subjectCanonical !== undefined && resource.subjectCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.subjectCanonical}
                     name='Subject Canonical'
@@ -144,7 +194,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -154,7 +204,17 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.description &&
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -164,7 +224,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -174,7 +234,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -184,7 +244,17 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.copyright &&
+                resource.usage !== undefined && resource.usage !== null &&
+                <Partials.String
+                    string={resource.usage}
+                    name='Usage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='usage'
+                />
+            }
+            {
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -194,7 +264,27 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
+                />
+            }
+            {
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -204,7 +294,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.topic &&
+                resource.topic !== undefined && resource.topic !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.topic}
                     name='Topic'
@@ -214,7 +304,17 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.library &&
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
+                />
+            }
+            {
+                resource.library !== undefined && resource.library !== null &&
                 <Partials.Canonical
                     canonical={resource.library}
                     name='Library'
@@ -228,7 +328,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 <Partials.Code code={resource.kind} name='Kind'/>
             }
             {
-                resource.profile &&
+                resource.profile !== undefined && resource.profile !== null &&
                 <Partials.Canonical
                     canonical={resource.profile}
                     name='Profile'
@@ -238,7 +338,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -256,7 +356,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 <Partials.Code code={resource.priority} name='Priority'/>
             }
             {
-                resource.doNotPerform &&
+                resource.doNotPerform !== undefined && resource.doNotPerform !== null &&
                 <Partials.Boolean
                     boolean={resource.doNotPerform}
                     name='Do Not Perform'
@@ -266,7 +366,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.timingTiming &&
+                resource.timingTiming !== undefined && resource.timingTiming !== null &&
                 <Partials.Timing
                     timing={resource.timingTiming}
                     name='Timing Timing'
@@ -276,7 +376,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.timingDateTime &&
+                resource.timingDateTime !== undefined && resource.timingDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.timingDateTime}
                     name='Timing Date Time'
@@ -286,7 +386,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.timingAge &&
+                resource.timingAge !== undefined && resource.timingAge !== null &&
                 <Partials.Quantity
                     quantity={resource.timingAge}
                     name='Timing Age'
@@ -296,7 +396,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.timingPeriod &&
+                resource.timingPeriod !== undefined && resource.timingPeriod !== null &&
                 <Partials.Period
                     period={resource.timingPeriod}
                     name='Timing Period'
@@ -306,7 +406,17 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.timingDuration &&
+                resource.timingRange !== undefined && resource.timingRange !== null &&
+                <Partials.Range
+                    range={resource.timingRange}
+                    name='Timing Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='timing-range'
+                />
+            }
+            {
+                resource.timingDuration !== undefined && resource.timingDuration !== null &&
                 <Partials.Quantity
                     quantity={resource.timingDuration}
                     name='Timing Duration'
@@ -316,7 +426,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -326,7 +436,18 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.productReference &&
+                resource.participant !== undefined && resource.participant !== null &&
+                <Partials.ActivityDefinitionParticipant
+                    participant={resource.participant}
+                    name='Participant'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='participant'
+                    field=''
+                />
+            }
+            {
+                resource.productReference !== undefined && resource.productReference !== null &&
                 <Partials.Reference
                     reference={resource.productReference}
                     name='Product Reference'
@@ -336,7 +457,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.productCodeableConcept &&
+                resource.productCodeableConcept !== undefined && resource.productCodeableConcept !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.productCodeableConcept}
                     name='Product Codeable Concept'
@@ -346,7 +467,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.quantity &&
+                resource.quantity !== undefined && resource.quantity !== null &&
                 <Partials.Quantity
                     quantity={resource.quantity}
                     name='Quantity'
@@ -356,7 +477,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.dosage &&
+                resource.dosage !== undefined && resource.dosage !== null &&
                 <Partials.Dosage
                     dosage={resource.dosage}
                     name='Dosage'
@@ -366,7 +487,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.bodySite &&
+                resource.bodySite !== undefined && resource.bodySite !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.bodySite}
                     name='Body Site'
@@ -376,7 +497,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.specimenRequirement &&
+                resource.specimenRequirement !== undefined && resource.specimenRequirement !== null &&
                 <Partials.Reference
                     reference={resource.specimenRequirement}
                     name='Specimen Requirement'
@@ -386,7 +507,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.observationRequirement &&
+                resource.observationRequirement !== undefined && resource.observationRequirement !== null &&
                 <Partials.Reference
                     reference={resource.observationRequirement}
                     name='Observation Requirement'
@@ -396,7 +517,7 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.observationResultRequirement &&
+                resource.observationResultRequirement !== undefined && resource.observationResultRequirement !== null &&
                 <Partials.Reference
                     reference={resource.observationResultRequirement}
                     name='Observation Result Requirement'
@@ -406,13 +527,24 @@ const ActivityDefinition = ({ resource }: { resource: TActivityDefinition }): Re
                 />
             }
             {
-                resource.transform &&
+                resource.transform !== undefined && resource.transform !== null &&
                 <Partials.Canonical
                     canonical={resource.transform}
                     name='Transform'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='transform'
+                />
+            }
+            {
+                resource.dynamicValue !== undefined && resource.dynamicValue !== null &&
+                <Partials.ActivityDefinitionDynamicValue
+                    dynamicValue={resource.dynamicValue}
+                    name='Dynamic Value'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='dynamic-value'
+                    field=''
                 />
             }
         </>

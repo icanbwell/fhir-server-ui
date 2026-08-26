@@ -25,7 +25,17 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -93,7 +103,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.type &&
+                resource.type !== undefined && resource.type !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.type}
                     name='Type'
@@ -103,7 +113,17 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.subject &&
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -113,7 +133,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.servicePeriod &&
+                resource.servicePeriod !== undefined && resource.servicePeriod !== null &&
                 <Partials.Period
                     period={resource.servicePeriod}
                     name='Service Period'
@@ -123,7 +143,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.coverage &&
+                resource.coverage !== undefined && resource.coverage !== null &&
                 <Partials.Reference
                     reference={resource.coverage}
                     name='Coverage'
@@ -134,7 +154,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.owner &&
+                resource.owner !== undefined && resource.owner !== null &&
                 <Partials.Reference
                     reference={resource.owner}
                     name='Owner'
@@ -144,7 +164,17 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.guarantor &&
+                resource.description !== undefined && resource.description !== null &&
+                <Partials.String
+                    string={resource.description}
+                    name='Description'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='description'
+                />
+            }
+            {
+                resource.guarantor !== undefined && resource.guarantor !== null &&
                 <Partials.Reference
                     reference={resource.guarantor}
                     name='Guarantor'
@@ -155,7 +185,7 @@ const Account = ({ resource }: { resource: TAccount }): React.ReactElement => {
                 />
             }
             {
-                resource.partOf &&
+                resource.partOf !== undefined && resource.partOf !== null &&
                 <Partials.Reference
                     reference={resource.partOf}
                     name='Part Of'

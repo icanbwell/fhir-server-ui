@@ -26,7 +26,17 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -94,7 +104,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -108,7 +118,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 <Partials.Code code={resource.severity} name='Severity'/>
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -118,7 +128,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.identifiedDateTime &&
+                resource.identifiedDateTime !== undefined && resource.identifiedDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.identifiedDateTime}
                     name='Identified Date Time'
@@ -128,7 +138,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.identifiedPeriod &&
+                resource.identifiedPeriod !== undefined && resource.identifiedPeriod !== null &&
                 <Partials.Period
                     period={resource.identifiedPeriod}
                     name='Identified Period'
@@ -138,7 +148,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -148,7 +158,7 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.implicated &&
+                resource.implicated !== undefined && resource.implicated !== null &&
                 <Partials.Reference
                     reference={resource.implicated}
                     name='Implicated'
@@ -158,13 +168,45 @@ const DetectedIssue = ({ resource }: { resource: TDetectedIssue }): React.ReactE
                 />
             }
             {
-                resource.reference &&
+                resource.evidence !== undefined && resource.evidence !== null &&
+                <Partials.DetectedIssueEvidence
+                    evidence={resource.evidence}
+                    name='Evidence'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='evidence'
+                    field=''
+                />
+            }
+            {
+                resource.detail !== undefined && resource.detail !== null &&
+                <Partials.String
+                    string={resource.detail}
+                    name='Detail'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='detail'
+                />
+            }
+            {
+                resource.reference !== undefined && resource.reference !== null &&
                 <Partials.Uri
                     uri={resource.reference}
                     name='Reference'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='reference'
+                />
+            }
+            {
+                resource.mitigation !== undefined && resource.mitigation !== null &&
+                <Partials.DetectedIssueMitigation
+                    mitigation={resource.mitigation}
+                    name='Mitigation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='mitigation'
+                    field=''
                 />
             }
         </>

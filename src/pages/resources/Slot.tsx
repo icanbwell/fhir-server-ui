@@ -24,7 +24,17 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -88,7 +98,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.serviceCategory &&
+                resource.serviceCategory !== undefined && resource.serviceCategory !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceCategory}
                     name='Service Category'
@@ -98,7 +108,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.serviceType &&
+                resource.serviceType !== undefined && resource.serviceType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.serviceType}
                     name='Service Type'
@@ -108,7 +118,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.specialty &&
+                resource.specialty !== undefined && resource.specialty !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.specialty}
                     name='Specialty'
@@ -118,7 +128,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.appointmentType &&
+                resource.appointmentType !== undefined && resource.appointmentType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.appointmentType}
                     name='Appointment Type'
@@ -128,7 +138,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.schedule &&
+                resource.schedule !== undefined && resource.schedule !== null &&
                 <Partials.Reference
                     reference={resource.schedule}
                     name='Schedule'
@@ -142,7 +152,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.start &&
+                resource.start !== undefined && resource.start !== null &&
                 <Partials.Instant
                     instant={resource.start}
                     name='Start'
@@ -152,7 +162,7 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.end &&
+                resource.end !== undefined && resource.end !== null &&
                 <Partials.Instant
                     instant={resource.end}
                     name='End'
@@ -162,13 +172,23 @@ const Slot = ({ resource }: { resource: TSlot }): React.ReactElement => {
                 />
             }
             {
-                resource.overbooked &&
+                resource.overbooked !== undefined && resource.overbooked !== null &&
                 <Partials.Boolean
                     boolean={resource.overbooked}
                     name='Overbooked'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='overbooked'
+                />
+            }
+            {
+                resource.comment !== undefined && resource.comment !== null &&
+                <Partials.String
+                    string={resource.comment}
+                    name='Comment'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='comment'
                 />
             }
         </>

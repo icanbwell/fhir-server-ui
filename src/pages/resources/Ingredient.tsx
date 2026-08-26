@@ -24,7 +24,17 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -92,7 +102,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.for_ &&
+                resource.for_ !== undefined && resource.for_ !== null &&
                 <Partials.Reference
                     reference={resource.for_}
                     name='For_'
@@ -102,7 +112,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 />
             }
             {
-                resource.role &&
+                resource.role !== undefined && resource.role !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.role}
                     name='Role'
@@ -112,7 +122,7 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 />
             }
             {
-                resource.function_ &&
+                resource.function_ !== undefined && resource.function_ !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.function_}
                     name='Function_'
@@ -122,13 +132,35 @@ const Ingredient = ({ resource }: { resource: TIngredient }): React.ReactElement
                 />
             }
             {
-                resource.allergenicIndicator &&
+                resource.allergenicIndicator !== undefined && resource.allergenicIndicator !== null &&
                 <Partials.Boolean
                     boolean={resource.allergenicIndicator}
                     name='Allergenic Indicator'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='allergenic-indicator'
+                />
+            }
+            {
+                resource.manufacturer !== undefined && resource.manufacturer !== null &&
+                <Partials.IngredientManufacturer
+                    manufacturer={resource.manufacturer}
+                    name='Manufacturer'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='manufacturer'
+                    field=''
+                />
+            }
+            {
+                resource.substance !== undefined && resource.substance !== null &&
+                <Partials.IngredientSubstance
+                    substance={resource.substance}
+                    name='Substance'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='substance'
+                    field=''
                 />
             }
         </>

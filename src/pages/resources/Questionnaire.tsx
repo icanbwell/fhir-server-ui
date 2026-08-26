@@ -26,7 +26,17 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -90,7 +100,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -100,7 +110,37 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.derivedFrom &&
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title !== undefined && resource.title !== null &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.derivedFrom !== undefined && resource.derivedFrom !== null &&
                 <Partials.Canonical
                     canonical={resource.derivedFrom}
                     name='Derived From'
@@ -114,7 +154,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -128,7 +168,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 <Partials.Code code={resource.subjectType} name='Subject Type'/>
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -138,7 +178,17 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.description &&
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -148,7 +198,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -158,7 +208,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -168,7 +218,7 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -178,7 +228,27 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
+                />
+            }
+            {
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -188,13 +258,24 @@ const Questionnaire = ({ resource }: { resource: TQuestionnaire }): React.ReactE
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.Coding
                     coding={resource.code}
                     name='Code'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='code'
+                />
+            }
+            {
+                resource.item !== undefined && resource.item !== null &&
+                <Partials.QuestionnaireItem
+                    item={resource.item}
+                    name='Item'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='item'
+                    field=''
                 />
             }
         </>

@@ -26,7 +26,17 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -94,7 +104,7 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 <Partials.Code code={resource.productCategory} name='Product Category'/>
             }
             {
-                resource.productCode &&
+                resource.productCode !== undefined && resource.productCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.productCode}
                     name='Product Code'
@@ -108,7 +118,7 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.request &&
+                resource.request !== undefined && resource.request !== null &&
                 <Partials.Reference
                     reference={resource.request}
                     name='Request'
@@ -118,13 +128,56 @@ const BiologicallyDerivedProduct = ({ resource }: { resource: TBiologicallyDeriv
                 />
             }
             {
-                resource.parent &&
+                resource.quantity !== undefined && resource.quantity !== null &&
+                <Partials.Int
+                    int={resource.quantity}
+                    name='Quantity'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='quantity'
+                />
+            }
+            {
+                resource.parent !== undefined && resource.parent !== null &&
                 <Partials.Reference
                     reference={resource.parent}
                     name='Parent'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='parent'
+                />
+            }
+            {
+                resource.collection !== undefined && resource.collection !== null &&
+                <Partials.BiologicallyDerivedProductCollection
+                    collection={resource.collection}
+                    name='Collection'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='collection'
+                    field=''
+                />
+            }
+            {
+                resource.processing !== undefined && resource.processing !== null &&
+                <Partials.BiologicallyDerivedProductProcessing
+                    processing={resource.processing}
+                    name='Processing'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='processing'
+                    field=''
+                />
+            }
+            {
+                resource.storage !== undefined && resource.storage !== null &&
+                <Partials.BiologicallyDerivedProductStorage
+                    storage={resource.storage}
+                    name='Storage'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='storage'
+                    field=''
                 />
             }
         </>

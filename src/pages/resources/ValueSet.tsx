@@ -27,7 +27,17 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -37,7 +47,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -51,7 +61,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -61,7 +71,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -71,7 +81,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -81,7 +91,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -91,7 +101,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -101,11 +111,41 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.title !== undefined && resource.title !== null &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -115,7 +155,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -125,7 +165,17 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.description &&
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -135,7 +185,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -145,7 +195,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.immutable &&
+                resource.immutable !== undefined && resource.immutable !== null &&
                 <Partials.Boolean
                     boolean={resource.immutable}
                     name='Immutable'
@@ -155,7 +205,7 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -165,13 +215,35 @@ const ValueSet = ({ resource }: { resource: TValueSet }): React.ReactElement => 
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='copyright'
+                />
+            }
+            {
+                resource.compose !== undefined && resource.compose !== null &&
+                <Partials.ValueSetCompose
+                    compose={resource.compose}
+                    name='Compose'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='compose'
+                    field=''
+                />
+            }
+            {
+                resource.expansion !== undefined && resource.expansion !== null &&
+                <Partials.ValueSetExpansion
+                    expansion={resource.expansion}
+                    name='Expansion'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='expansion'
+                    field=''
                 />
             }
         </>

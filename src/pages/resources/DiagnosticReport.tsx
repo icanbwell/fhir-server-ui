@@ -28,7 +28,17 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -38,7 +48,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -52,7 +62,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -62,7 +72,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -72,7 +82,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -82,7 +92,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -92,7 +102,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.basedOn &&
+                resource.basedOn !== undefined && resource.basedOn !== null &&
                 <Partials.Reference
                     reference={resource.basedOn}
                     name='Based On'
@@ -106,7 +116,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.category &&
+                resource.category !== undefined && resource.category !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.category}
                     name='Category'
@@ -116,7 +126,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -126,7 +136,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.subject &&
+                resource.subject !== undefined && resource.subject !== null &&
                 <Partials.Reference
                     reference={resource.subject}
                     name='Subject'
@@ -136,7 +146,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.encounter &&
+                resource.encounter !== undefined && resource.encounter !== null &&
                 <Partials.Reference
                     reference={resource.encounter}
                     name='Encounter'
@@ -146,7 +156,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.effectiveDateTime &&
+                resource.effectiveDateTime !== undefined && resource.effectiveDateTime !== null &&
                 <Partials.DateTime
                     dateTime={resource.effectiveDateTime}
                     name='Effective Date Time'
@@ -156,7 +166,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.effectivePeriod &&
+                resource.effectivePeriod !== undefined && resource.effectivePeriod !== null &&
                 <Partials.Period
                     period={resource.effectivePeriod}
                     name='Effective Period'
@@ -166,7 +176,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.issued &&
+                resource.issued !== undefined && resource.issued !== null &&
                 <Partials.Instant
                     instant={resource.issued}
                     name='Issued'
@@ -176,7 +186,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.performer &&
+                resource.performer !== undefined && resource.performer !== null &&
                 <Partials.Reference
                     reference={resource.performer}
                     name='Performer'
@@ -186,7 +196,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.resultsInterpreter &&
+                resource.resultsInterpreter !== undefined && resource.resultsInterpreter !== null &&
                 <Partials.Reference
                     reference={resource.resultsInterpreter}
                     name='Results Interpreter'
@@ -196,7 +206,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.specimen &&
+                resource.specimen !== undefined && resource.specimen !== null &&
                 <Partials.Reference
                     reference={resource.specimen}
                     name='Specimen'
@@ -206,7 +216,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.result &&
+                resource.result !== undefined && resource.result !== null &&
                 <Partials.Reference
                     reference={resource.result}
                     name='Result'
@@ -216,7 +226,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.imagingStudy &&
+                resource.imagingStudy !== undefined && resource.imagingStudy !== null &&
                 <Partials.Reference
                     reference={resource.imagingStudy}
                     name='Imaging Study'
@@ -226,7 +236,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.media &&
+                resource.media !== undefined && resource.media !== null &&
                 <Partials.Reference
                     reference={resource.media}
                     name='Media'
@@ -237,7 +247,17 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.conclusionCode &&
+                resource.conclusion !== undefined && resource.conclusion !== null &&
+                <Partials.String
+                    string={resource.conclusion}
+                    name='Conclusion'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='conclusion'
+                />
+            }
+            {
+                resource.conclusionCode !== undefined && resource.conclusionCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.conclusionCode}
                     name='Conclusion Code'
@@ -247,7 +267,7 @@ const DiagnosticReport = ({ resource }: { resource: TDiagnosticReport }): React.
                 />
             }
             {
-                resource.presentedForm &&
+                resource.presentedForm !== undefined && resource.presentedForm !== null &&
                 <Partials.Attachment
                     attachment={resource.presentedForm}
                     name='Presented Form'

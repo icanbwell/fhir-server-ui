@@ -25,7 +25,17 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.target &&
+                resource.target !== undefined && resource.target !== null &&
                 <Partials.Reference
                     reference={resource.target}
                     name='Target'
@@ -89,7 +99,17 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.need &&
+                resource.targetLocation !== undefined && resource.targetLocation !== null &&
+                <Partials.String
+                    string={resource.targetLocation}
+                    name='Target Location'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='target-location'
+                />
+            }
+            {
+                resource.need !== undefined && resource.need !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.need}
                     name='Need'
@@ -103,7 +123,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.statusDate &&
+                resource.statusDate !== undefined && resource.statusDate !== null &&
                 <Partials.DateTime
                     dateTime={resource.statusDate}
                     name='Status Date'
@@ -113,7 +133,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.validationType &&
+                resource.validationType !== undefined && resource.validationType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.validationType}
                     name='Validation Type'
@@ -123,7 +143,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.validationProcess &&
+                resource.validationProcess !== undefined && resource.validationProcess !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.validationProcess}
                     name='Validation Process'
@@ -133,7 +153,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.frequency &&
+                resource.frequency !== undefined && resource.frequency !== null &&
                 <Partials.Timing
                     timing={resource.frequency}
                     name='Frequency'
@@ -143,7 +163,7 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.lastPerformed &&
+                resource.lastPerformed !== undefined && resource.lastPerformed !== null &&
                 <Partials.DateTime
                     dateTime={resource.lastPerformed}
                     name='Last Performed'
@@ -153,7 +173,17 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.failureAction &&
+                resource.nextScheduled !== undefined && resource.nextScheduled !== null &&
+                <Partials.Date
+                    date={resource.nextScheduled}
+                    name='Next Scheduled'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='next-scheduled'
+                />
+            }
+            {
+                resource.failureAction !== undefined && resource.failureAction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.failureAction}
                     name='Failure Action'
@@ -163,7 +193,29 @@ const VerificationResult = ({ resource }: { resource: TVerificationResult }): Re
                 />
             }
             {
-                resource.validator &&
+                resource.primarySource !== undefined && resource.primarySource !== null &&
+                <Partials.VerificationResultPrimarySource
+                    primarySource={resource.primarySource}
+                    name='Primary Source'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='primary-source'
+                    field=''
+                />
+            }
+            {
+                resource.attestation !== undefined && resource.attestation !== null &&
+                <Partials.VerificationResultAttestation
+                    attestation={resource.attestation}
+                    name='Attestation'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='attestation'
+                    field=''
+                />
+            }
+            {
+                resource.validator !== undefined && resource.validator !== null &&
                 <Partials.Reference
                     reference={resource.validator}
                     name='Validator'

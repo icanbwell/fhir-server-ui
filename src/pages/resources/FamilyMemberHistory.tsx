@@ -25,7 +25,17 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -89,7 +99,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.instantiatesCanonical &&
+                resource.instantiatesCanonical !== undefined && resource.instantiatesCanonical !== null &&
                 <Partials.Canonical
                     canonical={resource.instantiatesCanonical}
                     name='Instantiates Canonical'
@@ -99,7 +109,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.instantiatesUri &&
+                resource.instantiatesUri !== undefined && resource.instantiatesUri !== null &&
                 <Partials.Uri
                     uri={resource.instantiatesUri}
                     name='Instantiates Uri'
@@ -113,7 +123,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.dataAbsentReason &&
+                resource.dataAbsentReason !== undefined && resource.dataAbsentReason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.dataAbsentReason}
                     name='Data Absent Reason'
@@ -123,7 +133,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.patient &&
+                resource.patient !== undefined && resource.patient !== null &&
                 <Partials.Reference
                     reference={resource.patient}
                     name='Patient'
@@ -133,7 +143,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -143,7 +153,17 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.relationship &&
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
+                resource.relationship !== undefined && resource.relationship !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.relationship}
                     name='Relationship'
@@ -153,7 +173,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.sex &&
+                resource.sex !== undefined && resource.sex !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.sex}
                     name='Sex'
@@ -163,7 +183,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.bornPeriod &&
+                resource.bornPeriod !== undefined && resource.bornPeriod !== null &&
                 <Partials.Period
                     period={resource.bornPeriod}
                     name='Born Period'
@@ -173,7 +193,27 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.ageAge &&
+                resource.bornDate !== undefined && resource.bornDate !== null &&
+                <Partials.Date
+                    date={resource.bornDate}
+                    name='Born Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='born-date'
+                />
+            }
+            {
+                resource.bornString !== undefined && resource.bornString !== null &&
+                <Partials.String
+                    string={resource.bornString}
+                    name='Born String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='born-string'
+                />
+            }
+            {
+                resource.ageAge !== undefined && resource.ageAge !== null &&
                 <Partials.Quantity
                     quantity={resource.ageAge}
                     name='Age Age'
@@ -183,7 +223,27 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.estimatedAge &&
+                resource.ageRange !== undefined && resource.ageRange !== null &&
+                <Partials.Range
+                    range={resource.ageRange}
+                    name='Age Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='age-range'
+                />
+            }
+            {
+                resource.ageString !== undefined && resource.ageString !== null &&
+                <Partials.String
+                    string={resource.ageString}
+                    name='Age String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='age-string'
+                />
+            }
+            {
+                resource.estimatedAge !== undefined && resource.estimatedAge !== null &&
                 <Partials.Boolean
                     boolean={resource.estimatedAge}
                     name='Estimated Age'
@@ -193,7 +253,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.deceasedBoolean &&
+                resource.deceasedBoolean !== undefined && resource.deceasedBoolean !== null &&
                 <Partials.Boolean
                     boolean={resource.deceasedBoolean}
                     name='Deceased Boolean'
@@ -203,7 +263,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.deceasedAge &&
+                resource.deceasedAge !== undefined && resource.deceasedAge !== null &&
                 <Partials.Quantity
                     quantity={resource.deceasedAge}
                     name='Deceased Age'
@@ -213,7 +273,37 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.reasonCode &&
+                resource.deceasedRange !== undefined && resource.deceasedRange !== null &&
+                <Partials.Range
+                    range={resource.deceasedRange}
+                    name='Deceased Range'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='deceased-range'
+                />
+            }
+            {
+                resource.deceasedDate !== undefined && resource.deceasedDate !== null &&
+                <Partials.Date
+                    date={resource.deceasedDate}
+                    name='Deceased Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='deceased-date'
+                />
+            }
+            {
+                resource.deceasedString !== undefined && resource.deceasedString !== null &&
+                <Partials.String
+                    string={resource.deceasedString}
+                    name='Deceased String'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='deceased-string'
+                />
+            }
+            {
+                resource.reasonCode !== undefined && resource.reasonCode !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reasonCode}
                     name='Reason Code'
@@ -223,7 +313,7 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.reasonReference &&
+                resource.reasonReference !== undefined && resource.reasonReference !== null &&
                 <Partials.Reference
                     reference={resource.reasonReference}
                     name='Reason Reference'
@@ -233,13 +323,24 @@ const FamilyMemberHistory = ({ resource }: { resource: TFamilyMemberHistory }): 
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='note'
+                />
+            }
+            {
+                resource.condition !== undefined && resource.condition !== null &&
+                <Partials.FamilyMemberHistoryCondition
+                    condition={resource.condition}
+                    name='Condition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='condition'
+                    field=''
                 />
             }
         </>

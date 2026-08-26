@@ -24,7 +24,17 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -62,7 +72,7 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                 <Partials.Code code={resource.type} name='Type'/>
             }
             {
-                resource.timestamp &&
+                resource.timestamp !== undefined && resource.timestamp !== null &&
                 <Partials.Instant
                     instant={resource.timestamp}
                     name='Timestamp'
@@ -72,7 +82,39 @@ const Bundle = ({ resource }: { resource: TBundle }): React.ReactElement => {
                 />
             }
             {
-                resource.signature &&
+                resource.total !== undefined && resource.total !== null &&
+                <Partials.UnsignedInt
+                    unsignedInt={resource.total}
+                    name='Total'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='total'
+                />
+            }
+            {
+                resource.link !== undefined && resource.link !== null &&
+                <Partials.BundleLink
+                    link={resource.link}
+                    name='Link'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='link'
+                    field=''
+                />
+            }
+            {
+                resource.entry !== undefined && resource.entry !== null &&
+                <Partials.BundleEntry
+                    entry={resource.entry}
+                    name='Entry'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='entry'
+                    field=''
+                />
+            }
+            {
+                resource.signature !== undefined && resource.signature !== null &&
                 <Partials.Reference
                     reference={resource.signature}
                     name='Signature'

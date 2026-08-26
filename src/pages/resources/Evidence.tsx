@@ -27,7 +27,17 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -37,7 +47,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -51,7 +61,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -61,7 +71,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -71,7 +81,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -81,7 +91,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -91,7 +101,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -101,7 +111,27 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.citeAsReference &&
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.title !== undefined && resource.title !== null &&
+                <Partials.String
+                    string={resource.title}
+                    name='Title'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='title'
+                />
+            }
+            {
+                resource.citeAsReference !== undefined && resource.citeAsReference !== null &&
                 <Partials.Reference
                     reference={resource.citeAsReference}
                     name='Cite As Reference'
@@ -111,7 +141,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.citeAsMarkdown &&
+                resource.citeAsMarkdown !== undefined && resource.citeAsMarkdown !== null &&
                 <Partials.Markdown
                     markdown={resource.citeAsMarkdown}
                     name='Cite As Markdown'
@@ -125,7 +155,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -135,7 +165,47 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.description &&
+                resource.approvalDate !== undefined && resource.approvalDate !== null &&
+                <Partials.Date
+                    date={resource.approvalDate}
+                    name='Approval Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='approval-date'
+                />
+            }
+            {
+                resource.lastReviewDate !== undefined && resource.lastReviewDate !== null &&
+                <Partials.Date
+                    date={resource.lastReviewDate}
+                    name='Last Review Date'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='last-review-date'
+                />
+            }
+            {
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.relatedArtifact !== undefined && resource.relatedArtifact !== null &&
+                <Partials.RelatedArtifact
+                    relatedArtifact={resource.relatedArtifact}
+                    name='Related Artifact'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='related-artifact'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -145,7 +215,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.assertion &&
+                resource.assertion !== undefined && resource.assertion !== null &&
                 <Partials.Markdown
                     markdown={resource.assertion}
                     name='Assertion'
@@ -155,7 +225,7 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.note &&
+                resource.note !== undefined && resource.note !== null &&
                 <Partials.Annotation
                     annotation={resource.note}
                     name='Note'
@@ -165,7 +235,18 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.synthesisType &&
+                resource.variableDefinition !== undefined && resource.variableDefinition !== null &&
+                <Partials.EvidenceVariableDefinition
+                    variableDefinition={resource.variableDefinition}
+                    name='Variable Definition'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='variable-definition'
+                    field=''
+                />
+            }
+            {
+                resource.synthesisType !== undefined && resource.synthesisType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.synthesisType}
                     name='Synthesis Type'
@@ -175,13 +256,35 @@ const Evidence = ({ resource }: { resource: TEvidence }): React.ReactElement => 
                 />
             }
             {
-                resource.studyType &&
+                resource.studyType !== undefined && resource.studyType !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.studyType}
                     name='Study Type'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='study-type'
+                />
+            }
+            {
+                resource.statistic !== undefined && resource.statistic !== null &&
+                <Partials.EvidenceStatistic
+                    statistic={resource.statistic}
+                    name='Statistic'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='statistic'
+                    field=''
+                />
+            }
+            {
+                resource.certainty !== undefined && resource.certainty !== null &&
+                <Partials.EvidenceCertainty
+                    certainty={resource.certainty}
+                    name='Certainty'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='certainty'
+                    field=''
                 />
             }
         </>

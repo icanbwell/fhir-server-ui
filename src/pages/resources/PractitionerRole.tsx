@@ -26,7 +26,17 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -36,7 +46,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -50,7 +60,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -60,7 +70,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -70,7 +80,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -80,7 +90,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -90,7 +100,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -100,7 +110,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -110,7 +120,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.practitioner &&
+                resource.practitioner !== undefined && resource.practitioner !== null &&
                 <Partials.Reference
                     reference={resource.practitioner}
                     name='Practitioner'
@@ -120,7 +130,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.organization &&
+                resource.organization !== undefined && resource.organization !== null &&
                 <Partials.Reference
                     reference={resource.organization}
                     name='Organization'
@@ -130,7 +140,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -140,7 +150,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.specialty &&
+                resource.specialty !== undefined && resource.specialty !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.specialty}
                     name='Specialty'
@@ -150,7 +160,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -160,7 +170,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.healthcareService &&
+                resource.healthcareService !== undefined && resource.healthcareService !== null &&
                 <Partials.Reference
                     reference={resource.healthcareService}
                     name='Healthcare Service'
@@ -170,7 +180,7 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.telecom &&
+                resource.telecom !== undefined && resource.telecom !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.telecom}
                     name='Telecom'
@@ -180,7 +190,28 @@ const PractitionerRole = ({ resource }: { resource: TPractitionerRole }): React.
                 />
             }
             {
-                resource.endpoint &&
+                resource.availableTime !== undefined && resource.availableTime !== null &&
+                <Partials.PractitionerRoleAvailableTime
+                    availableTime={resource.availableTime}
+                    name='Available Time'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='available-time'
+                    field=''
+                />
+            }
+            {
+                resource.availabilityExceptions !== undefined && resource.availabilityExceptions !== null &&
+                <Partials.String
+                    string={resource.availabilityExceptions}
+                    name='Availability Exceptions'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='availability-exceptions'
+                />
+            }
+            {
+                resource.endpoint !== undefined && resource.endpoint !== null &&
                 <Partials.Reference
                     reference={resource.endpoint}
                     name='Endpoint'

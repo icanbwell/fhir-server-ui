@@ -25,7 +25,17 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -35,7 +45,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -49,7 +59,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -59,7 +69,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -69,7 +79,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -79,7 +89,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -89,7 +99,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.active &&
+                resource.active !== undefined && resource.active !== null &&
                 <Partials.Boolean
                     boolean={resource.active}
                     name='Active'
@@ -99,7 +109,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.period &&
+                resource.period !== undefined && resource.period !== null &&
                 <Partials.Period
                     period={resource.period}
                     name='Period'
@@ -109,7 +119,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.organization &&
+                resource.organization !== undefined && resource.organization !== null &&
                 <Partials.Reference
                     reference={resource.organization}
                     name='Organization'
@@ -119,7 +129,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.participatingOrganization &&
+                resource.participatingOrganization !== undefined && resource.participatingOrganization !== null &&
                 <Partials.Reference
                     reference={resource.participatingOrganization}
                     name='Participating Organization'
@@ -129,7 +139,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.network &&
+                resource.network !== undefined && resource.network !== null &&
                 <Partials.Reference
                     reference={resource.network}
                     name='Network'
@@ -139,7 +149,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.code &&
+                resource.code !== undefined && resource.code !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.code}
                     name='Code'
@@ -149,7 +159,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.specialty &&
+                resource.specialty !== undefined && resource.specialty !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.specialty}
                     name='Specialty'
@@ -159,7 +169,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.location &&
+                resource.location !== undefined && resource.location !== null &&
                 <Partials.Reference
                     reference={resource.location}
                     name='Location'
@@ -169,7 +179,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.healthcareService &&
+                resource.healthcareService !== undefined && resource.healthcareService !== null &&
                 <Partials.Reference
                     reference={resource.healthcareService}
                     name='Healthcare Service'
@@ -179,7 +189,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.telecom &&
+                resource.telecom !== undefined && resource.telecom !== null &&
                 <Partials.ContactPoint
                     contactPoint={resource.telecom}
                     name='Telecom'
@@ -189,7 +199,7 @@ const OrganizationAffiliation = ({ resource }: { resource: TOrganizationAffiliat
                 />
             }
             {
-                resource.endpoint &&
+                resource.endpoint !== undefined && resource.endpoint !== null &&
                 <Partials.Reference
                     reference={resource.endpoint}
                     name='Endpoint'

@@ -28,7 +28,17 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -38,7 +48,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -52,7 +62,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -62,7 +72,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -72,7 +82,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -82,7 +92,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.eventCoding &&
+                resource.eventCoding !== undefined && resource.eventCoding !== null &&
                 <Partials.Coding
                     coding={resource.eventCoding}
                     name='Event Coding'
@@ -92,7 +102,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.eventUri &&
+                resource.eventUri !== undefined && resource.eventUri !== null &&
                 <Partials.Uri
                     uri={resource.eventUri}
                     name='Event Uri'
@@ -102,7 +112,18 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.sender &&
+                resource.destination !== undefined && resource.destination !== null &&
+                <Partials.MessageHeaderDestination
+                    destination={resource.destination}
+                    name='Destination'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='destination'
+                    field=''
+                />
+            }
+            {
+                resource.sender !== undefined && resource.sender !== null &&
                 <Partials.Reference
                     reference={resource.sender}
                     name='Sender'
@@ -112,7 +133,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.enterer &&
+                resource.enterer !== undefined && resource.enterer !== null &&
                 <Partials.Reference
                     reference={resource.enterer}
                     name='Enterer'
@@ -122,7 +143,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.author &&
+                resource.author !== undefined && resource.author !== null &&
                 <Partials.Reference
                     reference={resource.author}
                     name='Author'
@@ -132,7 +153,18 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.responsible &&
+                resource.source !== undefined && resource.source !== null &&
+                <Partials.MessageHeaderSource
+                    source={resource.source}
+                    name='Source'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='source'
+                    field=''
+                />
+            }
+            {
+                resource.responsible !== undefined && resource.responsible !== null &&
                 <Partials.Reference
                     reference={resource.responsible}
                     name='Responsible'
@@ -142,7 +174,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.reason &&
+                resource.reason !== undefined && resource.reason !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.reason}
                     name='Reason'
@@ -152,7 +184,18 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.focus &&
+                resource.response !== undefined && resource.response !== null &&
+                <Partials.MessageHeaderResponse
+                    response={resource.response}
+                    name='Response'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='response'
+                    field=''
+                />
+            }
+            {
+                resource.focus !== undefined && resource.focus !== null &&
                 <Partials.Reference
                     reference={resource.focus}
                     name='Focus'
@@ -162,7 +205,7 @@ const MessageHeader = ({ resource }: { resource: TMessageHeader }): React.ReactE
                 />
             }
             {
-                resource.definition &&
+                resource.definition !== undefined && resource.definition !== null &&
                 <Partials.Canonical
                     canonical={resource.definition}
                     name='Definition'

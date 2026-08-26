@@ -24,7 +24,17 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -88,7 +98,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.identifier &&
+                resource.identifier !== undefined && resource.identifier !== null &&
                 <Partials.Identifier
                     identifier={resource.identifier}
                     name='Identifier'
@@ -98,11 +108,31 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -112,7 +142,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -122,7 +152,17 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.jurisdiction &&
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.jurisdiction !== undefined && resource.jurisdiction !== null &&
                 <Partials.CodeableConcept
                     codeableConcept={resource.jurisdiction}
                     name='Jurisdiction'
@@ -132,7 +172,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.copyright &&
+                resource.copyright !== undefined && resource.copyright !== null &&
                 <Partials.Markdown
                     markdown={resource.copyright}
                     name='Copyright'
@@ -142,7 +182,7 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -152,7 +192,40 @@ const ExampleScenario = ({ resource }: { resource: TExampleScenario }): React.Re
                 />
             }
             {
-                resource.workflow &&
+                resource.actor !== undefined && resource.actor !== null &&
+                <Partials.ExampleScenarioActor
+                    actor={resource.actor}
+                    name='Actor'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='actor'
+                    field=''
+                />
+            }
+            {
+                resource.instance !== undefined && resource.instance !== null &&
+                <Partials.ExampleScenarioInstance
+                    instance={resource.instance}
+                    name='Instance'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='instance'
+                    field=''
+                />
+            }
+            {
+                resource.process !== undefined && resource.process !== null &&
+                <Partials.ExampleScenarioProcess
+                    process={resource.process}
+                    name='Process'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='process'
+                    field=''
+                />
+            }
+            {
+                resource.workflow !== undefined && resource.workflow !== null &&
                 <Partials.Canonical
                     canonical={resource.workflow}
                     name='Workflow'

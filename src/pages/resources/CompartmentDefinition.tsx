@@ -24,7 +24,17 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 {resource.resourceType}/{uuid}
             </Link>
             {
-                resource.meta &&
+                resource.id !== undefined && resource.id !== null &&
+                <Partials.String
+                    string={resource.id}
+                    name='Id'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='id'
+                />
+            }
+            {
+                resource.meta !== undefined && resource.meta !== null &&
                 <Partials.Meta
                     meta={resource.meta}
                     name='Meta'
@@ -34,7 +44,7 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
-                resource.implicitRules &&
+                resource.implicitRules !== undefined && resource.implicitRules !== null &&
                 <Partials.Uri
                     uri={resource.implicitRules}
                     name='Implicit Rules'
@@ -48,7 +58,7 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 <Partials.Code code={resource.language} name='Language'/>
             }
             {
-                resource.text &&
+                resource.text !== undefined && resource.text !== null &&
                 <Partials.Narrative
                     narrative={resource.text}
                     name='Text'
@@ -58,7 +68,7 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
-                resource.extension &&
+                resource.extension !== undefined && resource.extension !== null &&
                 <Partials.Extension
                     extension={resource.extension}
                     name='Extension'
@@ -68,7 +78,7 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
-                resource.modifierExtension &&
+                resource.modifierExtension !== undefined && resource.modifierExtension !== null &&
                 <Partials.Extension
                     extension={resource.modifierExtension}
                     name='Modifier Extension'
@@ -78,7 +88,7 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
-                resource.url &&
+                resource.url !== undefined && resource.url !== null &&
                 <Partials.Uri
                     uri={resource.url}
                     name='Url'
@@ -88,11 +98,31 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
+                resource.version !== undefined && resource.version !== null &&
+                <Partials.String
+                    string={resource.version}
+                    name='Version'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='version'
+                />
+            }
+            {
+                resource.name !== undefined && resource.name !== null &&
+                <Partials.String
+                    string={resource.name}
+                    name='Name'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='name'
+                />
+            }
+            {
                 resource.status &&
                 <Partials.Code code={resource.status} name='Status'/>
             }
             {
-                resource.experimental &&
+                resource.experimental !== undefined && resource.experimental !== null &&
                 <Partials.Boolean
                     boolean={resource.experimental}
                     name='Experimental'
@@ -102,7 +132,7 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
-                resource.date &&
+                resource.date !== undefined && resource.date !== null &&
                 <Partials.DateTime
                     dateTime={resource.date}
                     name='Date'
@@ -112,7 +142,17 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
-                resource.description &&
+                resource.publisher !== undefined && resource.publisher !== null &&
+                <Partials.String
+                    string={resource.publisher}
+                    name='Publisher'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='publisher'
+                />
+            }
+            {
+                resource.description !== undefined && resource.description !== null &&
                 <Partials.Markdown
                     markdown={resource.description}
                     name='Description'
@@ -122,7 +162,7 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 />
             }
             {
-                resource.purpose &&
+                resource.purpose !== undefined && resource.purpose !== null &&
                 <Partials.Markdown
                     markdown={resource.purpose}
                     name='Purpose'
@@ -136,13 +176,24 @@ const CompartmentDefinition = ({ resource }: { resource: TCompartmentDefinition 
                 <Partials.Code code={resource.code} name='Code'/>
             }
             {
-                resource.search &&
+                resource.search !== undefined && resource.search !== null &&
                 <Partials.Boolean
                     boolean={resource.search}
                     name='Search'
                     resourceType={resource.resourceType}
                     id={uuid}
                     searchParameter='search'
+                />
+            }
+            {
+                resource.resource !== undefined && resource.resource !== null &&
+                <Partials.CompartmentDefinitionResource
+                    resource={resource.resource}
+                    name='Resource'
+                    resourceType={resource.resourceType}
+                    id={uuid}
+                    searchParameter='resource'
+                    field=''
                 />
             }
         </>

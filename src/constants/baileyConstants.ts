@@ -34,6 +34,6 @@ export const BAILEY_MCP_SERVER_LABEL = 'fhir-server';
 // src/utils/compositionIndex.ts), not an invented capability.
 export const BAILEY_SUGGESTIONS: BaileySuggestion[] = [
     { label: "How do this patient's vitals look?" },
-    { label: 'Can you help me find a patient by name and address?' },
+    { label: 'Can you help me find a person by email?' },
     { label: 'Does this patient have any known allergies?' },
 ];

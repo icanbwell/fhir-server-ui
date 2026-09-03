@@ -243,7 +243,7 @@ const ResourceCard = ({
                                                 - The first occurrence specifies the resource type and ID for the main resource.
                                                 - The second occurrence in `$everything/{resourceType}` specifies the summary type. */}
                                             <Link
-                                                to={`/excel/4_0_0/${resource.resourceType}/${resource.id}/$everything/${resource.resourceType}`}
+                                                to={`/excel/4_0_0/${resource.resourceType}/${uuid}/$everything/${resource.resourceType}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 style={{

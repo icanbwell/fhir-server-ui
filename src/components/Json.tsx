@@ -4,6 +4,7 @@ import { Box, Link, Tooltip } from '@mui/material';
 import { TResource } from '../types/resources/Resource';
 import DataObjectIcon from '@mui/icons-material/DataObject';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { IdentifierSystem } from '../utils/identifierSystem';
 
 const Json = ({ resource, error }: { resource: TResource; error?: boolean }) => {
     const queryParams = new URLSearchParams(error ? window.location.search : '');
@@ -13,9 +14,12 @@ const Json = ({ resource, error }: { resource: TResource; error?: boolean }) => 
         queryParams.append('date', `ge${resource.meta.lastUpdated}`);
     }
 
+    const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
+    const uuid = tagUUID ? tagUUID : resource.id;
+
     const pathName = error
         ? window.location.pathname
-        : `/${window.location.pathname.includes('admin') ? 'admin' : '4_0_0'}/${resource.resourceType}/${resource.id}`;
+        : `/${window.location.pathname.includes('admin') ? 'admin' : '4_0_0'}/${resource.resourceType}/${uuid}`;
     return (
         <React.Fragment>
             <Box

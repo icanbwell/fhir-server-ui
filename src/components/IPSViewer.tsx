@@ -28,6 +28,7 @@ import { getMandatorySectionContent } from '../constants/ipsConstants';
 import { appendFormatJson } from '../utils/url.utils';
 import { useStreamProgress } from '../hooks/useStreamProgress';
 import StreamProgressIndicator from './StreamProgressIndicator';
+import { IdentifierSystem } from '../utils/identifierSystem';
 
 interface IPSViewerProps {
     relativeUrl: string;
@@ -539,17 +540,23 @@ const IPSViewer: React.FC<IPSViewerProps> = ({ relativeUrl }) => {
                             <>
                                 <Divider sx={{ mb: 2 }} />
                                 <List dense>
-                                    {resourcesByType[`${resourceType}`].map((resource) => (
-                                        <ListItem key={resource.id}>
-                                            <Link
-                                                href={`/4_0_0/${resourceType}/${resource.id}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                {resource.id}
-                                            </Link>
-                                        </ListItem>
-                                    ))}
+                                    {resourcesByType[`${resourceType}`].map((resource) => {
+                                        const tagUUID = resource?.meta?.tag?.find(
+                                            (s: { system: string; code: string }) => s.system === IdentifierSystem.uuid
+                                        )?.code;
+                                        const uuid = tagUUID ? tagUUID : resource.id;
+                                        return (
+                                            <ListItem key={resource.id}>
+                                                <Link
+                                                    href={`/4_0_0/${resourceType}/${uuid}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {uuid}
+                                                </Link>
+                                            </ListItem>
+                                        );
+                                    })}
                                 </List>
                             </>
                         )}

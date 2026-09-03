@@ -6,6 +6,7 @@ import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
 import { TAttachment } from '../types/partials/Attachment';
 import { TDocumentViewerResourceType } from '../partials/DocumentViewerLink';
+import { IdentifierSystem } from '../utils/identifierSystem';
 
 interface DocumentViewerProps {
     relativeUrl: string;
@@ -21,6 +22,7 @@ interface FhirResource {
     id?: string;
     contentType?: string;
     data?: string;
+    meta?: { tag?: Array<{ system?: string; code?: string }> };
     [key: string]: unknown;
 }
 
@@ -125,6 +127,9 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ relativeUrl, contentInd
         return <Alert severity="error">{errorMessage || 'Resource not found.'}</Alert>;
     }
 
+    const tagUUID = resource.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
+    const uuid = tagUUID ? tagUUID : resource.id;
+
     if (resource.resourceType === 'Binary') {
         // No title here: the heading below already reads "Binary/{id}" — repeating it as
         // AttachmentPreview's own subtitle would just duplicate the same text, and using it as
@@ -133,12 +138,12 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ relativeUrl, contentInd
         const attachment: TAttachment = {
             contentType: resource.contentType,
             data: resource.data,
-            url: resource.data ? undefined : `Binary/${resource.id}`,
+            url: resource.data ? undefined : `Binary/${uuid}`,
         };
         return (
             <Box>
                 <Typography variant="h5" sx={{ mb: 2 }}>
-                    {`Binary/${resource.id}`}
+                    {`Binary/${uuid}`}
                 </Typography>
                 <AttachmentPreview attachment={attachment} />
             </Box>
@@ -157,7 +162,7 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ relativeUrl, contentInd
     return (
         <Box>
             <Typography variant="h5" sx={{ mb: 2 }}>
-                {`${resource.resourceType}/${resource.id}`}
+                {`${resource.resourceType}/${uuid}`}
                 {isolated && attachments.length > 1 ? ` — content ${contentIndex! + 1} of ${attachments.length}` : ''}
             </Typography>
             {attachments.length === 0 && (

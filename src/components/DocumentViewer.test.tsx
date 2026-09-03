@@ -17,6 +17,7 @@ vi.mock('../api/fhirApi', () => ({
 
 import DocumentViewer from './DocumentViewer';
 import BaseApi from '../api/baseApi';
+import { IdentifierSystem } from '../utils/identifierSystem';
 
 // Inline base64 for "hello" — lets AttachmentPreview resolve content synchronously with no
 // network call, so these tests only need to mock DocumentViewer's own resource fetch below.
@@ -59,6 +60,24 @@ describe('DocumentViewer', () => {
         render(<DocumentViewer relativeUrl="/4_0_0/Binary/bin-1" />);
 
         expect(await screen.findByText('Binary/bin-1')).toBeInTheDocument();
+    });
+
+    it('uses the uuid tag instead of the (non-unique) id when one is present', async () => {
+        vi.spyOn(BaseApi.prototype, 'getData').mockResolvedValue({
+            status: 200,
+            incomplete: false,
+            json: {
+                resourceType: 'DocumentReference',
+                id: 'not-unique-id',
+                meta: { tag: [{ system: IdentifierSystem.uuid, code: 'the-real-unique-uuid' }] },
+                content: [{ attachment: textAttachment('First') }],
+            },
+        });
+
+        render(<DocumentViewer relativeUrl="/4_0_0/DocumentReference/not-unique-id" />);
+
+        expect(await screen.findByText('DocumentReference/the-real-unique-uuid')).toBeInTheDocument();
+        expect(screen.queryByText('DocumentReference/not-unique-id')).not.toBeInTheDocument();
     });
 
     it('isolates one entry of a bare-array field (DiagnosticReport.presentedForm) by contentIndex', async () => {

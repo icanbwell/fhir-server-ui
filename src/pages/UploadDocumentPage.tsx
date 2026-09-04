@@ -94,11 +94,20 @@ const UploadDocumentPage = (): React.ReactElement => {
                 );
                 return;
             }
-            if (binaryResult.json?.resourceType === 'OperationOutcome' || Array.isArray(binaryResult.json?.issue)) {
+            if (
+                binaryResult.json?.resourceType === 'OperationOutcome' ||
+                Array.isArray(binaryResult.json?.issue)
+            ) {
                 setSubmitError(
                     `Failed to create Binary resource (status ${binaryResult.status ?? 'unknown'}): ${JSON.stringify(
                         binaryResult.json
                     )}`
+                );
+                return;
+            }
+            if (binaryResult.incomplete) {
+                setSubmitError(
+                    'Failed to create Binary resource: connection dropped mid-response.'
                 );
                 return;
             }
@@ -131,21 +140,43 @@ const UploadDocumentPage = (): React.ReactElement => {
             if (!docRefResult.status || docRefResult.status < 200 || docRefResult.status >= 300) {
                 setSubmitError(
                     <>
-                        Failed to create DocumentReference (status {docRefResult.status ?? 'unknown'}):{' '}
-                        {JSON.stringify(docRefResult.json)}. The Binary resource was created and is not
-                        automatically cleaned up —{' '}
-                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>view/delete Binary/{binaryId}</RouterLink>.
+                        Failed to create DocumentReference (status{' '}
+                        {docRefResult.status ?? 'unknown'}): {JSON.stringify(docRefResult.json)}.
+                        The Binary resource was created and is not automatically cleaned up —{' '}
+                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>
+                            view/delete Binary/{binaryId}
+                        </RouterLink>
+                        .
                     </>
                 );
                 return;
             }
-            if (docRefResult.json?.resourceType === 'OperationOutcome' || Array.isArray(docRefResult.json?.issue)) {
+            if (
+                docRefResult.json?.resourceType === 'OperationOutcome' ||
+                Array.isArray(docRefResult.json?.issue)
+            ) {
                 setSubmitError(
                     <>
-                        Failed to create DocumentReference (status {docRefResult.status ?? 'unknown'}):{' '}
-                        {JSON.stringify(docRefResult.json)}. The Binary resource was created and is not
-                        automatically cleaned up —{' '}
-                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>view/delete Binary/{binaryId}</RouterLink>.
+                        Failed to create DocumentReference (status{' '}
+                        {docRefResult.status ?? 'unknown'}): {JSON.stringify(docRefResult.json)}.
+                        The Binary resource was created and is not automatically cleaned up —{' '}
+                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>
+                            view/delete Binary/{binaryId}
+                        </RouterLink>
+                        .
+                    </>
+                );
+                return;
+            }
+            if (docRefResult.incomplete) {
+                setSubmitError(
+                    <>
+                        Failed to create DocumentReference: connection dropped mid-response. The
+                        Binary resource was created and is not automatically cleaned up —{' '}
+                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>
+                            view/delete Binary/{binaryId}
+                        </RouterLink>
+                        .
                     </>
                 );
                 return;
@@ -172,8 +203,8 @@ const UploadDocumentPage = (): React.ReactElement => {
                                 Upload Document
                             </Typography>
                             <Alert severity="error">
-                                Unsupported resource type for document upload: {resourceType}. Only Patient and Person
-                                are supported.
+                                Unsupported resource type for document upload: {resourceType}. Only
+                                Patient and Person are supported.
                             </Alert>
                         </>
                     ) : (
@@ -181,7 +212,9 @@ const UploadDocumentPage = (): React.ReactElement => {
                             <Typography variant="h5" sx={{ mb: 2 }}>
                                 Upload Document
                             </Typography>
-                            <Typography sx={{ mb: 2 }}>Uploading for: {subjectReference}</Typography>
+                            <Typography sx={{ mb: 2 }}>
+                                Uploading for: {subjectReference}
+                            </Typography>
 
                             {validationError && (
                                 <Alert severity="error" sx={{ mb: 2 }}>
@@ -215,7 +248,11 @@ const UploadDocumentPage = (): React.ReactElement => {
                                 onChange={(e) => setDescription(e.target.value)}
                             />
 
-                            <Button variant="contained" disabled={!selectedFile || submitting} onClick={handleSubmit}>
+                            <Button
+                                variant="contained"
+                                disabled={!selectedFile || submitting}
+                                onClick={handleSubmit}
+                            >
                                 {submitting ? 'Uploading…' : 'Upload'}
                             </Button>
                         </>

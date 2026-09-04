@@ -13,6 +13,7 @@ const IPSViewerPage = lazy(() => import('../pages/IPSViewerPage'));
 const CompositionSummaryPage = lazy(() => import('../pages/CompositionSummaryPage'));
 const CompositionIndexPage = lazy(() => import('../pages/CompositionIndexPage'));
 const DocumentViewerPage = lazy(() => import('../pages/DocumentViewerPage'));
+const UploadDocumentPage = lazy(() => import('../pages/UploadDocumentPage'));
 const APIConsolePage = lazy(() => import('../pages/APIConsolePage'));
 const BaileyAIPage = lazy(() => import('../pages/BaileyAIPage'));
 
@@ -55,5 +56,10 @@ export default [
         key="documentViewerOperation"
         path="/document-viewer/4_0_0/:resourceType/:operation?/*"
         element={<DocumentViewerPage />}
+    />,
+    <Route
+        key="documentUpload"
+        path="/document-upload/4_0_0/:resourceType/:id"
+        element={<UploadDocumentPage />}
     />,
 ];

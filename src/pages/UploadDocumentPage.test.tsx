@@ -67,6 +67,7 @@ describe('UploadDocumentPage', () => {
                 resourceType: 'DocumentReference',
                 status: 'current',
                 meta: {
+                    source: 'https://www.icanbwell.com/fhir-server-ui',
                     security: [
                         ...BWELL_OWNER_SECURITY_TAGS,
                         { system: SecurityTagSystem.sourcePatientId, code: 'Patient/pat-1' },

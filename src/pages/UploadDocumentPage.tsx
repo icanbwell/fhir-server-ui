@@ -29,6 +29,12 @@ const BWELL_OWNER_SECURITY_TAGS = [
     { system: SecurityTagSystem.sourceAssigningAuthority, code: 'bwell' },
 ];
 
+// The FHIR server rejects $merge writes with "Missing either metadata or metadata source" when
+// meta.source is absent (resourceValidator.js, requireMetaSourceTags). Every other write path in
+// this app edits an existing resource that already carries a meta.source from whatever originally
+// created it, so a freshly client-authored resource needs one set explicitly.
+const META_SOURCE = 'https://www.icanbwell.com/fhir-server-ui';
+
 const UploadDocumentPage = (): React.ReactElement => {
     const { resourceType = '', id = '' } = useParams<{ resourceType: string; id: string }>();
     const { fhirUrl } = useContext(EnvContext);
@@ -80,6 +86,7 @@ const UploadDocumentPage = (): React.ReactElement => {
                     id: docRefId,
                     status: 'current',
                     meta: {
+                        source: META_SOURCE,
                         security: [
                             ...BWELL_OWNER_SECURITY_TAGS,
                             { system: SecurityTagSystem.sourcePatientId, code: subjectReference },

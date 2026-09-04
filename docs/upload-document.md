@@ -196,9 +196,27 @@ comfortably inline in a single resource, a separate `Binary` is still the
 right call — this tradeoff only favors inlining for single-owner, size-capped
 uploads like this one.
 
-## Step 5 — `meta.security` tagging
+## Step 5 — `meta.source` and `meta.security` tagging
 
-This resource needs security tags for the same reason any FHIR write on a
+**`meta.source`.** This repo's FHIR server rejects a `$merge` write outright
+— `200 OK` body, `MergeResultEntry` with `created`/`updated` both `false` —
+if `resource.meta.source` isn't set (`requireMetaSourceTags` server config,
+default enabled). Every *other* write path in this app (the raw-JSON "Edit
+Resource" console) round-trips an existing resource that already carries a
+`meta.source` from whatever originally created it, so this feature is the
+first place in the app that has to set one itself, on a resource it's
+authoring from scratch:
+
+```json
+{ "source": "https://www.icanbwell.com/{your-app-name}" }
+```
+
+If your server has an equivalent "every resource must declare its
+originating system" requirement, don't assume it's satisfied just because
+existing edit/update flows work — those inherit the value for free.
+Anything that *creates* a brand-new resource needs to set it explicitly.
+
+**`meta.security`.** This resource needs security tags for the same reason any FHIR write on a
 multi-tenant server does — an unwritten `meta.security` either gets rejected
 outright or defaults to something that makes the resource invisible to
 normal reads. Two distinct concerns apply here, and they compose:
@@ -283,7 +301,11 @@ The portable core, independent of framework/UI library:
    to be shared across multiple documents or is too large to inline
    comfortably. Either way, check the response *body*, not just the HTTP
    status, for resource-level failures.
-5. Tag the resource with whatever ownership/access model your server
+5. If your server requires `meta.source` on writes, set it explicitly on any
+   resource you author from scratch — don't assume it's covered just because
+   your existing edit/update flows (which round-trip a resource that already
+   has one) work fine without setting it.
+6. Tag the resource with whatever ownership/access model your server
    requires, and separately check whether the resource type holding the
    actual bytes needs its own patient-scoping tag beyond the general
    ownership tags — a resource with no `subject`/`patient` field of its own

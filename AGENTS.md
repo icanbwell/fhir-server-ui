@@ -15,7 +15,6 @@ This document describes the conventions, patterns, and execution instructions fo
 7. [Payload Files](#payload-files)
 8. [Executing Tests](#executing-tests)
 9. [Test Reports](#test-reports)
-10. [Commit Messages & PR Titles](#commit-messages--pr-titles)
 
 ---
 
@@ -718,24 +717,74 @@ Open the Karate summary report:
 
 ```bash
 open build/karate-reports/karate-summary.html
-```
+<!-- SYNC:PRESERVE-BELOW (do not edit this line -- content below survives the AGENTS.md sync) -->
 
----
+<!-- REPO-SPECIFIC ADDENDUM — complaint-parser only. Everything above this line is the org-wide
+     baseline, synced from icanbwell/.github (see CODEOWNERS, PR review by @icanbwell/enterprise-architecture).
+     This section is preserved across syncs automatically by the SYNC:PRESERVE-BELOW sentinel above
+     (icanbwell/.github .github/workflows/sync-agents-md.yml) -- no manual restoration needed on
+     future sync PRs. -->
 
-## Commit Messages & PR Titles
+## complaint-parser: repo-specific pointers
 
-Every commit message, and the PR title, must begin with a Jira issue key (e.g. `PHR-1234`) — or one of the allowed exceptions: `Bump`, `Merge`, `Revert`, `Reapply`, `build(deps): bump`, `build(deps-dev): bump`. This is enforced by `.github/workflows/check-commit-message.yml` (`gsactions/commit-message-checker`) on every PR push (`opened`/`edited`/`reopened`/`synchronize`) and on push to `main`/`releases/*`.
+Two things below are always relevant at the start of a session in this repo — check them early,
+not just when a task obviously needs them:
 
-The check validates the **PR title** on `pull_request` events — interim commit messages on a branch aren't individually checked before merge, so don't rely on per-commit CI feedback while iterating. What matters is that the PR title carries the prefix by the time it's merged; an unprefixed PR title fails the "Check Commit Message" CI check and blocks merge.
+- **`sessions/index.md`** — a pending → complete lifecycle for self-contained implementation
+  plans. Read it first if you're picking up work with no other specific instruction; it names a
+  recommended next session.
+- **`.claude/guidelines/index.md`** — repo-specific process guidance (deploying, etc.), organized
+  so each file is read only when the task at hand actually needs it. Not duplicated here to avoid
+  this baseline file growing unbounded as more guidance accumulates.
 
-PRs in this repo are typically squash-merged, so the commit landing on `main` is `<PR title> (#N)` — the **PR title** needs the ticket key, not just the individual commits.
+<!-- SYNC:PRESERVE-BELOW (do not edit this line -- content below survives the AGENTS.md sync) -->
 
-Jira project for this repo: **PHR** (`https://icanbwell.atlassian.net`).
+## Repo-Specific: ai-health-optimization — Cross-Repo Impact Checklist
 
-If a commit or PR was already pushed without the prefix, fix it after the fact:
+<!-- Everything above this line is the org-wide baseline, synced from icanbwell/.github
+     (see CODEOWNERS, PR review by @icanbwell/enterprise-architecture). This section is
+     preserved across syncs automatically by the SYNC:PRESERVE-BELOW sentinel above
+     (icanbwell/.github .github/workflows/sync-agents-md.yml) -- no manual restoration
+     needed on future sync PRs. -->
 
-```bash
-git commit --amend   # or rebase -i for multiple commits; add the "PHR-1234 " prefix
-git push --force-with-lease origin <branch>
-gh pr edit <PR#> --title "PHR-1234 <original title>"
-```
+> Repo-specific context, additive to the baseline above. When changing aggregation, unit handling, validation, scoring, or composition output, check **both ends** of the dependency chain before merging:
+
+- **Upstream — `device-codex`** (GitHub `icanbwell/device-codex`, pip package `devicecodex`): the source of truth for LOINC metadata, unit families, canonical units, valid ranges, and FHIR unit/code normalization (`interop.normalize_fhir_unit`, `is_plausible_unit`, `normalize_code`; `registry.get_metric_by_code`). Fix unit/range/code-alias gaps upstream there rather than patching locally; this repo should consume device-codex, not re-implement it.
+- **Downstream — `bwell-databricks`** (GitHub `icanbwell/bwell-databricks`): within that repo, `bundle/device-data-ingest-job/src/bwell/device_data_ingest_job/health_insights.py` calls `aihealthoptimization.pipeline.create_compositions_from_observations` and writes the returned Compositions to FHIR. It **exact-pins** `aihealthoptimization`/`devicecodex` in that bundle's `requirements.txt`, so scoring/value changes reach production only when the pin is bumped — coordinate that as a score-recompute / data-quality event, not a silent rollout. Keep the pipeline signature and composition keys (`device_metrics` + body-system names) stable.
+
+<!-- SYNC:PRESERVE-BELOW (do not edit this line -- content below survives the AGENTS.md sync) -->
+
+## Repo-Specific: ai-care-gap-scoring — Context
+
+<!-- Everything above this line is the org-wide baseline, synced from icanbwell/.github
+     (see CODEOWNERS, PR review by @icanbwell/enterprise-architecture). This section is
+     preserved across syncs automatically by the SYNC:PRESERVE-BELOW sentinel above
+     (icanbwell/.github .github/workflows/sync-agents-md.yml) -- no manual restoration
+     needed on future sync PRs. -->
+
+> Repo-specific context, additive to the baseline above.
+
+- **Purpose & phase:** Care gap closure **propensity scoring**. Currently **Phase 0 — feasibility**: produce PHI-safe aggregate feasibility/EDA reports (no model, no FHIR writes) to decide GO/NO-GO per measure. First measure: Breast Cancer Screening. See `docs/superpowers/specs/` and `docs/superpowers/plans/`.
+- **Data source — Databricks.** Reads normalized FHIR from `silver.fhir_lite.*` and quality-measure data from `bronze.dqm.*` via **`bwell-databricks-valet`** (`get_spark()` + env→catalog resolution). Catalogs are env-scoped (`nophi_dev` test, `silver_dev`/`silver` dev/prod). Do not read another service's private datastore directly.
+- **PHI is paramount.** Every emitted artifact is an aggregate only (counts/rates/correlations/binned distributions) with small-cell suppression (n<11) and no identifiers or exact dates. An output guard fails the run on PHI-like content. Never write row-level patient data to disk or logs.
+- **Eventual downstream (deferred to a later phase):** propensity scores will be written to the FHIR server as **`RiskAssessment`** resources, pending a new FDR ("Care Gap Propensity Score"). Nothing is written to FHIR in Phase 0.
+
+<!-- SYNC:PRESERVE-BELOW (do not edit this line -- content below survives the AGENTS.md sync) -->
+
+<!-- REPO-SPECIFIC ADDENDUM — complaint-parser only. Everything above this line is the org-wide
+     baseline, synced from icanbwell/.github (see CODEOWNERS, PR review by @icanbwell/enterprise-architecture).
+     This section is preserved across syncs automatically by the SYNC:PRESERVE-BELOW sentinel above
+     (icanbwell/.github .github/workflows/sync-agents-md.yml) -- no manual restoration needed on
+     future sync PRs. -->
+
+## complaint-parser: repo-specific pointers
+
+Two things below are always relevant at the start of a session in this repo — check them early,
+not just when a task obviously needs them:
+
+- **`sessions/index.md`** — a pending → complete lifecycle for self-contained implementation
+  plans. Read it first if you're picking up work with no other specific instruction; it names a
+  recommended next session.
+- **`.claude/guidelines/index.md`** — repo-specific process guidance (deploying, etc.), organized
+  so each file is read only when the task at hand actually needs it. Not duplicated here to avoid
+  this baseline file growing unbounded as more guidance accumulates.

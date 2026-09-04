@@ -107,4 +107,35 @@ describe('UploadDocumentPage', () => {
         const binaryLink = screen.getByRole('link', { name: /binary\//i });
         expect(binaryLink.getAttribute('href')).toMatch(/^\/4_0_0\/Binary\//);
     });
+
+    it('treats an OperationOutcome response as a Binary write failure even with 200 status', async () => {
+        const mergeResource = vi
+            .spyOn(FhirApi.prototype, 'mergeResource')
+            .mockResolvedValueOnce({
+                status: 200,
+                json: {
+                    resourceType: 'OperationOutcome',
+                    issue: [{ severity: 'error', code: 'validation', details: { text: 'Invalid data' } }],
+                },
+                incomplete: false,
+            });
+
+        renderPage();
+        fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
+        fireEvent.click(screen.getByRole('button', { name: /upload/i }));
+
+        expect(await screen.findByText(/failed to create binary/i)).toBeInTheDocument();
+        expect(mergeResource).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows an error and does not render form for unsupported resource type', () => {
+        const mergeResource = vi.spyOn(FhirApi.prototype, 'mergeResource');
+        renderPage('/document-upload/4_0_0/Observation/obs-1');
+
+        expect(screen.getByText(/unsupported resource type for document upload/i)).toBeInTheDocument();
+        expect(screen.getByText(/only patient and person are supported/i)).toBeInTheDocument();
+        expect(screen.queryByTestId('upload-document-file-input')).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /upload/i })).not.toBeInTheDocument();
+        expect(mergeResource).not.toHaveBeenCalled();
+    });
 });

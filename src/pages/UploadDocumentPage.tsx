@@ -31,6 +31,7 @@ const UploadDocumentPage = (): React.ReactElement => {
     const [submitting, setSubmitting] = useState(false);
 
     const subjectReference = buildSubjectReference({ resourceType, id });
+    const isValidResourceType = resourceType === 'Patient' || resourceType === 'Person';
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -77,6 +78,14 @@ const UploadDocumentPage = (): React.ReactElement => {
                 );
                 return;
             }
+            if (binaryResult.json?.resourceType === 'OperationOutcome' || Array.isArray(binaryResult.json?.issue)) {
+                setSubmitError(
+                    `Failed to create Binary resource (status ${binaryResult.status ?? 'unknown'}): ${JSON.stringify(
+                        binaryResult.json
+                    )}`
+                );
+                return;
+            }
 
             const docRefId = crypto.randomUUID();
             const docRefResult = await fhirApi.mergeResource({
@@ -111,6 +120,17 @@ const UploadDocumentPage = (): React.ReactElement => {
                 );
                 return;
             }
+            if (docRefResult.json?.resourceType === 'OperationOutcome' || Array.isArray(docRefResult.json?.issue)) {
+                setSubmitError(
+                    <>
+                        Failed to create DocumentReference (status {docRefResult.status ?? 'unknown'}):{' '}
+                        {JSON.stringify(docRefResult.json)}. The Binary resource was created and is not
+                        automatically cleaned up —{' '}
+                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>view/delete Binary/{binaryId}</RouterLink>.
+                    </>
+                );
+                return;
+            }
 
             navigate(`/4_0_0/DocumentReference/${docRefId}`);
         } catch (error) {
@@ -127,46 +147,60 @@ const UploadDocumentPage = (): React.ReactElement => {
             <div style={{ minHeight: '92vh' }}>
                 <Header />
                 <Box sx={{ p: 2, maxWidth: 640 }}>
-                    <Typography variant="h5" sx={{ mb: 2 }}>
-                        Upload Document
-                    </Typography>
-                    <Typography sx={{ mb: 2 }}>Uploading for: {subjectReference}</Typography>
+                    {!isValidResourceType ? (
+                        <>
+                            <Typography variant="h5" sx={{ mb: 2 }}>
+                                Upload Document
+                            </Typography>
+                            <Alert severity="error">
+                                Unsupported resource type for document upload: {resourceType}. Only Patient and Person
+                                are supported.
+                            </Alert>
+                        </>
+                    ) : (
+                        <>
+                            <Typography variant="h5" sx={{ mb: 2 }}>
+                                Upload Document
+                            </Typography>
+                            <Typography sx={{ mb: 2 }}>Uploading for: {subjectReference}</Typography>
 
-                    {validationError && (
-                        <Alert severity="error" sx={{ mb: 2 }}>
-                            {validationError}
-                        </Alert>
-                    )}
-                    {submitError && (
-                        <Alert severity="error" sx={{ mb: 2 }}>
-                            {submitError}
-                        </Alert>
-                    )}
+                            {validationError && (
+                                <Alert severity="error" sx={{ mb: 2 }}>
+                                    {validationError}
+                                </Alert>
+                            )}
+                            {submitError && (
+                                <Alert severity="error" sx={{ mb: 2 }}>
+                                    {submitError}
+                                </Alert>
+                            )}
 
-                    <Box sx={{ mb: 2 }}>
-                        <Button variant="outlined" component="label">
-                            {selectedFile ? selectedFile.file.name : 'Choose File'}
-                            <input
-                                type="file"
-                                hidden
-                                accept={ACCEPTED_UPLOAD_ACCEPT_ATTR}
-                                data-testid="upload-document-file-input"
-                                onChange={handleFileChange}
+                            <Box sx={{ mb: 2 }}>
+                                <Button variant="outlined" component="label">
+                                    {selectedFile ? selectedFile.file.name : 'Choose File'}
+                                    <input
+                                        type="file"
+                                        hidden
+                                        accept={ACCEPTED_UPLOAD_ACCEPT_ATTR}
+                                        data-testid="upload-document-file-input"
+                                        onChange={handleFileChange}
+                                    />
+                                </Button>
+                            </Box>
+
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                sx={{ mb: 2 }}
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                             />
-                        </Button>
-                    </Box>
 
-                    <TextField
-                        label="Description"
-                        fullWidth
-                        sx={{ mb: 2 }}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-
-                    <Button variant="contained" disabled={!selectedFile || submitting} onClick={handleSubmit}>
-                        {submitting ? 'Uploading…' : 'Upload'}
-                    </Button>
+                            <Button variant="contained" disabled={!selectedFile || submitting} onClick={handleSubmit}>
+                                {submitting ? 'Uploading…' : 'Upload'}
+                            </Button>
+                        </>
+                    )}
                 </Box>
             </div>
             <Footer />

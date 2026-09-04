@@ -47,10 +47,9 @@ describe('UploadDocumentPage', () => {
         expect(mergeResource).not.toHaveBeenCalled();
     });
 
-    it('creates a Binary then a DocumentReference and navigates to the new DocumentReference on success', async () => {
+    it('creates a DocumentReference with the file inlined as attachment data and navigates to it on success', async () => {
         const mergeResource = vi
             .spyOn(FhirApi.prototype, 'mergeResource')
-            .mockResolvedValueOnce({ status: 200, json: { resourceType: 'Binary' }, incomplete: false })
             .mockResolvedValueOnce({ status: 200, json: { resourceType: 'DocumentReference' }, incomplete: false });
 
         renderPage();
@@ -59,46 +58,37 @@ describe('UploadDocumentPage', () => {
 
         await waitFor(() => expect(screen.getByText('Viewing resource')).toBeInTheDocument());
 
-        expect(mergeResource).toHaveBeenCalledTimes(2);
+        expect(mergeResource).toHaveBeenCalledTimes(1);
 
-        const [binaryCall, docRefCall] = mergeResource.mock.calls;
-        expect(binaryCall[0]).toMatchObject({
-            resourceType: 'Binary',
-            resource: { resourceType: 'Binary', contentType: 'application/pdf' },
-        });
-        const binaryId = binaryCall[0].id;
-        expect(binaryCall[0].resource).toMatchObject({
-            id: binaryId,
-            data: expect.any(String),
-            meta: {
-                security: [
-                    ...BWELL_OWNER_SECURITY_TAGS,
-                    { system: SecurityTagSystem.sourcePatientId, code: 'Patient/pat-1' },
-                ],
-            },
-        });
-
+        const [docRefCall] = mergeResource.mock.calls;
         expect(docRefCall[0]).toMatchObject({
             resourceType: 'DocumentReference',
             resource: {
                 resourceType: 'DocumentReference',
                 status: 'current',
-                meta: { security: BWELL_OWNER_SECURITY_TAGS },
+                meta: {
+                    security: [
+                        ...BWELL_OWNER_SECURITY_TAGS,
+                        { system: SecurityTagSystem.sourcePatientId, code: 'Patient/pat-1' },
+                    ],
+                },
                 subject: { reference: 'Patient/pat-1' },
                 content: [
                     {
                         attachment: {
                             contentType: 'application/pdf',
-                            url: `Binary/${binaryId}`,
+                            data: expect.any(String),
+                            size: pdfFile().size,
                             title: 'note.pdf',
                         },
                     },
                 ],
             },
         });
+        expect((docRefCall[0].resource as any).content[0].attachment.url).toBeUndefined();
     });
 
-    it('stops before creating a DocumentReference if the Binary write fails', async () => {
+    it('shows an error and does not navigate if the DocumentReference write fails', async () => {
         const mergeResource = vi
             .spyOn(FhirApi.prototype, 'mergeResource')
             .mockResolvedValueOnce({ status: 500, json: { error: 'boom' }, incomplete: false });
@@ -107,25 +97,12 @@ describe('UploadDocumentPage', () => {
         fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
         fireEvent.click(screen.getByRole('button', { name: /upload/i }));
 
-        expect(await screen.findByText(/failed to create binary/i)).toBeInTheDocument();
-        expect(mergeResource).toHaveBeenCalledTimes(1);
-    });
-
-    it('surfaces the orphaned Binary link if the DocumentReference write fails after the Binary succeeds', async () => {
-        vi.spyOn(FhirApi.prototype, 'mergeResource')
-            .mockResolvedValueOnce({ status: 200, json: { resourceType: 'Binary' }, incomplete: false })
-            .mockResolvedValueOnce({ status: 500, json: { error: 'boom' }, incomplete: false });
-
-        renderPage();
-        fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
-        fireEvent.click(screen.getByRole('button', { name: /upload/i }));
-
         expect(await screen.findByText(/failed to create documentreference/i)).toBeInTheDocument();
-        const binaryLink = screen.getByRole('link', { name: /binary\//i });
-        expect(binaryLink.getAttribute('href')).toMatch(/^\/4_0_0\/Binary\//);
+        expect(mergeResource).toHaveBeenCalledTimes(1);
+        expect(screen.queryByText('Viewing resource')).not.toBeInTheDocument();
     });
 
-    it('treats an OperationOutcome response as a Binary write failure even with 200 status', async () => {
+    it('treats an OperationOutcome response as a write failure even with 200 status', async () => {
         const mergeResource = vi
             .spyOn(FhirApi.prototype, 'mergeResource')
             .mockResolvedValueOnce({
@@ -141,17 +118,17 @@ describe('UploadDocumentPage', () => {
         fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
         fireEvent.click(screen.getByRole('button', { name: /upload/i }));
 
-        expect(await screen.findByText(/failed to create binary/i)).toBeInTheDocument();
+        expect(await screen.findByText(/failed to create documentreference/i)).toBeInTheDocument();
         expect(mergeResource).toHaveBeenCalledTimes(1);
     });
 
-    it('treats a MergeResultEntry with created/updated false as a Binary write failure even with 200 status', async () => {
+    it('treats a MergeResultEntry with created/updated false as a write failure even with 200 status', async () => {
         const mergeResource = vi
             .spyOn(FhirApi.prototype, 'mergeResource')
             .mockResolvedValueOnce({
                 status: 200,
                 json: {
-                    resourceType: 'Binary',
+                    resourceType: 'DocumentReference',
                     id: 'd9b81839-391d-4935-bbcb-371d415e6fe7',
                     created: false,
                     updated: false,
@@ -180,56 +157,14 @@ describe('UploadDocumentPage', () => {
         fireEvent.click(screen.getByRole('button', { name: /upload/i }));
 
         expect(
-            await screen.findByText(/failed to create binary resource.*write not allowed using user scopes/i)
-        ).toBeInTheDocument();
-        expect(mergeResource).toHaveBeenCalledTimes(1);
-    });
-
-    it('surfaces the orphaned Binary link if the DocumentReference MergeResultEntry has created/updated false', async () => {
-        vi.spyOn(FhirApi.prototype, 'mergeResource')
-            .mockResolvedValueOnce({ status: 200, json: { resourceType: 'Binary', created: true, updated: false }, incomplete: false })
-            .mockResolvedValueOnce({
-                status: 200,
-                json: {
-                    resourceType: 'DocumentReference',
-                    created: false,
-                    updated: false,
-                    issue: {
-                        severity: 'error',
-                        code: 'forbidden',
-                        diagnostics: 'Write not allowed using user scopes if patient scope is present',
-                    },
-                },
-                incomplete: false,
-            });
-
-        renderPage();
-        fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
-        fireEvent.click(screen.getByRole('button', { name: /upload/i }));
-
-        expect(
             await screen.findByText(/failed to create documentreference.*write not allowed using user scopes/i)
         ).toBeInTheDocument();
-        const binaryLink = screen.getByRole('link', { name: /binary\//i });
-        expect(binaryLink.getAttribute('href')).toMatch(/^\/4_0_0\/Binary\//);
-    });
-
-    it('treats an incomplete Binary response as a failure even with 200 status', async () => {
-        const mergeResource = vi
-            .spyOn(FhirApi.prototype, 'mergeResource')
-            .mockResolvedValueOnce({ status: 200, json: undefined, incomplete: true });
-
-        renderPage();
-        fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
-        fireEvent.click(screen.getByRole('button', { name: /upload/i }));
-
-        expect(await screen.findByText(/failed to create binary resource: connection dropped/i)).toBeInTheDocument();
         expect(mergeResource).toHaveBeenCalledTimes(1);
     });
 
-    it('surfaces the orphaned Binary link if the DocumentReference response is incomplete', async () => {
-        vi.spyOn(FhirApi.prototype, 'mergeResource')
-            .mockResolvedValueOnce({ status: 200, json: { resourceType: 'Binary' }, incomplete: false })
+    it('treats an incomplete response as a failure even with 200 status', async () => {
+        const mergeResource = vi
+            .spyOn(FhirApi.prototype, 'mergeResource')
             .mockResolvedValueOnce({ status: 200, json: undefined, incomplete: true });
 
         renderPage();
@@ -239,8 +174,7 @@ describe('UploadDocumentPage', () => {
         expect(
             await screen.findByText(/failed to create documentreference: connection dropped/i)
         ).toBeInTheDocument();
-        const binaryLink = screen.getByRole('link', { name: /binary\//i });
-        expect(binaryLink.getAttribute('href')).toMatch(/^\/4_0_0\/Binary\//);
+        expect(mergeResource).toHaveBeenCalledTimes(1);
     });
 
     it('shows an error and does not render form for unsupported resource type', () => {

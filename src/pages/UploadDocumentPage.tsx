@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link as RouterLink, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -70,44 +70,6 @@ const UploadDocumentPage = (): React.ReactElement => {
         try {
             const fhirApi = new FhirApi({ fhirUrl, setUserDetails });
             const data = await fileToBase64(selectedFile.file);
-            const binaryId = crypto.randomUUID();
-            const binaryResult = await fhirApi.mergeResource({
-                resourceType: 'Binary',
-                id: binaryId,
-                resource: {
-                    resourceType: 'Binary',
-                    id: binaryId,
-                    contentType: selectedFile.contentType,
-                    data,
-                    meta: {
-                        security: [
-                            ...BWELL_OWNER_SECURITY_TAGS,
-                            { system: SecurityTagSystem.sourcePatientId, code: subjectReference },
-                        ],
-                    },
-                },
-            });
-            if (!binaryResult.status || binaryResult.status < 200 || binaryResult.status >= 300) {
-                setSubmitError(
-                    `Failed to create Binary resource (status ${binaryResult.status ?? 'unknown'}): ${JSON.stringify(
-                        binaryResult.json
-                    )}`
-                );
-                return;
-            }
-            const binaryFailureMessage = extractMergeFailureMessage(binaryResult.json);
-            if (binaryFailureMessage) {
-                setSubmitError(
-                    `Failed to create Binary resource (status ${binaryResult.status ?? 'unknown'}): ${binaryFailureMessage}`
-                );
-                return;
-            }
-            if (binaryResult.incomplete) {
-                setSubmitError(
-                    'Failed to create Binary resource: connection dropped mid-response.'
-                );
-                return;
-            }
 
             const docRefId = crypto.randomUUID();
             const docRefResult = await fhirApi.mergeResource({
@@ -118,7 +80,10 @@ const UploadDocumentPage = (): React.ReactElement => {
                     id: docRefId,
                     status: 'current',
                     meta: {
-                        security: BWELL_OWNER_SECURITY_TAGS,
+                        security: [
+                            ...BWELL_OWNER_SECURITY_TAGS,
+                            { system: SecurityTagSystem.sourcePatientId, code: subjectReference },
+                        ],
                     },
                     subject: { reference: subjectReference },
                     date: new Date().toISOString(),
@@ -127,7 +92,8 @@ const UploadDocumentPage = (): React.ReactElement => {
                         {
                             attachment: {
                                 contentType: selectedFile.contentType,
-                                url: `Binary/${binaryId}`,
+                                data,
+                                size: selectedFile.file.size,
                                 title: selectedFile.file.name,
                             },
                         },
@@ -136,44 +102,21 @@ const UploadDocumentPage = (): React.ReactElement => {
             });
             if (!docRefResult.status || docRefResult.status < 200 || docRefResult.status >= 300) {
                 setSubmitError(
-                    <>
-                        Failed to create DocumentReference (status{' '}
-                        {docRefResult.status ?? 'unknown'}): {JSON.stringify(docRefResult.json)}.
-                        The Binary resource was created and is not automatically cleaned up —{' '}
-                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>
-                            view/delete Binary/{binaryId}
-                        </RouterLink>
-                        .
-                    </>
+                    `Failed to create DocumentReference (status ${docRefResult.status ?? 'unknown'}): ${JSON.stringify(
+                        docRefResult.json
+                    )}`
                 );
                 return;
             }
             const docRefFailureMessage = extractMergeFailureMessage(docRefResult.json);
             if (docRefFailureMessage) {
                 setSubmitError(
-                    <>
-                        Failed to create DocumentReference (status{' '}
-                        {docRefResult.status ?? 'unknown'}): {docRefFailureMessage}.
-                        The Binary resource was created and is not automatically cleaned up —{' '}
-                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>
-                            view/delete Binary/{binaryId}
-                        </RouterLink>
-                        .
-                    </>
+                    `Failed to create DocumentReference (status ${docRefResult.status ?? 'unknown'}): ${docRefFailureMessage}`
                 );
                 return;
             }
             if (docRefResult.incomplete) {
-                setSubmitError(
-                    <>
-                        Failed to create DocumentReference: connection dropped mid-response. The
-                        Binary resource was created and is not automatically cleaned up —{' '}
-                        <RouterLink to={`/4_0_0/Binary/${binaryId}`}>
-                            view/delete Binary/{binaryId}
-                        </RouterLink>
-                        .
-                    </>
-                );
+                setSubmitError('Failed to create DocumentReference: connection dropped mid-response.');
                 return;
             }
 

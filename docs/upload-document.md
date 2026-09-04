@@ -1,10 +1,10 @@
 # Upload Document
 
-How this app lets a developer/QA user create a `DocumentReference` + `Binary`
-resource pair for an existing `Patient` or `Person`, from a file picked in the
-browser — without hand-authoring FHIR JSON or base64-encoding anything by
-hand. Written so a different project can reimplement the same approach
-against its own FHIR server.
+How this app lets a developer/QA user create a `DocumentReference` for an
+existing `Patient` or `Person`, from a file picked in the browser — without
+hand-authoring FHIR JSON or base64-encoding anything by hand. Written so a
+different project can reimplement the same approach against its own FHIR
+server.
 
 This is an **internal test-data tool**, not a member-facing upload feature:
 it's reachable only from this app's FHIR resource console (the "Upload
@@ -17,19 +17,21 @@ Implementation plan: `docs/superpowers/plans/2026-09-03-upload-document-page.md`
 
 ## The problem this solves
 
-FHIR represents an uploaded file as **two** resources, not one:
+FHIR can represent an uploaded file's bytes two ways: as a separate `Binary`
+resource referenced by `content[].attachment.url`, or inlined directly on the
+`DocumentReference` as `content[].attachment.data` (base64). This feature
+uses the **inline** form — a single resource holds both the clinical
+metadata (who it's about, what kind of document, when) and the base64
+payload, which avoids the two-resource orphan/ordering problems a `Binary` +
+`DocumentReference` pair introduces (see "Why inline instead of a separate
+Binary" below).
 
-- `Binary` — the actual bytes, base64-encoded, plus a `contentType`.
-- `DocumentReference` — the clinical metadata (who it's about, what kind of
-  document, when) with `content[].attachment.url` pointing at the `Binary`.
-
-Producing this pair by hand (in a raw JSON API console, say) means the author
-has to: pick a client-side-generated id, base64-encode the file themselves,
-get the FHIR reference syntax right (`Binary/{id}`), and know which
-security tags the server expects on write. Getting any one of those wrong
-produces a resource that silently doesn't behave like a real one (invisible
-to reads, or rejected outright). This feature automates all of that behind a
-file picker.
+Producing this resource by hand (in a raw JSON API console, say) means the
+author has to: pick a client-side-generated id, base64-encode the file
+themselves, and know which security tags the server expects on write.
+Getting any one of those wrong produces a resource that silently doesn't
+behave like a real one (invisible to reads, or rejected outright). This
+feature automates all of that behind a file picker.
 
 ## Architecture overview
 
@@ -38,8 +40,8 @@ Patient/Person resource card
   └─ "Upload Document" link  →  opens a dedicated upload page
                                     └─ validate the picked file (extension + size)
                                     └─ base64-encode it client-side
-                                    └─ POST a Binary ($merge, client-generated id)
-                                    └─ POST a DocumentReference referencing that Binary
+                                    └─ POST a DocumentReference ($merge, client-generated id)
+                                       with the file inlined as content[0].attachment.data
                                     └─ navigate to the new DocumentReference
 ```
 
@@ -55,12 +57,11 @@ Concretely, in this repo (React 19 + MUI + Vite):
 | FHIR write primitive (`POST /{resourceType}/{id}/$merge`) | `src/api/fhirApi.ts` (`mergeResource`) |
 
 There's deliberately **no separate "create resource" framework** here — this
-is a single-purpose page for one resource pair, not a generic
-any-resource-type creation UI. This repo already has a raw-JSON `$merge`
-console for that (the "Edit Resource" pencil icon on every resource card);
-this page exists specifically to remove the base64-encoding and
-security-tagging tedium for the one resource pair developers actually need
-test data for often.
+is a single-purpose page for one resource, not a generic any-resource-type
+creation UI. This repo already has a raw-JSON `$merge` console for that (the
+"Edit Resource" pencil icon on every resource card); this page exists
+specifically to remove the base64-encoding and security-tagging tedium for
+the one resource developers actually need test data for often.
 
 ## Step 1 — Entry point and subject resolution
 
@@ -98,16 +99,15 @@ extension→MIME lookup table:
    `json`, `xml` are accepted.
 2. **Size cap.** 10 MB, checked against the raw file size (not the ~33%
    larger base64-encoded size the server will actually receive — budget
-   accordingly if your server enforces its own request-body ceiling).
+   accordingly if your server enforces its own request-body ceiling; since
+   the payload is now inlined directly on the `DocumentReference`, this cap
+   also bounds how large a single FHIR resource this page can produce).
 
 The one gotcha worth calling out: **don't trust the browser's reported MIME
 type (`File.type`) for the content type you persist.** It's frequently empty
 for HEIC in Chrome/Firefox (they don't natively decode it), and inconsistent
 across OS file-association settings for `txt`/`json`/`xml`. Resolve the
-content type from the file's **extension** via a fixed table instead, and use
-that same resolved value everywhere downstream (`Binary.contentType` *and*
-`DocumentReference.content[].attachment.contentType`) so the two resources
-always agree with each other and with what was actually validated:
+content type from the file's **extension** via a fixed table instead:
 
 ```ts
 const EXTENSION_CONTENT_TYPES: Record<string, string> = {
@@ -143,54 +143,70 @@ function fileToBase64(file: File): Promise<string> {
 ```
 
 `FileReader.readAsDataURL` produces a `data:<mime>;base64,<payload>` string —
-FHIR's `Binary.data` is typed `base64Binary`, so the `data:...;base64,`
+FHIR's `Attachment.data` is typed `base64Binary`, so the `data:...;base64,`
 prefix has to be stripped before the value is usable.
 
-## Step 4 — Write Binary, then DocumentReference, in that order
+## Step 4 — Write a single DocumentReference with the file inlined
 
-The two writes are **sequential, not parallel**, and each is a
-`POST /{resourceType}/{id}/$merge` with a **client-generated UUID** as the
-resource id (an upsert-by-id call, not a server-assigned-id `POST`):
-
-1. Generate `binaryId`; create the `Binary` with the base64 payload and
-   resolved `contentType`.
-2. Only if that succeeds: generate `docRefId`; create the `DocumentReference`
-   with `subject.reference` = the resolved subject reference, and
-   `content[0].attachment.url` = `Binary/{binaryId}`.
-3. Navigate to `/4_0_0/DocumentReference/{docRefId}` on success.
-
-**A 2xx HTTP status is not sufficient evidence of success.** Some FHIR
-`$merge`-style operations return `200 OK` with an `OperationOutcome` body (or
-a top-level `issue` array) describing a resource-level rejection — treating
-any 2xx as success would silently navigate to a `DocumentReference` that was
-never actually created. Check the response body shape in addition to the
-status:
+The write is a single `POST /DocumentReference/{id}/$merge` with a
+**client-generated UUID** as the resource id (an upsert-by-id call, not a
+server-assigned-id `POST`). The base64 payload goes directly on
+`content[0].attachment.data`, alongside the resolved `contentType`, the
+original filename as `title`, and the raw (pre-base64) byte count as `size`:
 
 ```ts
-if (json?.resourceType === 'OperationOutcome' || Array.isArray(json?.issue)) {
-  // treat as failure even though status was 2xx
+{
+  resourceType: 'DocumentReference',
+  id: docRefId,
+  status: 'current',
+  subject: { reference: subjectReference },
+  content: [{
+    attachment: { contentType, data, size: file.size, title: file.name },
+  }],
 }
 ```
 
-If the `Binary` write fails, stop — never attempt the `DocumentReference`
-write with a dangling reference. If the `Binary` succeeds but the
-`DocumentReference` write fails, there is now an orphaned `Binary` with no
-referencing document; this implementation deliberately does **not**
-auto-delete it (a rollback DELETE call adds real complexity for a rare,
-low-stakes failure mode in an internal tool) — instead it surfaces a direct
-link to the orphaned resource so a human can clean it up manually.
+Navigate to `/4_0_0/DocumentReference/{docRefId}` on success.
+
+**A 2xx HTTP status is not sufficient evidence of success.** Some FHIR
+`$merge`-style operations return `200 OK` with an `OperationOutcome` body (or
+a top-level `issue` array) describing a resource-level rejection, or a
+`MergeResultEntry` body (`{ created: false, updated: false, issue: {...} }`)
+with the merged resource's own `resourceType` rather than
+`'OperationOutcome'` — treating any 2xx as success would silently navigate to
+a `DocumentReference` that was never actually created. Check the response
+body shape in addition to the status (see `extractMergeFailureMessage` in
+`src/utils/uploadDocument.utils.ts`), and treat a response the network layer
+marks `incomplete` (connection dropped mid-response) as a failure too.
+
+### Why inline instead of a separate Binary
+
+An earlier version of this page created a `Binary` resource (the base64
+bytes) and a `DocumentReference` pointing at it via
+`content[].attachment.url = Binary/{id}` — two sequential writes. That shape
+brought its own class of problem: if the `Binary` write succeeded but the
+`DocumentReference` write then failed, there was no way to make the pair
+atomic without adding rollback-DELETE complexity, so the fix was to surface
+an orphaned-`Binary` link for a human to clean up manually. Inlining the data
+directly on the `DocumentReference` removes that failure mode entirely —
+there's only one resource, so one write either succeeds or fails, with
+nothing left dangling either way. If your use case needs to share one
+payload across multiple `DocumentReference`s, or the payload is too large to
+comfortably inline in a single resource, a separate `Binary` is still the
+right call — this tradeoff only favors inlining for single-owner, size-capped
+uploads like this one.
 
 ## Step 5 — `meta.security` tagging
 
-Both new resources need security tags for the same reason any FHIR write on
-a multi-tenant server does — an unwritten `meta.security` either gets
-rejected outright or defaults to something that makes the resource invisible
-to normal reads. Two distinct concerns apply here, and they compose:
+This resource needs security tags for the same reason any FHIR write on a
+multi-tenant server does — an unwritten `meta.security` either gets rejected
+outright or defaults to something that makes the resource invisible to
+normal reads. Two distinct concerns apply here, and they compose:
 
-**Ownership (`owner`/`access`/`sourceAssigningAuthority`).** These
-resources are created by an internal tool, not received from any specific
-tenant's system — so they're tagged as owned by the platform itself, not by
-whichever tenant the subject patient happens to belong to:
+**Ownership (`owner`/`access`/`sourceAssigningAuthority`).** This resource
+is created by an internal tool, not received from any specific tenant's
+system — so it's tagged as owned by the platform itself, not by whichever
+tenant the subject patient happens to belong to:
 
 ```json
 { "system": "https://www.icanbwell.com/owner", "code": "bwell" }
@@ -205,19 +221,23 @@ data. In this repo that decision came from prior art already established for
 another self-service upload feature in the same system (a "digital wallet"
 document-upload flow), not from first principles.
 
-**Patient-scoping the `Binary` specifically.** `Binary` is commonly a
-*non-patient-compartment* resource type in a FHIR server, which means a
-naive implementation makes every `Binary` readable by anyone with any valid
-token — there's no `subject`/`patient` field on `Binary` itself to scope
-access by. If your server has this same gap, it needs its own resolution
-independent of the general ownership tags above; in this repo's server the
-resolution is an additional `meta.security` entry on `Binary` only (not
-needed on `DocumentReference`, which is already patient-scoped via its own
-`subject` field):
+**Patient-scoping the resource holding the actual bytes.** A resource
+type carrying non-patient-compartment content can end up readable by anyone
+with any valid token if the server can't derive patient-scoping from a
+`subject`/`patient` field alone. When this page still split the payload into
+a separate `Binary` (which has no `subject` field of its own), that gap was
+closed with an extra tag on the `Binary` specifically:
 
 ```json
 { "system": "https://www.icanbwell.com/sourcePatientId", "code": "Patient/{subjectId}" }
 ```
+
+Now that the payload is inlined, this `sourcePatientId` tag moves to the
+`DocumentReference` itself, in addition to its own `subject` field — the tag
+tracks *which resource holds the actual bytes*, not which resource type is
+conventionally patient-scoped, so it follows the payload. If your server has
+this same gap, apply the equivalent tag to whichever resource ends up
+carrying the sensitive content.
 
 ## Testing approach
 
@@ -233,13 +253,12 @@ Structure tests around the same layering as the implementation:
   not unrelated shared components (`Header`/`Footer`) unless they genuinely
   throw without a provider your test doesn't set up. Cover: unsupported file
   rejected with zero network calls; happy path calls `mergeResource` exactly
-  twice with the expected payloads (including the `meta.security` blocks)
-  and navigates on success; a bad-status `Binary` response stops before the
-  `DocumentReference` call; a 200-with-`OperationOutcome` response is treated
-  as failure the same as a bad status; a `DocumentReference` failure after a
-  successful `Binary` write surfaces the orphaned-resource link; an
-  unsupported `resourceType` in the route renders an error instead of the
-  form.
+  once with the expected payload (including the inlined `attachment.data`
+  and the `meta.security` block) and navigates on success; a bad-status
+  response shows an error and does not navigate; a 200-with-`OperationOutcome`
+  or 200-with-`MergeResultEntry` response is treated as failure the same as a
+  bad status; an incomplete response is treated as failure; an unsupported
+  `resourceType` in the route renders an error instead of the form.
 
 This repo's tests, if you want concrete examples:
 `src/utils/uploadDocument.utils.test.ts`, `src/pages/UploadDocumentPage.test.tsx`,
@@ -257,12 +276,15 @@ The portable core, independent of framework/UI library:
    control — never trust the browser-reported MIME type, and guard the
    lookup against prototype-chain properties if it's a plain object.
 3. Base64-encode client-side and strip the data-URL prefix before sending.
-4. Write `Binary` then `DocumentReference` sequentially, with client-generated
-   ids; check the response *body*, not just the HTTP status, for
-   resource-level failures; don't auto-rollback a successful `Binary` write
-   on a subsequent failure — surface it for manual cleanup instead.
-5. Tag both resources with whatever ownership/access model your server
-   requires, and separately check whether any resource type you're creating
-   (like `Binary`) needs its own patient-scoping tag beyond the general
+4. Prefer inlining the payload on `content[].attachment.data` over a separate
+   `Binary` + `url` reference when the payload is single-owner and
+   size-capped — it collapses two sequential, partially-failable writes into
+   one atomic one. Reach for a separate `Binary` only when the payload needs
+   to be shared across multiple documents or is too large to inline
+   comfortably. Either way, check the response *body*, not just the HTTP
+   status, for resource-level failures.
+5. Tag the resource with whatever ownership/access model your server
+   requires, and separately check whether the resource type holding the
+   actual bytes needs its own patient-scoping tag beyond the general
    ownership tags — a resource with no `subject`/`patient` field of its own
    won't get that scoping for free.

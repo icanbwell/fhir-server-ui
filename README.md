@@ -103,6 +103,7 @@ make generate_types
 
 - [Composition Summary Screen](docs/composition-summary-screen.md) — how the readable Composition view (`/composition-summary/...`) is implemented.
 - [Runtime Environment Configuration](docs/runtime-environment-config.md) — how to supply `REACT_APP_*` config at container start instead of baking it into the build, for containerized deployments.
+- [Upload Document](docs/upload-document.md) — how the "Upload Document" admin tool (`/document-upload/...`) creates a `DocumentReference` + `Binary` pair from a file picked in the browser.
 
 ## Terminal Warning
 When running the application, you might encounter the following warning in the terminal `Failed to parse source map`.

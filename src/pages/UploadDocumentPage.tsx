@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import FhirApi from '../api/fhirApi';
 import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
+import { SecurityTagSystem } from '../utils/securityTagSystem';
 import {
     ACCEPTED_UPLOAD_ACCEPT_ATTR,
     buildSubjectReference,
@@ -17,6 +18,15 @@ type TSelectedFile = {
     file: File;
     contentType: string;
 };
+
+// This admin tool's uploads are treated as b.well-owned, not owned by whichever client the
+// subject Patient/Person happens to belong to - matching the "DocumentReference | Digital
+// Wallet (BWell)" row in the PROA data-sharing provenance table, not the subject's own tags.
+const BWELL_OWNER_SECURITY_TAGS = [
+    { system: SecurityTagSystem.owner, code: 'bwell' },
+    { system: SecurityTagSystem.access, code: 'bwell' },
+    { system: SecurityTagSystem.sourceAssigningAuthority, code: 'bwell' },
+];
 
 const UploadDocumentPage = (): React.ReactElement => {
     const { resourceType = '', id = '' } = useParams<{ resourceType: string; id: string }>();
@@ -68,6 +78,12 @@ const UploadDocumentPage = (): React.ReactElement => {
                     id: binaryId,
                     contentType: selectedFile.contentType,
                     data,
+                    meta: {
+                        security: [
+                            ...BWELL_OWNER_SECURITY_TAGS,
+                            { system: SecurityTagSystem.sourcePatientId, code: subjectReference },
+                        ],
+                    },
                 },
             });
             if (!binaryResult.status || binaryResult.status < 200 || binaryResult.status >= 300) {
@@ -95,6 +111,9 @@ const UploadDocumentPage = (): React.ReactElement => {
                     resourceType: 'DocumentReference',
                     id: docRefId,
                     status: 'current',
+                    meta: {
+                        security: BWELL_OWNER_SECURITY_TAGS,
+                    },
                     subject: { reference: subjectReference },
                     date: new Date().toISOString(),
                     description: description || undefined,

@@ -3,7 +3,14 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ThemeContextProvider } from '../context/ThemeContext';
 import FhirApi from '../api/fhirApi';
+import { SecurityTagSystem } from '../utils/securityTagSystem';
 import UploadDocumentPage from './UploadDocumentPage';
+
+const BWELL_OWNER_SECURITY_TAGS = [
+    { system: SecurityTagSystem.owner, code: 'bwell' },
+    { system: SecurityTagSystem.access, code: 'bwell' },
+    { system: SecurityTagSystem.sourceAssigningAuthority, code: 'bwell' },
+];
 
 const renderPage = (initialPath = '/document-upload/4_0_0/Patient/pat-1') =>
     render(
@@ -60,13 +67,23 @@ describe('UploadDocumentPage', () => {
             resource: { resourceType: 'Binary', contentType: 'application/pdf' },
         });
         const binaryId = binaryCall[0].id;
-        expect(binaryCall[0].resource).toMatchObject({ id: binaryId, data: expect.any(String) });
+        expect(binaryCall[0].resource).toMatchObject({
+            id: binaryId,
+            data: expect.any(String),
+            meta: {
+                security: [
+                    ...BWELL_OWNER_SECURITY_TAGS,
+                    { system: SecurityTagSystem.sourcePatientId, code: 'Patient/pat-1' },
+                ],
+            },
+        });
 
         expect(docRefCall[0]).toMatchObject({
             resourceType: 'DocumentReference',
             resource: {
                 resourceType: 'DocumentReference',
                 status: 'current',
+                meta: { security: BWELL_OWNER_SECURITY_TAGS },
                 subject: { reference: 'Patient/pat-1' },
                 content: [
                     {

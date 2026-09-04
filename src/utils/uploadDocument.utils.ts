@@ -24,7 +24,10 @@ export type ValidateUploadFileResult = { contentType: string } | { error: string
 // always agree with each other and with what was actually validated.
 export function validateUploadFile(file: { name: string; size: number }): ValidateUploadFileResult {
     const extension = file.name.split('.').pop()?.toLowerCase();
-    const contentType = extension ? ACCEPTED_UPLOAD_EXTENSIONS[extension] : undefined;
+    const contentType =
+        extension && Object.prototype.hasOwnProperty.call(ACCEPTED_UPLOAD_EXTENSIONS, extension)
+            ? ACCEPTED_UPLOAD_EXTENSIONS[extension]
+            : undefined;
     if (!contentType) {
         return {
             error: `Unsupported file type. Accepted extensions: ${Object.keys(ACCEPTED_UPLOAD_EXTENSIONS).join(', ')}.`,

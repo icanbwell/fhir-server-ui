@@ -36,6 +36,18 @@ describe('validateUploadFile', () => {
             contentType: 'application/pdf',
         });
     });
+
+    it('rejects prototype-pollution attack attempts (e.g., "resume.constructor")', () => {
+        const result = validateUploadFile({ name: 'resume.constructor', size: 1024 });
+        expect('error' in result).toBe(true);
+        expect(result).toHaveProperty('error');
+    });
+
+    it('rejects prototype-pollution attack attempts (e.g., "photo.toString")', () => {
+        const result = validateUploadFile({ name: 'photo.toString', size: 1024 });
+        expect('error' in result).toBe(true);
+        expect(result).toHaveProperty('error');
+    });
 });
 
 describe('ACCEPTED_UPLOAD_ACCEPT_ATTR', () => {

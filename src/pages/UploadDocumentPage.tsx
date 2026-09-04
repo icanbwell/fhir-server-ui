@@ -113,6 +113,10 @@ const UploadDocumentPage = (): React.ReactElement => {
             }
 
             navigate(`/4_0_0/DocumentReference/${docRefId}`);
+        } catch (error) {
+            setSubmitError(
+                `Failed to prepare or upload the file: ${error instanceof Error ? error.message : String(error)}`
+            );
         } finally {
             setSubmitting(false);
         }

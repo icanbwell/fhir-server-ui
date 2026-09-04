@@ -1,41 +1,20 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-// Mock FhirApi for module-level EnvironmentContext initialization.
-// vi.mock() is hoisted before imports, so this prevents the unhandled promise rejection
-// from EnvironmentContext's module-level getVersion() call when FHIR_SERVER_URL is undefined.
-vi.mock('../api/fhirApi', () => ({
-    default: class {
-        getVersion() {
-            return Promise.resolve('4.0.0');
-        }
-        mergeResource() {
-            return Promise.resolve({ status: 200, json: {}, incomplete: false });
-        }
-    },
-}));
-
-// Mock Header and Footer to avoid theme provider requirements
-vi.mock('../components/Header', () => ({
-    default: () => <div data-testid="mock-header" />,
-}));
-
-vi.mock('../components/Footer', () => ({
-    default: () => <div data-testid="mock-footer" />,
-}));
-
+import { ThemeContextProvider } from '../context/ThemeContext';
 import FhirApi from '../api/fhirApi';
 import UploadDocumentPage from './UploadDocumentPage';
 
 const renderPage = (initialPath = '/document-upload/4_0_0/Patient/pat-1') =>
     render(
-        <MemoryRouter initialEntries={[initialPath]}>
-            <Routes>
-                <Route path="/document-upload/4_0_0/:resourceType/:id" element={<UploadDocumentPage />} />
-                <Route path="/4_0_0/:resourceType/:id" element={<div>Viewing resource</div>} />
-            </Routes>
-        </MemoryRouter>
+        <ThemeContextProvider>
+            <MemoryRouter initialEntries={[initialPath]}>
+                <Routes>
+                    <Route path="/document-upload/4_0_0/:resourceType/:id" element={<UploadDocumentPage />} />
+                    <Route path="/4_0_0/:resourceType/:id" element={<div>Viewing resource</div>} />
+                </Routes>
+            </MemoryRouter>
+        </ThemeContextProvider>
     );
 
 const pdfFile = () => new File(['%PDF-1.4'], 'note.pdf', { type: 'application/pdf' });

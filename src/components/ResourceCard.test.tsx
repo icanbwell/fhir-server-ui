@@ -21,17 +21,14 @@ describe('ResourceCard upload document link', () => {
         );
     });
 
-    it('links to the person-compartment upload page for a Person resource', () => {
+    it('does not show the upload link for a Person resource', () => {
         render(
             <MemoryRouter>
                 <ResourceCard index={0} resource={resource('Person', 'per-1')} expanded={false} />
             </MemoryRouter>
         );
 
-        expect(screen.getByRole('link', { name: /upload document/i })).toHaveAttribute(
-            'href',
-            '/document-upload/4_0_0/Person/per-1'
-        );
+        expect(screen.queryByRole('link', { name: /upload document/i })).not.toBeInTheDocument();
     });
 
     it('does not show the upload link for other resource types', () => {

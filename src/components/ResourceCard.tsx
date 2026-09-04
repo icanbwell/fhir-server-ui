@@ -218,8 +218,7 @@ const ResourceCard = ({
                         {resource.resourceType &&
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionIndexLink({ resource, uuid: uuid?.toString() })}
-                        {resource.resourceType &&
-                            summaryResourceTypes.includes(resource.resourceType.toString()) &&
+                        {resource.resourceType === 'Patient' &&
                             getUploadDocumentLink({ resource, uuid: uuid?.toString() })}
                         {resource.resourceType &&
                             compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&

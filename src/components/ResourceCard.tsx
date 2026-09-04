@@ -86,6 +86,13 @@ const getCompositionIndexLink = ({ resource, uuid }: TGetIPSLinkProps) =>
         tooltip: 'View all Compositions by version and category',
     });
 
+const getUploadDocumentLink = ({ resource, uuid }: TGetIPSLinkProps) =>
+    getResourceLinkAction({
+        to: `/document-upload/4_0_0/${resource.resourceType}/${uuid}`,
+        label: 'Upload Document',
+        tooltip: 'Upload document or photo for this patient',
+    });
+
 const ResourceCard = ({
     index,
     resource,
@@ -211,6 +218,9 @@ const ResourceCard = ({
                         {resource.resourceType &&
                             summaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionIndexLink({ resource, uuid: uuid?.toString() })}
+                        {resource.resourceType &&
+                            summaryResourceTypes.includes(resource.resourceType.toString()) &&
+                            getUploadDocumentLink({ resource, uuid: uuid?.toString() })}
                         {resource.resourceType &&
                             compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}

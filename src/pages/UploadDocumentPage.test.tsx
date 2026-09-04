@@ -145,6 +145,75 @@ describe('UploadDocumentPage', () => {
         expect(mergeResource).toHaveBeenCalledTimes(1);
     });
 
+    it('treats a MergeResultEntry with created/updated false as a Binary write failure even with 200 status', async () => {
+        const mergeResource = vi
+            .spyOn(FhirApi.prototype, 'mergeResource')
+            .mockResolvedValueOnce({
+                status: 200,
+                json: {
+                    resourceType: 'Binary',
+                    id: 'd9b81839-391d-4935-bbcb-371d415e6fe7',
+                    created: false,
+                    updated: false,
+                    issue: {
+                        severity: 'error',
+                        code: 'forbidden',
+                        details: { text: 'Write not allowed using user scopes if patient scope is present' },
+                        diagnostics: 'Write not allowed using user scopes if patient scope is present',
+                    },
+                    operationOutcome: {
+                        resourceType: 'OperationOutcome',
+                        issue: [
+                            {
+                                severity: 'error',
+                                code: 'forbidden',
+                                diagnostics: 'Write not allowed using user scopes if patient scope is present',
+                            },
+                        ],
+                    },
+                },
+                incomplete: false,
+            });
+
+        renderPage();
+        fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
+        fireEvent.click(screen.getByRole('button', { name: /upload/i }));
+
+        expect(
+            await screen.findByText(/failed to create binary resource.*write not allowed using user scopes/i)
+        ).toBeInTheDocument();
+        expect(mergeResource).toHaveBeenCalledTimes(1);
+    });
+
+    it('surfaces the orphaned Binary link if the DocumentReference MergeResultEntry has created/updated false', async () => {
+        vi.spyOn(FhirApi.prototype, 'mergeResource')
+            .mockResolvedValueOnce({ status: 200, json: { resourceType: 'Binary', created: true, updated: false }, incomplete: false })
+            .mockResolvedValueOnce({
+                status: 200,
+                json: {
+                    resourceType: 'DocumentReference',
+                    created: false,
+                    updated: false,
+                    issue: {
+                        severity: 'error',
+                        code: 'forbidden',
+                        diagnostics: 'Write not allowed using user scopes if patient scope is present',
+                    },
+                },
+                incomplete: false,
+            });
+
+        renderPage();
+        fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
+        fireEvent.click(screen.getByRole('button', { name: /upload/i }));
+
+        expect(
+            await screen.findByText(/failed to create documentreference.*write not allowed using user scopes/i)
+        ).toBeInTheDocument();
+        const binaryLink = screen.getByRole('link', { name: /binary\//i });
+        expect(binaryLink.getAttribute('href')).toMatch(/^\/4_0_0\/Binary\//);
+    });
+
     it('treats an incomplete Binary response as a failure even with 200 status', async () => {
         const mergeResource = vi
             .spyOn(FhirApi.prototype, 'mergeResource')

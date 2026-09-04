@@ -10,6 +10,7 @@ import { SecurityTagSystem } from '../utils/securityTagSystem';
 import {
     ACCEPTED_UPLOAD_ACCEPT_ATTR,
     buildSubjectReference,
+    extractMergeFailureMessage,
     fileToBase64,
     validateUploadFile,
 } from '../utils/uploadDocument.utils';
@@ -94,14 +95,10 @@ const UploadDocumentPage = (): React.ReactElement => {
                 );
                 return;
             }
-            if (
-                binaryResult.json?.resourceType === 'OperationOutcome' ||
-                Array.isArray(binaryResult.json?.issue)
-            ) {
+            const binaryFailureMessage = extractMergeFailureMessage(binaryResult.json);
+            if (binaryFailureMessage) {
                 setSubmitError(
-                    `Failed to create Binary resource (status ${binaryResult.status ?? 'unknown'}): ${JSON.stringify(
-                        binaryResult.json
-                    )}`
+                    `Failed to create Binary resource (status ${binaryResult.status ?? 'unknown'}): ${binaryFailureMessage}`
                 );
                 return;
             }
@@ -151,14 +148,12 @@ const UploadDocumentPage = (): React.ReactElement => {
                 );
                 return;
             }
-            if (
-                docRefResult.json?.resourceType === 'OperationOutcome' ||
-                Array.isArray(docRefResult.json?.issue)
-            ) {
+            const docRefFailureMessage = extractMergeFailureMessage(docRefResult.json);
+            if (docRefFailureMessage) {
                 setSubmitError(
                     <>
                         Failed to create DocumentReference (status{' '}
-                        {docRefResult.status ?? 'unknown'}): {JSON.stringify(docRefResult.json)}.
+                        {docRefResult.status ?? 'unknown'}): {docRefFailureMessage}.
                         The Binary resource was created and is not automatically cleaned up —{' '}
                         <RouterLink to={`/4_0_0/Binary/${binaryId}`}>
                             view/delete Binary/{binaryId}

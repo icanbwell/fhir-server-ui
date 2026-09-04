@@ -58,3 +58,23 @@ export function fileToBase64(file: File): Promise<string> {
 export function buildSubjectReference({ resourceType, id }: { resourceType: string; id: string }): string {
     return `Patient/${resourceType === 'Person' ? 'person.' : ''}${id}`;
 }
+
+// $merge always answers 2xx, even when the resource was rejected — per-item outcome travels in
+// the body as a MergeResultEntry: { resourceType: '<the merged type>', created: false, updated:
+// false, issue: {...single object...}, operationOutcome: {...} }. resourceType is the FHIR type
+// being merged (not 'OperationOutcome') and issue is a single object, not an array, so neither
+// looked like a failure to the checks this file's caller used to run inline. Returns undefined
+// when json doesn't look like a failure of any known shape.
+export function extractMergeFailureMessage(json: any): string | undefined {
+    if (!json || typeof json !== 'object') {
+        return undefined;
+    }
+    if (json.resourceType === 'OperationOutcome' || Array.isArray(json.issue)) {
+        return JSON.stringify(json);
+    }
+    if (json.created === false && json.updated === false) {
+        const issue = json.operationOutcome?.issue?.[0] ?? json.issue;
+        return issue?.diagnostics || issue?.details?.text || JSON.stringify(json);
+    }
+    return undefined;
+}

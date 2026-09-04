@@ -40,4 +40,33 @@ describe('ResourceCard upload document link', () => {
 
         expect(screen.queryByRole('link', { name: /upload document/i })).not.toBeInTheDocument();
     });
+
+    it('links to the upload page with the encounter subject reference for an Encounter resource', () => {
+        render(
+            <MemoryRouter>
+                <ResourceCard
+                    index={0}
+                    resource={
+                        { resourceType: 'Encounter', id: 'enc-1', subject: { reference: 'Patient/pat-1' } } as unknown as TResource
+                    }
+                    expanded={false}
+                />
+            </MemoryRouter>
+        );
+
+        expect(screen.getByRole('link', { name: /upload document/i })).toHaveAttribute(
+            'href',
+            '/document-upload/4_0_0/Encounter/enc-1?subjectReference=Patient%2Fpat-1'
+        );
+    });
+
+    it('does not show the upload link for an Encounter without a subject', () => {
+        render(
+            <MemoryRouter>
+                <ResourceCard index={0} resource={resource('Encounter', 'enc-2')} expanded={false} />
+            </MemoryRouter>
+        );
+
+        expect(screen.queryByRole('link', { name: /upload document/i })).not.toBeInTheDocument();
+    });
 });

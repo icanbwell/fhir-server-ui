@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     ACCEPTED_UPLOAD_ACCEPT_ATTR,
     MAX_UPLOAD_SIZE_BYTES,
+    buildEncounterReference,
     buildSubjectReference,
     fileToBase64,
     validateUploadFile,
@@ -70,5 +71,11 @@ describe('buildSubjectReference', () => {
 
     it('builds a person-compartment Patient reference for a Person resourceType', () => {
         expect(buildSubjectReference({ resourceType: 'Person', id: 'abc123' })).toBe('Patient/person.abc123');
+    });
+});
+
+describe('buildEncounterReference', () => {
+    it('builds an Encounter reference from an id', () => {
+        expect(buildEncounterReference('enc-1')).toBe('Encounter/enc-1');
     });
 });

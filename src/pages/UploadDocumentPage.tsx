@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -9,6 +9,7 @@ import UserContext from '../context/UserContext';
 import { SecurityTagSystem } from '../utils/securityTagSystem';
 import {
     ACCEPTED_UPLOAD_ACCEPT_ATTR,
+    buildEncounterReference,
     buildSubjectReference,
     extractMergeFailureMessage,
     fileToBase64,
@@ -37,6 +38,7 @@ const META_SOURCE = 'https://www.icanbwell.com/fhir-server-ui';
 
 const UploadDocumentPage = (): React.ReactElement => {
     const { resourceType = '', id = '' } = useParams<{ resourceType: string; id: string }>();
+    const [searchParams] = useSearchParams();
     const { fhirUrl } = useContext(EnvContext);
     const { setUserDetails } = useContext(UserContext);
     const navigate = useNavigate();
@@ -47,8 +49,15 @@ const UploadDocumentPage = (): React.ReactElement => {
     const [submitError, setSubmitError] = useState<React.ReactNode | undefined>();
     const [submitting, setSubmitting] = useState(false);
 
-    const subjectReference = buildSubjectReference({ resourceType, id });
-    const isValidResourceType = resourceType === 'Patient' || resourceType === 'Person';
+    // Reached from an Encounter's own "Upload Document" link (ResourceCard), which supplies the
+    // Encounter's subject as a query param since Encounter/<id> is not itself a valid subject
+    // reference the way Patient/Person id are - buildSubjectReference has no notion of Encounter.
+    const isEncounter = resourceType === 'Encounter';
+    const encounterSubjectReference = searchParams.get('subjectReference') ?? undefined;
+    const subjectReference = isEncounter ? encounterSubjectReference : buildSubjectReference({ resourceType, id });
+    const encounterReference = isEncounter && id ? buildEncounterReference(id) : undefined;
+    const isValidResourceType =
+        resourceType === 'Patient' || resourceType === 'Person' || (isEncounter && !!encounterSubjectReference);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -68,7 +77,7 @@ const UploadDocumentPage = (): React.ReactElement => {
     };
 
     const handleSubmit = async () => {
-        if (!selectedFile) {
+        if (!selectedFile || !subjectReference) {
             return;
         }
         setSubmitting(true);
@@ -95,6 +104,7 @@ const UploadDocumentPage = (): React.ReactElement => {
                     subject: { reference: subjectReference },
                     date: new Date().toISOString(),
                     description: description || undefined,
+                    context: encounterReference ? { encounter: [{ reference: encounterReference }] } : undefined,
                     content: [
                         {
                             attachment: {
@@ -148,8 +158,11 @@ const UploadDocumentPage = (): React.ReactElement => {
                                 Upload Document
                             </Typography>
                             <Alert severity="error">
-                                Unsupported resource type for document upload: {resourceType}. Only
-                                Patient and Person are supported.
+                                {isEncounter
+                                    ? 'Missing subject reference for this Encounter — open this page via the ' +
+                                      "Upload Document link on the Encounter's resource card."
+                                    : `Unsupported resource type for document upload: ${resourceType}. Only ` +
+                                      'Patient, Person, and Encounter are supported.'}
                             </Alert>
                         </>
                     ) : (
@@ -160,6 +173,11 @@ const UploadDocumentPage = (): React.ReactElement => {
                             <Typography sx={{ mb: 2 }}>
                                 Uploading for: {subjectReference}
                             </Typography>
+                            {encounterReference && (
+                                <Typography sx={{ mb: 2 }}>
+                                    Linking to: {encounterReference}
+                                </Typography>
+                            )}
 
                             {validationError && (
                                 <Alert severity="error" sx={{ mb: 2 }}>

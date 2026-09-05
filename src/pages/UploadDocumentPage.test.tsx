@@ -183,9 +183,46 @@ describe('UploadDocumentPage', () => {
         renderPage('/document-upload/4_0_0/Observation/obs-1');
 
         expect(screen.getByText(/unsupported resource type for document upload/i)).toBeInTheDocument();
-        expect(screen.getByText(/only patient and person are supported/i)).toBeInTheDocument();
+        expect(screen.getByText(/only patient, person, and encounter are supported/i)).toBeInTheDocument();
         expect(screen.queryByTestId('upload-document-file-input')).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: /upload/i })).not.toBeInTheDocument();
         expect(mergeResource).not.toHaveBeenCalled();
+    });
+
+    it('shows an error and does not render form for an Encounter opened without a subject reference', () => {
+        const mergeResource = vi.spyOn(FhirApi.prototype, 'mergeResource');
+        renderPage('/document-upload/4_0_0/Encounter/enc-1');
+
+        expect(screen.getByText(/missing subject reference for this encounter/i)).toBeInTheDocument();
+        expect(screen.queryByTestId('upload-document-file-input')).not.toBeInTheDocument();
+        expect(mergeResource).not.toHaveBeenCalled();
+    });
+
+    it('shows the resolved subject and encounter linkage for an Encounter upload', () => {
+        renderPage('/document-upload/4_0_0/Encounter/enc-1?subjectReference=Patient%2Fpat-1');
+
+        expect(screen.getByText(/Patient\/pat-1/)).toBeInTheDocument();
+        expect(screen.getByText(/Encounter\/enc-1/)).toBeInTheDocument();
+    });
+
+    it('creates a DocumentReference with context.encounter set when uploaded from an Encounter', async () => {
+        const mergeResource = vi
+            .spyOn(FhirApi.prototype, 'mergeResource')
+            .mockResolvedValueOnce({ status: 200, json: { resourceType: 'DocumentReference' }, incomplete: false });
+
+        renderPage('/document-upload/4_0_0/Encounter/enc-1?subjectReference=Patient%2Fpat-1');
+        fireEvent.change(screen.getByTestId('upload-document-file-input'), { target: { files: [pdfFile()] } });
+        fireEvent.click(screen.getByRole('button', { name: /upload/i }));
+
+        await waitFor(() => expect(screen.getByText('Viewing resource')).toBeInTheDocument());
+
+        const [docRefCall] = mergeResource.mock.calls;
+        expect(docRefCall[0]).toMatchObject({
+            resourceType: 'DocumentReference',
+            resource: {
+                subject: { reference: 'Patient/pat-1' },
+                context: { encounter: [{ reference: 'Encounter/enc-1' }] },
+            },
+        });
     });
 });

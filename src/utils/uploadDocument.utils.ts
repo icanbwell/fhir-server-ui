@@ -59,6 +59,10 @@ export function buildSubjectReference({ resourceType, id }: { resourceType: stri
     return `Patient/${resourceType === 'Person' ? 'person.' : ''}${id}`;
 }
 
+export function buildEncounterReference(encounterId: string): string {
+    return `Encounter/${encounterId}`;
+}
+
 // $merge always answers 2xx, even when the resource was rejected — per-item outcome travels in
 // the body as a MergeResultEntry: { resourceType: '<the merged type>', created: false, updated:
 // false, issue: {...single object...}, operationOutcome: {...} }. resourceType is the FHIR type

@@ -10,6 +10,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EditIcon from '@mui/icons-material/Edit';
 import { IdentifierSystem } from '../utils/identifierSystem';
+import { TEncounter } from '../types/resources/Encounter';
 
 type TResourceCardProps = {
     index: number;
@@ -86,12 +87,20 @@ const getCompositionIndexLink = ({ resource, uuid }: TGetIPSLinkProps) =>
         tooltip: 'View all Compositions by version and category',
     });
 
-const getUploadDocumentLink = ({ resource, uuid }: TGetIPSLinkProps) =>
-    getResourceLinkAction({
-        to: `/document-upload/4_0_0/${resource.resourceType}/${uuid}`,
+const getUploadDocumentLink = ({
+    resource,
+    uuid,
+    subjectReference,
+}: TGetIPSLinkProps & { subjectReference?: string }) => {
+    const query = subjectReference ? `?subjectReference=${encodeURIComponent(subjectReference)}` : '';
+    return getResourceLinkAction({
+        to: `/document-upload/4_0_0/${resource.resourceType}/${uuid}${query}`,
         label: 'Upload Document',
-        tooltip: 'Upload document or photo for this patient',
+        tooltip: subjectReference
+            ? "Upload document or photo for this encounter's patient"
+            : 'Upload document or photo for this patient',
     });
+};
 
 const ResourceCard = ({
     index,
@@ -220,6 +229,13 @@ const ResourceCard = ({
                             getCompositionIndexLink({ resource, uuid: uuid?.toString() })}
                         {resource.resourceType === 'Patient' &&
                             getUploadDocumentLink({ resource, uuid: uuid?.toString() })}
+                        {resource.resourceType === 'Encounter' &&
+                            (resource as TEncounter).subject?.reference &&
+                            getUploadDocumentLink({
+                                resource,
+                                uuid: uuid?.toString(),
+                                subjectReference: (resource as TEncounter).subject?.reference?.toString(),
+                            })}
                         {resource.resourceType &&
                             compositionSummaryResourceTypes.includes(resource.resourceType.toString()) &&
                             getCompositionSummaryLink({ uuid: uuid?.toString() })}

@@ -82,7 +82,7 @@
     "jest-axe": "^11.0.0",
     "jsdom": "^30.0.1",
     "prettier": "^3.8.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "resolutions": {
     "postcss@npm:^8.5.15": "^8.5.25",

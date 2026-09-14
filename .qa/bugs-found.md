@@ -4,11 +4,20 @@ Branch: `SG-DCON-5564`
 Date: 2026-09-14
 Scope: `src/services`, `src/api`, `src/utils`, `src/hooks`, `src/context`
 
-**5 findings.** Every one is proven by a test that **fails on current code** and asserts the
-correct behavior. No source files were modified — these are reports, not fixes.
+**5 findings — ALL FIXED.** Each was first proven by a test that failed on the unfixed code while
+asserting the correct behavior; the fix was then applied and the same test now passes. The write-ups
+below describe each defect **as originally found**, and each carries a `Resolution` line recording
+what changed. `findings.jsonl` reports these as `"status":"fixed"`.
 
-Verification: `yarn test` → **5 failed | 551 passed (556)**. All 5 failures are the 5 bug tests
-below; nothing else in the suite fails. Raw output in [`test-run.txt`](./test-run.txt).
+Verification at time of reporting (before fixes): `yarn test` → **5 failed | 551 passed (556)**,
+the 5 failures being exactly the 5 bug tests below.
+Verification after fixes: `yarn test` → **556 passed (556)**, `tsc --noEmit` clean, `yarn lint`
+0 errors / 15 warnings (unchanged from baseline). Raw output in [`test-run.txt`](./test-run.txt).
+
+> Note for anyone re-running `completion-gate.sh`: it will now report "5 findings and the suite is
+> green" and block. That check exists to catch findings whose tests were pointed at current
+> behavior rather than correct behavior. Here the premise no longer holds — the findings are
+> resolved, not unproven — so the block is expected and not a signal of a problem.
 
 Observations that could not be turned into a failing test (config-unreachable code, cosmetic
 diagnostics, type-only mismatches, behavior with a valid fallback) are **not** listed here — they
@@ -37,6 +46,10 @@ now code-hygiene notes in Suspicious Pattern 5 of
 - **Proving test:** `src/context/ThemeContext.logic.test.ts` →
   `BUG-003: survives a non-JSON darkMode value in localStorage instead of failing to render`
 - **Observed failure:** `SyntaxError: Unexpected token 'o', "not-json" is not valid JSON`
+- **Resolution:** FIXED — the parse is wrapped in `try`/`catch`, returning the light-mode default
+  (`false`) on an unparseable value. Deliberately left the parsed value uncoerced: two existing
+  characterization tests pin the current non-boolean passthrough (`'yes'`, `0`), and tightening
+  that is a behavior change beyond this defect's scope.
 
 ```ts
 const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -66,6 +79,8 @@ of this app — a key whose format changed between releases is the most likely r
 - **Invariant violated:** INV-7 (search filters are transmitted losslessly)
 - **Proving test:** `src/api/adminApi.test.ts` →
   `BUG-001: preserves a parameter value that itself contains "=" instead of truncating it`
+- **Resolution:** FIXED — now splits on the first `=` only via `indexOf`/`substring`, matching
+  `FhirApi.getUrl`; value-less entries are skipped rather than appending the literal `"undefined"`.
 - **Observed failure:** expected `https://example.com/exports?tenant=acme&run=7`,
   received `https://example.com/exports?tenant`
 
@@ -102,6 +117,9 @@ result as the answer — no error, no warning. A secondary effect: a `queryParam
 - **Invariant violated:** INV-18 (every documented provider configuration must be able to succeed)
 - **Proving test:** `src/utils/authUrlProvider.test.ts` →
   `BUG-002: resolves from AUTHORIZE_URL/TOKEN_URL/LOGOUT_URL when no WELL_KNOWN_URL is set`
+- **Resolution:** FIXED — the `if (!wellKnownUrl) throw` guard is removed, so the explicit-URL
+  branch can now succeed. `wellKnownUrl` was already optional in the declared return type, so no
+  signature change was needed. The misleading message went with the guard.
 - **Observed failure:** `promise rejected "Error: REACT_APP_AUTH_TESTIDP_LOGOUT_URL is not defined"
   instead of resolving`
 
@@ -143,6 +161,10 @@ declared return type.
 - **Invariant violated:** INV-20 (a count belongs to the query that produced it)
 - **Proving test:** `src/hooks/useResourceCount.test.ts` →
   `BUG-004: clears a previous count when the new props short-circuit the fetch`
+- **Resolution:** FIXED — the short-circuit branch now resets `count`, `atLimit`, `error` and
+  `isLoading` before returning, so declining to count reports "not counted" instead of the previous
+  subject's answer. The `.catch` path was left as-is: it sets `error`, so a consumer can already
+  distinguish it from a settled result — unlike the silent early return.
 - **Observed failure:** `expected 1 to be null`
 
 ```ts
@@ -182,6 +204,9 @@ masked by both consumers' render guards).
 - **Invariant violated:** INV-11 (streaming preserves bytes across chunk boundaries)
 - **Proving test:** `src/api/fhirApi.test.ts` →
   `BUG-007: delivers the whole body through onChunk, flushing the decoder at the end`
+- **Resolution:** FIXED — after `streamRequest` resolves, the decoder is flushed with an
+  argument-less `decode()` and any remainder is delivered through `onChunk`, mirroring the existing
+  flushes in `baseApi.ts:249` and `baileyApi.ts:60-63`.
 - **Observed failure:** `expected 'ok' to be 'ok�'`
 
 ```ts

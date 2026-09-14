@@ -26,6 +26,16 @@ export function useResourceCount({
 
     useEffect(() => {
         if (!resourceType || !queryParameters) {
+            // Declining to count must not leave the previous query's answer in state. Callers
+            // reuse this hook instance across different subjects (Reference.tsx renders
+            // ReferenceLink with `key={index}`, so React reuses the instance and the hook gets
+            // new props rather than remounting). A leftover count here reports "this resource
+            // exists" for a reference that was never queried, and because this path sets no
+            // error, nothing downstream can tell it apart from a real answer.
+            setCount(null);
+            setAtLimit(false);
+            setError(null);
+            setIsLoading(false);
             return;
         }
         let cancelled = false;

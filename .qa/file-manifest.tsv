@@ -1,0 +1,61 @@
+path	status	reason
+src/api/adminApi.ts	tested	adminApi.test.ts (45 tests; carries BUG-001)
+src/api/baileyApi.ts	tested	baileyApi.test.ts (12 tests)
+src/api/baseApi.ts	tested	baseApi.test.ts (44 tests)
+src/api/fhirApi.ts	tested	fhirApi.test.ts (40 tests; carries BUG-007)
+src/context/EnvironmentContext.ts	tested	EnvironmentContext.test.ts (10 tests)
+src/context/LastRequestContext.ts	tested	LastRequestContext.test.ts (2 tests) - the module is a type declaration plus one createContext default, and those 2 tests assert that default (null lastRequest; recordRequest is a safe no-op). 3 tests that installed a value via .Provider and asserted React delivered it were removed: they asserted React's Context guarantee, not this module, and stayed green with the module body replaced by createContext<any>(undefined). Kept as tested rather than excluded because the default value IS falsifiable module behavior; the provider logic that derives pathname and updates state lives in App.tsx (out of scope)
+src/context/ThemeContext.tsx	tested	ThemeContext.test.tsx (11 tests) + ThemeContext.logic.test.ts (7 tests; carries BUG-003)
+src/context/UserContext.ts	excluded	pure React context default ({userDetails: null, setUserDetails: () => {}}); no logic, no branches - a test would assert a literal (RULE 14)
+src/hooks/useAgGridBrandTheme.ts	tested	useAgGridBrandTheme.test.ts (6 tests)
+src/hooks/useBaileyChatTransport.ts	tested	useBaileyChatTransport.test.tsx (pre-existing)
+src/hooks/useBaileyThemeBridge.ts	tested	useBaileyThemeBridge.test.tsx (pre-existing)
+src/hooks/useResourceCount.ts	tested	useResourceCount.test.ts (18 tests; carries BUG-004)
+src/hooks/useStreamProgress.ts	tested	useStreamProgress.test.ts (pre-existing)
+src/services/AuthServiceFactory.ts	tested	AuthServiceFactory.test.ts (pre-existing)
+src/services/BwellAppAuthService.ts	tested	BwellAppAuthService.test.ts (18 tests)
+src/services/ClientCredentialsAuthService.ts	tested	ClientCredentialsAuthService.test.ts (pre-existing)
+src/services/CognitoAuthService.ts	tested	CognitoAuthService.test.ts (18 tests) - the failed-exchange code_verifier test was deleted with the retraction of the finding it proved (see domain-invariants.md Suspicious Pattern 5)
+src/services/IAuthService.ts	excluded	pure TypeScript interface; erased at compile time, no runtime surface to import or call
+src/services/OktaAuthService.ts	tested	OktaAuthService.test.ts (17 tests) - the failed-exchange code_verifier test was deleted with the retraction of the finding it proved (see domain-invariants.md Suspicious Pattern 5)
+src/services/WellKnownConfigurationService.ts	tested	WellKnownConfigurationService.test.ts (12 tests)
+src/utils/attachment.utils.ts	tested	attachment.utils.test.ts (pre-existing)
+src/utils/auditEventDateFilter.ts	tested	auditEventDateFilter.test.ts (7 tests)
+src/utils/auth.utils.ts	tested	auth.utils.test.ts (12 tests)
+src/utils/authUrlProvider.ts	tested	authUrlProvider.test.ts (23 tests; carries BUG-002)
+src/utils/compositionIndex.ts	tested	compositionIndex.test.ts (pre-existing)
+src/utils/dateFormat.ts	tested	dateFormat.test.ts (pre-existing)
+src/utils/humanName.ts	tested	humanName.test.ts (pre-existing)
+src/utils/identifierSystem.ts	excluded	frozen constant map of system URIs (4 lines, no functions); value asserted indirectly via INV-22 in consuming tests - a direct test would restate the constant (RULE 14)
+src/utils/incrementalBundleParser.ts	tested	incrementalBundleParser.test.ts (7 tests)
+src/utils/isTrue.ts	tested	isTrue.test.ts (pre-existing)
+src/utils/jwtParser.ts	tested	jwtParser.test.ts (pre-existing)
+src/utils/localData.utils.ts	excluded	four one-line pass-throughs to window.localStorage with no transformation; testing them would assert the browser API, and they are exercised for real (unmocked) by auth.utils.test.ts and ThemeContext tests
+src/utils/resourceDefinitions.ts	tested	resourceDefinitions.test.ts (9 table-integrity tests; density floor waived - see domain-invariants.md "Density-floor exemption")
+src/utils/searchForm.utils.ts	tested	searchForm.utils.test.ts (14 tests)
+src/utils/searchFormQuery.ts	tested	searchFormQuery.test.ts (11 tests)
+src/utils/securityTagSystem.ts	excluded	frozen constant map of b.well security-tag system URIs (12 lines, no functions); correctness is the string values themselves, asserted where they are consumed (RULE 14)
+src/utils/spreadsheetColumns.ts	tested	spreadsheetColumns.test.ts (pre-existing)
+src/utils/streamingFetch.ts	tested	streamingFetch.test.ts (13 tests)
+src/utils/uid.utils.ts	tested	uid.utils.test.ts (pre-existing)
+src/utils/uploadDocument.utils.ts	tested	uploadDocument.utils.test.ts (21 tests: 13 pre-existing + 8 added for extractMergeFailureMessage, which was exported with four branches and zero tests - the $merge-answers-2xx failure path that decides whether a rejected upload is reported or shown as a success)
+src/utils/url.utils.ts	tested	url.utils.test.ts (pre-existing)
+src/App.tsx	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core)
+src/index.tsx	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core)
+src/runtimeEnv.ts	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core)
+src/ObservationGraph.tsx	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core)
+src/ObservationTimeline.tsx	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core)
+src/PatientTimeline.tsx	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core)
+src/vite-env.d.ts	excluded	ambient type declarations only; no runtime code
+src/admin/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 10 source files
+src/components/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 24 source files
+src/constants/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 2 source files
+src/generated/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 1 generated source file
+src/generator/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - build-time generator, no runtime source
+src/pages/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 164 source files
+src/partials/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 257 source files
+src/routes/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 2 source files
+src/test/	excluded	test harness itself (setup.ts and helpers), not code under test
+src/theme/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 1 source file (brandColors.ts constants, asserted via ThemeContext and useAgGridBrandTheme tests)
+src/types/	excluded	out of scope for DCON-5564 (user-narrowed to highest-risk core) - 703 pure type-declaration files, erased at compile time
+src/dist/	excluded	build output, not source

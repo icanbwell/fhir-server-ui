@@ -1,0 +1,176 @@
+{
+  "timestamp": "2026-09-14T10:49:17Z",
+  "repo": "fhir-server-ui",
+  "language": "TypeScript",
+  "test_framework": "Vitest",
+  "phase": "before",
+  "grade": "D",
+  "grade_desc": "Below standard - tests exist but coverage insufficient",
+  "readiness": "NOT READY",
+  "scope": "src/services, src/api, src/utils, src/hooks, src/context (highest-risk core; full-repo narrowed by user)",
+  "gates": {
+    "passed": 2,
+    "total": 4,
+    "failed": "branch-coverage security-coverage",
+    "detail": {
+      "tests_pass": true,
+      "branch_coverage_ge_70": false,
+      "lint_errors_le_5": true,
+      "security_files_tested": false
+    }
+  },
+  "coverage": {
+    "statements": 41.17,
+    "branches": 44.42,
+    "functions": 47.24,
+    "lines": 40.43,
+    "measured_by": "vitest run --coverage (v8 provider, explicit include over target dirs)",
+    "raw": {
+      "statements": "406/986",
+      "branches": "247/556",
+      "functions": "103/218",
+      "lines": "389/962"
+    }
+  },
+  "tests": {
+    "files": 28,
+    "cases": 192,
+    "all_passing": true
+  },
+  "total_source_files": 41,
+  "total_test_files": 28,
+  "untested_files": 20,
+  "mutation": {
+    "ran": false,
+    "score": null,
+    "tool": "stryker",
+    "note": "quick mode - not requested via --with-mutation"
+  },
+  "static_analysis": {
+    "errors": 0,
+    "warnings": 15,
+    "tool": "eslint (flat config, eslint-plugin-security)",
+    "typescript_strict": true,
+    "no_implicit_any": true
+  },
+  "security": {
+    "critical_files": 9,
+    "tested": 3,
+    "untested": 6,
+    "untested_list": [
+      "src/services/BwellAppAuthService.ts",
+      "src/services/CognitoAuthService.ts",
+      "src/services/IAuthService.ts",
+      "src/services/OktaAuthService.ts",
+      "src/utils/auth.utils.ts",
+      "src/utils/authUrlProvider.ts"
+    ]
+  },
+  "deployment_readiness": false,
+  "note": "Top-level fields are the ORIGINAL 'before' snapshot and are unmodified. Post-generation metrics for DCON-5564 are under the 'after' key.",
+  "after": {
+    "timestamp": "2026-09-14T20:00:00Z",
+    "phase": "after",
+    "revision": "post-adversarial-review remediation: 2 findings retracted, 6 weak/harmful tests rewritten or deleted, extractMergeFailureMessage gap closed",
+    "grade": "B",
+    "grade_desc": "Good - target scope is comprehensively covered; 5 proven defects await triage",
+    "readiness": "NOT READY",
+    "readiness_reason": "5 open findings are each proven by a test that fails on current code (see bugs-found.md / findings.jsonl). The suite is green apart from those 5 deliberate failures. Ready once the findings are fixed or dispositioned.",
+    "gates": {
+      "passed": 3,
+      "total": 4,
+      "failed": "tests_pass",
+      "detail": {
+        "tests_pass": false,
+        "tests_pass_excluding_bug_tests": true,
+        "branch_coverage_ge_70": true,
+        "lint_errors_le_5": true,
+        "security_files_tested": true
+      },
+      "note": "tests_pass is false by design: the 5 failing tests are the BUG-001, BUG-002, BUG-003, BUG-004 and BUG-007 proofs, which assert correct behavior against current code. No non-bug test fails."
+    },
+    "coverage": {
+      "statements": 97.56,
+      "branches": 92.44,
+      "functions": 96.33,
+      "lines": 97.6,
+      "measured_by": "vitest run --coverage (v8 provider, explicit include over target dirs, coverage.reportOnFailure=true) - same command and same denominators as the before run",
+      "raw": {
+        "statements": "962/986",
+        "branches": "514/556",
+        "functions": "210/218",
+        "lines": "939/962"
+      },
+      "branch_delta_note": "511/556 -> 514/556: the three branches gained are extractMergeFailureMessage's, previously untested",
+      "lowest_covered_in_scope": {
+        "src/context/ThemeContext.tsx": "80.55 stmts / 85.00 branches (MUI styleOverrides callbacks only run when those components render)",
+        "src/api/baseApi.ts": "93.33 stmts / 88.88 branches",
+        "src/utils/streamingFetch.ts": "100.00 stmts / 81.25 branches"
+      }
+    },
+    "tests": {
+      "files": 50,
+      "cases": 556,
+      "passing": 551,
+      "failing": 5,
+      "all_passing": false,
+      "failing_are_all_bug_proofs": true,
+      "failing_ids": ["BUG-001", "BUG-002", "BUG-003", "BUG-004", "BUG-007"]
+    },
+    "added_this_run": {
+      "test_files": 22,
+      "test_cases": 364
+    },
+    "remediation_this_revision": {
+      "tests_deleted": 5,
+      "tests_rewritten": 3,
+      "tests_added": 8,
+      "net_case_delta": 3,
+      "deleted": [
+        "src/services/OktaAuthService.test.ts - failed-exchange code_verifier test (proof of a retracted finding)",
+        "src/services/CognitoAuthService.test.ts - failed-exchange code_verifier test (proof of a retracted finding)",
+        "src/context/LastRequestContext.test.ts - 3 tests that asserted React's Context delivery through their own Provider rather than this module's default value"
+      ],
+      "rewritten": [
+        "src/api/adminApi.test.ts - the bare-parameter test no longer pins the literal string 'undefined' (which BUG-001's fix changes); it now asserts getUrl stays total and the well-formed sibling parameter and injected _count survive",
+        "src/api/adminApi.test.ts - the dot-segment test now calls the real triggerExport() against a stubbed fetch and asserts origin confinement plus the resolved path, instead of testing the WHATWG URL parser",
+        "src/hooks/useResourceCount.test.ts - the failed-refetch test no longer asserts the stale count===5 (a tripwire against BUG-004's .catch-path fix); it asserts the new parameters were requested, the failure surfaced, and the hook settled"
+      ],
+      "added": [
+        "src/utils/uploadDocument.utils.test.ts - 8 tests for extractMergeFailureMessage, previously exported with four branches and zero tests"
+      ]
+    },
+    "total_source_files": 41,
+    "tested_source_files": 36,
+    "excluded_source_files": 5,
+    "untested_files": 0,
+    "findings": {
+      "total": 5,
+      "high": 1,
+      "medium": 3,
+      "low": 1,
+      "all_proven_by_failing_test": true,
+      "retracted": 2,
+      "retracted_ids": ["BUG-005", "BUG-006"],
+      "retraction_note": "Both were the PKCE code_verifier failure-path notes (Okta and Cognito). Retracted as OVERSTATED by adversarial review: getLoginUrlAsync mints a fresh verifier on every login attempt, a verifier is inert without its matching authorization code, and RFC 7636 forbids reuse across authorization requests - which this code never does - not retention in client storage after a failed exchange. Reclassified as code hygiene in domain-invariants.md Suspicious Pattern 5; their two proving tests were deleted. Lines kept in findings.jsonl with status 'retracted' for provenance."
+    },
+    "static_analysis": {
+      "errors": 0,
+      "warnings": 15,
+      "tool": "eslint (flat config, eslint-plugin-security)",
+      "typescript_strict": true,
+      "tsc_noEmit_clean": true
+    },
+    "security": {
+      "critical_files": 9,
+      "tested": 8,
+      "untested": 0,
+      "excluded": 1,
+      "excluded_list": [
+        "src/services/IAuthService.ts"
+      ],
+      "excluded_reason": "pure TypeScript interface; erased at compile time, no runtime surface"
+    },
+    "deployment_readiness": false
+  }
+}

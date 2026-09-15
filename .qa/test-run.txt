@@ -1,9 +1,0 @@
-
- RUN  v4.1.11 /Users/shubhamgoel/repos/fhir-server-ui
-
-
- Test Files  50 passed (50)
-      Tests  556 passed (556)
-   Start at  21:57:37
-   Duration  13.29s (transform 5.95s, setup 13.43s, import 27.19s, tests 5.55s, environment 38.03s)
-

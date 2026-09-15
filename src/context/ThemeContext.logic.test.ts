@@ -68,7 +68,7 @@ describe('ThemeContextProvider persisted-preference parsing', () => {
         // Pins current behavior: the stored value is only checked for parseability, never for
         // type, so a JSON string arrives as a string and is merely used for its truthiness. No
         // runtime consequence today (every consumer treats it as a boolean condition), so this is
-        // recorded in .qa/domain-invariants.md Suspicious Patterns rather than filed as a bug.
+        // pinned as a characterization rather than filed as a bug.
         localStorage.setItem('darkMode', '"yes"');
 
         const { result } = renderTheme();

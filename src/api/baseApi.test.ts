@@ -158,7 +158,7 @@ describe('BaseApi URL resolution', () => {
         expect(url.searchParams.get('_format')).toBe('json');
     });
 
-    it('reports the request as method + path only, never the absolute URL (INV-1)', async () => {
+    it('reports the request as method + path only, never the absolute URL', async () => {
         mockFetch.mockResolvedValue(makeResponse());
         const onRequest = vi.fn();
         const api = newApi({ onRequest });
@@ -169,7 +169,7 @@ describe('BaseApi URL resolution', () => {
     });
 });
 
-describe('BaseApi token confinement (INV-1)', () => {
+describe('BaseApi token confinement', () => {
     it('refuses an absolute foreign-origin path without ever calling fetch', async () => {
         localStorage.setItem('jwt', 'session-token');
         const api = newApi();
@@ -240,7 +240,7 @@ describe('BaseApi token confinement (INV-1)', () => {
     });
 });
 
-describe('BaseApi.buildHeaders (INV-2)', () => {
+describe('BaseApi.buildHeaders', () => {
     it('attaches the session token as a Bearer header', async () => {
         localStorage.setItem('jwt', 'session-token');
         mockFetch.mockResolvedValue(makeResponse());
@@ -356,9 +356,9 @@ describe('BaseApi.buildHeaders (INV-2)', () => {
 
     it('propagates a provider-config failure out of header construction (characterization)', async () => {
         // Pins current behavior: a stale `identityProvider` whose env vars are gone makes every
-        // request throw from buildHeaders rather than degrading to the 'jwt' default. See
-        // .qa/domain-invariants.md "Suspicious Patterns" #6 — whether this should fail loudly or
-        // fall back is a product decision, so it is pinned rather than asserted as correct.
+        // request throw from buildHeaders rather than degrading to the 'jwt' default. Whether
+        // this should fail loudly or fall back is a product decision, so it is pinned rather
+        // than asserted as correct.
         localStorage.setItem('identityProvider', 'retired-provider');
         mockGetAuthInfo.mockImplementation(() => {
             throw new Error('REACT_APP_AUTH_RETIRED-PROVIDER_CUSTOM_USERNAME is not defined');
@@ -371,7 +371,7 @@ describe('BaseApi.buildHeaders (INV-2)', () => {
     });
 });
 
-describe('BaseApi unauthorized handling (INV-5, INV-6)', () => {
+describe('BaseApi unauthorized handling', () => {
     it('logs the user out on 401', async () => {
         const setUserDetails = vi.fn();
         mockFetch.mockResolvedValue(makeResponse({ status: 401 }));
@@ -421,7 +421,7 @@ describe('BaseApi unauthorized handling (INV-5, INV-6)', () => {
     });
 });
 
-describe('BaseApi streaming (INV-11, INV-13, INV-14)', () => {
+describe('BaseApi streaming', () => {
     it('reassembles a multi-byte UTF-8 character split across two chunks', async () => {
         // '€' is E2 82 AC — split after the first byte so a per-chunk decoder would corrupt it.
         const euro = encode('{"v":"€"}');
@@ -622,7 +622,7 @@ describe('BaseApi.getData / request / getVersion', () => {
     });
 });
 
-describe('BaseApi.downloadFile (INV-12)', () => {
+describe('BaseApi.downloadFile', () => {
     it('returns a Blob tagged with the response content-type', async () => {
         mockFetch.mockResolvedValue(
             makeResponse({

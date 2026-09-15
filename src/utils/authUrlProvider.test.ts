@@ -251,7 +251,7 @@ describe('AuthUrlProvider.getAuthInfo', () => {
         });
     });
 
-    it('defaults the FHIR-bound token key to jwt when unset (INV-2)', () => {
+    it('defaults the FHIR-bound token key to jwt when unset', () => {
         Object.assign(APP_ENV, AUTH_INFO_ENV);
 
         expect(new AuthUrlProvider().getAuthInfo('testidp').tokenToSendToFhirServer).toBe('jwt');

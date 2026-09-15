@@ -223,7 +223,7 @@ describe('AdminApi.getUrl', () => {
         // A value-less entry is malformed input. BUG-001's fix changes what getUrl does with it
         // (today it appends the literal string "undefined"; the fix skips the entry), so this
         // asserts only what must hold either way: getUrl stays total, the well-formed sibling
-        // parameter survives byte-identical (INV-7), the injected default is not duplicated, and
+        // parameter survives byte-identical, the injected default is not duplicated, and
         // the path is untouched. Deliberately does NOT pin the bare entry's own rendering.
         const url = newApi().getUrl({
             resourceType: 'ExportStatus',
@@ -447,14 +447,14 @@ describe('AdminApi export, index, cache and log endpoints', () => {
         expect(sentInit().body).toBeUndefined();
     });
 
-    it('keeps a dot-segment trigger id on the configured FHIR origin (INV-1)', async () => {
+    it('keeps a dot-segment trigger id on the configured FHIR origin', async () => {
         // `/admin/triggerExport/${id}` interpolates the id unencoded (adminApi.ts:163), so an id
         // containing '..' collapses the admin path. Routed through the real triggerExport + a
         // stubbed fetch so the assertion is about this repo's code, not the URL parser: the
         // request must never leave the configured FHIR origin whatever the id contains, and the
         // resolved path records today's behavior so encoding the id becomes a deliberate change.
-        // Not filed as a bug (the id is server-supplied and the server authorizes each admin
-        // endpoint independently) — see .qa/domain-invariants.md Suspicious Patterns.
+        // Not filed as a bug: the id is server-supplied and the server authorizes each admin
+        // endpoint independently.
         await newApi().triggerExport('../deletePatientDataGraph');
 
         expect(sentUrl().origin).toBe(FHIR_URL);
@@ -509,7 +509,7 @@ describe('AdminApi export, index, cache and log endpoints', () => {
 });
 
 describe('AdminApi inherited auth behavior', () => {
-    it('logs the user out when an admin endpoint answers 401 (INV-5)', async () => {
+    it('logs the user out when an admin endpoint answers 401', async () => {
         const setUserDetails = vi.fn();
         mockFetch.mockResolvedValue(makeResponse(401, '{}'));
 
@@ -518,7 +518,7 @@ describe('AdminApi inherited auth behavior', () => {
         expect(mockLogout).toHaveBeenCalledWith(setUserDetails);
     });
 
-    it('keeps the session when an admin endpoint answers 403 for lack of privilege (INV-6)', async () => {
+    it('keeps the session when an admin endpoint answers 403 for lack of privilege', async () => {
         const setUserDetails = vi.fn();
         mockFetch.mockResolvedValue(
             makeResponse(403, '{"resourceType":"OperationOutcome","id":"forbidden"}')
@@ -530,7 +530,7 @@ describe('AdminApi inherited auth behavior', () => {
         expect(result.status).toBe(403);
     });
 
-    it('attaches the session bearer token to admin requests (INV-2)', async () => {
+    it('attaches the session bearer token to admin requests', async () => {
         localStorage.setItem('jwt', 'admin-session-token');
 
         await newApi().getAllCacheKeys({ resourceId: 'patient-9', resourceType: 'Patient' });

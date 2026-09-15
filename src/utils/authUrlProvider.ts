@@ -42,9 +42,10 @@ class AuthUrlProvider {
         if (!logoutUrl) {
             throw new Error(`REACT_APP_AUTH_${provider.toUpperCase()}_LOGOUT_URL is not defined`);
         }
-        if (!wellKnownUrl) {
-            throw new Error(`REACT_APP_AUTH_${provider.toUpperCase()}_LOGOUT_URL is not defined`);
-        }
+        // No guard on wellKnownUrl: its absence is the whole point of the else branch above,
+        // which resolves the three endpoints from environment variables instead of OIDC
+        // discovery. Requiring it here rejected every discovery-less deployment — and reported
+        // the failure as "LOGOUT_URL is not defined", naming the wrong variable.
 
         return {
             authorizeUrl,

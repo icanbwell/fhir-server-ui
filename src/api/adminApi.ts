@@ -128,8 +128,21 @@ class AdminApi extends BaseApi {
 
         if (queryParameters) {
             queryParameters.forEach((queryParameter) => {
-                const [name, value] = queryParameter.split('=');
-                url.searchParams.append(name, value);
+                // Split on the FIRST '=' only, matching FhirApi.getUrl. Values are routinely
+                // URLs — `_source` is appended for every resource type by
+                // searchForm.utils.getFormData — and URLs legally contain '='. String.split('=')
+                // would drop everything after the second '=', silently searching for a value the
+                // user never typed.
+                const firstEquals = queryParameter.indexOf('=');
+                if (firstEquals === -1) {
+                    // A value-less entry is malformed input; skip it rather than appending the
+                    // literal string "undefined" as this parameter's value.
+                    return;
+                }
+                url.searchParams.append(
+                    queryParameter.substring(0, firstEquals),
+                    queryParameter.substring(firstEquals + 1)
+                );
             });
         }
         this.addMissingRequiredParams({ queryParams: url.searchParams, id, resourceType });

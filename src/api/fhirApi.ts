@@ -193,6 +193,18 @@ class FhirApi extends BaseApi {
             onHeaders,
             onChunk: onChunk ? (chunk) => onChunk(decoder.decode(chunk, { stream: true })) : undefined,
         });
+        if (onChunk) {
+            // Flush any dangling partial multi-byte UTF-8 sequence left buffered by the last
+            // `{ stream: true }` call — without this, a body that ends mid-character (which this
+            // stack explicitly supports via `incomplete: true`) silently drops those trailing
+            // bytes from the streamed text while `rawText` still reports them, so the API Console
+            // displays a body that disagrees with the response received. Mirrors baseApi.ts's
+            // and baileyApi.ts's own flush.
+            const flushed = decoder.decode();
+            if (flushed) {
+                onChunk(flushed);
+            }
+        }
 
         let json: any;
         try {

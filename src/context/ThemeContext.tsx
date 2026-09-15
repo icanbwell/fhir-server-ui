@@ -46,7 +46,18 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
     const [isDarkMode, setIsDarkMode] = useState(() => {
         // Get initial theme from localStorage or default to false (light mode)
         const savedTheme = getLocalData('darkMode');
-        return savedTheme ? JSON.parse(savedTheme) : false;
+        if (!savedTheme) {
+            return false;
+        }
+        try {
+            return JSON.parse(savedTheme);
+        } catch {
+            // localStorage is attacker-adjacent (any script on the origin, an extension, a stale
+            // value from an older build, manual devtools editing). An unparseable value must not
+            // throw here — the persisted bad value would white-screen the app on every reload,
+            // with no reachable control to clear it. Fall back to the light-mode default.
+            return false;
+        }
     });
 
     useEffect(() => {

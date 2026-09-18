@@ -1,12 +1,10 @@
 import React, { useContext, useMemo, useState } from 'react';
-import { Alert, Link, Tooltip } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
 import { saveAs } from 'file-saver';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
 import { useStreamProgress } from '../hooks/useStreamProgress';
-import StreamProgressIndicator from './StreamProgressIndicator';
+import DownloadIconButton from './DownloadIconButton';
 
 interface DownloadEverythingButtonProps {
     resourceType: 'Patient' | 'Person';
@@ -57,30 +55,13 @@ const DownloadEverythingButton: React.FC<DownloadEverythingButtonProps> = ({ res
     };
 
     return (
-        <React.Fragment>
-            {errorMessage && (
-                <Alert severity="error" sx={{ my: 2 }}>
-                    {errorMessage}
-                </Alert>
-            )}
-            {isLoading && <StreamProgressIndicator progress={progress} />}
-            <Tooltip title="Download $everything" arrow>
-                <Link
-                    component="button"
-                    onClick={downloadEverything}
-                    disabled={isLoading}
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        cursor: isLoading ? 'not-allowed' : 'pointer',
-                        opacity: isLoading ? 0.5 : 1,
-                    }}
-                >
-                    <DownloadIcon fontSize="small" />
-                </Link>
-            </Tooltip>
-        </React.Fragment>
+        <DownloadIconButton
+            tooltip="Download $everything"
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+            progress={progress}
+            onClick={downloadEverything}
+        />
     );
 };
 

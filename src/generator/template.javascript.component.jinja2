@@ -19,6 +19,9 @@ import Partials from '../../partials';
 {% if fhir_entity.cleaned_name == 'Person' %}
 import UserContext from '../../context/UserContext';
 {% endif %}
+{% if fhir_entity.cleaned_name in ['Person', 'Patient'] %}
+import DownloadEverythingButton from '../../components/DownloadEverythingButton';
+{% endif %}
 import { IdentifierSystem } from '../../utils/identifierSystem';
 {% if fhir_entity.cleaned_name in ['Subscription', 'SubscriptionStatus'] %}
 import PatientReferenceFromExtension from '../../partials/PatientReferenceFromExtension';
@@ -158,6 +161,16 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
             />
         {% endfor %}
     {% endif %}
+        {% if fhir_entity.cleaned_name == 'Patient' %}
+            <hr/>
+            <div>
+                <Typography variant="h5" sx={{- '{{ mt: 1 }}' -}}>Patient Data Graph (in json)</Typography>
+                <Link to={`/4_0_0/Patient/${uuid}/$everything?contained=true&_format=json`}>
+                    /4_0_0/Patient/{uuid}/$everything?contained=true&_format=json
+                </Link>
+                <DownloadEverythingButton resourceType="Patient" id={uuid} />
+            </div>
+        {% endif %}
         {% if fhir_entity.cleaned_name == 'Person' %}
             <hr/>
             <div>
@@ -165,6 +178,7 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                 <Link to={`/4_0_0/Person/${uuid}/$everything?contained=true&_format=json`}>
                     /4_0_0/Person/{uuid}/$everything?contained=true&_format=json
                 </Link>
+                <DownloadEverythingButton resourceType="Person" id={uuid} />
             </div>
             { userDetails?.isAdmin && (
                 <>

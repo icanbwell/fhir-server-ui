@@ -14,6 +14,7 @@ import { TPatient } from '../../types/resources/Patient';
 
 // Import all the partial resource
 import Partials from '../../partials';
+import DownloadEverythingButton from '../../components/DownloadEverythingButton';
 import { IdentifierSystem } from '../../utils/identifierSystem';
 
 const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
@@ -406,6 +407,14 @@ const Patient = ({ resource }: { resource: TPatient }): React.ReactElement => {
                 resourceType={resource.resourceType}
                 reverseReferences={[{'target': 'Task', 'property': 'patient'}]}
             />
+            <hr/>
+            <div>
+                <Typography variant="h5" sx={{ mt: 1 }}>Patient Data Graph (in json)</Typography>
+                <Link to={`/4_0_0/Patient/${uuid}/$everything?contained=true&_format=json`}>
+                    /4_0_0/Patient/{uuid}/$everything?contained=true&_format=json
+                </Link>
+                <DownloadEverythingButton resourceType="Patient" id={uuid} />
+            </div>
         </>
     );
 };

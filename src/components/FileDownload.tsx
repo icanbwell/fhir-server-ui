@@ -1,12 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Link, Alert, Tooltip } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
 import { saveAs } from 'file-saver';
 import EnvironmentContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 import BaseApi from '../api/baseApi';
 import { useStreamProgress } from '../hooks/useStreamProgress';
-import StreamProgressIndicator from './StreamProgressIndicator';
+import DownloadIconButton from './DownloadIconButton';
 
 interface FileDownloadProps {
     relativeUrl: string;
@@ -72,30 +70,13 @@ const FileDownload: React.FC<FileDownloadProps> = ({ relativeUrl, format }) => {
     };
 
     return (
-        <React.Fragment>
-            {errorMessage && (
-                <Alert severity="error" sx={{ my: 2 }}>
-                    {errorMessage}
-                </Alert>
-            )}
-            {isLoading && <StreamProgressIndicator progress={progress} />}
-            <Tooltip title="Download" arrow>
-                <Link
-                    component="button"
-                    onClick={downloadFile}
-                    disabled={isLoading}
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        cursor: isLoading ? 'not-allowed' : 'pointer',
-                        opacity: isLoading ? 0.5 : 1,
-                    }}
-                >
-                    <DownloadIcon fontSize="small" />
-                </Link>
-            </Tooltip>
-        </React.Fragment>
+        <DownloadIconButton
+            tooltip="Download"
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+            progress={progress}
+            onClick={downloadFile}
+        />
     );
 };
 

@@ -15,6 +15,7 @@ import { TPerson } from '../../types/resources/Person';
 // Import all the partial resource
 import Partials from '../../partials';
 import UserContext from '../../context/UserContext';
+import DownloadEverythingButton from '../../components/DownloadEverythingButton';
 import { IdentifierSystem } from '../../utils/identifierSystem';
 
 const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
@@ -363,6 +364,7 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                 <Link to={`/4_0_0/Person/${uuid}/$everything?contained=true&_format=json`}>
                     /4_0_0/Person/{uuid}/$everything?contained=true&_format=json
                 </Link>
+                <DownloadEverythingButton resourceType="Person" id={uuid} />
             </div>
             { userDetails?.isAdmin && (
                 <>

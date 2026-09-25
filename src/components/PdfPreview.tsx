@@ -57,6 +57,7 @@ const PdfPreview: React.FC<PdfPreviewProps> = ({ blob }) => {
         <Box ref={containerRef} sx={{ width: '100%' }}>
             <Document
                 file={blob}
+                suspense={false}
                 loading={<Typography color="text.secondary">Loading PDF…</Typography>}
                 onLoadSuccess={({ numPages: loadedPages }) => setNumPages(loadedPages)}
                 onLoadError={() => setError('Failed to render this PDF — use Download instead.')}

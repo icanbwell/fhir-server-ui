@@ -32,6 +32,14 @@ describe('clearDescopeStorage', () => {
         });
     });
 
+    it('removes the last submitted login ID (the email typed into the flow) from both storages', () => {
+        localStorage.setItem('dls_last_submitted_login_id', 'user@example.com');
+        sessionStorage.setItem('dls_last_submitted_login_id', 'user@example.com');
+        clearDescopeStorage();
+        expect(localStorage.getItem('dls_last_submitted_login_id')).toBeNull();
+        expect(sessionStorage.getItem('dls_last_submitted_login_id')).toBeNull();
+    });
+
     it('leaves unrelated keys alone', () => {
         localStorage.setItem('other', 'keep');
         clearDescopeStorage();

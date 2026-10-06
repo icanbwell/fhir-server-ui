@@ -10,6 +10,7 @@ const USER = { username: 'user@example.com', isAdmin: false } as never;
 describe('completeBwellDescopeLogin', () => {
     beforeEach(() => {
         localStorage.clear();
+        sessionStorage.clear();
         mockJwtParser.mockReset();
     });
 
@@ -18,6 +19,13 @@ describe('completeBwellDescopeLogin', () => {
         expect(completeBwellDescopeLogin('jwt-abc')).toBe(USER);
         expect(localStorage.getItem('jwt')).toBe('jwt-abc');
         expect(localStorage.getItem('identityProvider')).toBe('bwelldescope');
+    });
+
+    it('drops the login ID the Descope flow left in sessionStorage once the session is established', () => {
+        sessionStorage.setItem('dls_last_submitted_login_id', 'user@example.com');
+        mockJwtParser.mockReturnValue(USER);
+        completeBwellDescopeLogin('jwt-abc');
+        expect(sessionStorage.getItem('dls_last_submitted_login_id')).toBeNull();
     });
 
     it('replaces stale auth data from another provider', () => {

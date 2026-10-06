@@ -1,6 +1,7 @@
 import { TUserDetails } from '../types/baseTypes';
 import { removeAuthData } from './auth.utils';
 import { BWELL_DESCOPE_PROVIDER } from './bwellDescopeConfig';
+import { clearDescopeStorage } from './descopeStorage';
 import { jwtParser } from './jwtParser';
 import { setLocalData } from './localData.utils';
 
@@ -9,6 +10,7 @@ export const completeBwellDescopeLogin = (sessionJwt: string | undefined): TUser
         return null;
     }
     removeAuthData();
+    clearDescopeStorage();
     setLocalData('jwt', sessionJwt);
     setLocalData('identityProvider', BWELL_DESCOPE_PROVIDER);
     const userDetails = jwtParser();

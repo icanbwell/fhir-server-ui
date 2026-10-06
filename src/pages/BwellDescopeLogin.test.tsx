@@ -102,6 +102,16 @@ describe('BwellDescopeLogin', () => {
         expect(setUserDetails).not.toHaveBeenCalled();
     });
 
+    it('shows a session error instead of failing silently when establishing the session throws', async () => {
+        mockComplete.mockImplementation(() => {
+            throw new Error('QuotaExceededError');
+        });
+        renderPage();
+        await userEvent.click(screen.getByText('ok'));
+        expect(screen.getByText(/session could not be established/i)).toBeInTheDocument();
+        expect(setUserDetails).not.toHaveBeenCalled();
+    });
+
     it('shows an error when the flow succeeds without a session jwt', async () => {
         mockComplete.mockReturnValue(null);
         renderPage();

@@ -64,6 +64,29 @@ describe('auth.utils', () => {
             expect(localStorage.length).toBe(1);
         });
 
+        it('also clears the Descope SDK keys from both storages, so every session-ending path wipes them', () => {
+            const descopeKeys = [
+                'DS',
+                'DSR',
+                'dls_last_user_login_id',
+                'dls_last_user_display_name',
+                'dls_last_submitted_login_id',
+            ];
+            descopeKeys.forEach((key) => {
+                localStorage.setItem(key, 'value');
+                sessionStorage.setItem(key, 'value');
+            });
+            localStorage.setItem('darkMode', 'true');
+
+            removeAuthData();
+
+            descopeKeys.forEach((key) => {
+                expect(localStorage.getItem(key)).toBeNull();
+                expect(sessionStorage.getItem(key)).toBeNull();
+            });
+            expect(localStorage.getItem('darkMode')).toBe('true');
+        });
+
         it('is a no-op that does not throw when nothing is stored', () => {
             expect(() => removeAuthData()).not.toThrow();
             expect(localStorage.length).toBe(0);

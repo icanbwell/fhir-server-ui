@@ -15,6 +15,9 @@ export const removeAuthData = (): void => {
     removeLocalData('id_token');
     removeLocalData('identityProvider');
     removeLocalData('code_verifier');
+    // Descope's SDK keys (some hold the user's login email) must go whenever the session ends,
+    // including the silent token-expiry path, not only on an explicit logout.
+    clearDescopeStorage();
 };
 
 export const logout = async (setUserDetails?: (_userDetails: any) => void): Promise<void> => {
@@ -25,7 +28,6 @@ export const logout = async (setUserDetails?: (_userDetails: any) => void): Prom
             // b.well App / client-credentials auth are direct credentials POSTs with no
             // OIDC end-session endpoint - just clear local state instead of building a logout URL.
             removeAuthData();
-            clearDescopeStorage();
             if (setUserDetails) {
                 setUserDetails(null);
             }

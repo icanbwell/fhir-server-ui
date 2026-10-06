@@ -32,7 +32,14 @@ const BwellDescopeLogin = () => {
     }, []);
 
     const handleSuccess = (event: CustomEvent<{ sessionJwt?: string }>) => {
-        const userDetails = completeBwellDescopeLogin(event.detail?.sessionJwt);
+        let userDetails;
+        try {
+            userDetails = completeBwellDescopeLogin(event.detail?.sessionJwt);
+        } catch {
+            // e.g. localStorage writes blocked (Safari private mode): show the same message
+            // as an unusable token instead of leaving the user on the widget with no feedback.
+            userDetails = null;
+        }
         if (!userDetails) {
             setError(SESSION_ERROR_MESSAGE);
             return;

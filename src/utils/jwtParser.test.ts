@@ -185,4 +185,14 @@ describe('jwtParser', () => {
 
         expect(jwtParser()?.username).toBe('fallback-user');
     });
+
+    it('clears a stored bwelldescope provider that this environment does not configure', () => {
+        mockGetLocalData.mockImplementation((key) => (key === 'identityProvider' ? 'bwelldescope' : null));
+        mockGetAuthInfo.mockImplementation(() => {
+            throw new Error('REACT_APP_AUTH_BWELLDESCOPE_CUSTOM_USERNAME is not defined');
+        });
+
+        expect(jwtParser()).toBeNull();
+        expect(mockRemoveAuthData).toHaveBeenCalledTimes(1);
+    });
 });

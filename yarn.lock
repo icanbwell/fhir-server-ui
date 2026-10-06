@@ -5678,14 +5678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immer@npm:^10.0.3":
-  version: 10.2.0
-  resolution: "immer@npm:10.2.0"
-  checksum: 10c0/35e66b0585b2aec4e85ae7a993f049405f170799ba89d79205bc3fdae2c5bdaa2b1d35f62803d8beee42b7e85c7f7315a6e93b6a5a510c5a46f03dbe63619e87
-  languageName: node
-  linkType: hard
-
-"immer@npm:^11.0.0":
+"immer@npm:^11.0.0, immer@npm:^11.1.9":
   version: 11.1.21
   resolution: "immer@npm:11.1.21"
   checksum: 10c0/0c29182c98d0cea079fc679a198a9bccc4d7d70b528d85f52707e606fbe6fc8fea0a3d583e86ff2d3eb75cd42e25aa359466e8e8edde316db436bb92a917fe84

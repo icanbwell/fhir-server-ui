@@ -58,6 +58,7 @@ const renderPage = () =>
 describe('BwellDescopeLogin', () => {
     beforeEach(() => {
         localStorage.clear();
+        sessionStorage.clear();
         mockComplete.mockReset();
         mockAuthProvider.mockReset();
         setUserDetails.mockReset();
@@ -125,6 +126,20 @@ describe('BwellDescopeLogin', () => {
         await userEvent.click(screen.getByText('fail'));
         expect(screen.getByText(/unable to sign in right now/i)).toBeInTheDocument();
         expect(screen.queryByText(/secret detail/)).not.toBeInTheDocument();
+    });
+
+    it('clears the login email Descope left in sessionStorage when the flow errors', async () => {
+        sessionStorage.setItem('dls_last_submitted_login_id', 'user@example.com');
+        renderPage();
+        await userEvent.click(screen.getByText('fail'));
+        expect(sessionStorage.getItem('dls_last_submitted_login_id')).toBeNull();
+    });
+
+    it('clears the login email Descope left in sessionStorage when the user leaves the page', () => {
+        const { unmount } = renderPage();
+        sessionStorage.setItem('dls_last_submitted_login_id', 'user@example.com');
+        unmount();
+        expect(sessionStorage.getItem('dls_last_submitted_login_id')).toBeNull();
     });
 
     it('redirects without showing the flow when a jwt is already stored', async () => {

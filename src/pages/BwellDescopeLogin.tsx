@@ -9,6 +9,7 @@ import UserContext from '../context/UserContext';
 import { getLocalData } from '../utils/localData.utils';
 import { getBwellDescopeConfig } from '../utils/bwellDescopeConfig';
 import { completeBwellDescopeLogin } from '../utils/bwellDescopeSession';
+import { clearDescopeStorage } from '../utils/descopeStorage';
 
 const NOT_CONFIGURED_MESSAGE =
     'b.well App sign-in is not configured (missing REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID).';
@@ -30,6 +31,10 @@ const BwellDescopeLogin = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // The Descope widget keeps the email typed into the flow in sessionStorage; don't leave it
+    // behind when the user navigates away from the sign-in page.
+    useEffect(() => clearDescopeStorage, []);
 
     const handleSuccess = (event: CustomEvent<{ sessionJwt?: string }>) => {
         let userDetails;
@@ -53,6 +58,7 @@ const BwellDescopeLogin = () => {
     const handleError = (event: CustomEvent<Record<string, unknown>>) => {
         // Log only the error type, never the full detail, which can echo user input.
         console.error('b.well Descope login failed', { type: event.detail?.errorType });
+        clearDescopeStorage();
         setError(GENERIC_ERROR_MESSAGE);
     };
 

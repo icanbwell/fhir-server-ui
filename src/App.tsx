@@ -23,6 +23,7 @@ import { TUserDetails } from './types/baseTypes';
 import { jwtParser } from './utils/jwtParser';
 import IdentityProviderSelection from './pages/IdentityProviderSelection';
 import BwellAppLogin from './pages/BwellAppLogin';
+import BwellDescopeLogin from './pages/BwellDescopeLogin';
 import ClientCredentialsLogin from './pages/ClientCredentialsLogin';
 import { useLocation } from 'react-router';
 import NotFoundPage from './pages/NotFoundPage';
@@ -49,6 +50,7 @@ function Root() {
                 </Route>
                 <Route key="authcallback" path="/authcallback" element={<Auth />} />
                 <Route key="bwellLogin" path="/bwell-login" element={<BwellAppLogin />} />
+                <Route key="bwellDescopeLogin" path="/bwell-descope-login" element={<BwellDescopeLogin />} />
                 <Route key="clientCredentialsLogin" path="/client-credentials-login" element={<ClientCredentialsLogin />} />
                 <Route
                     element={

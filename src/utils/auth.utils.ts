@@ -1,8 +1,14 @@
 import { getLocalData, removeLocalData } from './localData.utils';
 import { IAuthService } from '../services/IAuthService';
 import AuthServiceFactory from '../services/AuthServiceFactory';
+import { clearDescopeStorage } from './descopeStorage';
 
-const CREDENTIALS_BASED_PROVIDERS = new Set(['bwellapp', 'cognitocc', 'descopecc']);
+const CREDENTIALS_BASED_PROVIDERS = new Set([
+    'bwellapp',
+    'bwelldescope',
+    'cognitocc',
+    'descopecc',
+]);
 
 export const removeAuthData = (): void => {
     removeLocalData('jwt');
@@ -19,6 +25,7 @@ export const logout = async (setUserDetails?: (_userDetails: any) => void): Prom
             // b.well App / client-credentials auth are direct credentials POSTs with no
             // OIDC end-session endpoint - just clear local state instead of building a logout URL.
             removeAuthData();
+            clearDescopeStorage();
             if (setUserDetails) {
                 setUserDetails(null);
             }

@@ -30,6 +30,7 @@ const makeAuthService = (logoutUrl: string) => ({
 describe('auth.utils', () => {
     beforeEach(() => {
         localStorage.clear();
+        sessionStorage.clear();
         mockGetAuthService.mockReset();
         mockReplace = vi.fn();
         Object.defineProperty(window, 'location', {
@@ -198,6 +199,24 @@ describe('auth.utils', () => {
             expect(mockGetAuthService).toHaveBeenCalledTimes(1);
             expect(authService.getLogoutUrlAsync).toHaveBeenCalledWith('BWELLAPP');
             expect(mockReplace).toHaveBeenCalledWith('https://idp.example.com/logout');
+        });
+
+        it('logout for bwelldescope clears auth data and Descope storage without an OIDC logout URL', async () => {
+            localStorage.setItem('identityProvider', 'bwelldescope');
+            localStorage.setItem('jwt', 'jwt-value');
+            localStorage.setItem('DS', 'descope-session');
+            sessionStorage.setItem('DSR', 'descope-refresh');
+            const setUserDetails = vi.fn();
+
+            await logout(setUserDetails);
+
+            expect(localStorage.getItem('jwt')).toBeNull();
+            expect(localStorage.getItem('identityProvider')).toBeNull();
+            expect(localStorage.getItem('DS')).toBeNull();
+            expect(sessionStorage.getItem('DSR')).toBeNull();
+            expect(setUserDetails).toHaveBeenCalledWith(null);
+            expect(mockGetAuthService).not.toHaveBeenCalled();
+            expect(mockReplace).toHaveBeenCalledWith(ORIGIN);
         });
     });
 });

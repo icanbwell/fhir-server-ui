@@ -77,6 +77,8 @@ const BwellDescopeLogin = () => {
                         projectId={config.projectId}
                         baseUrl={config.baseUrl}
                         baseStaticUrl={config.baseStaticUrl}
+                        persistTokens={false}
+                        storeLastAuthenticatedUser={false}
                     >
                         <Descope
                             flowId={config.flowId}

@@ -7,11 +7,17 @@ import UserContext from '../context/UserContext';
 import { ThemeContextProvider } from '../context/ThemeContext';
 import { APP_ENV } from '../runtimeEnv';
 
-const { mockComplete } = vi.hoisted(() => ({ mockComplete: vi.fn() }));
+const { mockComplete, mockAuthProvider } = vi.hoisted(() => ({
+    mockComplete: vi.fn(),
+    mockAuthProvider: vi.fn(),
+}));
 vi.mock('../utils/bwellDescopeSession', () => ({ completeBwellDescopeLogin: mockComplete }));
 
 vi.mock('@descope/react-sdk', () => ({
-    AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    AuthProvider: (props: { children: React.ReactNode }) => {
+        mockAuthProvider(props);
+        return <>{props.children}</>;
+    },
     Descope: ({
         flowId,
         onSuccess,
@@ -53,6 +59,7 @@ describe('BwellDescopeLogin', () => {
     beforeEach(() => {
         localStorage.clear();
         mockComplete.mockReset();
+        mockAuthProvider.mockReset();
         setUserDetails.mockReset();
         APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID = 'P-test';
         Reflect.deleteProperty(APP_ENV, 'REACT_APP_AUTH_BWELLDESCOPE_FLOW_ID');
@@ -68,6 +75,14 @@ describe('BwellDescopeLogin', () => {
     it('renders the flow with the default flow id', () => {
         renderPage();
         expect(screen.getByTestId('descope')).toHaveAttribute('data-flow', 'bwell-parent-flow');
+    });
+
+    it('stops the Descope SDK persisting tokens and the last authenticated user', () => {
+        renderPage();
+        expect(mockAuthProvider).toHaveBeenCalled();
+        const props = mockAuthProvider.mock.calls[0][0];
+        expect(props.persistTokens).toBe(false);
+        expect(props.storeLastAuthenticatedUser).toBe(false);
     });
 
     it('sets the user and navigates home after a successful flow', async () => {

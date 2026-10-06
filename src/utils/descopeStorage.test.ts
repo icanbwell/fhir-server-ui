@@ -19,6 +19,19 @@ describe('clearDescopeStorage', () => {
         expect(sessionStorage.getItem('DSR')).toBeNull();
     });
 
+    it('removes the stored last-authenticated-user keys from both storages', () => {
+        const keys = ['dls_last_user_login_id', 'dls_last_user_display_name'];
+        keys.forEach((key) => {
+            localStorage.setItem(key, 'user@example.com');
+            sessionStorage.setItem(key, 'user@example.com');
+        });
+        clearDescopeStorage();
+        keys.forEach((key) => {
+            expect(localStorage.getItem(key)).toBeNull();
+            expect(sessionStorage.getItem(key)).toBeNull();
+        });
+    });
+
     it('leaves unrelated keys alone', () => {
         localStorage.setItem('other', 'keep');
         clearDescopeStorage();

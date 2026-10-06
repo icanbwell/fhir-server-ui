@@ -73,8 +73,10 @@ matches today's: a `jwt` in localStorage, `identityProvider` set, and `UserConte
 - Session refresh: Descope session JWTs are short-lived. Decide whether to keep the refresh token
   and call the Descope SDK's refresh (as ui-platform does), or require re-login on expiry as the
   legacy flow does. Default for the first version: re-login on expiry, same as today.
-- Logout: clear `jwt`, `identityProvider`, and call the Descope SDK `logout()` to revoke the
-  refresh token and clear Descope's own session storage (`DS`, `DSR`).
+- Logout: the page configures the Descope SDK not to persist tokens or the last-authenticated
+  user, so the refresh token is never stored in the browser and there is nothing to revoke in
+  v1. Logout clears `jwt`, `identityProvider` and any Descope keys (`DS`, `DSR`,
+  `dls_last_user_*`) as defense in depth.
 
 ### Per-environment selection (no environment checks in code)
 

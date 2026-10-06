@@ -9,13 +9,15 @@ import IdentityProviderSelection from './IdentityProviderSelection';
 const renderWith = (providers: string) =>
     render(
         <ThemeContextProvider>
-            <EnvContext.Provider value={
+            <EnvContext.Provider
+                value={
                     {
                         AUTH_PROVIDERS: providers,
                         FHIR_APP_VERSION: 'test',
                         getFhirServerVersion: () => 'test',
                     } as never
-                }>
+                }
+            >
                 <MemoryRouter initialEntries={['/select-idp']}>
                     <Routes>
                         <Route path="/select-idp" element={<IdentityProviderSelection />} />

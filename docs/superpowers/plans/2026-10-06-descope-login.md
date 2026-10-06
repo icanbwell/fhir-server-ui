@@ -19,7 +19,7 @@
 - The legacy `bwellapp` page, service, tests and env vars must not change behavior.
 - No PHI or real credentials in tests, fixtures, logs or docs; use synthetic values (`user@example.com`, `jwt-abc`).
 - Client config is read from `APP_ENV` (`src/runtimeEnv.ts`) via `REACT_APP_*` names; never read `import.meta.env` directly.
-- `@descope/react-sdk` is a new dependency: Task 2 is blocked until it is approved (`approved-tech.yaml` / Tech Design Review) and resolvable through the JFrog-backed `bwell-fhir-server-ui` wrapper.
+- `@descope/react-sdk` is new to this repo but already used in icanbwell (ui-platform, same `^2.30.9` range). No `approved-tech.yaml` copy lists Descope: Task 2 waits for EA to confirm that existing org use suffices or that a Tech Design Review is needed, and the package must be resolvable through the JFrog-backed `bwell-fhir-server-ui` wrapper.
 
 ## Review Focus
 
@@ -193,7 +193,7 @@ git commit -m "BAI-1053 add bwelldescope config helper and env docs"
 
 - [ ] **Step 1: Confirm approval**
 
-Check the repo's `policies/approved-tech.yaml` (the `bwell-fhir-server-ui` copy has no Descope entry) and the Tech Design Review outcome for BAI-1053. Do not continue without it. Record the approval link in the PR description.
+Check the repo's `policies/approved-tech.yaml` (the `bwell-fhir-server-ui` copy has no Descope entry; ui-platform already uses the SDK) and get EA's answer on whether that precedent suffices or a Tech Design Review is needed for BAI-1053. Do not continue without it. Record the outcome link in the PR description.
 
 - [ ] **Step 2: Install, using the version ui-platform pins**
 

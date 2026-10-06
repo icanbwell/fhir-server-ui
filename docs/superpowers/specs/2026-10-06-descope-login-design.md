@@ -124,10 +124,12 @@ rather than a clean 4xx, so the UI cannot tell "wrong password" from "wrong syst
 3. **Descope project config.** Project ID, flow ID and tenant for `fhir-ui` (is
    `bwell-parent-flow` correct?), and that the flow is allowed from the `fhir-ui.dev.bwell.zone`
    and `fhir-ui.dev-use1.bwell.zone` origins (Descope approved domains / CORS).
-4. **New dependency.** `@descope/react-sdk` is not in this repo's `package.json`, and the copy of
-   `policies/approved-tech.yaml` in `bwell-fhir-server-ui` has no Descope entry. The org rule is
-   to check `approved-tech.yaml` before adding a significant library; this likely needs a Tech
-   Design Review. ui-platform already uses it. Dependencies here resolve through JFrog via the
+4. **Dependency approval.** `@descope/react-sdk` is new to this repo's `package.json` but already
+   used elsewhere in icanbwell: ui-platform (`^2.30.9`, the range this design uses) and the
+   kill-the-clipboard-scanner frontends. None of the `policies/approved-tech.yaml` copies checked
+   (including `bwell-fhir-server-ui`) list Descope. The org rule is to check `approved-tech.yaml`
+   before adding a significant library, so ask EA whether existing org use is enough or a Tech
+   Design Review is still needed. Dependencies here resolve through JFrog via the
    `bwell-fhir-server-ui` wrapper repo, so the package must be available there.
 5. **Tenant concept.** The legacy form's `Tenant` is a client key. How a Descope tenant or flow
    maps to it for this UI is undecided.

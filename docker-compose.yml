@@ -52,6 +52,21 @@ services:
       REACT_APP_AUTH_BWELLAPP_CLIENT_ID: 'bwellapp'
       REACT_APP_AUTH_BWELLAPP_TOKEN_FOR_USER_DETAILS: 'jwt'
       REACT_APP_AUTH_BWELLAPP_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
+      # Descope-based b.well App sign-in - add 'bwelldescope' to REACT_APP_AUTH_PROVIDERS in
+      # .env to enable it locally, and set REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID (required)
+      # plus the optional FLOW_ID/TENANT_ID/BASE_URL/BASE_STATIC_URL in .env.
+      # http://localhost:5051 must be in the Descope project's approved domains.
+      REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID: ${REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID:-}
+      REACT_APP_AUTH_BWELLDESCOPE_FLOW_ID: ${REACT_APP_AUTH_BWELLDESCOPE_FLOW_ID:-}
+      REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID: ${REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID:-}
+      REACT_APP_AUTH_BWELLDESCOPE_BASE_URL: ${REACT_APP_AUTH_BWELLDESCOPE_BASE_URL:-}
+      REACT_APP_AUTH_BWELLDESCOPE_BASE_STATIC_URL: ${REACT_APP_AUTH_BWELLDESCOPE_BASE_STATIC_URL:-}
+      REACT_APP_AUTH_BWELLDESCOPE_CUSTOM_USERNAME: 'email'
+      REACT_APP_AUTH_BWELLDESCOPE_CUSTOM_GROUP: 'roles'
+      REACT_APP_AUTH_BWELLDESCOPE_CUSTOM_SCOPE: 'scope'
+      REACT_APP_AUTH_BWELLDESCOPE_CLIENT_ID: 'bwelldescope'
+      REACT_APP_AUTH_BWELLDESCOPE_TOKEN_FOR_USER_DETAILS: 'jwt'
+      REACT_APP_AUTH_BWELLDESCOPE_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
       # Client-credentials sign-in (clientcredentials is enabled in REACT_APP_AUTH_PROVIDERS
       # above) - the login page lets you pick Cognito or Descope; set
       # REACT_APP_AUTH_COGNITOCC_TOKEN_URL in .env for whichever provider(s) you want to use

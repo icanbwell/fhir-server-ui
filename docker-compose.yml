@@ -20,7 +20,7 @@ services:
       REACT_APP_BAILEY_MODEL: ${REACT_APP_BAILEY_MODEL}
       REACT_APP_AWS_REGION: 'us-east-1'
       # list of AuthProviders - add 'okta' here in .env to enable Okta sign-in locally
-      REACT_APP_AUTH_PROVIDERS: ${REACT_APP_AUTH_PROVIDERS:-cognito,bwellapp,bwelldescope,clientcredentials}
+      REACT_APP_AUTH_PROVIDERS: ${REACT_APP_AUTH_PROVIDERS:-cognito,bwelldescope,clientcredentials}
       # Each AuthProvider has its own set of environment variables
       REACT_APP_AUTH_COGNITO_CUSTOM_USERNAME: 'cognito:username'
       REACT_APP_AUTH_COGNITO_CUSTOM_GROUP: 'cognito:groups'

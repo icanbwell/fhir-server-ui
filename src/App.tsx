@@ -15,6 +15,8 @@ import Auth from './pages/Auth';
 import FhirRoutes from './routes/fhirRoutes';
 import AdminRoutes from './routes/adminRoutes';
 const AdminIndexPage = React.lazy(() => import('./admin/index'));
+// Lazy so the Descope SDK (and its fingerprinting dependency) only loads on this route.
+const BwellDescopeLogin = React.lazy(() => import('./pages/BwellDescopeLogin'));
 import EnvContext from './context/EnvironmentContext';
 import UserContext from './context/UserContext';
 import LastRequestContext, { TLastRequest, TRequestInfo } from './context/LastRequestContext';
@@ -49,6 +51,7 @@ function Root() {
                 </Route>
                 <Route key="authcallback" path="/authcallback" element={<Auth />} />
                 <Route key="bwellLogin" path="/bwell-login" element={<BwellAppLogin />} />
+                <Route key="bwellDescopeLogin" path="/bwell-descope-login" element={<BwellDescopeLogin />} />
                 <Route key="clientCredentialsLogin" path="/client-credentials-login" element={<ClientCredentialsLogin />} />
                 <Route
                     element={

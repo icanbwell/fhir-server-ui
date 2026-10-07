@@ -8,11 +8,13 @@ import { setLocalData } from '../utils/localData.utils';
 
 const PROVIDER_LABELS: Record<string, string> = Object.assign(Object.create(null), {
     bwellapp: 'b.well App',
+    bwelldescope: 'b.well App',
     clientcredentials: 'Client Credentials',
 });
 
 const PROVIDER_ROUTES: Record<string, string> = Object.assign(Object.create(null), {
     bwellapp: '/bwell-login',
+    bwelldescope: '/bwell-descope-login',
     clientcredentials: '/client-credentials-login',
 });
 

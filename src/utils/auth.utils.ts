@@ -1,14 +1,23 @@
 import { getLocalData, removeLocalData } from './localData.utils';
 import { IAuthService } from '../services/IAuthService';
 import AuthServiceFactory from '../services/AuthServiceFactory';
+import { clearDescopeStorage } from './descopeStorage';
 
-const CREDENTIALS_BASED_PROVIDERS = new Set(['bwellapp', 'cognitocc', 'descopecc']);
+const CREDENTIALS_BASED_PROVIDERS = new Set([
+    'bwellapp',
+    'bwelldescope',
+    'cognitocc',
+    'descopecc',
+]);
 
 export const removeAuthData = (): void => {
     removeLocalData('jwt');
     removeLocalData('id_token');
     removeLocalData('identityProvider');
     removeLocalData('code_verifier');
+    // Descope's SDK keys (some hold the user's login email) must go whenever the session ends,
+    // including the silent token-expiry path, not only on an explicit logout.
+    clearDescopeStorage();
 };
 
 export const logout = async (setUserDetails?: (_userDetails: any) => void): Promise<void> => {

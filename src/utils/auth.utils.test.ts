@@ -30,6 +30,7 @@ const makeAuthService = (logoutUrl: string) => ({
 describe('auth.utils', () => {
     beforeEach(() => {
         localStorage.clear();
+        sessionStorage.clear();
         mockGetAuthService.mockReset();
         mockReplace = vi.fn();
         Object.defineProperty(window, 'location', {
@@ -61,6 +62,29 @@ describe('auth.utils', () => {
             expect(localStorage.getItem('code_verifier')).toBeNull();
             expect(localStorage.getItem('darkMode')).toBe('true');
             expect(localStorage.length).toBe(1);
+        });
+
+        it('also clears the Descope SDK keys from both storages, so every session-ending path wipes them', () => {
+            const descopeKeys = [
+                'DS',
+                'DSR',
+                'dls_last_user_login_id',
+                'dls_last_user_display_name',
+                'dls_last_submitted_login_id',
+            ];
+            descopeKeys.forEach((key) => {
+                localStorage.setItem(key, 'value');
+                sessionStorage.setItem(key, 'value');
+            });
+            localStorage.setItem('darkMode', 'true');
+
+            removeAuthData();
+
+            descopeKeys.forEach((key) => {
+                expect(localStorage.getItem(key)).toBeNull();
+                expect(sessionStorage.getItem(key)).toBeNull();
+            });
+            expect(localStorage.getItem('darkMode')).toBe('true');
         });
 
         it('is a no-op that does not throw when nothing is stored', () => {
@@ -198,6 +222,24 @@ describe('auth.utils', () => {
             expect(mockGetAuthService).toHaveBeenCalledTimes(1);
             expect(authService.getLogoutUrlAsync).toHaveBeenCalledWith('BWELLAPP');
             expect(mockReplace).toHaveBeenCalledWith('https://idp.example.com/logout');
+        });
+
+        it('logout for bwelldescope clears auth data and Descope storage without an OIDC logout URL', async () => {
+            localStorage.setItem('identityProvider', 'bwelldescope');
+            localStorage.setItem('jwt', 'jwt-value');
+            localStorage.setItem('DS', 'descope-session');
+            sessionStorage.setItem('DSR', 'descope-refresh');
+            const setUserDetails = vi.fn();
+
+            await logout(setUserDetails);
+
+            expect(localStorage.getItem('jwt')).toBeNull();
+            expect(localStorage.getItem('identityProvider')).toBeNull();
+            expect(localStorage.getItem('DS')).toBeNull();
+            expect(sessionStorage.getItem('DSR')).toBeNull();
+            expect(setUserDetails).toHaveBeenCalledWith(null);
+            expect(mockGetAuthService).not.toHaveBeenCalled();
+            expect(mockReplace).toHaveBeenCalledWith(ORIGIN);
         });
     });
 });

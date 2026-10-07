@@ -1123,6 +1123,265 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@descope/access-key-management-widget@npm:0.9.9":
+  version: 0.9.9
+  resolution: "@descope/access-key-management-widget@npm:0.9.9"
+  dependencies:
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/1bbf0bc2c60a7c852c80d728e3940d4c015559b4637333647d92df1a0372f281b894a5994ba0794a6eafe35ea2c7aa01d57657548c91efa0351feeb4b6e2bb45
+  languageName: node
+  linkType: hard
+
+"@descope/applications-portal-widget@npm:0.8.9":
+  version: 0.8.9
+  resolution: "@descope/applications-portal-widget@npm:0.8.9"
+  dependencies:
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/783bbd7a721a7263129b101630634a3b395de27b6843d8df2ee29eb0e692e15433208d0268bd810ed7427c4eb25089d5e9a5aa08d60ecb8740e6e290c6d849f2
+  languageName: node
+  linkType: hard
+
+"@descope/audit-management-widget@npm:0.8.9":
+  version: 0.8.9
+  resolution: "@descope/audit-management-widget@npm:0.8.9"
+  dependencies:
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/508db9721d0ee75751e07b41267b7734a1775603da4b4afba740666cc9655c7a6dbaf38323d8e4e468c578e95189ac0998a840007a0ef8d1408565ec62cf804e
+  languageName: node
+  linkType: hard
+
+"@descope/core-js-sdk@npm:2.67.0":
+  version: 2.67.0
+  resolution: "@descope/core-js-sdk@npm:2.67.0"
+  dependencies:
+    jwt-decode: "npm:4.0.0"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/c889a37c9b36cce3b0006ffd2bd8f428bc8f22b1a361211c26e9e111ba4df216233ecc47d1d2cc2991c4b8993d151fd02b64eb50269c551c9604745961feb26d
+  languageName: node
+  linkType: hard
+
+"@descope/escape-markdown@npm:0.1.6":
+  version: 0.1.6
+  resolution: "@descope/escape-markdown@npm:0.1.6"
+  checksum: 10c0/4ded6be22bc1db83767fcc951f1d3b997d095212f1a43b0fdae933c1cc0c66e9a483c0e155a7f041fce297eed87d2e510d64073c1fc1a25bfcc29d351d90db9c
+  languageName: node
+  linkType: hard
+
+"@descope/outbound-applications-widget@npm:0.5.8":
+  version: 0.5.8
+  resolution: "@descope/outbound-applications-widget@npm:0.5.8"
+  dependencies:
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-component": "npm:3.70.6"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/49d68f22635b48cafdfd9ecd7769c274f26be120ac9555b7ffc7a5cf1caf104ab22835e39c3c7e0cdece0cc4df5768af5a47fd40ae239a703cabc56b1d36e736
+  languageName: node
+  linkType: hard
+
+"@descope/react-sdk@npm:^2.30.9":
+  version: 2.30.10
+  resolution: "@descope/react-sdk@npm:2.30.10"
+  dependencies:
+    "@descope/access-key-management-widget": "npm:0.9.9"
+    "@descope/applications-portal-widget": "npm:0.8.9"
+    "@descope/audit-management-widget": "npm:0.8.9"
+    "@descope/core-js-sdk": "npm:2.67.0"
+    "@descope/outbound-applications-widget": "npm:0.5.8"
+    "@descope/role-management-widget": "npm:0.9.9"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/tenant-profile-widget": "npm:0.8.8"
+    "@descope/user-management-widget": "npm:0.16.0"
+    "@descope/user-profile-widget": "npm:0.15.0"
+    "@descope/web-component": "npm:3.70.6"
+    "@descope/web-js-sdk": "npm:1.51.3"
+  peerDependencies:
+    "@types/react": ">=16"
+    react: ">=16"
+  checksum: 10c0/40a7e02f502bbf9c7dc4103f9edf967da35242c68ad15c334559ba0be7c40b8eba8f2f38d49c63a87b97528be6becbbefca538c0144e724fa54d3092872796a7
+  languageName: node
+  linkType: hard
+
+"@descope/role-management-widget@npm:0.9.9":
+  version: 0.9.9
+  resolution: "@descope/role-management-widget@npm:0.9.9"
+  dependencies:
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/ea079dc0d7878d9d250b11a6b5b2993e3e685703a4d7d377ab70dadc038fbd5d9123f477f15297f36bdec478859bf2e284abd0739a1b0a50a28c793e25ffabab
+  languageName: node
+  linkType: hard
+
+"@descope/sdk-component-drivers@npm:0.14.1":
+  version: 0.14.1
+  resolution: "@descope/sdk-component-drivers@npm:0.14.1"
+  dependencies:
+    "@descope/sdk-helpers": "npm:0.9.0"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/16f212b333591be21e7a648e0bf7cb4527f2e085c8bafedf5617816db22a4e7d8b58eed1642f9ac01bbcf92db155289525bcbfa14a27cea0dec9ebb72e83c530
+  languageName: node
+  linkType: hard
+
+"@descope/sdk-helpers@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@descope/sdk-helpers@npm:0.9.0"
+  dependencies:
+    tslib: "npm:2.8.1"
+  checksum: 10c0/189c8272709ac19d36b1859bcef1a8d33b625c250cb77d022fa89032fe81f54f40c9c1ad95056a0f2e65d1c7f6ca3d249b76b7a7fd3fc180aadb161aab007554
+  languageName: node
+  linkType: hard
+
+"@descope/sdk-mixins@npm:0.23.2":
+  version: 0.23.2
+  resolution: "@descope/sdk-mixins@npm:0.23.2"
+  dependencies:
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    tslib: "npm:2.8.1"
+  peerDependencies:
+    "@reduxjs/toolkit": ^2.0.1
+    immer: ^10.0.3
+    redux: 5.0.1
+    redux-thunk: 3.1.0
+  checksum: 10c0/b7c2358758ed57434b0663e43a72be5d4612f323add908ca022a4355c855d4967ee2c81588d7873fff597b905fdc6bb09916af46e9aa2982d51e20d729613616
+  languageName: node
+  linkType: hard
+
+"@descope/tenant-profile-widget@npm:0.8.8":
+  version: 0.8.8
+  resolution: "@descope/tenant-profile-widget@npm:0.8.8"
+  dependencies:
+    "@descope/core-js-sdk": "npm:2.67.0"
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-component": "npm:3.70.6"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  dependenciesMeta:
+    "@descope/core-js-sdk":
+      optional: true
+  checksum: 10c0/cba8968a1299b6c1406bec6e0a4b57a99051cf0b1adbf128c6b4ef437b54e4439b45aac46268fe37d5fe5b25a506170c8e5de49416824571e6a944e95c49c4f7
+  languageName: node
+  linkType: hard
+
+"@descope/user-management-widget@npm:0.16.0":
+  version: 0.16.0
+  resolution: "@descope/user-management-widget@npm:0.16.0"
+  dependencies:
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-component": "npm:3.70.6"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    libphonenumber-js: "npm:1.11.17"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/8f1330da2ce8d5c56521ab0bda006ed1370350db9eba766a8032e5f2877032aa057238ae5b82be385f602df7f1eb289122aa2b049b87a41068fadae110ad6e59
+  languageName: node
+  linkType: hard
+
+"@descope/user-profile-widget@npm:0.15.0":
+  version: 0.15.0
+  resolution: "@descope/user-profile-widget@npm:0.15.0"
+  dependencies:
+    "@descope/core-js-sdk": "npm:2.67.0"
+    "@descope/sdk-component-drivers": "npm:0.14.1"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-component": "npm:3.70.6"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    immer: "npm:^10.0.3"
+    redux: "npm:5.0.1"
+    redux-thunk: "npm:3.1.0"
+    reselect: "npm:5.1.1"
+    tslib: "npm:2.8.1"
+  dependenciesMeta:
+    "@descope/core-js-sdk":
+      optional: true
+  checksum: 10c0/253ee5cecb3b694dc1b032e08f1516eca732a871e6e07f302375d9897508f71ac77083db7907ce1d45e8a28f0f0d7bb4a304002dc459f0827440230ea9b018ee
+  languageName: node
+  linkType: hard
+
+"@descope/web-component@npm:3.70.6":
+  version: 3.70.6
+  resolution: "@descope/web-component@npm:3.70.6"
+  dependencies:
+    "@descope/escape-markdown": "npm:0.1.6"
+    "@descope/sdk-helpers": "npm:0.9.0"
+    "@descope/sdk-mixins": "npm:0.23.2"
+    "@descope/web-js-sdk": "npm:1.51.3"
+    "@fingerprintjs/fingerprintjs-pro": "npm:3.11.6"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/01796878cd7b727e96a8243cf21573e1c5e0ed77b30f72bde708489160f4e2a9f215b0f44e640fcdd4428ac8f7e65b26dc037c0b101536275618d1f1c64b4d4c
+  languageName: node
+  linkType: hard
+
+"@descope/web-js-sdk@npm:1.51.3":
+  version: 1.51.3
+  resolution: "@descope/web-js-sdk@npm:1.51.3"
+  dependencies:
+    "@descope/core-js-sdk": "npm:2.67.0"
+    "@fingerprintjs/fingerprintjs-pro": "npm:3.11.6"
+    js-cookie: "npm:3.0.8"
+    jwt-decode: "npm:4.0.0"
+    tslib: "npm:2.8.1"
+  checksum: 10c0/5641d2e9cde28055d2678136c2bda6f68c47987c78401f95af1e8a6399a95c684141c3fafa0f493c22daa0b12aae166817e73caa5d00cf574e5b8bf5dc295225
+  languageName: node
+  linkType: hard
+
 "@emotion/babel-plugin@npm:^11.13.5":
   version: 11.13.5
   resolution: "@emotion/babel-plugin@npm:11.13.5"
@@ -1342,6 +1601,15 @@ __metadata:
     "@noble/hashes":
       optional: true
   checksum: 10c0/333056a6953bbf875d9f3b86c32314de29458d842e5f56f6ef8034b18c2d9660184550093d1bae5de0064043d5e23f54cc03148798d9d29cf5167ac03f2e9f8c
+  languageName: node
+  linkType: hard
+
+"@fingerprintjs/fingerprintjs-pro@npm:3.11.6":
+  version: 3.11.6
+  resolution: "@fingerprintjs/fingerprintjs-pro@npm:3.11.6"
+  dependencies:
+    tslib: "npm:^2.4.1"
+  checksum: 10c0/47b15c3f8730c19a139e0e5f534f237bd19a6358601237b3a28a0ac89e6bcfb668cae79d8e5fe6d4458dfba49a4cd39b1760815f64a46d1e4368055ec101af9a
   languageName: node
   linkType: hard
 
@@ -2306,6 +2574,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@reduxjs/toolkit@npm:^2.0.1":
+  version: 2.13.0
+  resolution: "@reduxjs/toolkit@npm:2.13.0"
+  dependencies:
+    "@standard-schema/spec": "npm:^1.0.0"
+    "@standard-schema/utils": "npm:^0.3.0"
+    immer: "npm:^11.0.0"
+    redux: "npm:^5.0.1"
+    redux-thunk: "npm:^3.1.0"
+    reselect: "npm:^5.1.0"
+  peerDependencies:
+    react: ^16.9.0 || ^17.0.0 || ^18 || ^19
+    react-redux: ^7.2.1 || ^8.1.3 || ^9.0.0
+  peerDependenciesMeta:
+    react:
+      optional: true
+    react-redux:
+      optional: true
+  checksum: 10c0/9c8a75adab87a6c172754ff0308ddd17cf1c202e2e8144e56fb124b126b3959f088b533bb66ebc41a7a7143658c6b5c2e588efa2392f62090e374ae0dc249159
+  languageName: node
+  linkType: hard
+
 "@rolldown/binding-android-arm64@npm:1.2.2":
   version: 1.2.2
   resolution: "@rolldown/binding-android-arm64@npm:1.2.2"
@@ -2602,10 +2892,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@standard-schema/spec@npm:^1.1.0":
+"@standard-schema/spec@npm:^1.0.0, @standard-schema/spec@npm:^1.1.0":
   version: 1.1.0
   resolution: "@standard-schema/spec@npm:1.1.0"
   checksum: 10c0/d90f55acde4b2deb983529c87e8025fa693de1a5e8b49ecc6eb84d1fd96328add0e03d7d551442156c7432fd78165b2c26ff561b970a9a881f046abb78d6a526
+  languageName: node
+  linkType: hard
+
+"@standard-schema/utils@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@standard-schema/utils@npm:0.3.0"
+  checksum: 10c0/6eb74cd13e52d5fc74054df51e37d947ef53f3ab9e02c085665dcca3c38c60ece8d735cebbdf18fbb13c775fbcb9becb3f53109b0e092a63f0f7389ce0993fd0
   languageName: node
   linkType: hard
 
@@ -4857,6 +5154,7 @@ __metadata:
   resolution: "fhir-server-ui@workspace:."
   dependencies:
     "@cucumber/cucumber": "npm:^13.2.0"
+    "@descope/react-sdk": "npm:^2.30.9"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@fontsource/open-sans": "npm:^5.3.0"
@@ -5377,6 +5675,13 @@ __metadata:
   version: 7.0.6
   resolution: "ignore@npm:7.0.6"
   checksum: 10c0/fc01ef1d14efbe003439b60538726351e81483d1b6f55bdbb3a4465c6346d9481afad5b350dfbd604ddd7049618ef9093ff26dc147984aabc303c56ba53ea3b5
+  languageName: node
+  linkType: hard
+
+"immer@npm:^11.0.0, immer@npm:^11.1.9":
+  version: 11.1.21
+  resolution: "immer@npm:11.1.21"
+  checksum: 10c0/0c29182c98d0cea079fc679a198a9bccc4d7d70b528d85f52707e606fbe6fc8fea0a3d583e86ff2d3eb75cd42e25aa359466e8e8edde316db436bb92a917fe84
   languageName: node
   linkType: hard
 
@@ -5910,6 +6215,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-cookie@npm:3.0.8":
+  version: 3.0.8
+  resolution: "js-cookie@npm:3.0.8"
+  checksum: 10c0/421912a4a55535bda32b3059835864e1182c3af5b4516df00a060edc1fa5a53d38bb8d5a91d5d305e396206f4fd11e829f17850aa5aa8164118c04d8ebf1ff5d
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^10.0.0":
   version: 10.0.0
   resolution: "js-tokens@npm:10.0.0"
@@ -6027,7 +6339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jwt-decode@npm:^4.0.0":
+"jwt-decode@npm:4.0.0, jwt-decode@npm:^4.0.0":
   version: 4.0.0
   resolution: "jwt-decode@npm:4.0.0"
   checksum: 10c0/de75bbf89220746c388cf6a7b71e56080437b77d2edb29bae1c2155048b02c6b8c59a3e5e8d6ccdfd54f0b8bda25226e491a4f1b55ac5f8da04cfbadec4e546c
@@ -6059,6 +6371,13 @@ __metadata:
     prelude-ls: "npm:^1.2.1"
     type-check: "npm:~0.4.0"
   checksum: 10c0/effb03cad7c89dfa5bd4f6989364bfc79994c2042ec5966cb9b95990e2edee5cd8969ddf42616a0373ac49fac1403437deaf6e9050fbbaa3546093a59b9ac94e
+  languageName: node
+  linkType: hard
+
+"libphonenumber-js@npm:1.11.17":
+  version: 1.11.17
+  resolution: "libphonenumber-js@npm:1.11.17"
+  checksum: 10c0/102bc66f82b4fb86983f3c68d7b8eafd5e5f82be48bcd87c4c3a723b08e62d2deffa78a5d646698f2ba163f4e0d5722d99661ba9ec36f12b5a108fcdf8731059
   languageName: node
   linkType: hard
 
@@ -8033,6 +8352,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"redux-thunk@npm:3.1.0, redux-thunk@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "redux-thunk@npm:3.1.0"
+  peerDependencies:
+    redux: ^5.0.0
+  checksum: 10c0/21557f6a30e1b2e3e470933247e51749be7f1d5a9620069a3125778675ce4d178d84bdee3e2a0903427a5c429e3aeec6d4df57897faf93eb83455bc1ef7b66fd
+  languageName: node
+  linkType: hard
+
+"redux@npm:5.0.1, redux@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "redux@npm:5.0.1"
+  checksum: 10c0/b10c28357194f38e7d53b760ed5e64faa317cc63de1fb95bc5d9e127fab956392344368c357b8e7a9bedb0c35b111e7efa522210cfdc3b3c75e5074718e9069c
+  languageName: node
+  linkType: hard
+
 "reflect.getprototypeof@npm:^1.0.10, reflect.getprototypeof@npm:^1.0.9":
   version: 1.0.10
   resolution: "reflect.getprototypeof@npm:1.0.10"
@@ -8142,6 +8477,20 @@ __metadata:
   version: 2.0.2
   resolution: "require-from-string@npm:2.0.2"
   checksum: 10c0/aaa267e0c5b022fc5fd4eef49d8285086b15f2a1c54b28240fdf03599cbd9c26049fee3eab894f2e1f6ca65e513b030a7c264201e3f005601e80c49fb2937ce2
+  languageName: node
+  linkType: hard
+
+"reselect@npm:5.1.1":
+  version: 5.1.1
+  resolution: "reselect@npm:5.1.1"
+  checksum: 10c0/219c30da122980f61853db3aebd173524a2accd4b3baec770e3d51941426c87648a125ca08d8c57daa6b8b086f2fdd2703cb035dd6231db98cdbe1176a71f489
+  languageName: node
+  linkType: hard
+
+"reselect@npm:^5.1.0":
+  version: 5.3.0
+  resolution: "reselect@npm:5.3.0"
+  checksum: 10c0/c79728e4f315152bfb2d82456d35075b705392d9e72c485d7d9b1061bd80af628416216d80f02a42f24dbb24d738aec7fec45806930aaa1d17c32e9875fa1bd6
   languageName: node
   linkType: hard
 
@@ -8975,7 +9324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3":
+"tslib@npm:2.8.1, tslib@npm:^2.0.3, tslib@npm:^2.4.1":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10c0/9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62

@@ -20,7 +20,7 @@ services:
       REACT_APP_BAILEY_MODEL: ${REACT_APP_BAILEY_MODEL}
       REACT_APP_AWS_REGION: 'us-east-1'
       # list of AuthProviders - add 'okta' here in .env to enable Okta sign-in locally
-      REACT_APP_AUTH_PROVIDERS: ${REACT_APP_AUTH_PROVIDERS:-cognito,bwellapp,clientcredentials}
+      REACT_APP_AUTH_PROVIDERS: ${REACT_APP_AUTH_PROVIDERS:-cognito,bwelldescope,clientcredentials}
       # Each AuthProvider has its own set of environment variables
       REACT_APP_AUTH_COGNITO_CUSTOM_USERNAME: 'cognito:username'
       REACT_APP_AUTH_COGNITO_CUSTOM_GROUP: 'cognito:groups'
@@ -52,6 +52,20 @@ services:
       REACT_APP_AUTH_BWELLAPP_CLIENT_ID: 'bwellapp'
       REACT_APP_AUTH_BWELLAPP_TOKEN_FOR_USER_DETAILS: 'jwt'
       REACT_APP_AUTH_BWELLAPP_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
+      # Descope-based b.well App sign-in (bwelldescope is enabled in REACT_APP_AUTH_PROVIDERS
+      # above, pointed at the dev Descope project by default; override any of these in .env).
+      # http://localhost:5051 must be in the Descope project's approved domains.
+      REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID: ${REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID:-P34WYrxC5FleySBOZksaRHN1szsA}
+      REACT_APP_AUTH_BWELLDESCOPE_FLOW_ID: ${REACT_APP_AUTH_BWELLDESCOPE_FLOW_ID:-bwell-parent-flow}
+      REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID: ${REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID:-}
+      REACT_APP_AUTH_BWELLDESCOPE_BASE_URL: ${REACT_APP_AUTH_BWELLDESCOPE_BASE_URL:-}
+      REACT_APP_AUTH_BWELLDESCOPE_BASE_STATIC_URL: ${REACT_APP_AUTH_BWELLDESCOPE_BASE_STATIC_URL:-}
+      REACT_APP_AUTH_BWELLDESCOPE_CUSTOM_USERNAME: 'email'
+      REACT_APP_AUTH_BWELLDESCOPE_CUSTOM_GROUP: 'roles'
+      REACT_APP_AUTH_BWELLDESCOPE_CUSTOM_SCOPE: 'scope'
+      REACT_APP_AUTH_BWELLDESCOPE_CLIENT_ID: 'bwelldescope'
+      REACT_APP_AUTH_BWELLDESCOPE_TOKEN_FOR_USER_DETAILS: 'jwt'
+      REACT_APP_AUTH_BWELLDESCOPE_TOKEN_TO_SEND_TO_FHIR_SERVER: 'jwt'
       # Client-credentials sign-in (clientcredentials is enabled in REACT_APP_AUTH_PROVIDERS
       # above) - the login page lets you pick Cognito or Descope; set
       # REACT_APP_AUTH_COGNITOCC_TOKEN_URL in .env for whichever provider(s) you want to use

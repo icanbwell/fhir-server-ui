@@ -2,7 +2,15 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { AuthProvider, Descope } from '@descope/react-sdk';
-import { Link, Typography } from '@mui/material';
+import {
+    FormControl,
+    InputLabel,
+    Link,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    Typography,
+} from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import UserContext from '../context/UserContext';
@@ -24,6 +32,19 @@ const BwellDescopeLogin = () => {
     const resourceUrl = location.state?.resourceUrl || '/';
     const config = useMemo(() => getBwellDescopeConfig(), []);
     const [error, setError] = useState<string | null>(null);
+    const [selectedTenantName, setSelectedTenantName] = useState<string>(
+        config?.tenants[0]?.name ?? ''
+    );
+    const tenants = config?.tenants ?? [];
+    const tenantId =
+        tenants.find((t) => t.name === selectedTenantName)?.tenantId ??
+        tenants[0]?.tenantId ??
+        config?.tenantId;
+
+    const handleTenantChange = (event: SelectChangeEvent) => {
+        setSelectedTenantName(event.target.value);
+        setError(null);
+    };
 
     useEffect(() => {
         if (getLocalData('jwt')) {
@@ -93,9 +114,27 @@ const BwellDescopeLogin = () => {
                         persistTokens={false}
                         storeLastAuthenticatedUser={false}
                     >
+                        {tenants.length > 1 && (
+                            <FormControl fullWidth sx={{ mb: 2 }}>
+                                <InputLabel id="bwell-descope-tenant-label">Tenant</InputLabel>
+                                <Select
+                                    labelId="bwell-descope-tenant-label"
+                                    label="Tenant"
+                                    value={selectedTenantName}
+                                    onChange={handleTenantChange}
+                                >
+                                    {tenants.map((tenant) => (
+                                        <MenuItem key={tenant.name} value={tenant.name}>
+                                            {tenant.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        )}
                         <Descope
+                            key={tenantId}
                             flowId={config.flowId}
-                            tenant={config.tenantId}
+                            tenant={tenantId}
                             onSuccess={handleSuccess}
                             onError={handleError}
                         />

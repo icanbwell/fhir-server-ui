@@ -38,6 +38,7 @@ describe('getBwellDescopeConfig', () => {
             projectId: 'P-test',
             flowId: DEFAULT_BWELL_DESCOPE_FLOW_ID,
             tenantId: undefined,
+            tenants: [],
             baseUrl: undefined,
             baseStaticUrl: undefined,
         });
@@ -53,8 +54,18 @@ describe('getBwellDescopeConfig', () => {
             projectId: 'P-test',
             flowId: 'custom-flow',
             tenantId: 'tenant-1',
+            tenants: [],
             baseUrl: 'https://auth.example.com',
             baseStaticUrl: 'https://static.example.com',
         });
+    });
+
+    it('parses named tenants and skips malformed entries', () => {
+        APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID = 'P-test';
+        APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANTS = ' Acme = T-acme , bad, Demo=T-demo ';
+        expect(getBwellDescopeConfig()?.tenants).toEqual([
+            { name: 'Acme', tenantId: 'T-acme' },
+            { name: 'Demo', tenantId: 'T-demo' },
+        ]);
     });
 });

@@ -20,14 +20,16 @@ vi.mock('@descope/react-sdk', () => ({
     },
     Descope: ({
         flowId,
+        tenant,
         onSuccess,
         onError,
     }: {
         flowId: string;
+        tenant?: string;
         onSuccess: (e: { detail: { sessionJwt?: string } }) => void;
         onError: (e: { detail: Record<string, unknown> }) => void;
     }) => (
-        <div data-testid="descope" data-flow={flowId}>
+        <div data-testid="descope" data-flow={flowId} data-tenant={tenant ?? ''}>
             <button onClick={() => onSuccess({ detail: { sessionJwt: 'jwt-abc' } })}>ok</button>
             <button onClick={() => onSuccess({ detail: {} })}>no-jwt</button>
             <button onClick={() => onError({ detail: { errorDescription: 'secret detail' } })}>
@@ -64,6 +66,8 @@ describe('BwellDescopeLogin', () => {
         setUserDetails.mockReset();
         APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID = 'P-test';
         Reflect.deleteProperty(APP_ENV, 'REACT_APP_AUTH_BWELLDESCOPE_FLOW_ID');
+        Reflect.deleteProperty(APP_ENV, 'REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID');
+        Reflect.deleteProperty(APP_ENV, 'REACT_APP_AUTH_BWELLDESCOPE_TENANTS');
     });
 
     it('shows a configuration message and no flow when the project id is missing', () => {
@@ -146,5 +150,64 @@ describe('BwellDescopeLogin', () => {
         localStorage.setItem('jwt', 'existing');
         renderPage();
         expect(await screen.findByText('home')).toBeInTheDocument();
+    });
+
+    describe('tenant selection', () => {
+        it('shows no dropdown and no tenant when none is configured', () => {
+            renderPage();
+            expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+            expect(screen.getByTestId('descope')).toHaveAttribute('data-tenant', '');
+        });
+
+        it.each(['Acme', 'Acme=T-acme,Acme=T-other'])(
+            'shows a misconfiguration message and no flow for tenants %j',
+            (raw) => {
+                APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID = 'T-single';
+                APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANTS = raw;
+                renderPage();
+                expect(screen.getByText(/tenants are misconfigured/i)).toBeInTheDocument();
+                expect(screen.queryByTestId('descope')).not.toBeInTheDocument();
+            }
+        );
+
+        it('uses the single REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID without a dropdown', () => {
+            APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID = 'T-single';
+            renderPage();
+            expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+            expect(screen.getByTestId('descope')).toHaveAttribute('data-tenant', 'T-single');
+        });
+
+        it('uses a lone entry in the tenant list without a dropdown', () => {
+            APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANTS = 'Acme=T-acme';
+            renderPage();
+            expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+            expect(screen.getByTestId('descope')).toHaveAttribute('data-tenant', 'T-acme');
+        });
+
+        it('prefers the tenant list over the single tenant id', () => {
+            APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID = 'T-single';
+            APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANTS = 'Acme=T-acme,Demo=T-demo';
+            renderPage();
+            expect(screen.getByTestId('descope')).toHaveAttribute('data-tenant', 'T-acme');
+        });
+
+        it('lets the user pick a tenant and passes it to the flow', async () => {
+            APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANTS = 'Acme=T-acme,Demo=T-demo';
+            renderPage();
+            expect(screen.getByTestId('descope')).toHaveAttribute('data-tenant', 'T-acme');
+            await userEvent.click(screen.getByRole('combobox'));
+            await userEvent.click(await screen.findByRole('option', { name: 'Demo' }));
+            expect(screen.getByTestId('descope')).toHaveAttribute('data-tenant', 'T-demo');
+        });
+
+        it('clears a previous error when the tenant changes', async () => {
+            APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANTS = 'Acme=T-acme,Demo=T-demo';
+            renderPage();
+            await userEvent.click(screen.getByText('fail'));
+            expect(screen.getByText(/unable to sign in right now/i)).toBeInTheDocument();
+            await userEvent.click(screen.getByRole('combobox'));
+            await userEvent.click(await screen.findByRole('option', { name: 'Demo' }));
+            expect(screen.queryByText(/unable to sign in right now/i)).not.toBeInTheDocument();
+        });
     });
 });

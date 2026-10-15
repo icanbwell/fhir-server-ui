@@ -5,6 +5,7 @@ import { AuthProvider, Descope } from '@descope/react-sdk';
 import { Link, Typography } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import TenantSelect from '../components/TenantSelect';
 import UserContext from '../context/UserContext';
 import { getLocalData } from '../utils/localData.utils';
 import { getBwellDescopeConfig } from '../utils/bwellDescopeConfig';
@@ -15,6 +16,8 @@ const NOT_CONFIGURED_MESSAGE =
     'b.well App sign-in is not configured (missing REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID).';
 const SESSION_ERROR_MESSAGE =
     'Signed in, but the session could not be established. Please contact support.';
+const INVALID_TENANTS_MESSAGE =
+    'b.well App sign-in tenants are misconfigured (REACT_APP_AUTH_BWELLDESCOPE_TENANTS must be Name=tenantId pairs with unique names).';
 const GENERIC_ERROR_MESSAGE = 'Unable to sign in right now. Please try again.';
 
 const BwellDescopeLogin = () => {
@@ -24,6 +27,19 @@ const BwellDescopeLogin = () => {
     const resourceUrl = location.state?.resourceUrl || '/';
     const config = useMemo(() => getBwellDescopeConfig(), []);
     const [error, setError] = useState<string | null>(null);
+    const [selectedTenantName, setSelectedTenantName] = useState<string>(
+        config?.tenants[0]?.name ?? ''
+    );
+    const tenants = config?.tenants ?? [];
+    const tenantId =
+        tenants.find((t) => t.name === selectedTenantName)?.tenantId ??
+        tenants[0]?.tenantId ??
+        config?.tenantId;
+
+    const handleTenantChange = (name: string) => {
+        setSelectedTenantName(name);
+        setError(null);
+    };
 
     useEffect(() => {
         if (getLocalData('jwt')) {
@@ -81,9 +97,9 @@ const BwellDescopeLogin = () => {
                 <Typography variant="h4" gutterBottom>
                     Sign In With b.well App
                 </Typography>
-                {!config ? (
+                {!config || config.tenantsInvalid ? (
                     <Typography color="error" sx={{ mt: 4 }}>
-                        {NOT_CONFIGURED_MESSAGE}
+                        {config ? INVALID_TENANTS_MESSAGE : NOT_CONFIGURED_MESSAGE}
                     </Typography>
                 ) : (
                     <AuthProvider
@@ -93,9 +109,18 @@ const BwellDescopeLogin = () => {
                         persistTokens={false}
                         storeLastAuthenticatedUser={false}
                     >
+                        {tenants.length > 1 && (
+                            <TenantSelect
+                                labelId="bwell-descope-tenant-label"
+                                names={tenants.map((tenant) => tenant.name)}
+                                value={selectedTenantName}
+                                onChange={handleTenantChange}
+                            />
+                        )}
                         <Descope
+                            key={tenantId}
                             flowId={config.flowId}
-                            tenant={config.tenantId}
+                            tenant={tenantId}
                             onSuccess={handleSuccess}
                             onError={handleError}
                         />

@@ -59,7 +59,11 @@ matches today's: a `jwt` in localStorage, `identityProvider` set, and `UserConte
 - New page `src/pages/BwellDescopeLogin.tsx` renders `<Descope>` with:
   - project ID from `REACT_APP_AUTH_BWELLDESCOPE_PROJECT_ID`,
   - flow ID from `REACT_APP_AUTH_BWELLDESCOPE_FLOW_ID` (default `bwell-parent-flow`),
-  - optional tenant from `REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID`,
+  - optional tenant from `REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID`, or, for environments serving
+    several tenants (PHR-3773), a named list in `REACT_APP_AUTH_BWELLDESCOPE_TENANTS`
+    (`Name=tenantId,Name=tenantId`, same format as the legacy provider's client keys). Two or
+    more entries render a Tenant dropdown whose selection is passed to `<Descope tenant=…>`; the
+    list takes precedence over `TENANT_ID`,
   - optional custom base URL from `REACT_APP_AUTH_BWELLDESCOPE_BASE_URL`
     (dev uses `auth.dev.icanbwell.com`).
 - On success: `removeAuthData()`, store the Descope session JWT as `jwt`, set

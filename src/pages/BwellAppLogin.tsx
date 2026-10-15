@@ -5,15 +5,11 @@ import {
     Button,
     Box,
     TextField,
-    Select,
-    MenuItem,
     Link,
-    SelectChangeEvent,
-    FormControl,
-    InputLabel,
 } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import TenantSelect from '../components/TenantSelect';
 import UserContext from '../context/UserContext';
 import { getLocalData, setLocalData } from '../utils/localData.utils';
 import { jwtParser } from '../utils/jwtParser';
@@ -59,10 +55,6 @@ const BwellAppLogin = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const handleClientChange = (event: SelectChangeEvent) => {
-        setSelectedClientName(event.target.value);
-    };
 
     const handleSubmit = async (formEvent: FormEvent<HTMLFormElement>) => {
         formEvent.preventDefault();
@@ -142,21 +134,12 @@ const BwellAppLogin = () => {
                 ) : (
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, width: '100%' }}>
                         {clientKeys.length > 0 && (
-                            <FormControl fullWidth sx={{ mb: 2 }}>
-                                <InputLabel id="bwell-tenant-label">Tenant</InputLabel>
-                                <Select
-                                    labelId="bwell-tenant-label"
-                                    label="Tenant"
-                                    value={selectedClientName}
-                                    onChange={handleClientChange}
-                                >
-                                    {clientKeys.map((client) => (
-                                        <MenuItem key={client.name} value={client.name}>
-                                            {client.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                            <TenantSelect
+                                labelId="bwell-tenant-label"
+                                names={clientKeys.map((client) => client.name)}
+                                value={selectedClientName}
+                                onChange={setSelectedClientName}
+                            />
                         )}
                         <TextField
                             fullWidth

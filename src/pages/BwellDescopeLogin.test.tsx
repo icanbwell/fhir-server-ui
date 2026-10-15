@@ -159,6 +159,17 @@ describe('BwellDescopeLogin', () => {
             expect(screen.getByTestId('descope')).toHaveAttribute('data-tenant', '');
         });
 
+        it.each(['Acme', 'Acme=T-acme,Acme=T-other'])(
+            'shows a misconfiguration message and no flow for tenants %j',
+            (raw) => {
+                APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID = 'T-single';
+                APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANTS = raw;
+                renderPage();
+                expect(screen.getByText(/tenants are misconfigured/i)).toBeInTheDocument();
+                expect(screen.queryByTestId('descope')).not.toBeInTheDocument();
+            }
+        );
+
         it('uses the single REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID without a dropdown', () => {
             APP_ENV.REACT_APP_AUTH_BWELLDESCOPE_TENANT_ID = 'T-single';
             renderPage();

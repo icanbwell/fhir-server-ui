@@ -51,6 +51,11 @@ const BaileyChatContainer = () => {
         model: baileyModel,
         instructions: BAILEY_SYSTEM_INSTRUCTIONS,
         tools,
+        // No conversation id in browser storage (an internal admin tool does not resume chats
+        // across reloads), and the full transcript is sent every turn so the model sees the same
+        // input as before the library client was adopted.
+        storage: null,
+        sendFullTranscript: true,
     });
 
     return (

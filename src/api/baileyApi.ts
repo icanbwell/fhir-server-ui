@@ -1,67 +1,21 @@
 import BaseApi from './baseApi';
-import { HttpMethod } from '../context/LastRequestContext';
-import { BaileyChatInputMessage, BaileyMcpToolConfig } from '@icanbwell/baileyai-chat-ui';
 
-export interface StreamChatParams {
-    model: string;
-    instructions: string;
-    input: BaileyChatInputMessage[];
-    tools: BaileyMcpToolConfig[];
-    signal?: AbortSignal;
-    onChunk: (text: string) => void;
-    onRequestId?: (requestId: string) => void;
-}
+const BAILEY_AUTH_HEADER_NAMES = new Set(['authorization', 'origin-service']);
 
 // Bailey validates the caller's bearer token against its own AUTH_PROVIDERS, which may not
-// trust the same issuer fhir-server-ui's token came from — a config mismatch between two
-// different services, not evidence this app's own session is invalid. Overriding
-// handleUnauthorized to a no-op keeps a 401 from Bailey from logging the user out of
-// fhir-server-ui, for the same reason ConnectionFhirApi avoids BaseApi's interceptor.
+// trust the same issuer fhir-server-ui's token came from. BaileyApi no longer sends requests
+// itself: the @icanbwell/baileyai-chat-ui client does, and only asks this class for headers, so
+// no code path here can reach BaseApi's 401 handling (which logs the user out).
 class BaileyApi extends BaseApi {
-    protected async handleUnauthorized(_status: number | undefined): Promise<void> {
-        // Intentionally does nothing — see class comment above.
-    }
-
-    // `text` and `errorMessage` are returned alongside `status` because a non-2xx body is the
-    // only place Bailey explains itself (invalid model id, rejected tool config, a disabled
-    // feature flag), and `errorMessage` carries the fetch-level failure reason (CORS block, DNS,
-    // connection refused) when no response arrived at all. Dropping them would leave the user
-    // with nothing but a bare status code.
-    async streamChat({
-        model,
-        instructions,
-        input,
-        tools,
-        signal,
-        onChunk,
-        onRequestId,
-    }: StreamChatParams): Promise<{ status: number | undefined; text: string; errorMessage?: string }> {
-        const decoder = new TextDecoder();
-        const { status, text, errorMessage } = await this.streamRequest({
-            method: 'POST' as HttpMethod,
-            urlString: '/bailey/v1/responses',
-            data: { model, instructions, input, stream: true, tools },
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json, text/event-stream',
-            },
-            signal,
-            onChunk: (chunk) => onChunk(decoder.decode(chunk, { stream: true })),
-            onHeaders: (_status, headers) => {
-                const requestId = headers['x-request-id'];
-                if (requestId) {
-                    onRequestId?.(requestId);
-                }
-            },
-        });
-        // Flush any dangling partial multi-byte UTF-8 sequence left buffered by the last
-        // `{ stream: true }` call — without this, a stream that ends mid-character (an abrupt
-        // cutoff) silently drops those trailing bytes. Mirrors baseApi.ts's own flush.
-        const flushed = decoder.decode();
-        if (flushed) {
-            onChunk(flushed);
-        }
-        return { status, text, errorMessage };
+    /**
+     * Authorization (from the session token, per identityProvider) and Origin-Service only.
+     * The library client owns Accept and Content-Type, so none of BaseApi's other defaults
+     * are returned.
+     */
+    getAuthHeaders(): Record<string, string> {
+        return Object.fromEntries(
+            Object.entries(this.buildHeaders()).filter(([name]) => BAILEY_AUTH_HEADER_NAMES.has(name.toLowerCase()))
+        );
     }
 }
 

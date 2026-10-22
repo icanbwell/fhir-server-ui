@@ -65,6 +65,14 @@ describe('BaileyChatContainer', () => {
         );
     });
 
+    it('pins storage null and sendFullTranscript true so adoption is behavior-neutral', () => {
+        renderContainer();
+
+        expect(useBaileyChatMock).toHaveBeenCalledWith(
+            expect.objectContaining({ storage: null, sendFullTranscript: true })
+        );
+    });
+
     it('renders tables and charts through BaileyTable/BaileyChart', () => {
         renderContainer();
 

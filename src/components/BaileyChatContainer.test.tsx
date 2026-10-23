@@ -65,6 +65,41 @@ describe('BaileyChatContainer', () => {
         );
     });
 
+    it('pins storage false and sendFullTranscript true, with no id, sub or storage-key options', () => {
+        useBaileyChatMock.mockClear();
+        renderContainer();
+
+        const config = useBaileyChatMock.mock.calls[0][0] as Record<string, unknown>;
+        expect(config.storage).toBe(false);
+        expect(config.sendFullTranscript).toBe(true);
+        ['sub', 'conversationId', 'storageKey', 'onStorageError'].forEach((key) => expect(config).not.toHaveProperty(key));
+    });
+
+    it('handles context loss silently: a no-op handler that logs nothing', () => {
+        useBaileyChatMock.mockClear();
+        const consoleSpies = (['log', 'info', 'warn', 'error'] as const).map((m) => vi.spyOn(console, m));
+        renderContainer();
+
+        const { onContextLoss } = useBaileyChatMock.mock.calls[0][0] as {
+            onContextLoss: (info: { sentId: string; reportedId?: string }) => void;
+        };
+        onContextLoss({ sentId: 'user-1:chat-0123abcd', reportedId: 'user-1:chat-ffffffff' });
+
+        consoleSpies.forEach((spy) => {
+            expect(spy).not.toHaveBeenCalled();
+            spy.mockRestore();
+        });
+    });
+
+    it('offers no history entry', () => {
+        baileyChatPanelPropsSpy.mockClear();
+        renderContainer();
+
+        const props = baileyChatPanelPropsSpy.mock.calls[0][0];
+        expect(props).not.toHaveProperty('history');
+        expect(props).not.toHaveProperty('onHistoryClick');
+    });
+
     it('renders tables and charts through BaileyTable/BaileyChart', () => {
         renderContainer();
 

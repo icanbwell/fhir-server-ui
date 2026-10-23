@@ -27,8 +27,12 @@ vi.mock('../hooks/useBaileyThemeBridge', () => ({
     useBaileyThemeBridge: vi.fn(),
 }));
 
-vi.mock('@icanbwell/baileyai-chat-ui/table', () => ({ BaileyTable: () => <div data-testid="bailey-table" /> }));
-vi.mock('@icanbwell/baileyai-chat-ui/chart', () => ({ BaileyChart: () => <div data-testid="bailey-chart" /> }));
+vi.mock('@icanbwell/baileyai-chat-ui/table', () => ({
+    BaileyTable: () => <div data-testid="bailey-table" />,
+}));
+vi.mock('@icanbwell/baileyai-chat-ui/chart', () => ({
+    BaileyChart: () => <div data-testid="bailey-chart" />,
+}));
 
 function renderContainer() {
     return render(
@@ -60,7 +64,13 @@ describe('BaileyChatContainer', () => {
             expect.objectContaining({
                 transport: 'transport-stub',
                 model: 'gpt-5',
-                tools: [{ type: 'mcp', server_url: 'https://fhir.example.com/mcp', server_label: 'fhir-server' }],
+                tools: [
+                    {
+                        type: 'mcp',
+                        server_url: 'https://fhir.example.com/mcp',
+                        server_label: 'fhir-server',
+                    },
+                ],
             })
         );
     });
@@ -72,24 +82,39 @@ describe('BaileyChatContainer', () => {
         const config = useBaileyChatMock.mock.calls[0][0] as Record<string, unknown>;
         expect(config.storage).toBe(false);
         expect(config.sendFullTranscript).toBe(true);
-        ['sub', 'conversationId', 'storageKey', 'onStorageError'].forEach((key) => expect(config).not.toHaveProperty(key));
+        ['sub', 'conversationId', 'storageKey', 'onStorageError'].forEach((key) =>
+            expect(config).not.toHaveProperty(key)
+        );
     });
 
-    it('handles context loss silently: a no-op handler that logs nothing', () => {
-        useBaileyChatMock.mockClear();
-        const consoleSpies = (['log', 'info', 'warn', 'error'] as const).map((m) => vi.spyOn(console, m));
-        renderContainer();
+    it.each(['id', 'history'] as const)(
+        'handles context loss (reason %s) silently: a no-op handler that logs nothing',
+        (reason) => {
+            useBaileyChatMock.mockClear();
+            const consoleSpies = (['log', 'info', 'warn', 'error'] as const).map((m) =>
+                vi.spyOn(console, m)
+            );
+            renderContainer();
 
-        const { onContextLoss } = useBaileyChatMock.mock.calls[0][0] as {
-            onContextLoss: (info: { sentId: string; reportedId?: string }) => void;
-        };
-        onContextLoss({ sentId: 'user-1:chat-0123abcd', reportedId: 'user-1:chat-ffffffff' });
+            const { onContextLoss } = useBaileyChatMock.mock.calls[0][0] as {
+                onContextLoss: (info: {
+                    sentId: string;
+                    reportedId?: string;
+                    reason?: 'id' | 'history';
+                }) => void;
+            };
+            onContextLoss({
+                sentId: 'user-1:chat-0123abcd',
+                reportedId: 'user-1:chat-ffffffff',
+                reason,
+            });
 
-        consoleSpies.forEach((spy) => {
-            expect(spy).not.toHaveBeenCalled();
-            spy.mockRestore();
-        });
-    });
+            consoleSpies.forEach((spy) => {
+                expect(spy).not.toHaveBeenCalled();
+                spy.mockRestore();
+            });
+        }
+    );
 
     it('offers no history entry', () => {
         baileyChatPanelPropsSpy.mockClear();

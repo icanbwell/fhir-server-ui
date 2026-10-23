@@ -6,7 +6,8 @@ import { useBaileyChat, type BaileyChatTransport } from '@icanbwell/baileyai-cha
 vi.mock('../utils/auth.utils', () => ({ logout: vi.fn(), removeAuthData: vi.fn() }));
 
 import { logout, removeAuthData } from '../utils/auth.utils';
-import { useBaileyChatTransport } from './useBaileyChatTransport';
+import { NETWORK_ERROR_COPY, useBaileyChatTransport } from './useBaileyChatTransport';
+import BaileyApi from '../api/baileyApi';
 import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
 
@@ -26,7 +27,13 @@ const streamParams = (overrides: Record<string, unknown> = {}) => ({
     model: 'm',
     instructions: 'i',
     input: [{ role: 'user' as const, content: 'hello' }],
-    tools: [{ type: 'mcp' as const, server_url: 'https://fhir.example.com/mcp', server_label: 'fhir-server' }],
+    tools: [
+        {
+            type: 'mcp' as const,
+            server_url: 'https://fhir.example.com/mcp',
+            server_label: 'fhir-server',
+        },
+    ],
     signal: new AbortController().signal,
     onChunk: vi.fn(),
     ...overrides,
@@ -46,14 +53,18 @@ function Wrapper({ baileyUrl = BAILEY_URL, children }: PropsWithChildren<{ baile
                 getFhirServerVersion: () => 'null',
             }}
         >
-            <UserContext.Provider value={{ userDetails: null, setUserDetails }}>{children}</UserContext.Provider>
+            <UserContext.Provider value={{ userDetails: null, setUserDetails }}>
+                {children}
+            </UserContext.Provider>
         </EnvContext.Provider>
     );
 }
 
-const renderTransport = () => renderHook(() => useBaileyChatTransport(), { wrapper: Wrapper }).result.current;
+const renderTransport = () =>
+    renderHook(() => useBaileyChatTransport(), { wrapper: Wrapper }).result.current;
 
-const fetchedHeaders = (call = 0) => fetchMock.mock.calls.at(call)?.[1].headers as Record<string, string>;
+const fetchedHeaders = (call = 0) =>
+    fetchMock.mock.calls.at(call)?.[1].headers as Record<string, string>;
 const fetchedBody = (call = 0) => JSON.parse(fetchMock.mock.calls.at(call)?.[1].body);
 
 describe('useBaileyChatTransport', () => {
@@ -68,6 +79,7 @@ describe('useBaileyChatTransport', () => {
     });
     afterEach(() => {
         vi.unstubAllGlobals();
+        vi.restoreAllMocks();
     });
 
     it('is referentially stable across re-renders when baileyUrl is unchanged', () => {
@@ -222,7 +234,9 @@ describe('useBaileyChatTransport', () => {
         );
         const chunks: string[] = [];
 
-        await renderTransport().streamChat(streamParams({ onChunk: (t: string) => chunks.push(t) }));
+        await renderTransport().streamChat(
+            streamParams({ onChunk: (t: string) => chunks.push(t) })
+        );
 
         expect(chunks.length).toBeGreaterThan(1);
         expect(chunks.join('')).toBe('price €9');
@@ -262,15 +276,57 @@ describe('useBaileyChatTransport', () => {
         expect(setUserDetails).not.toHaveBeenCalled();
     });
 
-    it('a fetch failure resolves with a fixed message and no status (the reason is not exposed)', async () => {
-        fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
+    it('a fetch failure resolves with no status, errorKind network, the original cause and host copy', async () => {
+        const failure = new TypeError('Failed to fetch');
+        fetchMock.mockRejectedValue(failure);
         const onChunk = vi.fn();
 
         const result = await renderTransport().streamChat(streamParams({ onChunk }));
 
         expect(result.status).toBeUndefined();
-        expect(result.errorMessage).toBe('Request failed');
+        expect(result.errorKind).toBe('network');
+        expect(result.errorCause).toBe(failure);
+        expect(result.errorMessage).toBe(NETWORK_ERROR_COPY);
         expect(onChunk).not.toHaveBeenCalled();
+    });
+
+    it('a getHeaders failure is reported as network with host copy and no cause', async () => {
+        localStorage.setItem('jwt', 'session-token');
+        fetchMock.mockResolvedValue(sseResponse('ok'));
+        const transport = renderTransport();
+        vi.spyOn(BaileyApi.prototype, 'getAuthHeaders').mockImplementation(() => {
+            throw new Error('token store unavailable');
+        });
+
+        const result = await transport.streamChat(streamParams());
+
+        expect(fetchMock).not.toHaveBeenCalled();
+        expect(result).toMatchObject({
+            status: undefined,
+            errorKind: 'network',
+            errorMessage: NETWORK_ERROR_COPY,
+        });
+        expect(result.errorCause).toBeUndefined();
+    });
+
+    it('never puts the underlying error text or the request URL into the user-visible message', async () => {
+        fetchMock.mockRejectedValue(
+            new TypeError('CORS blocked https://bailey.example.com/bailey/v1/responses')
+        );
+
+        const result = await renderTransport().streamChat(streamParams());
+
+        expect(result.errorMessage).not.toContain('CORS');
+        expect(result.errorMessage).not.toContain('bailey.example.com');
+    });
+
+    it('leaves the message of a non-network failure (HTTP status) untouched', async () => {
+        fetchMock.mockResolvedValue(new Response('{"detail":"nope"}', { status: 500 }));
+
+        const result = await renderTransport().streamChat(streamParams());
+
+        expect(result.errorKind).toBeUndefined();
+        expect(result.errorMessage).not.toBe(NETWORK_ERROR_COPY);
     });
 
     it('rejects when the caller aborts', async () => {
@@ -324,7 +380,9 @@ describe('useBaileyChat with the library client', () => {
     };
 
     it('reports persistence off and no context loss', async () => {
-        fetchMock.mockImplementation(async () => sseResponse('hi', { 'X-Conversation-Id': CONVERSATION_ID }));
+        fetchMock.mockImplementation(async () =>
+            sseResponse('hi', { 'X-Conversation-Id': CONVERSATION_ID })
+        );
         const onContextLoss = vi.fn();
         const chat = renderChat(onContextLoss);
 
@@ -336,7 +394,9 @@ describe('useBaileyChat with the library client', () => {
     });
 
     it('does not persist the conversation id', async () => {
-        fetchMock.mockImplementation(async () => sseResponse('hi', { 'X-Conversation-Id': CONVERSATION_ID }));
+        fetchMock.mockImplementation(async () =>
+            sseResponse('hi', { 'X-Conversation-Id': CONVERSATION_ID })
+        );
         const chat = renderChat();
 
         await sendAndSettle(chat, 'first');
@@ -350,7 +410,9 @@ describe('useBaileyChat with the library client', () => {
     });
 
     it('sends the full transcript each turn even after the server reports an id, and never an id', async () => {
-        fetchMock.mockImplementation(async () => sseResponse('reply', { 'X-Conversation-Id': CONVERSATION_ID }));
+        fetchMock.mockImplementation(async () =>
+            sseResponse('reply', { 'X-Conversation-Id': CONVERSATION_ID })
+        );
         const chat = renderChat();
 
         await sendAndSettle(chat, 'first question');
@@ -362,7 +424,9 @@ describe('useBaileyChat with the library client', () => {
         expect(text).toContain('reply');
         expect(text).toContain('second question');
         fetchMock.mock.calls.forEach((_c, i) => {
-            expect(Object.keys(fetchedHeaders(i)).map((n) => n.toLowerCase())).not.toContain('x-chat-id');
+            expect(Object.keys(fetchedHeaders(i)).map((n) => n.toLowerCase())).not.toContain(
+                'x-chat-id'
+            );
         });
     });
 
@@ -374,6 +438,28 @@ describe('useBaileyChat with the library client', () => {
 
         expect(chat.result.current.status).toBe('error');
         expect(setUserDetails).not.toHaveBeenCalled();
+    });
+
+    it('shows the host network copy, not the raw reason, when fetch fails', async () => {
+        fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
+        const chat = renderChat();
+
+        await sendAndSettle(chat, 'first');
+
+        expect(chat.result.current.status).toBe('error');
+        expect(chat.result.current.error).toContain(NETWORK_ERROR_COPY);
+        expect(chat.result.current.error).not.toContain('Failed to fetch');
+        expect(setUserDetails).not.toHaveBeenCalled();
+    });
+
+    it('keeps the library message for an HTTP failure', async () => {
+        fetchMock.mockResolvedValue(new Response('{"detail":"boom"}', { status: 500 }));
+        const chat = renderChat();
+
+        await sendAndSettle(chat, 'first');
+
+        expect(chat.result.current.error).toContain('status 500');
+        expect(chat.result.current.error).not.toContain(NETWORK_ERROR_COPY);
     });
 
     it('treats a caller stop as idle, not an error', async () => {
@@ -398,7 +484,11 @@ describe('useBaileyChat with the library client', () => {
             new Response(
                 new ReadableStream<Uint8Array>({
                     start(controller) {
-                        controller.enqueue(encoder.encode('data: {"type":"response.output_text.delta","delta":"par"}\n\n'));
+                        controller.enqueue(
+                            encoder.encode(
+                                'data: {"type":"response.output_text.delta","delta":"par"}\n\n'
+                            )
+                        );
                     },
                     pull() {
                         throw new TypeError('network error');

@@ -3,6 +3,16 @@ import { BaileyChatTransport, createBaileyClient } from '@icanbwell/baileyai-cha
 import BaileyApi from '../api/baileyApi';
 import EnvContext from '../context/EnvironmentContext';
 
+// Shown after the library's "Bailey request failed (status network error)." prefix. Fixed copy:
+// the browser reports CORS, DNS and offline identically, and the underlying error text can carry
+// the request URL, so it is never displayed (it stays on `errorCause` for callers that want it).
+export const NETWORK_ERROR_COPY = "Couldn't reach Bailey. Check your connection and try again.";
+export const TIMEOUT_ERROR_COPY = 'Bailey took too long to respond. Try again.';
+
+const COPY_BY_KIND = { network: NETWORK_ERROR_COPY, timeout: TIMEOUT_ERROR_COPY } as const;
+
+type StreamChatResult = Awaited<ReturnType<BaileyChatTransport['streamChat']>>;
+
 // Memoized on `baileyUrl` so useBaileyChat's send/stop/retryLast callbacks (which depend on
 // `transport` referentially) aren't recreated every render.
 export function useBaileyChatTransport(): BaileyChatTransport {
@@ -11,7 +21,7 @@ export function useBaileyChatTransport(): BaileyChatTransport {
     return useMemo<BaileyChatTransport>(() => {
         // setUserDetails is deliberately undefined: nothing on the Bailey path may log the user out.
         const api = new BaileyApi({ fhirUrl: baileyUrl, setUserDetails: undefined });
-        return createBaileyClient({
+        const client = createBaileyClient({
             // The library appends `/responses`; REACT_APP_BAILEY_URL is the origin only.
             baseUrl: `${baileyUrl.replace(/\/+$/, '')}/bailey/v1`,
             // Read on every request so a rotated token is picked up.
@@ -22,5 +32,16 @@ export function useBaileyChatTransport(): BaileyChatTransport {
             // invalid: ignore it on purpose so it cannot log the user out. The chat shows the error.
             onAuthError: () => undefined,
         });
+        return {
+            // Chooses the user-visible text from the failure kind. Results without `errorKind`
+            // (HTTP statuses, interrupted streams) pass through unchanged; `errorKind` and
+            // `errorCause` are preserved on the result.
+            async streamChat(params) {
+                const result: StreamChatResult = await client.streamChat(params);
+                return result.errorKind
+                    ? { ...result, errorMessage: COPY_BY_KIND[result.errorKind] }
+                    : result;
+            },
+        };
     }, [baileyUrl]);
 }

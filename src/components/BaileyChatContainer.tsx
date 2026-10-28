@@ -8,7 +8,12 @@ import { useBaileyThemeBridge } from '../hooks/useBaileyThemeBridge';
 import { useAgGridBrandTheme } from '../hooks/useAgGridBrandTheme';
 import { useTheme } from '../context/ThemeContext';
 import EnvContext from '../context/EnvironmentContext';
-import { BAILEY_MCP_SERVER_LABEL, BAILEY_SUGGESTIONS, BAILEY_SYSTEM_INSTRUCTIONS } from '../constants/baileyConstants';
+import {
+    BAILEY_MCP_SERVER_LABEL,
+    BAILEY_STATELESS_CHAT_OPTIONS,
+    BAILEY_SUGGESTIONS,
+    BAILEY_SYSTEM_INSTRUCTIONS,
+} from '../constants/baileyConstants';
 import { brandColors } from '../theme/brandColors';
 
 // Passed to the package's built-in BaileyChart via its `palette` prop instead of copying its
@@ -51,6 +56,7 @@ const BaileyChatContainer = () => {
         model: baileyModel,
         instructions: BAILEY_SYSTEM_INSTRUCTIONS,
         tools,
+        ...BAILEY_STATELESS_CHAT_OPTIONS,
     });
 
     return (

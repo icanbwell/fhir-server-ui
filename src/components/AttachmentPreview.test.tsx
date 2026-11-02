@@ -55,6 +55,23 @@ describe('AttachmentPreview', () => {
         expect(container.querySelector('video')).toBeNull();
     });
 
+    it('replaces the <img> element with a warning when the browser cannot display it', async () => {
+        // Only Safari decodes TIFF in an <img>, so in Chrome, Edge and Firefox a TIFF attachment used to render as a
+        // blank area with no hint that Download still works.
+        const { container } = render(
+            <AttachmentPreview attachment={{ contentType: 'image/tiff', data: 'SUkqAA==', title: 'Slide' }} />
+        );
+
+        await waitFor(() => expect(screen.queryByText('Loading…')).not.toBeInTheDocument());
+
+        const image = container.querySelector('img');
+        expect(image).not.toBeNull();
+        fireEvent.error(image!);
+
+        expect(await screen.findByText(/cannot display this image\/tiff image — use download instead/i)).toBeInTheDocument();
+        expect(container.querySelector('img')).toBeNull();
+    });
+
     it('replaces the <audio> element with a warning when the browser cannot play it', async () => {
         const { container } = render(
             <AttachmentPreview attachment={{ contentType: 'audio/mpeg', data: 'aGVsbG8=', title: 'Recording' }} />

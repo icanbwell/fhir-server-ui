@@ -9,9 +9,11 @@ type TReverseReference = {
 
 type TReverseReferenceProps = TBaseResourceProps & {
     reverseReferences: TReverseReference[];
+    // The patient every reverse search on this page is scoped to, e.g. `Patient/123`; see ReverseReferenceLink.
+    patientReference?: string;
 };
 
-function ReverseReference({ id, reverseReferences, resourceType }: TReverseReferenceProps) {
+function ReverseReference({ id, reverseReferences, resourceType, patientReference }: TReverseReferenceProps) {
     let resolvedId = id;
     if (resourceType === 'Patient') {
         resolvedId = `Patient/${id}`;
@@ -30,6 +32,7 @@ function ReverseReference({ id, reverseReferences, resourceType }: TReverseRefer
                             target={reference.target}
                             property={reference.property}
                             resolvedId={String(resolvedId)}
+                            patientReference={patientReference}
                         />
                     ) : null
                 )}

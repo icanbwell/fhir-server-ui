@@ -158,6 +158,9 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                 id={uuid}
                 resourceType={resource.resourceType}
                 reverseReferences={{- '{' }}{{ reference.get("reverseReferences") }}{{ '}' }}
+            {% if reference.get("patientReference") %}
+                patientReference={{- '{' }}resource.{{ reference.get("patientReference") }}?.reference ? String(resource.{{ reference.get("patientReference") }}.reference) : undefined{{ '}' }}
+            {% endif %}
             />
         {% endfor %}
     {% endif %}

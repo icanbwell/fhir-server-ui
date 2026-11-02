@@ -234,7 +234,18 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment }) => 
             );
         }
         if (contentType.startsWith('image/') && objectUrl) {
-            return <Box component="img" src={objectUrl} sx={{ maxWidth: '100%' }} />;
+            // Same fallback as the media branches: only Safari decodes some image types (TIFF among them), and an
+            // <img> that fails otherwise renders as a blank area with no hint that Download still works.
+            return mediaError ? (
+                <Alert severity="warning">{mediaError}</Alert>
+            ) : (
+                <Box
+                    component="img"
+                    src={objectUrl}
+                    sx={{ maxWidth: '100%' }}
+                    onError={() => setMediaError(`This browser cannot display this ${contentType} image — use Download instead.`)}
+                />
+            );
         }
         if (contentType.startsWith('video/') && objectUrl) {
             return renderMediaElement('video', { maxWidth: '100%' }, 'video');

@@ -1,6 +1,8 @@
 reverse_references = {
     "Encounter": [
-        {"reverseReferences": [{"target":'DocumentReference', "property":'encounter'}], "name": "DocumentReference"}
+        # patientReference names the field holding the patient the search is scoped to. DocumentReference?encounter=
+        # alone timed out on staging; with patient= it answers in seconds.
+        {"reverseReferences": [{"target":'DocumentReference', "property":'encounter'}], "name": "DocumentReference", "patientReference": "subject"}
     ],
     "HealthcareService": [
         {"reverseReferences": [{"target":'PractitionerRole', "property":'actor'}], "name": "Practitioner Role"},

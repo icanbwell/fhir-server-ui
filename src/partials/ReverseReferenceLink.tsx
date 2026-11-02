@@ -7,17 +7,25 @@ type TReverseReferenceLinkProps = {
     target: string;
     property: string;
     resolvedId: string;
+    // Scopes the search to one patient, e.g. `Patient/123`. DocumentReference?encounter=<id> on its own timed out
+    // on staging (HTTP 500 after about 60 seconds) and answers in seconds with patient= added, so an Encounter page
+    // passes its subject here.
+    patientReference?: string;
 };
 
-function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenceLinkProps) {
-    const href = `/4_0_0/${target}?${property}=${resolvedId}`;
+function ReverseReferenceLink({ target, property, resolvedId, patientReference }: TReverseReferenceLinkProps) {
+    const queryParameters = [`${property}=${resolvedId}`];
+    if (patientReference) {
+        queryParameters.push(`patient=${patientReference}`);
+    }
+    const href = `/4_0_0/${target}?${queryParameters.join('&')}`;
 
     // AuditEvent queries are slow on this FHIR server, so this link is excluded from
     // counting entirely (queryParameters: undefined short-circuits useResourceCount's
     // effect before it fetches anything) — it still renders as a plain link, with no badge.
     const { count, atLimit, isLoading, error } = useResourceCount({
         resourceType: target,
-        queryParameters: target === 'AuditEvent' ? undefined : [`${property}=${resolvedId}`],
+        queryParameters: target === 'AuditEvent' ? undefined : queryParameters,
         limit: 10,
     });
 

@@ -327,6 +327,7 @@ const Encounter = ({ resource }: { resource: TEncounter }): React.ReactElement =
                 id={uuid}
                 resourceType={resource.resourceType}
                 reverseReferences={[{'target': 'DocumentReference', 'property': 'encounter'}]}
+                patientReference={resource.subject?.reference ? String(resource.subject.reference) : undefined}
             />
         </>
     );

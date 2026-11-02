@@ -68,7 +68,7 @@
     "rtf.js": "^3.0.9",
     "typescript": "^6.0.3",
     "uuid": "^14.0.0",
-    "vite": "^8.0.16",
+    "vite": "^8.2.4",
     "vite-plugin-svgr": "^5.2.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },

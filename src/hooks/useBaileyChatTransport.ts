@@ -13,6 +13,16 @@ const COPY_BY_KIND = { network: NETWORK_ERROR_COPY, timeout: TIMEOUT_ERROR_COPY 
 
 type StreamChatResult = Awaited<ReturnType<BaileyChatTransport['streamChat']>>;
 
+// Host copy for the kinds known today; a kind added by a later `^1.x` release has no entry, so
+// it falls back to the library's own message rather than becoming `undefined`.
+export function withHostErrorCopy(result: StreamChatResult): StreamChatResult {
+    if (!result.errorKind) {
+        return result;
+    }
+    const copy: string | undefined = COPY_BY_KIND[result.errorKind];
+    return { ...result, errorMessage: copy ?? result.errorMessage };
+}
+
 // Memoized on `baileyUrl` so useBaileyChat's send/stop/retryLast callbacks (which depend on
 // `transport` referentially) aren't recreated every render.
 export function useBaileyChatTransport(): BaileyChatTransport {
@@ -34,13 +44,10 @@ export function useBaileyChatTransport(): BaileyChatTransport {
         });
         return {
             // Chooses the user-visible text from the failure kind. Results without `errorKind`
-            // (HTTP statuses, interrupted streams) pass through unchanged; `errorKind` and
-            // `errorCause` are preserved on the result.
+            // (HTTP statuses, interrupted streams) and kinds without host copy pass through
+            // unchanged; `errorKind` and `errorCause` are preserved on the result.
             async streamChat(params) {
-                const result: StreamChatResult = await client.streamChat(params);
-                return result.errorKind
-                    ? { ...result, errorMessage: COPY_BY_KIND[result.errorKind] }
-                    : result;
+                return withHostErrorCopy(await client.streamChat(params));
             },
         };
     }, [baileyUrl]);

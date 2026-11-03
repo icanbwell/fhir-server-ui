@@ -6,7 +6,12 @@ import { useBaileyChat, type BaileyChatTransport } from '@icanbwell/baileyai-cha
 vi.mock('../utils/auth.utils', () => ({ logout: vi.fn(), removeAuthData: vi.fn() }));
 
 import { logout, removeAuthData } from '../utils/auth.utils';
-import { NETWORK_ERROR_COPY, useBaileyChatTransport } from './useBaileyChatTransport';
+import {
+    NETWORK_ERROR_COPY,
+    TIMEOUT_ERROR_COPY,
+    useBaileyChatTransport,
+    withHostErrorCopy,
+} from './useBaileyChatTransport';
 import BaileyApi from '../api/baileyApi';
 import EnvContext from '../context/EnvironmentContext';
 import UserContext from '../context/UserContext';
@@ -327,6 +332,21 @@ describe('useBaileyChatTransport', () => {
 
         expect(result.errorKind).toBeUndefined();
         expect(result.errorMessage).not.toBe(NETWORK_ERROR_COPY);
+    });
+
+    it.each([
+        ['network', NETWORK_ERROR_COPY],
+        ['timeout', TIMEOUT_ERROR_COPY],
+        ['a kind added by a later library release', 'Bailey request failed (library message).'],
+    ])('withHostErrorCopy for %s yields %s', (errorKind, expected) => {
+        const kind = errorKind.startsWith('a kind') ? 'future-kind' : errorKind;
+        const result = withHostErrorCopy({
+            errorKind: kind,
+            errorMessage: 'Bailey request failed (library message).',
+        } as unknown as Parameters<typeof withHostErrorCopy>[0]);
+
+        expect(result.errorMessage).toBe(expected);
+        expect(result.errorKind).toBe(kind);
     });
 
     it('rejects when the caller aborts', async () => {

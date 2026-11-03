@@ -47,6 +47,22 @@ describe('ReverseReferenceLink', () => {
         });
     });
 
+    it('leaves the search unscoped when the subject is not a Patient', () => {
+        // Encounter.subject may reference a Group, and the patient= parameter matches Patient subjects only, so
+        // patient=Group/<id> would hide every document the encounter= search finds.
+        render(
+            <ReverseReferenceLink
+                target="DocumentReference"
+                property="encounter"
+                resolvedId="enc-1"
+                patientReference="Group/grp-1"
+            />
+        );
+
+        expect(screen.getByRole('link')).toHaveAttribute('href', '/4_0_0/DocumentReference?encounter=enc-1');
+        expect(countCalls.at(-1)).toEqual({ resourceType: 'DocumentReference', queryParameters: ['encounter=enc-1'] });
+    });
+
     it('still skips counting AuditEvent when a patient is given', () => {
         render(
             <ReverseReferenceLink target="AuditEvent" property="entity" resolvedId="enc-1" patientReference="Patient/pat-1" />

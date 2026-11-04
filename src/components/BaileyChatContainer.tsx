@@ -14,6 +14,7 @@ import { useTheme } from '../context/ThemeContext';
 import EnvContext from '../context/EnvironmentContext';
 import {
     BAILEY_MCP_SERVER_LABEL,
+    BAILEY_STATELESS_CHAT_OPTIONS,
     BAILEY_SUGGESTIONS,
     BAILEY_SYSTEM_INSTRUCTIONS,
 } from '../constants/baileyConstants';
@@ -74,6 +75,7 @@ const BaileyChatContainer = () => {
         // to the full transcript. The ids embed the user's `sub`,
         // so they must never be logged or stored here.
         onContextLoss: noop,
+        ...BAILEY_STATELESS_CHAT_OPTIONS,
     });
 
     return (

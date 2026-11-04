@@ -65,6 +65,14 @@ describe('BaileyChatContainer', () => {
         );
     });
 
+    it('keeps the chat stateless: full transcript every turn and no stored conversation id', () => {
+        renderContainer();
+
+        expect(useBaileyChatMock).toHaveBeenCalledWith(
+            expect.objectContaining({ sendFullTranscript: true, storage: false })
+        );
+    });
+
     it('renders tables and charts through BaileyTable/BaileyChart', () => {
         renderContainer();
 

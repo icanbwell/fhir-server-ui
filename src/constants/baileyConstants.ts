@@ -27,6 +27,17 @@ export const BAILEY_SYSTEM_INSTRUCTIONS = joinInstructions(
 
 export const BAILEY_MCP_SERVER_LABEL = 'fhir-server';
 
+// Since baileyai-chat-ui 1.0.17, useBaileyChat adopts the conversation id the server reports and
+// then sends only the newest message, relying on the server to prepend the stored history. Our
+// transport does not forward that id as `x-chat-id`, so the server would start a new conversation
+// every other turn and the model would answer without prior context. These options keep the
+// stateless behavior of 1.0.9: always send the full transcript and never persist an id (the
+// default sessionStorage key is also shared and un-keyed by user).
+export const BAILEY_STATELESS_CHAT_OPTIONS = {
+    sendFullTranscript: true,
+    storage: false,
+} as const;
+
 // Shown as clickable cards in the empty chat state, before any message is sent. Each one must be
 // answerable by the fhir-server MCP endpoint's own tool registry (see BAILEY_SYSTEM_INSTRUCTIONS
 // above) — allergies is grounded in the allergy/allergyintolerance Composition category this

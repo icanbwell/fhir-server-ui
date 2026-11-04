@@ -64,12 +64,6 @@ const BaileyChatContainer = () => {
         model: baileyModel,
         instructions: BAILEY_SYSTEM_INSTRUCTIONS,
         tools,
-        // Internal admin tool: no resume across reload, so the held conversation id is never
-        // written to browser storage.
-        storage: false,
-        // Send the whole transcript every turn and never a conversation id. Keeps the request
-        // identical to before the library client was adopted, even if the backend reports an id.
-        sendFullTranscript: true,
         // Context loss is silent by decision (BAI-1237 D6/D7), for both `reason: 'id'` and
         // `reason: 'history'`: this host has no telemetry hook, and the library already falls back
         // to the full transcript. The ids embed the user's `sub`,

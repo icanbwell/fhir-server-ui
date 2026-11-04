@@ -1,5 +1,9 @@
 import { useContext, useMemo } from 'react';
-import { BaileyChatPanel, useBaileyChat, type BaileyMcpToolConfig } from '@icanbwell/baileyai-chat-ui';
+import {
+    BaileyChatPanel,
+    useBaileyChat,
+    type BaileyMcpToolConfig,
+} from '@icanbwell/baileyai-chat-ui';
 import '@icanbwell/baileyai-chat-ui/styles.css';
 import { BaileyTable } from '@icanbwell/baileyai-chat-ui/table';
 import { BaileyChart } from '@icanbwell/baileyai-chat-ui/chart';
@@ -39,6 +43,8 @@ const DARK_CHART_PALETTE = [
     brandColors.errorRed,
 ];
 
+const noop = () => undefined;
+
 const BaileyChatContainer = () => {
     const { fhirUrl, baileyModel } = useContext(EnvContext);
     const { isDarkMode } = useTheme();
@@ -47,7 +53,9 @@ const BaileyChatContainer = () => {
     useBaileyThemeBridge();
 
     const tools = useMemo<BaileyMcpToolConfig[]>(
-        () => [{ type: 'mcp', server_url: `${fhirUrl}/mcp`, server_label: BAILEY_MCP_SERVER_LABEL }],
+        () => [
+            { type: 'mcp', server_url: `${fhirUrl}/mcp`, server_label: BAILEY_MCP_SERVER_LABEL },
+        ],
         [fhirUrl]
     );
 
@@ -56,6 +64,11 @@ const BaileyChatContainer = () => {
         model: baileyModel,
         instructions: BAILEY_SYSTEM_INSTRUCTIONS,
         tools,
+        // Context loss is silent by decision (BAI-1237 D6/D7), for both `reason: 'id'` and
+        // `reason: 'history'`: this host has no telemetry hook, and the library already falls back
+        // to the full transcript. The ids embed the user's `sub`,
+        // so they must never be logged or stored here.
+        onContextLoss: noop,
         ...BAILEY_STATELESS_CHAT_OPTIONS,
     });
 
@@ -63,7 +76,9 @@ const BaileyChatContainer = () => {
         <BaileyChatPanel
             chat={chat}
             suggestions={BAILEY_SUGGESTIONS}
-            renderTable={(data) => <BaileyTable headers={data.headers} rows={data.rows} theme={gridTheme} />}
+            renderTable={(data) => (
+                <BaileyTable headers={data.headers} rows={data.rows} theme={gridTheme} />
+            )}
             renderChart={(spec) => (
                 <BaileyChart
                     spec={spec}

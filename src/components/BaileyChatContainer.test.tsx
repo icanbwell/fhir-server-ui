@@ -45,6 +45,7 @@ function renderContainer() {
                 baileyUrl: 'https://bailey.example.com',
                 baileyModel: 'gpt-5',
                 baileyEnabled: true,
+                connectionHistoryUrl: '',
                 getFhirServerVersion: () => 'null',
             }}
         >

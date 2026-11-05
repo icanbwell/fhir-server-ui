@@ -55,6 +55,7 @@ function Wrapper({ baileyUrl = BAILEY_URL, children }: PropsWithChildren<{ baile
                 baileyUrl,
                 baileyModel: 'm',
                 baileyEnabled: true,
+                connectionHistoryUrl: '',
                 getFhirServerVersion: () => 'null',
             }}
         >

@@ -19,7 +19,8 @@ import EnvContext from '../../context/EnvironmentContext';
 import DownloadEverythingButton from '../../components/DownloadEverythingButton';
 import { IdentifierSystem } from '../../utils/identifierSystem';
 
-// Bailey admin tools (baileyai-skills-service SPA) that accept a ?personId= deep link.
+// Bailey admin tools (baileyai-skills-service SPA) that accept a #personId= deep link. A fragment, not a query
+// string, so the person id is never sent to a server (access logs, traces) with the page request.
 const BAILEY_ADMIN_TOOLS = [
     { path: 'conversations', label: 'Conversations' },
     { path: 'feedback', label: 'Feedback Review' },
@@ -425,7 +426,7 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                             {BAILEY_ADMIN_TOOLS.map((tool) => (
                                 <div key={tool.path}>
                                     <a
-                                        href={`${baileyAdminUrl}/${tool.path}?personId=${encodeURIComponent(String(clientPersonId ?? ''))}`}
+                                        href={`${baileyAdminUrl}/${tool.path}#personId=${encodeURIComponent(String(clientPersonId ?? ''))}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >

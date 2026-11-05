@@ -155,7 +155,7 @@ describe('Person Bailey admin tool links', () => {
 
         expect(screen.getByRole('link', { name: 'Conversations' })).toHaveAttribute(
             'href',
-            `${baseUrl}/conversations?personId=client-per-1`
+            `${baseUrl}/conversations#personId=client-per-1`
         );
     });
 
@@ -168,7 +168,7 @@ describe('Person Bailey admin tool links', () => {
 
         expect(screen.getByRole('link', { name: 'Conversations' })).toHaveAttribute(
             'href',
-            `${baseUrl}/conversations?personId=a%26clientKey%3Dx`
+            `${baseUrl}/conversations#personId=a%26clientKey%3Dx`
         );
     });
 
@@ -182,7 +182,7 @@ describe('Person Bailey admin tool links', () => {
 
         expect(screen.getByRole('link', { name: label })).toHaveAttribute(
             'href',
-            `${baseUrl}/${path}?personId=per-1`
+            `${baseUrl}/${path}#personId=per-1`
         );
     });
 

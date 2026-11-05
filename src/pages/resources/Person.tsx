@@ -15,13 +15,27 @@ import { TPerson } from '../../types/resources/Person';
 // Import all the partial resource
 import Partials from '../../partials';
 import UserContext from '../../context/UserContext';
+import EnvContext from '../../context/EnvironmentContext';
 import DownloadEverythingButton from '../../components/DownloadEverythingButton';
 import { IdentifierSystem } from '../../utils/identifierSystem';
 
+// Bailey admin tools (baileyai-skills-service SPA) that accept a #personId= deep link. A fragment, not a query
+// string, so the person id is never sent to a server (access logs, traces) with the page request.
+const BAILEY_ADMIN_TOOLS = [
+    { path: 'conversations', label: 'Conversations' },
+    { path: 'feedback', label: 'Feedback Review' },
+    { path: 'tool-call-logs', label: 'Tool Calls' },
+    { path: 'user-activity', label: 'User Activity' },
+] as const;
+
 const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
     const { userDetails } = React.useContext(UserContext);
+    const { connectionHistoryUrl, baileyAdminUrl, accessToCareSearchesUrl } = React.useContext(EnvContext);
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
+    // The Bailey admin tools search by the client FHIR person id (the clientFhirPersonId token claim), which is
+    // the resource id, not the bwell uuid tag the other links use.
+    const clientPersonId = resource.id ?? uuid;
 
     return (
         <>
@@ -382,6 +396,46 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                             /admin/patientData?personId={uuid}
                         </Link>
                     </div>
+                    {connectionHistoryUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{ mt: 1 }}>Connection History</Typography>
+                            <a
+                                href={`${connectionHistoryUrl}${encodeURIComponent(String(uuid ?? ''))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open in Sigma
+                            </a>
+                        </div>
+                    )}
+                    {accessToCareSearchesUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{ mt: 1 }}>Access to Care Searches</Typography>
+                            <a
+                                href={`${accessToCareSearchesUrl}${encodeURIComponent(String(uuid ?? ''))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open in Databricks
+                            </a>
+                        </div>
+                    )}
+                    {baileyAdminUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{ mt: 1 }}>Bailey Admin Tools</Typography>
+                            {BAILEY_ADMIN_TOOLS.map((tool) => (
+                                <div key={tool.path}>
+                                    <a
+                                        href={`${baileyAdminUrl}/${tool.path}#personId=${encodeURIComponent(String(clientPersonId ?? ''))}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {tool.label}
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </>
             )}
             <hr/>

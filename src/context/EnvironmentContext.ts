@@ -26,6 +26,9 @@ const EnvContext = createContext<{
     baileyUrl: string;
     baileyModel: string;
     baileyEnabled: boolean;
+    connectionHistoryUrl: string;
+    baileyAdminUrl: string;
+    accessToCareSearchesUrl: string;
     getFhirServerVersion:() => string;
 }>({
     fhirUrl: APP_ENV.REACT_APP_FHIR_SERVER_URL || '',
@@ -35,6 +38,9 @@ const EnvContext = createContext<{
     baileyUrl: APP_ENV.REACT_APP_BAILEY_URL || '',
     baileyModel: APP_ENV.REACT_APP_BAILEY_MODEL || '',
     baileyEnabled,
+    connectionHistoryUrl: APP_ENV.REACT_APP_CONNECTION_HISTORY_URL || '',
+    baileyAdminUrl: APP_ENV.REACT_APP_BAILEY_ADMIN_URL || '',
+    accessToCareSearchesUrl: APP_ENV.REACT_APP_ACCESS_TO_CARE_SEARCHES_URL || '',
     getFhirServerVersion: () => fhirServerVersion,
 });
 

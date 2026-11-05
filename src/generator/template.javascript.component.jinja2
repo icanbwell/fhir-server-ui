@@ -18,6 +18,7 @@ import {{ '{ T' + fhir_entity.cleaned_name + ' }' }} from '../../types/resources
 import Partials from '../../partials';
 {% if fhir_entity.cleaned_name == 'Person' %}
 import UserContext from '../../context/UserContext';
+import EnvContext from '../../context/EnvironmentContext';
 {% endif %}
 {% if fhir_entity.cleaned_name in ['Person', 'Patient'] %}
 import DownloadEverythingButton from '../../components/DownloadEverythingButton';
@@ -30,6 +31,7 @@ import PatientReferenceFromExtension from '../../partials/PatientReferenceFromEx
 const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_entity.cleaned_name + ' ' -}}}): React.ReactElement => {
 {% if fhir_entity.cleaned_name == 'Person' %}
     const { userDetails } = React.useContext(UserContext);
+    const { connectionHistoryUrl } = React.useContext(EnvContext);
 {% endif %}
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
@@ -196,6 +198,18 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                             /admin/patientData?personId={uuid}
                         </Link>
                     </div>
+                    {connectionHistoryUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{- '{{ mt: 1 }}' -}}>Connection History</Typography>
+                            <a
+                                href={`${connectionHistoryUrl}${uuid}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open in Sigma
+                            </a>
+                        </div>
+                    )}
                 </>
             )}
             <hr/>

@@ -2,6 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 import Person from './Person';
+import UserContext from '../../context/UserContext';
+import EnvContext from '../../context/EnvironmentContext';
+import { TUserDetails } from '../../types/baseTypes';
 import { TPerson } from '../../types/resources/Person';
 
 // Person.tsx renders Partials.ReverseReference for its "Resources Related to Linked Patient
@@ -45,5 +48,46 @@ describe('Person Data Graph section', () => {
         );
 
         expect(screen.queryByText('Admin Functions')).not.toBeInTheDocument();
+    });
+});
+
+describe('Person Connection History link', () => {
+    const baseUrl = 'https://sigma.example.com/workbook/abc?:nodeId=n1&:customView=';
+    const renderPerson = ({ isAdmin, connectionHistoryUrl }: { isAdmin: boolean; connectionHistoryUrl: string }) =>
+        render(
+            <MemoryRouter>
+                <UserContext.Provider value={{ userDetails: { isAdmin } as unknown as TUserDetails }}>
+                    <EnvContext.Provider
+                        value={{
+                            fhirUrl: '',
+                            AUTH_PROVIDERS: '',
+                            FHIR_APP_VERSION: 'null',
+                            AWS_REGION: '',
+                            baileyUrl: '',
+                            baileyModel: '',
+                            baileyEnabled: false,
+                            connectionHistoryUrl,
+                            getFhirServerVersion: () => 'null',
+                        }}
+                    >
+                        <Person resource={person} />
+                    </EnvContext.Provider>
+                </UserContext.Provider>
+            </MemoryRouter>
+        );
+
+    it('links to the configured URL with the person uuid appended for an admin', () => {
+        renderPerson({ isAdmin: true, connectionHistoryUrl: baseUrl });
+
+        expect(screen.getByRole('link', { name: /open in sigma/i })).toHaveAttribute('href', `${baseUrl}per-1`);
+    });
+
+    it.each([
+        { isAdmin: false, connectionHistoryUrl: baseUrl },
+        { isAdmin: true, connectionHistoryUrl: '' },
+    ])('does not render the link when %o', (props) => {
+        renderPerson(props);
+
+        expect(screen.queryByRole('link', { name: /open in sigma/i })).not.toBeInTheDocument();
     });
 });

@@ -26,6 +26,7 @@ const EnvContext = createContext<{
     baileyUrl: string;
     baileyModel: string;
     baileyEnabled: boolean;
+    connectionHistoryUrl: string;
     getFhirServerVersion:() => string;
 }>({
     fhirUrl: APP_ENV.REACT_APP_FHIR_SERVER_URL || '',
@@ -35,6 +36,7 @@ const EnvContext = createContext<{
     baileyUrl: APP_ENV.REACT_APP_BAILEY_URL || '',
     baileyModel: APP_ENV.REACT_APP_BAILEY_MODEL || '',
     baileyEnabled,
+    connectionHistoryUrl: APP_ENV.REACT_APP_CONNECTION_HISTORY_URL || '',
     getFhirServerVersion: () => fhirServerVersion,
 });
 

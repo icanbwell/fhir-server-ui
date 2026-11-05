@@ -19,6 +19,8 @@ services:
       REACT_APP_BAILEY_URL: ${REACT_APP_BAILEY_URL}
       REACT_APP_BAILEY_MODEL: ${REACT_APP_BAILEY_MODEL}
       REACT_APP_AWS_REGION: 'us-east-1'
+      # Set REACT_APP_CONNECTION_HISTORY_URL in .env; the Person uuid is appended to it.
+      REACT_APP_CONNECTION_HISTORY_URL: ${REACT_APP_CONNECTION_HISTORY_URL:-}
       # list of AuthProviders - add 'okta' here in .env to enable Okta sign-in locally
       REACT_APP_AUTH_PROVIDERS: ${REACT_APP_AUTH_PROVIDERS:-cognito,bwelldescope,clientcredentials}
       # Each AuthProvider has its own set of environment variables

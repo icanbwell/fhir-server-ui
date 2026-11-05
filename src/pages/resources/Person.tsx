@@ -15,11 +15,13 @@ import { TPerson } from '../../types/resources/Person';
 // Import all the partial resource
 import Partials from '../../partials';
 import UserContext from '../../context/UserContext';
+import EnvContext from '../../context/EnvironmentContext';
 import DownloadEverythingButton from '../../components/DownloadEverythingButton';
 import { IdentifierSystem } from '../../utils/identifierSystem';
 
 const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
     const { userDetails } = React.useContext(UserContext);
+    const { connectionHistoryUrl } = React.useContext(EnvContext);
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
 
@@ -382,6 +384,18 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                             /admin/patientData?personId={uuid}
                         </Link>
                     </div>
+                    {connectionHistoryUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{ mt: 1 }}>Connection History</Typography>
+                            <a
+                                href={`${connectionHistoryUrl}${uuid}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open in Sigma
+                            </a>
+                        </div>
+                    )}
                 </>
             )}
             <hr/>

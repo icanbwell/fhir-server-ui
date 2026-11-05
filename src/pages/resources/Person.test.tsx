@@ -145,11 +145,24 @@ describe('Person Bailey admin tool links', () => {
             </MemoryRouter>
         );
 
+    it('uses the FHIR resource id, not the uuid tag, as the personId', () => {
+        const withTag = {
+            resourceType: 'Person',
+            id: 'client-per-1',
+            meta: { tag: [{ system: 'https://www.icanbwell.com/uuid', code: 'bwell-uuid-1' }] },
+        } as unknown as TPerson;
+        renderPerson({ isAdmin: true, baileyAdminUrl: baseUrl }, withTag);
+
+        expect(screen.getByRole('link', { name: 'Conversations' })).toHaveAttribute(
+            'href',
+            `${baseUrl}/conversations?personId=client-per-1`
+        );
+    });
+
     it('percent-encodes the person id so it cannot inject extra URL parameters', () => {
         const hostile = {
             resourceType: 'Person',
-            id: 'per-1',
-            meta: { tag: [{ system: 'https://www.icanbwell.com/uuid', code: 'a&clientKey=x' }] },
+            id: 'a&clientKey=x',
         } as unknown as TPerson;
         renderPerson({ isAdmin: true, baileyAdminUrl: baseUrl }, hostile);
 

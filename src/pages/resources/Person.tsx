@@ -32,6 +32,9 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
     const { connectionHistoryUrl, baileyAdminUrl, accessToCareSearchesUrl } = React.useContext(EnvContext);
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
+    // The Bailey admin tools search by the client FHIR person id (the clientFhirPersonId token claim), which is
+    // the resource id, not the bwell uuid tag the other links use.
+    const clientPersonId = resource.id ?? uuid;
 
     return (
         <>
@@ -422,7 +425,7 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                             {BAILEY_ADMIN_TOOLS.map((tool) => (
                                 <div key={tool.path}>
                                     <a
-                                        href={`${baileyAdminUrl}/${tool.path}?personId=${encodeURIComponent(String(uuid ?? ''))}`}
+                                        href={`${baileyAdminUrl}/${tool.path}?personId=${encodeURIComponent(String(clientPersonId ?? ''))}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >

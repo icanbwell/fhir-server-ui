@@ -101,6 +101,7 @@ describe('EnvironmentContext', () => {
             REACT_APP_BAILEY_URL: 'https://bailey.example.test',
             REACT_APP_BAILEY_MODEL: 'bailey-test-model',
             REACT_APP_ENABLE_BAILEY: 'false',
+            REACT_APP_CONNECTION_HISTORY_URL: 'https://history.example.test/wb?id=',
         });
 
         const context = readContextDefault(module.default);
@@ -114,6 +115,7 @@ describe('EnvironmentContext', () => {
             baileyUrl: context.baileyUrl,
             baileyModel: context.baileyModel,
             baileyEnabled: context.baileyEnabled,
+            connectionHistoryUrl: context.connectionHistoryUrl,
         }).toEqual({
             fhirUrl: 'https://fhir.example.test',
             AUTH_PROVIDERS: 'provider-a,provider-b',
@@ -122,6 +124,7 @@ describe('EnvironmentContext', () => {
             baileyUrl: 'https://bailey.example.test',
             baileyModel: 'bailey-test-model',
             baileyEnabled: false,
+            connectionHistoryUrl: 'https://history.example.test/wb?id=',
         });
         expect(constructorArgs).toEqual([
             { fhirUrl: 'https://fhir.example.test', setUserDetails: undefined },
@@ -140,6 +143,7 @@ describe('EnvironmentContext', () => {
         expect(context.baileyUrl).toBe('');
         expect(context.baileyModel).toBe('');
         expect(context.baileyEnabled).toBe(true);
+        expect(context.connectionHistoryUrl).toBe('');
         expect(context.getFhirServerVersion()).toBe('null');
     });
 

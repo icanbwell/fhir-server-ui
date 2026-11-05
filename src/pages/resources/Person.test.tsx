@@ -53,7 +53,10 @@ describe('Person Data Graph section', () => {
 
 describe('Person Connection History link', () => {
     const baseUrl = 'https://sigma.example.com/workbook/abc?:nodeId=n1&:customView=';
-    const renderPerson = ({ isAdmin, connectionHistoryUrl }: { isAdmin: boolean; connectionHistoryUrl: string }) =>
+    const renderPerson = (
+        { isAdmin, connectionHistoryUrl }: { isAdmin: boolean; connectionHistoryUrl: string },
+        resource: TPerson = person
+    ) =>
         render(
             <MemoryRouter>
                 <UserContext.Provider value={{ userDetails: { isAdmin } as unknown as TUserDetails }}>
@@ -70,7 +73,7 @@ describe('Person Connection History link', () => {
                             getFhirServerVersion: () => 'null',
                         }}
                     >
-                        <Person resource={person} />
+                        <Person resource={resource} />
                     </EnvContext.Provider>
                 </UserContext.Provider>
             </MemoryRouter>
@@ -80,6 +83,20 @@ describe('Person Connection History link', () => {
         renderPerson({ isAdmin: true, connectionHistoryUrl: baseUrl });
 
         expect(screen.getByRole('link', { name: /open in sigma/i })).toHaveAttribute('href', `${baseUrl}per-1`);
+    });
+
+    it('percent-encodes the uuid so it cannot inject extra URL parameters', () => {
+        const hostile = {
+            resourceType: 'Person',
+            id: 'per-1',
+            meta: { tag: [{ system: 'https://www.icanbwell.com/uuid', code: 'a&:customView=x' }] },
+        } as unknown as TPerson;
+        renderPerson({ isAdmin: true, connectionHistoryUrl: baseUrl }, hostile);
+
+        expect(screen.getByRole('link', { name: /open in sigma/i })).toHaveAttribute(
+            'href',
+            `${baseUrl}a%26%3AcustomView%3Dx`
+        );
     });
 
     it.each([

@@ -388,7 +388,7 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                         <div>
                             <Typography variant="h5" sx={{ mt: 1 }}>Connection History</Typography>
                             <a
-                                href={`${connectionHistoryUrl}${uuid}`}
+                                href={`${connectionHistoryUrl}${encodeURIComponent(String(uuid ?? ''))}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

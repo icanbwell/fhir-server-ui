@@ -19,9 +19,17 @@ import EnvContext from '../../context/EnvironmentContext';
 import DownloadEverythingButton from '../../components/DownloadEverythingButton';
 import { IdentifierSystem } from '../../utils/identifierSystem';
 
+// Bailey admin tools (baileyai-skills-service SPA) that accept a ?personId= deep link.
+const BAILEY_ADMIN_TOOLS = [
+    { path: 'conversations', label: 'Conversations' },
+    { path: 'feedback', label: 'Feedback Review' },
+    { path: 'tool-call-logs', label: 'Tool Calls' },
+    { path: 'user-activity', label: 'User Activity' },
+] as const;
+
 const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
     const { userDetails } = React.useContext(UserContext);
-    const { connectionHistoryUrl } = React.useContext(EnvContext);
+    const { connectionHistoryUrl, baileyAdminUrl } = React.useContext(EnvContext);
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
 
@@ -394,6 +402,22 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                             >
                                 Open in Sigma
                             </a>
+                        </div>
+                    )}
+                    {baileyAdminUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{ mt: 1 }}>Bailey Admin Tools</Typography>
+                            {BAILEY_ADMIN_TOOLS.map((tool) => (
+                                <div key={tool.path}>
+                                    <a
+                                        href={`${baileyAdminUrl}/${tool.path}?personId=${encodeURIComponent(String(uuid ?? ''))}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {tool.label}
+                                    </a>
+                                </div>
+                            ))}
                         </div>
                     )}
                 </>

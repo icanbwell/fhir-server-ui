@@ -102,6 +102,7 @@ describe('EnvironmentContext', () => {
             REACT_APP_BAILEY_MODEL: 'bailey-test-model',
             REACT_APP_ENABLE_BAILEY: 'false',
             REACT_APP_CONNECTION_HISTORY_URL: 'https://history.example.test/wb?id=',
+            REACT_APP_BAILEY_ADMIN_URL: 'https://admin.example.test/web/admin',
         });
 
         const context = readContextDefault(module.default);
@@ -116,6 +117,7 @@ describe('EnvironmentContext', () => {
             baileyModel: context.baileyModel,
             baileyEnabled: context.baileyEnabled,
             connectionHistoryUrl: context.connectionHistoryUrl,
+            baileyAdminUrl: context.baileyAdminUrl,
         }).toEqual({
             fhirUrl: 'https://fhir.example.test',
             AUTH_PROVIDERS: 'provider-a,provider-b',
@@ -125,6 +127,7 @@ describe('EnvironmentContext', () => {
             baileyModel: 'bailey-test-model',
             baileyEnabled: false,
             connectionHistoryUrl: 'https://history.example.test/wb?id=',
+            baileyAdminUrl: 'https://admin.example.test/web/admin',
         });
         expect(constructorArgs).toEqual([
             { fhirUrl: 'https://fhir.example.test', setUserDetails: undefined },
@@ -144,6 +147,7 @@ describe('EnvironmentContext', () => {
         expect(context.baileyModel).toBe('');
         expect(context.baileyEnabled).toBe(true);
         expect(context.connectionHistoryUrl).toBe('');
+        expect(context.baileyAdminUrl).toBe('');
         expect(context.getFhirServerVersion()).toBe('null');
     });
 

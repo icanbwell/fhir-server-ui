@@ -54,7 +54,11 @@ describe('Person Data Graph section', () => {
 describe('Person Connection History link', () => {
     const baseUrl = 'https://sigma.example.com/workbook/abc?:nodeId=n1&:customView=';
     const renderPerson = (
-        { isAdmin, connectionHistoryUrl }: { isAdmin: boolean; connectionHistoryUrl: string },
+        {
+            isAdmin,
+            connectionHistoryUrl,
+            baileyAdminUrl = '',
+        }: { isAdmin: boolean; connectionHistoryUrl: string; baileyAdminUrl?: string },
         resource: TPerson = person
     ) =>
         render(
@@ -70,6 +74,7 @@ describe('Person Connection History link', () => {
                             baileyModel: '',
                             baileyEnabled: false,
                             connectionHistoryUrl,
+                            baileyAdminUrl,
                             getFhirServerVersion: () => 'null',
                         }}
                     >
@@ -106,5 +111,55 @@ describe('Person Connection History link', () => {
         renderPerson(props);
 
         expect(screen.queryByRole('link', { name: /open in sigma/i })).not.toBeInTheDocument();
+    });
+});
+
+describe('Person Bailey admin tool links', () => {
+    const baseUrl = 'https://skills.example.test/web/admin';
+    const renderPerson = ({ isAdmin, baileyAdminUrl }: { isAdmin: boolean; baileyAdminUrl: string }) =>
+        render(
+            <MemoryRouter>
+                <UserContext.Provider value={{ userDetails: { isAdmin } as unknown as TUserDetails }}>
+                    <EnvContext.Provider
+                        value={{
+                            fhirUrl: '',
+                            AUTH_PROVIDERS: '',
+                            FHIR_APP_VERSION: 'null',
+                            AWS_REGION: '',
+                            baileyUrl: '',
+                            baileyModel: '',
+                            baileyEnabled: false,
+                            connectionHistoryUrl: '',
+                            baileyAdminUrl,
+                            getFhirServerVersion: () => 'null',
+                        }}
+                    >
+                        <Person resource={person} />
+                    </EnvContext.Provider>
+                </UserContext.Provider>
+            </MemoryRouter>
+        );
+
+    it.each([
+        ['Conversations', 'conversations'],
+        ['Feedback Review', 'feedback'],
+        ['Tool Calls', 'tool-call-logs'],
+        ['User Activity', 'user-activity'],
+    ])('links %s with the person id for an admin', (label, path) => {
+        renderPerson({ isAdmin: true, baileyAdminUrl: baseUrl });
+
+        expect(screen.getByRole('link', { name: label })).toHaveAttribute(
+            'href',
+            `${baseUrl}/${path}?personId=per-1`
+        );
+    });
+
+    it.each([
+        { isAdmin: false, baileyAdminUrl: baseUrl },
+        { isAdmin: true, baileyAdminUrl: '' },
+    ])('does not render the tool links when %o', (props) => {
+        renderPerson(props);
+
+        expect(screen.queryByRole('link', { name: 'Conversations' })).not.toBeInTheDocument();
     });
 });

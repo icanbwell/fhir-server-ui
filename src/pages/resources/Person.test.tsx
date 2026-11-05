@@ -116,7 +116,10 @@ describe('Person Connection History link', () => {
 
 describe('Person Bailey admin tool links', () => {
     const baseUrl = 'https://skills.example.test/web/admin';
-    const renderPerson = ({ isAdmin, baileyAdminUrl }: { isAdmin: boolean; baileyAdminUrl: string }) =>
+    const renderPerson = (
+        { isAdmin, baileyAdminUrl }: { isAdmin: boolean; baileyAdminUrl: string },
+        resource: TPerson = person
+    ) =>
         render(
             <MemoryRouter>
                 <UserContext.Provider value={{ userDetails: { isAdmin } as unknown as TUserDetails }}>
@@ -134,11 +137,25 @@ describe('Person Bailey admin tool links', () => {
                             getFhirServerVersion: () => 'null',
                         }}
                     >
-                        <Person resource={person} />
+                        <Person resource={resource} />
                     </EnvContext.Provider>
                 </UserContext.Provider>
             </MemoryRouter>
         );
+
+    it('percent-encodes the person id so it cannot inject extra URL parameters', () => {
+        const hostile = {
+            resourceType: 'Person',
+            id: 'per-1',
+            meta: { tag: [{ system: 'https://www.icanbwell.com/uuid', code: 'a&clientKey=x' }] },
+        } as unknown as TPerson;
+        renderPerson({ isAdmin: true, baileyAdminUrl: baseUrl }, hostile);
+
+        expect(screen.getByRole('link', { name: 'Conversations' })).toHaveAttribute(
+            'href',
+            `${baseUrl}/conversations?personId=a%26clientKey%3Dx`
+        );
+    });
 
     it.each([
         ['Conversations', 'conversations'],

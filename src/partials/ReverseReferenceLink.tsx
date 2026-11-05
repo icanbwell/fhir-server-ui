@@ -7,17 +7,28 @@ type TReverseReferenceLinkProps = {
     target: string;
     property: string;
     resolvedId: string;
+    // When set, the link searches by the client_person_id extension instead of `property`.
+    clientPersonId?: string;
 };
 
-function ReverseReferenceLink({ target, property, resolvedId }: TReverseReferenceLinkProps) {
-    const href = `/4_0_0/${target}?${property}=${resolvedId}`;
+const CLIENT_PERSON_ID_SYSTEM = 'https://icanbwell.com/codes/client_person_id';
+
+function ReverseReferenceLink({ target, property, resolvedId, clientPersonId }: TReverseReferenceLinkProps) {
+    // Subscription and SubscriptionStatus carry no patient reference; they are found through
+    // the client_person_id extension, and open in the excel view. The `|` stays literal.
+    // The count query takes the raw token: FhirApi.getUrl encodes it via searchParams.append,
+    // so pre-encoding it would double-encode and match nothing. Only the href is encoded.
+    const extensionToken = clientPersonId ? `${CLIENT_PERSON_ID_SYSTEM}|${clientPersonId}` : undefined;
+    const href = extensionToken
+        ? `/excel/4_0_0/${target}?extension=${encodeURIComponent(CLIENT_PERSON_ID_SYSTEM)}|${encodeURIComponent(clientPersonId as string)}`
+        : `/4_0_0/${target}?${property}=${resolvedId}`;
 
     // AuditEvent queries are slow on this FHIR server, so this link is excluded from
     // counting entirely (queryParameters: undefined short-circuits useResourceCount's
     // effect before it fetches anything) — it still renders as a plain link, with no badge.
     const { count, atLimit, isLoading, error } = useResourceCount({
         resourceType: target,
-        queryParameters: target === 'AuditEvent' ? undefined : [`${property}=${resolvedId}`],
+        queryParameters: target === 'AuditEvent' ? undefined : [extensionToken ? `extension=${extensionToken}` : `${property}=${resolvedId}`],
         limit: 10,
     });
 

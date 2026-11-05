@@ -3,7 +3,7 @@ import { TBaseResourceProps } from '../types/baseTypes';
 import ReverseReferenceLink from './ReverseReferenceLink';
 
 // Targets on a Person that are searched by client_person_id extension, not a patient reference.
-const CLIENT_PERSON_ID_TARGETS = ['Subscription', 'SubscriptionStatus'];
+const CLIENT_PERSON_ID_TARGETS: readonly string[] = ['Subscription', 'SubscriptionStatus'];
 
 type TReverseReference = {
     target: string;
@@ -15,11 +15,12 @@ type TReverseReferenceProps = TBaseResourceProps & {
 };
 
 function ReverseReference({ id, reverseReferences, resourceType }: TReverseReferenceProps) {
+    const isPerson = resourceType === 'Person';
     let resolvedId = id;
     if (resourceType === 'Patient') {
         resolvedId = `Patient/${id}`;
     }
-    if (resourceType === 'Person') {
+    if (isPerson) {
         resolvedId = `Patient/person.${id}`;
     }
 
@@ -34,7 +35,7 @@ function ReverseReference({ id, reverseReferences, resourceType }: TReverseRefer
                             property={reference.property}
                             resolvedId={String(resolvedId)}
                             clientPersonId={
-                                resourceType === 'Person' && CLIENT_PERSON_ID_TARGETS.includes(reference.target)
+                                isPerson && id && CLIENT_PERSON_ID_TARGETS.includes(reference.target)
                                     ? String(id)
                                     : undefined
                             }

@@ -2,6 +2,9 @@ import { Box } from '@mui/material';
 import { TBaseResourceProps } from '../types/baseTypes';
 import ReverseReferenceLink from './ReverseReferenceLink';
 
+// Targets on a Person that are searched by client_person_id extension, not a patient reference.
+const CLIENT_PERSON_ID_TARGETS = ['Subscription', 'SubscriptionStatus'];
+
 type TReverseReference = {
     target: string;
     property: string;
@@ -30,6 +33,11 @@ function ReverseReference({ id, reverseReferences, resourceType }: TReverseRefer
                             target={reference.target}
                             property={reference.property}
                             resolvedId={String(resolvedId)}
+                            clientPersonId={
+                                resourceType === 'Person' && CLIENT_PERSON_ID_TARGETS.includes(reference.target)
+                                    ? String(id)
+                                    : undefined
+                            }
                         />
                     ) : null
                 )}

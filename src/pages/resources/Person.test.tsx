@@ -75,6 +75,7 @@ describe('Person Connection History link', () => {
                             baileyEnabled: false,
                             connectionHistoryUrl,
                             baileyAdminUrl,
+                            accessToCareSearchesUrl: '',
                             getFhirServerVersion: () => 'null',
                         }}
                     >
@@ -134,6 +135,7 @@ describe('Person Bailey admin tool links', () => {
                             baileyEnabled: false,
                             connectionHistoryUrl: '',
                             baileyAdminUrl,
+                            accessToCareSearchesUrl: '',
                             getFhirServerVersion: () => 'null',
                         }}
                     >
@@ -178,5 +180,68 @@ describe('Person Bailey admin tool links', () => {
         renderPerson(props);
 
         expect(screen.queryByRole('link', { name: 'Conversations' })).not.toBeInTheDocument();
+    });
+});
+
+describe('Person Access to Care Searches link', () => {
+    const baseUrl = 'https://dash.example.test/published?o=1&f_x%7Eperson_id_input=';
+    const renderPerson = (
+        { isAdmin, accessToCareSearchesUrl }: { isAdmin: boolean; accessToCareSearchesUrl: string },
+        resource: TPerson = person
+    ) =>
+        render(
+            <MemoryRouter>
+                <UserContext.Provider value={{ userDetails: { isAdmin } as unknown as TUserDetails }}>
+                    <EnvContext.Provider
+                        value={{
+                            fhirUrl: '',
+                            AUTH_PROVIDERS: '',
+                            FHIR_APP_VERSION: 'null',
+                            AWS_REGION: '',
+                            baileyUrl: '',
+                            baileyModel: '',
+                            baileyEnabled: false,
+                            connectionHistoryUrl: '',
+                            baileyAdminUrl: '',
+                            accessToCareSearchesUrl,
+                            getFhirServerVersion: () => 'null',
+                        }}
+                    >
+                        <Person resource={resource} />
+                    </EnvContext.Provider>
+                </UserContext.Provider>
+            </MemoryRouter>
+        );
+
+    it('links to the configured URL with the person uuid appended for an admin', () => {
+        renderPerson({ isAdmin: true, accessToCareSearchesUrl: baseUrl });
+
+        expect(screen.getByRole('link', { name: /open in databricks/i })).toHaveAttribute(
+            'href',
+            `${baseUrl}per-1`
+        );
+    });
+
+    it('percent-encodes the person id so it cannot inject extra URL parameters', () => {
+        const hostile = {
+            resourceType: 'Person',
+            id: 'per-1',
+            meta: { tag: [{ system: 'https://www.icanbwell.com/uuid', code: 'a&o=x' }] },
+        } as unknown as TPerson;
+        renderPerson({ isAdmin: true, accessToCareSearchesUrl: baseUrl }, hostile);
+
+        expect(screen.getByRole('link', { name: /open in databricks/i })).toHaveAttribute(
+            'href',
+            `${baseUrl}a%26o%3Dx`
+        );
+    });
+
+    it.each([
+        { isAdmin: false, accessToCareSearchesUrl: baseUrl },
+        { isAdmin: true, accessToCareSearchesUrl: '' },
+    ])('does not render the link when %o', (props) => {
+        renderPerson(props);
+
+        expect(screen.queryByRole('link', { name: /open in databricks/i })).not.toBeInTheDocument();
     });
 });

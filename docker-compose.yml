@@ -23,6 +23,8 @@ services:
       REACT_APP_CONNECTION_HISTORY_URL: ${REACT_APP_CONNECTION_HISTORY_URL:-}
       # Set REACT_APP_BAILEY_ADMIN_URL in .env; Person pages append /<tool>?personId=<uuid> for admins.
       REACT_APP_BAILEY_ADMIN_URL: ${REACT_APP_BAILEY_ADMIN_URL:-}
+      # Set REACT_APP_ACCESS_TO_CARE_SEARCHES_URL in .env; the Person uuid is appended for admins.
+      REACT_APP_ACCESS_TO_CARE_SEARCHES_URL: ${REACT_APP_ACCESS_TO_CARE_SEARCHES_URL:-}
       # list of AuthProviders - add 'okta' here in .env to enable Okta sign-in locally
       REACT_APP_AUTH_PROVIDERS: ${REACT_APP_AUTH_PROVIDERS:-cognito,bwelldescope,clientcredentials}
       # Each AuthProvider has its own set of environment variables

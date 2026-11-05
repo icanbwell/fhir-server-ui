@@ -41,7 +41,7 @@ const BAILEY_ADMIN_TOOLS = [
 const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_entity.cleaned_name + ' ' -}}}): React.ReactElement => {
 {% if fhir_entity.cleaned_name == 'Person' %}
     const { userDetails } = React.useContext(UserContext);
-    const { connectionHistoryUrl, baileyAdminUrl } = React.useContext(EnvContext);
+    const { connectionHistoryUrl, baileyAdminUrl, accessToCareSearchesUrl } = React.useContext(EnvContext);
 {% endif %}
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
@@ -217,6 +217,18 @@ const {{ fhir_entity.cleaned_name }} = ({ resource }: { resource: {{ 'T' + fhir_
                                 rel="noopener noreferrer"
                             >
                                 Open in Sigma
+                            </a>
+                        </div>
+                    )}
+                    {accessToCareSearchesUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{- '{{ mt: 1 }}' -}}>Access to Care Searches</Typography>
+                            <a
+                                href={`${accessToCareSearchesUrl}${encodeURIComponent(String(uuid ?? ''))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open in Databricks
                             </a>
                         </div>
                     )}

@@ -103,6 +103,7 @@ describe('EnvironmentContext', () => {
             REACT_APP_ENABLE_BAILEY: 'false',
             REACT_APP_CONNECTION_HISTORY_URL: 'https://history.example.test/wb?id=',
             REACT_APP_BAILEY_ADMIN_URL: 'https://admin.example.test/web/admin',
+            REACT_APP_ACCESS_TO_CARE_SEARCHES_URL: 'https://dash.example.test/published?f_x=',
         });
 
         const context = readContextDefault(module.default);
@@ -118,6 +119,7 @@ describe('EnvironmentContext', () => {
             baileyEnabled: context.baileyEnabled,
             connectionHistoryUrl: context.connectionHistoryUrl,
             baileyAdminUrl: context.baileyAdminUrl,
+            accessToCareSearchesUrl: context.accessToCareSearchesUrl,
         }).toEqual({
             fhirUrl: 'https://fhir.example.test',
             AUTH_PROVIDERS: 'provider-a,provider-b',
@@ -128,6 +130,7 @@ describe('EnvironmentContext', () => {
             baileyEnabled: false,
             connectionHistoryUrl: 'https://history.example.test/wb?id=',
             baileyAdminUrl: 'https://admin.example.test/web/admin',
+            accessToCareSearchesUrl: 'https://dash.example.test/published?f_x=',
         });
         expect(constructorArgs).toEqual([
             { fhirUrl: 'https://fhir.example.test', setUserDetails: undefined },
@@ -148,6 +151,7 @@ describe('EnvironmentContext', () => {
         expect(context.baileyEnabled).toBe(true);
         expect(context.connectionHistoryUrl).toBe('');
         expect(context.baileyAdminUrl).toBe('');
+        expect(context.accessToCareSearchesUrl).toBe('');
         expect(context.getFhirServerVersion()).toBe('null');
     });
 

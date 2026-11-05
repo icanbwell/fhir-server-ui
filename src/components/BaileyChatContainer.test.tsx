@@ -47,6 +47,7 @@ function renderContainer() {
                 baileyEnabled: true,
                 connectionHistoryUrl: '',
                 baileyAdminUrl: '',
+                accessToCareSearchesUrl: '',
                 getFhirServerVersion: () => 'null',
             }}
         >

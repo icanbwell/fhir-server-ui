@@ -29,7 +29,7 @@ const BAILEY_ADMIN_TOOLS = [
 
 const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
     const { userDetails } = React.useContext(UserContext);
-    const { connectionHistoryUrl, baileyAdminUrl } = React.useContext(EnvContext);
+    const { connectionHistoryUrl, baileyAdminUrl, accessToCareSearchesUrl } = React.useContext(EnvContext);
     const tagUUID = resource?.meta?.tag?.find((s) => s.system === IdentifierSystem.uuid)?.code;
     const uuid = tagUUID ? tagUUID : resource.id;
 
@@ -401,6 +401,18 @@ const Person = ({ resource }: { resource: TPerson }): React.ReactElement => {
                                 rel="noopener noreferrer"
                             >
                                 Open in Sigma
+                            </a>
+                        </div>
+                    )}
+                    {accessToCareSearchesUrl && (
+                        <div>
+                            <Typography variant="h5" sx={{ mt: 1 }}>Access to Care Searches</Typography>
+                            <a
+                                href={`${accessToCareSearchesUrl}${encodeURIComponent(String(uuid ?? ''))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open in Databricks
                             </a>
                         </div>
                     )}

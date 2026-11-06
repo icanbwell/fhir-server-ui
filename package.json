@@ -80,11 +80,11 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest-axe": "^3.5.9",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.12",
     "jest-axe": "^11.0.0",
     "jsdom": "^30.0.1",
     "prettier": "^3.8.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "resolutions": {
     "postcss@npm:^8.5.15": "^8.5.25",

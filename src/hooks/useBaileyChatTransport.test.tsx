@@ -225,6 +225,14 @@ describe('useBaileyChatTransport', () => {
         expect(headers['Origin-Service']).toBe('fhir-ui');
     });
 
+    it('sends the device IANA time zone in X-User-Timezone so Bailey shows times in local time', async () => {
+        fetchMock.mockImplementation(async () => sseResponse('ok'));
+
+        await renderTransport().streamChat(streamParams());
+
+        expect(fetchedHeaders()['X-User-Timezone']).toBe(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    });
+
     it('streams decoded text to onChunk and reassembles a multi-byte character split across chunks', async () => {
         const body = encoder.encode('price €9');
         const euroAt = body.indexOf(0xe2);

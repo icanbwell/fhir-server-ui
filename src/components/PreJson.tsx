@@ -9,12 +9,16 @@ import { useTheme } from '../context/ThemeContext';
 
 const DEFAULT_FILENAME = 'response.json';
 
+// resourceType and id come from the server response, so keep only filename-safe characters.
+const toSafeSegment = (value: string): string => value.replace(/[^A-Za-z0-9._-]/g, '_');
+
 const deriveFilename = (data: Record<string, unknown>): string => {
     const { resourceType, id } = data;
     if (typeof resourceType !== 'string') {
         return DEFAULT_FILENAME;
     }
-    return typeof id === 'string' ? `${resourceType}-${id}.json` : `${resourceType}.json`;
+    const safeType = toSafeSegment(resourceType);
+    return typeof id === 'string' ? `${safeType}-${toSafeSegment(id)}.json` : `${safeType}.json`;
 };
 
 interface PreJsonProps {

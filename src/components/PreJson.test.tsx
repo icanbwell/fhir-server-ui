@@ -25,6 +25,7 @@ describe('PreJson download', () => {
         ['resourceType and id', { resourceType: 'Patient', id: 'p1' }, 'Patient-p1.json'],
         ['resourceType only', { resourceType: 'Bundle' }, 'Bundle.json'],
         ['neither', { foo: 'bar' }, 'response.json'],
+        ['unsafe characters', { resourceType: 'Pat/ient', id: '../x y' }, 'Pat_ient-.._x_y.json'],
     ])('names the file from %s', (_label, data, expected) => {
         render(<PreJson data={data} />);
         fireEvent.click(screen.getByRole('button', { name: 'Download JSON' }));

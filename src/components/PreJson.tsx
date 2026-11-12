@@ -7,7 +7,7 @@ import 'react18-json-view/src/style.css';
 import 'react18-json-view/src/dark.css';
 import { useTheme } from '../context/ThemeContext';
 
-const DEFAULT_FILENAME = 'fhir-response.json';
+const DEFAULT_FILENAME = 'response.json';
 
 const deriveFilename = (data: Record<string, unknown>): string => {
     const { resourceType, id } = data;

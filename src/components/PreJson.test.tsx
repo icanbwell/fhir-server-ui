@@ -24,7 +24,7 @@ describe('PreJson download', () => {
     it.each([
         ['resourceType and id', { resourceType: 'Patient', id: 'p1' }, 'Patient-p1.json'],
         ['resourceType only', { resourceType: 'Bundle' }, 'Bundle.json'],
-        ['neither', { foo: 'bar' }, 'fhir-response.json'],
+        ['neither', { foo: 'bar' }, 'response.json'],
     ])('names the file from %s', (_label, data, expected) => {
         render(<PreJson data={data} />);
         fireEvent.click(screen.getByRole('button', { name: 'Download JSON' }));
@@ -41,8 +41,11 @@ describe('PreJson download', () => {
         expect(await readBlob(blob)).toBe(JSON.stringify(data, null, 2));
     });
 
-    it('renders no download button when there is no object data', () => {
-        render(<PreJson data={null} />);
-        expect(screen.queryByRole('button', { name: 'Download JSON' })).toBeNull();
-    });
+    it.each([['null', null], ['a string', 'plain text']])(
+        'renders no download button when data is %s',
+        (_label, data) => {
+            render(<PreJson data={data} />);
+            expect(screen.queryByRole('button', { name: 'Download JSON' })).toBeNull();
+        }
+    );
 });

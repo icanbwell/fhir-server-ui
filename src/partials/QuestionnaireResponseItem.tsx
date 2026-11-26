@@ -14,7 +14,7 @@ const QuestionnaireResponseItem = ({ name, questionnaireResponseItem }: TQuestio
             {questionnaireResponseItem && questionnaireResponseItem.length > 0 && (
                 <Box>
                     <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>{name}</Typography>
-                    <PreJson data={questionnaireResponseItem} />
+                    <PreJson data={questionnaireResponseItem} filename="questionnaire-response-items.json" />
                 </Box>
             )}
         </>

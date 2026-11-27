@@ -64,7 +64,7 @@ function Footer({ links, requestId }: { links?: TBundleLink[]; requestId?: Strin
     };
 
     return (
-        <Box sx={{ p: 1, display: 'flex', borderTop: 1 }}>
+        <Box sx={{ p: 1, display: 'flex', borderTop: 1, borderColor: 'divider' }}>
             {showPagination && (
                 <div>
                     <PaginationItem

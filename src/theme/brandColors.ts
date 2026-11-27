@@ -23,6 +23,17 @@ export const brandColors = {
   darkModePaper: '#1E2150',
   darkModeBorder: '#2A2E63',
   darkModeTextSecondary: '#A9ACC4',
+  // Dark-mode-only accent/status colours and surfaces. Every foreground token below
+  // was contrast-checked (>= 4.5:1) against the three dark surfaces:
+  // darkModeBackground, darkModePaper and darkModeRaised.
+  darkModePrimary: '#9BA3FF',
+  darkModePrimaryHover: '#C3C8FF',
+  darkModeSecondary: '#9A90FF',
+  darkModeInfo: '#8FB4FF',
+  darkModeError: '#FF8A80',
+  darkModeWarning: '#FFA36B',
+  darkModeRaised: '#262A63',
+  darkModeDivider: '#3D4290',
   // Pale green tint of brand `green`, used to highlight "answer"/correct content.
   highlightGreen: '#EAF7E0',
 } as const;

@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { alpha, Theme, useTheme } from '@mui/material/styles';
 
 ChartJS.register(
   CategoryScale,
@@ -40,29 +41,39 @@ const observations = [
     value: 2,
   },
 ];
-const chartData = {
+const getChartData = (theme: Theme) => ({
   labels: observations.map((obs) => obs.date),
   datasets: [
     {
       label: 'DAST-10 Scores',
       data: observations.map((obs) => obs.value),
-      backgroundColor: 'rgba(46, 53, 134, 0.2)',
-      borderColor: '#2E3586',
+      backgroundColor: alpha(theme.palette.primary.main, 0.2),
+      borderColor: theme.palette.primary.main,
       borderWidth: 2,
     },
   ],
-};
+});
 
-const chartOptions = {
+const getChartOptions = (theme: Theme) => ({
   scales: {
+    x: {
+      ticks: { color: theme.palette.text.secondary },
+      grid: { color: theme.palette.divider },
+    },
     y: {
       beginAtZero: true,
+      ticks: { color: theme.palette.text.secondary },
+      grid: { color: theme.palette.divider },
     },
   },
-};
+  plugins: {
+    legend: { labels: { color: theme.palette.text.primary } },
+  },
+});
 
 const ObservationGraph = () => {
-  return <Line data={chartData} options={chartOptions} />;
+  const theme = useTheme();
+  return <Line data={getChartData(theme)} options={getChartOptions(theme)} />;
 };
 
 export default ObservationGraph;

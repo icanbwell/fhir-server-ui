@@ -21,7 +21,31 @@ declare module '@mui/material/styles' {
 // (the header row and its cells); derive the shared background once so they
 // can't silently diverge on a future style tweak.
 const getHeaderBackground = (theme: Theme) =>
-    theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.06) : theme.palette.brand.lightGray;
+    theme.palette.mode === 'dark' ? theme.palette.brand.darkModeRaised : theme.palette.brand.lightGray;
+
+// Rounded surface shared by Paper/Card/Accordion. `backgroundImage: 'none'` disables MUI's
+// dark-mode elevation overlay so surfaces stay on the dark-mode tokens; dark surfaces also get
+// a hairline divider border since shadows are invisible on dark backgrounds.
+// Square papers (AppBar, Drawer, ...) keep their square edges and get no extra border.
+const getSurfaceShape = (theme: Theme, square = false) => ({
+    backgroundImage: 'none',
+    ...(square ? {} : { borderRadius: 12 }),
+    ...(theme.palette.mode === 'dark' && !square ? { border: `1px solid ${theme.palette.divider}` } : {}),
+});
+
+// Dark-mode status colours share one accent recipe: a hover/pressed shade darkened 15% and an
+// opaque page-background contrastText. MUI's own defaults (darken(main, 0.3) and an
+// rgba(0, 0, 0, 0.87) contrastText) fall below AA once the alpha is blended, so both are explicit.
+const getDarkAccent = (main: string) => ({
+    main,
+    dark: darken(main, 0.15),
+    contrastText: brandColors.darkModeBackground,
+});
+
+const getFocusRing = (theme: Theme) => ({
+    outline: `2px solid ${theme.palette.primary.main}`,
+    outlineOffset: 2,
+});
 
 interface ThemeContextType {
     isDarkMode: boolean;
@@ -80,27 +104,19 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
     const theme = createTheme({
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
-            primary: {
-                main: brandColors.blue,
-                dark: brandColors.darkBlue,
-            },
-            secondary: {
-                main: brandColors.lilac,
-            },
+            primary: isDarkMode
+                ? getDarkAccent(brandColors.darkModePrimary)
+                : { main: brandColors.blue, dark: brandColors.darkBlue },
+            secondary: isDarkMode ? getDarkAccent(brandColors.darkModeSecondary) : { main: brandColors.lilac },
             success: {
                 main: brandColors.green,
             },
-            warning: {
-                main: brandColors.orange,
-            },
-            error: {
-                main: brandColors.errorRed,
-            },
+            warning: isDarkMode ? getDarkAccent(brandColors.darkModeWarning) : { main: brandColors.orange },
+            error: isDarkMode ? getDarkAccent(brandColors.darkModeError) : { main: brandColors.errorRed },
             // Not a distinct brand color; the guide has no "info" swatch, so this is a
             // lightened tint of brand Blue to stay in-family rather than MUI's stock blue.
-            info: {
-                main: lighten(brandColors.blue, 0.25),
-            },
+            info: isDarkMode ? getDarkAccent(brandColors.darkModeInfo) : { main: lighten(brandColors.blue, 0.25) },
+            ...(isDarkMode ? { divider: brandColors.darkModeDivider } : {}),
             background: {
                 default: isDarkMode ? brandColors.darkModeBackground : brandColors.lightGray,
                 paper: isDarkMode ? brandColors.darkModePaper : brandColors.white,
@@ -113,6 +129,9 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                 secondary: isDarkMode ? brandColors.darkModeTextSecondary : darken(brandColors.midGray, 0.15),
             },
             brand: brandColors,
+        },
+        shape: {
+            borderRadius: 8,
         },
         typography: {
             fontFamily: openSansStack,
@@ -131,11 +150,44 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
             button: { fontWeight: 600, textTransform: 'none' },
         },
         components: {
+            MuiCssBaseline: {
+                styleOverrides: (theme) => {
+                    const isDark = theme.palette.mode === 'dark';
+                    const thumb = isDark ? theme.palette.brand.darkModeDivider : theme.palette.grey[400];
+                    const track = isDark ? theme.palette.brand.darkModePaper : theme.palette.grey[100];
+                    return {
+                        html: {
+                            colorScheme: theme.palette.mode,
+                            scrollbarColor: `${thumb} ${track}`,
+                        },
+                        '*::-webkit-scrollbar': { width: 12, height: 12, backgroundColor: track },
+                        '*::-webkit-scrollbar-track': { backgroundColor: track },
+                        '*::-webkit-scrollbar-thumb': {
+                            backgroundColor: thumb,
+                            borderRadius: 8,
+                            border: `2px solid ${track}`,
+                        },
+                        '*::-webkit-scrollbar-corner': { backgroundColor: track },
+                    };
+                },
+            },
             // Customize components for better dark mode support
             MuiAppBar: {
                 styleOverrides: {
                     root: ({ theme }) => ({
                         backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.primary.main,
+                        // The default ring is primary.main, which is invisible on the light-mode primary AppBar.
+                        '& .Mui-focusVisible': { outlineColor: 'currentColor' },
+                    }),
+                },
+            },
+            // AlertRoot is styled(Paper); undo the Paper surface radius and dark divider border so
+            // alerts keep the base radius and their own severity colouring.
+            MuiAlert: {
+                styleOverrides: {
+                    root: ({ theme, ownerState }) => ({
+                        borderRadius: theme.shape.borderRadius,
+                        ...(ownerState.variant !== 'outlined' && { border: 0 }),
                     }),
                 },
             },
@@ -143,13 +195,39 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                 styleOverrides: {
                     root: ({ theme }) => ({
                         backgroundColor: theme.palette.background.paper,
+                        ...getSurfaceShape(theme),
                     }),
                 },
             },
             MuiPaper: {
                 styleOverrides: {
-                    root: ({ theme }) => ({
+                    root: ({ theme, ownerState }) => ({
                         backgroundColor: theme.palette.background.paper,
+                        ...getSurfaceShape(theme, ownerState?.square),
+                    }),
+                },
+            },
+            MuiAccordion: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        ...getSurfaceShape(theme),
+                        // MUI's first/last-of-type rules would otherwise win with shape.borderRadius.
+                        '&, &:first-of-type, &:last-of-type': { borderRadius: 12 },
+                        '&:before': { display: 'none' },
+                    }),
+                },
+            },
+            MuiPopover: {
+                styleOverrides: {
+                    paper: ({ theme }) => ({
+                        ...(theme.palette.mode === 'dark' ? { backgroundColor: theme.palette.brand.darkModeRaised } : {}),
+                    }),
+                },
+            },
+            MuiButtonBase: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        '&.Mui-focusVisible': getFocusRing(theme),
                     }),
                 },
             },
@@ -174,7 +252,10 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                             backgroundColor: alpha(theme.palette.text.primary, 0.03),
                         },
                         '&:hover': {
-                            backgroundColor: alpha(theme.palette.text.primary, 0.06),
+                            backgroundColor:
+                                theme.palette.mode === 'dark'
+                                    ? theme.palette.brand.darkModeRaised
+                                    : alpha(theme.palette.text.primary, 0.06),
                         },
                     }),
                 },
@@ -263,8 +344,9 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                             color: theme.palette.primary.main,
                         },
                         '&:hover': {
-                            color: theme.palette.primary.dark,
+                            color: theme.palette.mode === 'dark' ? theme.palette.brand.darkModePrimaryHover : theme.palette.primary.dark,
                         },
+                        '&:focus-visible': getFocusRing(theme),
                     }),
                 },
             },

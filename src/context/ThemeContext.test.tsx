@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { render, renderHook, act, screen } from '@testing-library/react';
+import { Alert } from '@mui/material';
 import { useTheme as useMuiTheme } from '@mui/material/styles';
 import { ThemeContextProvider, useTheme } from './ThemeContext';
 import { getLocalData } from '../utils/localData.utils';
@@ -136,5 +137,187 @@ describe('ThemeContextProvider rendering', () => {
 
         expect(mode).toBe('dark');
         expect(background).toBe(brandColors.darkModeBackground);
+    });
+
+    it('uses the contrast-checked dark primary and divider when dark mode was persisted', () => {
+        localStorage.setItem('darkMode', 'true');
+        let primary: string | undefined;
+        let divider: string | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            primary = muiTheme.palette.primary.main;
+            divider = muiTheme.palette.divider;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(primary).toBe(brandColors.darkModePrimary);
+        expect(divider).toBe(brandColors.darkModeDivider);
+    });
+
+    it.each([
+        ['light', false],
+        ['dark', true],
+    ])('uses an 8px base corner radius in %s mode', (_label, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let radius: number | string | undefined;
+        const Probe = () => {
+            radius = useMuiTheme().shape.borderRadius;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(radius).toBe(8);
+    });
+
+    it('keeps dark surfaces on-token: no elevation overlay, rounded, bordered paper', () => {
+        localStorage.setItem('darkMode', 'true');
+        let paperRoot: Record<string, unknown> | undefined;
+        let paperBackground: string | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiPaper?.styleOverrides?.root;
+            paperRoot = typeof root === 'function' ? (root({ theme: muiTheme } as never) as Record<string, unknown>) : undefined;
+            paperBackground = muiTheme.palette.background.paper;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(paperBackground).toBe(brandColors.darkModePaper);
+        expect(paperRoot).toMatchObject({
+            backgroundImage: 'none',
+            borderRadius: 12,
+            border: `1px solid ${brandColors.darkModeDivider}`,
+        });
+    });
+
+    it.each([
+        ['light', false, { square: false }, { borderRadius: 12 }, ['border']],
+        ['light', false, { square: true }, { backgroundImage: 'none' }, ['borderRadius', 'border']],
+        ['dark', true, { square: false }, { borderRadius: 12, border: `1px solid ${brandColors.darkModeDivider}` }, []],
+        ['dark', true, { square: true }, { backgroundImage: 'none' }, ['borderRadius', 'border']],
+    ])('resolves the Paper override in %s mode for %j', (_label, dark, ownerState, expected, absent) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let paperRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiPaper?.styleOverrides?.root;
+            paperRoot = typeof root === 'function' ? (root({ theme: muiTheme, ownerState } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(paperRoot).toMatchObject(expected);
+        absent.forEach((key) => expect(paperRoot).not.toHaveProperty(key));
+    });
+
+    it('keeps a single Accordion at 12px on every corner, beating the first/last-of-type rules', () => {
+        localStorage.setItem('darkMode', 'true');
+        let accordionRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiAccordion?.styleOverrides?.root;
+            accordionRoot = typeof root === 'function' ? (root({ theme: muiTheme } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(accordionRoot).toMatchObject({
+            '&, &:first-of-type, &:last-of-type': { borderRadius: 12 },
+            '&:before': { display: 'none' },
+        });
+    });
+
+    it.each([
+        ['light', 'standard', false],
+        ['light', 'outlined', false],
+        ['dark', 'standard', true],
+        ['dark', 'outlined', true],
+    ])('resolves the Alert override in %s mode for the %s variant', (_label, variant, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let alertRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiAlert?.styleOverrides?.root;
+            alertRoot = typeof root === 'function' ? (root({ theme: muiTheme, ownerState: { variant } } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(alertRoot).toMatchObject({ borderRadius: 8 });
+        if (variant === 'outlined') {
+            expect(alertRoot).not.toHaveProperty('border');
+        } else {
+            expect(alertRoot).toMatchObject({ border: 0 });
+        }
+    });
+
+    it.each([
+        ['light', false],
+        ['dark', true],
+    ])('renders an Alert with the base radius and no Paper border in %s mode', (_label, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+
+        render(
+            <ThemeContextProvider>
+                <Alert severity="info">notice</Alert>
+            </ThemeContextProvider>
+        );
+
+        const style = getComputedStyle(screen.getByRole('alert'));
+        expect(style.borderRadius).toBe('8px');
+        expect(style.borderWidth === '' || style.borderWidth === '0px' || style.borderWidth === '0').toBe(true);
+    });
+
+    it.each([
+        ['light', false],
+        ['dark', true],
+    ])('keeps the AppBar focus ring visible against its own background in %s mode', (_label, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let appBarRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiAppBar?.styleOverrides?.root;
+            appBarRoot = typeof root === 'function' ? (root({ theme: muiTheme } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(appBarRoot).toMatchObject({ '& .Mui-focusVisible': { outlineColor: 'currentColor' } });
     });
 });

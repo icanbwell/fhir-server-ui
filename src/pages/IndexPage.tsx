@@ -66,12 +66,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
 
     function getBox() {
         if (loading && !resources?.length) {
-            return (
-                <>
-                    <LinearProgress />
-                    <StreamProgressIndicator progress={progress} />
-                </>
-            );
+            return <StreamProgressIndicator progress={progress} loading={loading} />;
         }
         if (!loading && status === 401) {
             return <Box>Login Expired</Box>;
@@ -82,8 +77,7 @@ const IndexPage = ({ search }: { search?: boolean }) => {
         // If narrative is returned then show it at top level
         return (
             <>
-                {loading && <LinearProgress />}
-                {loading && <StreamProgressIndicator progress={progress} />}
+                {loading && <StreamProgressIndicator progress={progress} loading={loading} />}
                 {truncated && (
                     <Alert severity="warning" sx={{ mb: 2 }}>
                         Showing the first {MAX_RESOURCES.toLocaleString()} resources. The full result set is

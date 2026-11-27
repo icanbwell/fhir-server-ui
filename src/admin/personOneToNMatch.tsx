@@ -16,6 +16,7 @@ import {
     Alert,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useTheme } from '@mui/material/styles';
 import AdminApi from '../api/adminApi';
 import EnvironmentContext from '../context/EnvironmentContext';
 import PreJson from '../components/PreJson';
@@ -24,6 +25,7 @@ import Footer from '../components/Footer';
 import UserContext from '../context/UserContext';
 
 const PersonOneToNMatchPage: React.FC = () => {
+    const theme = useTheme();
     const { fhirUrl } = useContext(EnvironmentContext);
     const { setUserDetails } = useContext(UserContext);
     const adminApi = new AdminApi({ fhirUrl, setUserDetails });
@@ -204,9 +206,9 @@ const PersonOneToNMatchPage: React.FC = () => {
                                                     fontFamily: 'monospace',
                                                     fontSize: '13px',
                                                     padding: '8px',
-                                                    // No brand neutral sits close to this weight (light-gray is too pale to
-                                                    // read as a border); matches MUI's own default outlined-input border.
-                                                    border: '1px solid rgba(0, 0, 0, 0.23)',
+                                                    border: `1px solid ${theme.palette.divider}`,
+                                                    backgroundColor: theme.palette.background.paper,
+                                                    color: theme.palette.text.primary,
                                                     borderRadius: '4px',
                                                     resize: 'vertical',
                                                 }}

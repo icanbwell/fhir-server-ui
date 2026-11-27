@@ -7,17 +7,19 @@ const VerticalTimeline: any = OriginalVerticalTimeline;
 const VerticalTimelineElement: any = OriginalVerticalTimelineElement;
 
 import 'react-vertical-timeline-component/style.min.css';
+import { useTheme } from '@mui/material/styles';
+import { getTimelineStyles, TimelineStyles } from './theme/timelineStyles';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 
-const renderTimelineElements = (observations: any) => {
+const renderTimelineElements = (observations: any, timelineStyles: TimelineStyles) => {
   return observations.map((observation: any, index: number) => (
     <VerticalTimelineElement
       className="vertical-timeline-element--work"
-      contentStyle={{ background: '#2E3586', color: '#fff' }}
-      contentArrowStyle={{ borderRight: '7px solid #2E3586' }}
+      contentStyle={timelineStyles.contentStyle}
+      contentArrowStyle={timelineStyles.contentArrowStyle}
       key={index}
       date={observation.date}
-      iconStyle={{ background: '#2E3586', color: '#fff' }}
+      iconStyle={timelineStyles.iconStyle}
       icon={<MedicalInformationIcon />}
     >
       <h3 className="vertical-timeline-element-title">{observation.code}</h3>
@@ -51,8 +53,11 @@ const observations = [
 ];
 
 const ObservationTimeline = () => {
+  const timelineStyles = getTimelineStyles(useTheme());
   return (
-    <VerticalTimeline>{renderTimelineElements(observations)}</VerticalTimeline>
+    <VerticalTimeline lineColor={timelineStyles.lineColor}>
+      {renderTimelineElements(observations, timelineStyles)}
+    </VerticalTimeline>
   );
 };
 

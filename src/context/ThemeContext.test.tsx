@@ -158,4 +158,50 @@ describe('ThemeContextProvider rendering', () => {
         expect(primary).toBe(brandColors.darkModePrimary);
         expect(divider).toBe(brandColors.darkModeDivider);
     });
+
+    it.each([
+        ['light', false],
+        ['dark', true],
+    ])('uses an 8px base corner radius in %s mode', (_label, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let radius: number | string | undefined;
+        const Probe = () => {
+            radius = useMuiTheme().shape.borderRadius;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(radius).toBe(8);
+    });
+
+    it('keeps dark surfaces on-token: no elevation overlay, rounded, bordered paper', () => {
+        localStorage.setItem('darkMode', 'true');
+        let paperRoot: Record<string, unknown> | undefined;
+        let paperBackground: string | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiPaper?.styleOverrides?.root;
+            paperRoot = typeof root === 'function' ? (root({ theme: muiTheme } as never) as Record<string, unknown>) : undefined;
+            paperBackground = muiTheme.palette.background.paper;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(paperBackground).toBe(brandColors.darkModePaper);
+        expect(paperRoot).toMatchObject({
+            backgroundImage: 'none',
+            borderRadius: 12,
+            border: `1px solid ${brandColors.darkModeDivider}`,
+        });
+    });
 });

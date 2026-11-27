@@ -15,6 +15,15 @@
   --bwell-dark-mode-background: #14162E;
   --bwell-dark-mode-paper: #1E2150;
   --bwell-dark-mode-border: #2A2E63;
+  --bwell-dark-mode-text-secondary: #A9ACC4;
+  --bwell-dark-mode-primary: #9BA3FF;
+  --bwell-dark-mode-primary-hover: #C3C8FF;
+  --bwell-dark-mode-secondary: #9A90FF;
+  --bwell-dark-mode-info: #8FB4FF;
+  --bwell-dark-mode-error: #FF8A80;
+  --bwell-dark-mode-warning: #FF8F73;
+  --bwell-dark-mode-raised: #262A63;
+  --bwell-dark-mode-divider: #3D4290;
   --bwell-highlight-green: #EAF7E0;
   --font-display: 'Quicksand', 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   --font-body: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
@@ -48,6 +57,19 @@ a:not(.MuiButton-root):not(.MuiButtonBase-root):visited {
 
 a:not(.MuiButton-root):not(.MuiButtonBase-root):hover {
   color: var(--bwell-dark-blue);
+}
+
+/* Dark-mode link colours: the navy light-mode links are unreadable on dark surfaces. */
+.dark-mode a:not(.MuiButton-root):not(.MuiButtonBase-root) {
+  color: var(--bwell-dark-mode-primary);
+}
+
+.dark-mode a:not(.MuiButton-root):not(.MuiButtonBase-root):visited {
+  color: var(--bwell-dark-mode-primary);
+}
+
+.dark-mode a:not(.MuiButton-root):not(.MuiButtonBase-root):hover {
+  color: var(--bwell-dark-mode-primary-hover);
 }
 
 /* Format for answer divs */

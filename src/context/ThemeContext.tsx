@@ -21,7 +21,21 @@ declare module '@mui/material/styles' {
 // (the header row and its cells); derive the shared background once so they
 // can't silently diverge on a future style tweak.
 const getHeaderBackground = (theme: Theme) =>
-    theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.06) : theme.palette.brand.lightGray;
+    theme.palette.mode === 'dark' ? theme.palette.brand.darkModeRaised : theme.palette.brand.lightGray;
+
+// Rounded surface shared by Paper/Card/Accordion. `backgroundImage: 'none'` disables MUI's
+// dark-mode elevation overlay so surfaces stay on the dark-mode tokens; dark surfaces also get
+// a hairline divider border since shadows are invisible on dark backgrounds.
+const getSurfaceShape = (theme: Theme) => ({
+    borderRadius: 12,
+    backgroundImage: 'none',
+    ...(theme.palette.mode === 'dark' ? { border: `1px solid ${theme.palette.divider}` } : {}),
+});
+
+const getFocusRing = (theme: Theme) => ({
+    outline: `2px solid ${theme.palette.primary.main}`,
+    outlineOffset: 2,
+});
 
 interface ThemeContextType {
     isDarkMode: boolean;
@@ -114,6 +128,9 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
             },
             brand: brandColors,
         },
+        shape: {
+            borderRadius: 8,
+        },
         typography: {
             fontFamily: openSansStack,
             fontWeightLight: 300,
@@ -131,6 +148,27 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
             button: { fontWeight: 600, textTransform: 'none' },
         },
         components: {
+            MuiCssBaseline: {
+                styleOverrides: (theme) => {
+                    const isDark = theme.palette.mode === 'dark';
+                    const thumb = isDark ? theme.palette.brand.darkModeDivider : theme.palette.grey[400];
+                    const track = isDark ? theme.palette.brand.darkModePaper : theme.palette.grey[100];
+                    return {
+                        html: {
+                            colorScheme: theme.palette.mode,
+                            scrollbarColor: `${thumb} ${track}`,
+                        },
+                        '*::-webkit-scrollbar': { width: 12, height: 12, backgroundColor: track },
+                        '*::-webkit-scrollbar-track': { backgroundColor: track },
+                        '*::-webkit-scrollbar-thumb': {
+                            backgroundColor: thumb,
+                            borderRadius: 8,
+                            border: `2px solid ${track}`,
+                        },
+                        '*::-webkit-scrollbar-corner': { backgroundColor: track },
+                    };
+                },
+            },
             // Customize components for better dark mode support
             MuiAppBar: {
                 styleOverrides: {
@@ -143,6 +181,7 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                 styleOverrides: {
                     root: ({ theme }) => ({
                         backgroundColor: theme.palette.background.paper,
+                        ...getSurfaceShape(theme),
                     }),
                 },
             },
@@ -150,6 +189,29 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                 styleOverrides: {
                     root: ({ theme }) => ({
                         backgroundColor: theme.palette.background.paper,
+                        ...getSurfaceShape(theme),
+                    }),
+                },
+            },
+            MuiAccordion: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        ...getSurfaceShape(theme),
+                        '&:before': { display: 'none' },
+                    }),
+                },
+            },
+            MuiPopover: {
+                styleOverrides: {
+                    paper: ({ theme }) => ({
+                        ...(theme.palette.mode === 'dark' ? { backgroundColor: theme.palette.brand.darkModeRaised } : {}),
+                    }),
+                },
+            },
+            MuiButtonBase: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        '&.Mui-focusVisible': getFocusRing(theme),
                     }),
                 },
             },
@@ -174,7 +236,10 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                             backgroundColor: alpha(theme.palette.text.primary, 0.03),
                         },
                         '&:hover': {
-                            backgroundColor: alpha(theme.palette.text.primary, 0.06),
+                            backgroundColor:
+                                theme.palette.mode === 'dark'
+                                    ? theme.palette.brand.darkModeRaised
+                                    : alpha(theme.palette.text.primary, 0.06),
                         },
                     }),
                 },
@@ -263,8 +328,9 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                             color: theme.palette.primary.main,
                         },
                         '&:hover': {
-                            color: theme.palette.primary.dark,
+                            color: theme.palette.mode === 'dark' ? theme.palette.brand.darkModePrimaryHover : theme.palette.primary.dark,
                         },
+                        '&:focus-visible': getFocusRing(theme),
                     }),
                 },
             },

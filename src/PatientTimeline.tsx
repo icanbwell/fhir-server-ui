@@ -6,6 +6,8 @@ import {
 const VerticalTimeline: any = OriginalVerticalTimeline;
 const VerticalTimelineElement: any = OriginalVerticalTimelineElement;
 import 'react-vertical-timeline-component/style.min.css';
+import { useTheme } from '@mui/material/styles';
+import { getTimelineStyles } from './theme/timelineStyles';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 import MedicationIcon from '@mui/icons-material/Medication';
@@ -36,15 +38,17 @@ function getIcon(patientEvent: any) {
   }
 }
 
-const renderTimelineElements = (patientEvents: any) => {
+type TimelineStyles = ReturnType<typeof getTimelineStyles>;
+
+const renderTimelineElements = (patientEvents: any, timelineStyles: TimelineStyles) => {
   return patientEvents.map((patientEvent: any, index: number) => (
     <VerticalTimelineElement
       className="vertical-timeline-element--work"
-      contentStyle={{ background: '#2E3586', color: '#fff' }}
-      contentArrowStyle={{ borderRight: '7px solid #2E3586' }}
+      contentStyle={timelineStyles.contentStyle}
+      contentArrowStyle={timelineStyles.contentArrowStyle}
       key={index}
       date={patientEvent.date}
-      iconStyle={{ background: '#2E3586', color: '#fff' }}
+      iconStyle={timelineStyles.iconStyle}
       icon={getIcon(patientEvent)}
     >
       <h3 className="vertical-timeline-element-title">
@@ -101,8 +105,11 @@ const patientEvents = [
 ];
 
 const PatientTimeline = () => {
+  const timelineStyles = getTimelineStyles(useTheme());
   return (
-    <VerticalTimeline>{renderTimelineElements(patientEvents)}</VerticalTimeline>
+    <VerticalTimeline>
+      {renderTimelineElements(patientEvents, timelineStyles)}
+    </VerticalTimeline>
   );
 };
 

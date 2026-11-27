@@ -14,11 +14,13 @@ function formatBytes(bytes: number): string {
 
 interface StreamProgressIndicatorProps {
     progress: StreamProgressState;
+    // Show a bare indeterminate bar when no stream progress is available yet (no caption).
+    loading?: boolean;
 }
 
-const StreamProgressIndicator: React.FC<StreamProgressIndicatorProps> = ({ progress }) => {
+const StreamProgressIndicator: React.FC<StreamProgressIndicatorProps> = ({ progress, loading }) => {
     if (!progress.isStreaming) {
-        return null;
+        return loading ? <LinearProgress /> : null;
     }
     const percent = progress.totalBytes
         ? Math.min(100, Math.round((progress.bytesReceived / progress.totalBytes) * 100))

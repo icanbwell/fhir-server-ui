@@ -26,10 +26,11 @@ const getHeaderBackground = (theme: Theme) =>
 // Rounded surface shared by Paper/Card/Accordion. `backgroundImage: 'none'` disables MUI's
 // dark-mode elevation overlay so surfaces stay on the dark-mode tokens; dark surfaces also get
 // a hairline divider border since shadows are invisible on dark backgrounds.
-const getSurfaceShape = (theme: Theme) => ({
-    borderRadius: 12,
+// Square papers (AppBar, Drawer, ...) keep their square edges and get no extra border.
+const getSurfaceShape = (theme: Theme, square = false) => ({
     backgroundImage: 'none',
-    ...(theme.palette.mode === 'dark' ? { border: `1px solid ${theme.palette.divider}` } : {}),
+    ...(square ? {} : { borderRadius: 12 }),
+    ...(theme.palette.mode === 'dark' && !square ? { border: `1px solid ${theme.palette.divider}` } : {}),
 });
 
 const getFocusRing = (theme: Theme) => ({
@@ -187,9 +188,9 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
             },
             MuiPaper: {
                 styleOverrides: {
-                    root: ({ theme }) => ({
+                    root: ({ theme, ownerState }) => ({
                         backgroundColor: theme.palette.background.paper,
-                        ...getSurfaceShape(theme),
+                        ...getSurfaceShape(theme, ownerState?.square),
                     }),
                 },
             },

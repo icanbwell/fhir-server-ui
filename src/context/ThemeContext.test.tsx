@@ -204,4 +204,29 @@ describe('ThemeContextProvider rendering', () => {
             border: `1px solid ${brandColors.darkModeDivider}`,
         });
     });
+
+    it.each([
+        ['light', false, { square: false }, { borderRadius: 12 }, ['border']],
+        ['light', false, { square: true }, { backgroundImage: 'none' }, ['borderRadius', 'border']],
+        ['dark', true, { square: false }, { borderRadius: 12, border: `1px solid ${brandColors.darkModeDivider}` }, []],
+        ['dark', true, { square: true }, { backgroundImage: 'none' }, ['borderRadius', 'border']],
+    ])('resolves the Paper override in %s mode for %j', (_label, dark, ownerState, expected, absent) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let paperRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiPaper?.styleOverrides?.root;
+            paperRoot = typeof root === 'function' ? (root({ theme: muiTheme, ownerState } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(paperRoot).toMatchObject(expected);
+        absent.forEach((key) => expect(paperRoot).not.toHaveProperty(key));
+    });
 });

@@ -137,4 +137,25 @@ describe('ThemeContextProvider rendering', () => {
         expect(mode).toBe('dark');
         expect(background).toBe(brandColors.darkModeBackground);
     });
+
+    it('uses the contrast-checked dark primary and divider when dark mode was persisted', () => {
+        localStorage.setItem('darkMode', 'true');
+        let primary: string | undefined;
+        let divider: string | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            primary = muiTheme.palette.primary.main;
+            divider = muiTheme.palette.divider;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(primary).toBe(brandColors.darkModePrimary);
+        expect(divider).toBe(brandColors.darkModeDivider);
+    });
 });

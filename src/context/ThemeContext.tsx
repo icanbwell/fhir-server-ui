@@ -80,27 +80,27 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
     const theme = createTheme({
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
-            primary: {
-                main: brandColors.blue,
-                dark: brandColors.darkBlue,
-            },
+            primary: isDarkMode
+                ? { main: brandColors.darkModePrimary, dark: darken(brandColors.darkModePrimary, 0.15) }
+                : { main: brandColors.blue, dark: brandColors.darkBlue },
             secondary: {
-                main: brandColors.lilac,
+                main: isDarkMode ? brandColors.darkModeSecondary : brandColors.lilac,
             },
             success: {
                 main: brandColors.green,
             },
             warning: {
-                main: brandColors.orange,
+                main: isDarkMode ? brandColors.darkModeWarning : brandColors.orange,
             },
             error: {
-                main: brandColors.errorRed,
+                main: isDarkMode ? brandColors.darkModeError : brandColors.errorRed,
             },
             // Not a distinct brand color; the guide has no "info" swatch, so this is a
             // lightened tint of brand Blue to stay in-family rather than MUI's stock blue.
             info: {
-                main: lighten(brandColors.blue, 0.25),
+                main: isDarkMode ? brandColors.darkModeInfo : lighten(brandColors.blue, 0.25),
             },
+            ...(isDarkMode ? { divider: brandColors.darkModeDivider } : {}),
             background: {
                 default: isDarkMode ? brandColors.darkModeBackground : brandColors.lightGray,
                 paper: isDarkMode ? brandColors.darkModePaper : brandColors.white,

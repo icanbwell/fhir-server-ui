@@ -33,6 +33,12 @@ afterEach(() => {
     document.body.classList.remove('dark-mode');
 });
 
+const surfaces = {
+    darkModeBackground: brandColors.darkModeBackground,
+    darkModePaper: brandColors.darkModePaper,
+    darkModeRaised: brandColors.darkModeRaised,
+};
+
 describe('dark palette tokens', () => {
     const foregrounds = {
         darkModePrimary: brandColors.darkModePrimary,
@@ -41,11 +47,6 @@ describe('dark palette tokens', () => {
         darkModeInfo: brandColors.darkModeInfo,
         darkModeError: brandColors.darkModeError,
         darkModeWarning: brandColors.darkModeWarning,
-    };
-    const surfaces = {
-        darkModeBackground: brandColors.darkModeBackground,
-        darkModePaper: brandColors.darkModePaper,
-        darkModeRaised: brandColors.darkModeRaised,
     };
     const cases = Object.entries(foregrounds).flatMap(([fgName, fg]) =>
         Object.entries(surfaces).map(([bgName, bg]) => [fgName, bgName, fg, bg] as const)
@@ -73,14 +74,31 @@ describe('dark theme palette', () => {
     });
 
     it.each([
-        ['primary.main', (p: Palette) => [p.primary.contrastText, p.primary.main]],
-        ['primary.dark', (p: Palette) => [p.primary.contrastText, p.primary.dark]],
-        ['error.main', (p: Palette) => [p.error.contrastText, p.error.main]],
-        ['secondary.main', (p: Palette) => [p.secondary.contrastText, p.secondary.main]],
-    ] as const)('contrastText is readable on %s', (_name, pick) => {
-        const [fg, bg] = pick(readPalette(true));
+        ['primary', (p: Palette) => p.primary],
+        ['secondary', (p: Palette) => p.secondary],
+        ['error', (p: Palette) => p.error],
+        ['warning', (p: Palette) => p.warning],
+        ['info', (p: Palette) => p.info],
+    ] as const)(
+        '%s contrastText is opaque and readable on both main and dark (hover) shades',
+        (_name, pick) => {
+            const { contrastText, main, dark } = pick(readPalette(true));
 
-        expect(getContrastRatio(fg, bg)).toBeGreaterThanOrEqual(AA_NORMAL_TEXT);
+            expect(contrastText).toBe(brandColors.darkModeBackground);
+            expect(getContrastRatio(contrastText, main)).toBeGreaterThanOrEqual(AA_NORMAL_TEXT);
+            expect(getContrastRatio(contrastText, dark)).toBeGreaterThanOrEqual(AA_NORMAL_TEXT);
+        }
+    );
+
+    it.each([
+        ['text.primary', (p: Palette) => p.text.primary],
+        ['text.secondary', (p: Palette) => p.text.secondary],
+    ] as const)('%s meets WCAG AA on every dark surface', (_name, pick) => {
+        const fg = pick(readPalette(true));
+
+        Object.values(surfaces).forEach((bg) => {
+            expect(getContrastRatio(fg, bg)).toBeGreaterThanOrEqual(AA_NORMAL_TEXT);
+        });
     });
 });
 

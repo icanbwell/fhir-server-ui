@@ -33,6 +33,15 @@ const getSurfaceShape = (theme: Theme, square = false) => ({
     ...(theme.palette.mode === 'dark' && !square ? { border: `1px solid ${theme.palette.divider}` } : {}),
 });
 
+// Dark-mode status colours share one accent recipe: a hover/pressed shade darkened 15% and an
+// opaque page-background contrastText. MUI's own defaults (darken(main, 0.3) and an
+// rgba(0, 0, 0, 0.87) contrastText) fall below AA once the alpha is blended, so both are explicit.
+const getDarkAccent = (main: string) => ({
+    main,
+    dark: darken(main, 0.15),
+    contrastText: brandColors.darkModeBackground,
+});
+
 const getFocusRing = (theme: Theme) => ({
     outline: `2px solid ${theme.palette.primary.main}`,
     outlineOffset: 2,
@@ -96,25 +105,17 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
             primary: isDarkMode
-                ? { main: brandColors.darkModePrimary, dark: darken(brandColors.darkModePrimary, 0.15) }
+                ? getDarkAccent(brandColors.darkModePrimary)
                 : { main: brandColors.blue, dark: brandColors.darkBlue },
-            secondary: {
-                main: isDarkMode ? brandColors.darkModeSecondary : brandColors.lilac,
-            },
+            secondary: isDarkMode ? getDarkAccent(brandColors.darkModeSecondary) : { main: brandColors.lilac },
             success: {
                 main: brandColors.green,
             },
-            warning: {
-                main: isDarkMode ? brandColors.darkModeWarning : brandColors.orange,
-            },
-            error: {
-                main: isDarkMode ? brandColors.darkModeError : brandColors.errorRed,
-            },
+            warning: isDarkMode ? getDarkAccent(brandColors.darkModeWarning) : { main: brandColors.orange },
+            error: isDarkMode ? getDarkAccent(brandColors.darkModeError) : { main: brandColors.errorRed },
             // Not a distinct brand color; the guide has no "info" swatch, so this is a
             // lightened tint of brand Blue to stay in-family rather than MUI's stock blue.
-            info: {
-                main: isDarkMode ? brandColors.darkModeInfo : lighten(brandColors.blue, 0.25),
-            },
+            info: isDarkMode ? getDarkAccent(brandColors.darkModeInfo) : { main: lighten(brandColors.blue, 0.25) },
             ...(isDarkMode ? { divider: brandColors.darkModeDivider } : {}),
             background: {
                 default: isDarkMode ? brandColors.darkModeBackground : brandColors.lightGray,
@@ -175,6 +176,18 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                 styleOverrides: {
                     root: ({ theme }) => ({
                         backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.primary.main,
+                        // The default ring is primary.main, which is invisible on the light-mode primary AppBar.
+                        '& .Mui-focusVisible': { outlineColor: 'currentColor' },
+                    }),
+                },
+            },
+            // AlertRoot is styled(Paper); undo the Paper surface radius and dark divider border so
+            // alerts keep the base radius and their own severity colouring.
+            MuiAlert: {
+                styleOverrides: {
+                    root: ({ theme, ownerState }) => ({
+                        borderRadius: theme.shape.borderRadius,
+                        ...(ownerState.variant !== 'outlined' && { border: 0 }),
                     }),
                 },
             },
@@ -198,6 +211,8 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
                 styleOverrides: {
                     root: ({ theme }) => ({
                         ...getSurfaceShape(theme),
+                        // MUI's first/last-of-type rules would otherwise win with shape.borderRadius.
+                        '&, &:first-of-type, &:last-of-type': { borderRadius: 12 },
                         '&:before': { display: 'none' },
                     }),
                 },

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { render, renderHook, act, screen } from '@testing-library/react';
+import { Alert } from '@mui/material';
 import { useTheme as useMuiTheme } from '@mui/material/styles';
 import { ThemeContextProvider, useTheme } from './ThemeContext';
 import { getLocalData } from '../utils/localData.utils';
@@ -228,5 +229,95 @@ describe('ThemeContextProvider rendering', () => {
 
         expect(paperRoot).toMatchObject(expected);
         absent.forEach((key) => expect(paperRoot).not.toHaveProperty(key));
+    });
+
+    it('keeps a single Accordion at 12px on every corner, beating the first/last-of-type rules', () => {
+        localStorage.setItem('darkMode', 'true');
+        let accordionRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiAccordion?.styleOverrides?.root;
+            accordionRoot = typeof root === 'function' ? (root({ theme: muiTheme } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(accordionRoot).toMatchObject({
+            '&, &:first-of-type, &:last-of-type': { borderRadius: 12 },
+            '&:before': { display: 'none' },
+        });
+    });
+
+    it.each([
+        ['light', 'standard', false],
+        ['light', 'outlined', false],
+        ['dark', 'standard', true],
+        ['dark', 'outlined', true],
+    ])('resolves the Alert override in %s mode for the %s variant', (_label, variant, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let alertRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiAlert?.styleOverrides?.root;
+            alertRoot = typeof root === 'function' ? (root({ theme: muiTheme, ownerState: { variant } } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(alertRoot).toMatchObject({ borderRadius: 8 });
+        if (variant === 'outlined') {
+            expect(alertRoot).not.toHaveProperty('border');
+        } else {
+            expect(alertRoot).toMatchObject({ border: 0 });
+        }
+    });
+
+    it.each([
+        ['light', false],
+        ['dark', true],
+    ])('renders an Alert with the base radius and no Paper border in %s mode', (_label, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+
+        render(
+            <ThemeContextProvider>
+                <Alert severity="info">notice</Alert>
+            </ThemeContextProvider>
+        );
+
+        const style = getComputedStyle(screen.getByRole('alert'));
+        expect(style.borderRadius).toBe('8px');
+        expect(style.borderWidth === '' || style.borderWidth === '0px' || style.borderWidth === '0').toBe(true);
+    });
+
+    it.each([
+        ['light', false],
+        ['dark', true],
+    ])('keeps the AppBar focus ring visible against its own background in %s mode', (_label, dark) => {
+        localStorage.setItem('darkMode', JSON.stringify(dark));
+        let appBarRoot: Record<string, unknown> | undefined;
+        const Probe = () => {
+            const muiTheme = useMuiTheme();
+            const root = muiTheme.components?.MuiAppBar?.styleOverrides?.root;
+            appBarRoot = typeof root === 'function' ? (root({ theme: muiTheme } as never) as Record<string, unknown>) : undefined;
+            return null;
+        };
+
+        render(
+            <ThemeContextProvider>
+                <Probe />
+            </ThemeContextProvider>
+        );
+
+        expect(appBarRoot).toMatchObject({ '& .Mui-focusVisible': { outlineColor: 'currentColor' } });
     });
 });

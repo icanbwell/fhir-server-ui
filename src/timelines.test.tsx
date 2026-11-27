@@ -71,3 +71,26 @@ describe.each(timelines)('%s', (_name, Timeline) => {
         expect(content?.style.color).toBe('rgb(255, 255, 255)');
     });
 });
+
+describe.each(timelines)('%s dark-mode polish', (_name, Timeline) => {
+    test.each([
+        ['dark', 'true' as const, true],
+        ['light', undefined, false],
+    ])('%s mode themes the library icon ring and card shadow (overridden: %s)', (_mode, persisted, overridden) => {
+        const { container } = renderTimeline(Timeline, persisted);
+
+        const content = container.querySelector<HTMLElement>('.vertical-timeline-element-content');
+        const icon = container.querySelector<HTMLElement>('.vertical-timeline-element-icon');
+        expect(icon?.style.boxShadow).toBe(overridden ? `0 0 0 4px ${brandColors.darkModeBackground}` : '');
+        expect(content?.style.boxShadow).toBe(overridden ? 'none' : '');
+    });
+
+    test.each([
+        ['dark', 'true' as const, brandColors.darkModeDivider],
+        ['light', undefined, '#FFF'],
+    ])('%s mode sets the timeline spine colour to %s', (_mode, persisted, expected) => {
+        renderTimeline(Timeline, persisted);
+
+        expect(document.documentElement.style.getPropertyValue('--line-color').toLowerCase()).toBe(expected.toLowerCase());
+    });
+});

@@ -31,7 +31,7 @@ export const brandColors = {
   darkModeSecondary: '#9A90FF',
   darkModeInfo: '#8FB4FF',
   darkModeError: '#FF8A80',
-  darkModeWarning: '#FF8F73',
+  darkModeWarning: '#FFA36B',
   darkModeRaised: '#262A63',
   darkModeDivider: '#3D4290',
   // Pale green tint of brand `green`, used to highlight "answer"/correct content.
